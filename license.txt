@@ -1,0 +1,5 @@
+This code is distributed under the Boost software licensee.  See LICENSE_1_0.txt.
+
+A few files are or will be republished from other (open) sources with separate licenses.  Information about the origins and licenses of those files are included as comments or documentation within those files themselves when applicable.
+
+
