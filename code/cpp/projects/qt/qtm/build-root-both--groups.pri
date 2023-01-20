@@ -1,23 +1,24 @@
 
 #groups
 
+TKRZW_SRC_GROUP_DIR = $$SRC_CONTRIB_DIR/dbk/dbm/tkrzw
+WHITEDB_SRC_GROUP_DIR = $$SRC_CONTRIB_DIR/dbk/whitedb/whitedb
+NTXH_SRC_GROUP_DIR = $$SRC_CONTRIB_DIR/apk/ntxh/ntxh
+RELAE_GRAPH_SRC_GROUP_DIR = $$SRC_CONTRIB_DIR/apk/ntxh/relae-graph
+PHAON_GRAPH_SRC_GROUP_DIR = $$SRC_CONTRIB_DIR/apk/ntxh/phaon-graph
+
 
 QRING_SRC_GROUP_DIR = $$SRC_CONTRIB_DIR/apk/QScign/QRing
-RELAE_GRAPH_SRC_GROUP_DIR = $$SRC_CONTRIB_DIR/apk/hgdm/relae-graph
-PHAON_GRAPH_SRC_GROUP_DIR = $$SRC_CONTRIB_DIR/apk/hgdm/phaon-graph
-NTXH_SRC_GROUP_DIR = $$SRC_CONTRIB_DIR/apk/hgdm/ntxh
 DSMAIN_SRC_GROUP_DIR = $$SRC_CONTRIB_DIR/apk/dataset/dsmain
 SSQM_DSMAIN_SRC_GROUP_DIR = $$SRC_CONTRIB_DIR/apk/ssqm/ssqm-dsmain
 XPDF_SRC_GROUP_DIR = $$SRC_CONTRIB_DIR/xk/external/xpdf
 APPLICATION_MODEL_SRC_GROUP_DIR = $$SRC_CONTRIB_DIR/apk/dataset/application-model
 CONFIG_SRC_GROUP_DIR = $$SRC_CONTRIB_DIR/apk/dataset/config
 PHR_GRAPH_SRC_GROUP_DIR = $$SRC_CONTRIB_DIR/apk/hgdm/phr-graph
-RELAE_GRAPH_SRC_GROUP_DIR = $$SRC_CONTRIB_DIR/apk/hgdm/relae-graph
 PHAONIR_SRC_GROUP_DIR = $$SRC_CONTRIB_DIR/sk/phaonir/PhaonIR
 PHAONLIB_SRC_GROUP_DIR = $$SRC_CONTRIB_DIR/sk/phaonir/PhaonLib
 PHR_RUNTIME_SRC_GROUP_DIR = $$SRC_CONTRIB_DIR/sk/phaonir/phr-runtime
 TESTS_PHR_SRC_GROUP_DIR = $$SRC_CONTRIB_DIR/sk/rz/tests-phr
-WHITEDB_SRC_GROUP_DIR = $$SRC_CONTRIB_DIR/dbk/whitedb/whitedb
 
 RZ_KAUVIR_SRC_GROUP_DIR = $$SRC_CONTRIB_DIR/sk/rz/rz-kauvir
 

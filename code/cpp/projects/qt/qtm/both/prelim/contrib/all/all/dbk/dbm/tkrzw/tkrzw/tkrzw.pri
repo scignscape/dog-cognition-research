@@ -10,14 +10,12 @@ include(../build-group.pri)
 
 QT -= gui
 
-QMAKE_CC = gcc-7
-QMAKE_CXX = g++-7
+exists($$ROOT_DIR/../preferred/sysr.pri): include($$ROOT_DIR/../preferred/sysr.pri)
+exists($$ROOT_DIR/../preferred/sysr-c.pri): include($$ROOT_DIR/../preferred/sysr-c.pri)
+exists($$ROOT_DIR/../preferred/compiler.pri): include($$ROOT_DIR/../preferred/compiler.pri)
+
 
 CONFIG += c++17
-
-include($$ROOT_DIR/../preferred/sysr.pri)
-
-#include($$ROOT_DIR/../preferred/sysr-c.pri)
 
 DEFINES += DEFAULT_DEV_DGDB_FOLDER=\\\"$$ROOT_DIR/dev/consoles/dgdb\\\"
 
