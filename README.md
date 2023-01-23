@@ -22,7 +22,7 @@ and Robotics`".  Nathaniel Christen, the lead author on that chapter (I'm the on
 
 ---
 
-**Computer Code for the Data Set**
+## Computer Code for the Data Set ##
 We have implemented fairly extensive code base in conjunction with these data sets, but in keeping with the maxim that perfecting code takes much longer than text, a lot of the code is still provisional and poorly documented.  Currently we are keeping the code at the repo `https://github.com/ScignScape/ntxh`.  The README there points readers toward the `ctg` branch for the main data set material, but code specifically related to *this* (dog-cognition) repository is on the `ctg-temp` branch.  We mention this work to clarify the source of code discussed in the _Industry 4.0_ chapters, including procedures for downloading social-media videos, but again we simply have not had time yet to properly curate this code for a public audience.  For the time being we will provide a brief outline of the relevant components, and invite those curious about the overall project to ask about specific features (or to browse the most recent code, assuming one does not object to its work-in-process flaws).
 
 With that preamble out of the way, the following is a brief discussion of different parts of the code base mentioned in Section 5 (chapters 20-24) of the _Industry 4.0_ text referenced earlier.
@@ -35,7 +35,7 @@ Similar technology can be used for creating other kind of videos, such live appl
 
 ### Image Processing ###
 
-Chapter 22 of the _Industry 4.0_ book 
+Chapter 22 of the _Industry 4.0_ book presented a novel image format which is optimized for Computer Vision applications in a database context.  Code for creating, viewing, and analyzing images in this format will be recreated here in conjunction the five chapters in Section 5.  Currently we are migrating the code from another repository to the `wip` branch of this archive, so that branch will be more current than `main`. 
 
 
 
