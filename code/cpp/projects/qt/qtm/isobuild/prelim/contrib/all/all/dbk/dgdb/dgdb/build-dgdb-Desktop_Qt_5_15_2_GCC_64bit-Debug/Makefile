@@ -317,28 +317,7 @@ DIST          = /home/nlevisrael/Qt/5.15.2/gcc_64/mkspecs/features/spec_pre.prf 
 		/home/nlevisrael/Qt/5.15.2/gcc_64/mkspecs/features/exceptions.prf \
 		/home/nlevisrael/Qt/5.15.2/gcc_64/mkspecs/features/yacc.prf \
 		/home/nlevisrael/Qt/5.15.2/gcc_64/mkspecs/features/lex.prf \
-		../dgdb/dgdb.pro /home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dgdb/dgdb/dgdb/dh-location-structure.h \
-		/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dgdb/dgdb/dgdb/dgdb-database-instance.h \
-		/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dgdb/dgdb/dgdb/dh-record-processors.h \
-		/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dgdb/dgdb/dgdb/conversions.h \
-		/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dgdb/dgdb/dgdb/dgdb-hypernode.h \
-		/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dgdb/dgdb/dgdb/dwb/dwb-instance.h \
-		/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dgdb/dgdb/dgdb/dtb/dtb-package.h \
-		/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dgdb/dgdb/dgdb/dtb/sv-wrapper.h \
-		/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dgdb/dgdb/dgdb/dtb/_sv-wrapper.h \
-		/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dgdb/dgdb/dgdb/types/dh-type.h \
-		/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dgdb/dgdb/dgdb/types/dh-type-system.h \
-		/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dgdb/dgdb/dgdb/types/dh-type-builder.h \
-		/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dgdb/dgdb/dgdb/types/dh-subvalue-field.h \
-		/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dgdb/dgdb/dgdb/types/dh-type-field-info-state.h \
-		/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dgdb/dgdb/dgdb/dgdb-data-out-stream.h \
-		/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dgdb/dgdb/dgdb/dh-stage-value.h \
-		/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dgdb/dgdb/dgdb/types/stage/dh-stage-queue.h \
-		/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dgdb/dgdb/dgdb/types/stage/dh-stage-code.h \
-		/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dgdb/dgdb/dgdb/graph/dh-frame.h \
-		/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dgdb/dgdb/dgdb/graph/dh-dominion.h \
-		/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dgdb/dgdb/dgdb/graph/dh-record.h \
-		/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dgdb/dgdb/dgdb/dh-instance.h /home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dgdb/dgdb/dgdb/dh-location-structure.cpp \
+		../dgdb/dgdb.pro  /home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dgdb/dgdb/dgdb/dh-location-structure.cpp \
 		/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dgdb/dgdb/dgdb/dgdb-database-instance.cpp \
 		/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dgdb/dgdb/dgdb/dgdb-hypernode.cpp \
 		/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dgdb/dgdb/dgdb/dgdb-database-instance.data-options.cpp \
@@ -857,7 +836,6 @@ distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents /home/nlevisrael/Qt/5.15.2/gcc_64/mkspecs/features/data/dummy.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents /home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dgdb/dgdb/dgdb/dh-location-structure.h /home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dgdb/dgdb/dgdb/dgdb-database-instance.h /home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dgdb/dgdb/dgdb/dh-record-processors.h /home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dgdb/dgdb/dgdb/conversions.h /home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dgdb/dgdb/dgdb/dgdb-hypernode.h /home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dgdb/dgdb/dgdb/dwb/dwb-instance.h /home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dgdb/dgdb/dgdb/dtb/dtb-package.h /home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dgdb/dgdb/dgdb/dtb/sv-wrapper.h /home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dgdb/dgdb/dgdb/dtb/_sv-wrapper.h /home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dgdb/dgdb/dgdb/types/dh-type.h /home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dgdb/dgdb/dgdb/types/dh-type-system.h /home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dgdb/dgdb/dgdb/types/dh-type-builder.h /home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dgdb/dgdb/dgdb/types/dh-subvalue-field.h /home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dgdb/dgdb/dgdb/types/dh-type-field-info-state.h /home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dgdb/dgdb/dgdb/dgdb-data-out-stream.h /home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dgdb/dgdb/dgdb/dh-stage-value.h /home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dgdb/dgdb/dgdb/types/stage/dh-stage-queue.h /home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dgdb/dgdb/dgdb/types/stage/dh-stage-code.h /home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dgdb/dgdb/dgdb/graph/dh-frame.h /home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dgdb/dgdb/dgdb/graph/dh-dominion.h /home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dgdb/dgdb/dgdb/graph/dh-record.h /home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dgdb/dgdb/dgdb/dh-instance.h $(DISTDIR)/
 	$(COPY_FILE) --parents /home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dgdb/dgdb/dgdb/dh-location-structure.cpp /home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dgdb/dgdb/dgdb/dgdb-database-instance.cpp /home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dgdb/dgdb/dgdb/dgdb-hypernode.cpp /home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dgdb/dgdb/dgdb/dgdb-database-instance.data-options.cpp /home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dgdb/dgdb/dgdb/dgdb-database-instance.store-subvalue.cpp /home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dgdb/dgdb/dgdb/dwb/dwb-instance.cpp /home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dgdb/dgdb/dgdb/dtb/dtb-package.cpp /home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dgdb/dgdb/dgdb/dtb/sv-wrapper.cpp /home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dgdb/dgdb/dgdb/types/dh-type.cpp /home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dgdb/dgdb/dgdb/types/dh-type-field-info-state.cpp /home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dgdb/dgdb/dgdb/types/dh-type-system.cpp /home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dgdb/dgdb/dgdb/types/dh-type-builder.cpp /home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dgdb/dgdb/dgdb/types/dh-subvalue-field.cpp /home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dgdb/dgdb/dgdb/dgdb-data-out-stream.cpp /home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dgdb/dgdb/dgdb/dh-stage-value.cpp /home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dgdb/dgdb/dgdb/types/stage/dh-stage-queue.cpp /home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dgdb/dgdb/dgdb/types/stage/dh-stage-code.cpp /home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dgdb/dgdb/dgdb/types/stage/dh-stage-value.to-qba.cpp /home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dgdb/dgdb/dgdb/graph/dh-frame.cpp /home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dgdb/dgdb/dgdb/graph/dh-dominion.cpp /home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dgdb/dgdb/dgdb/graph/dh-record.cpp /home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dgdb/dgdb/dgdb/dh-instance.cpp $(DISTDIR)/
 
 
@@ -980,7 +958,8 @@ compiler_clean: compiler_moc_predefs_clean
 		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/QPair \
 		/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/global-macros.h \
 		/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/enum-macros.h \
-		/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/accessors.h
+		/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/accessors.h \
+		/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/kans.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o /home/nlevisrael/gits/dcr-wip/ar/code/cpp/targets/contrib/all/all/qt/qt-multiple/nomark/targets-5-15-2-Desktop_Qt_5_15_2_GCC_64bit/PROJECT_OBJECTS/dgdb/debug/dh-location-structure.o /home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dgdb/dgdb/dgdb/dh-location-structure.cpp
 
 /home/nlevisrael/gits/dcr-wip/ar/code/cpp/targets/contrib/all/all/qt/qt-multiple/nomark/targets-5-15-2-Desktop_Qt_5_15_2_GCC_64bit/PROJECT_OBJECTS/dgdb/debug/dgdb-database-instance.o: /home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dgdb/dgdb/dgdb/dgdb-database-instance.cpp /home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dgdb/dgdb/dgdb/dgdb-database-instance.h \
@@ -1320,9 +1299,9 @@ compiler_clean: compiler_moc_predefs_clean
 		/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/global-macros.h \
 		/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/enum-macros.h \
 		/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/accessors.h \
+		/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/kans.h \
 		/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dgdb/dgdb/dgdb/types/dh-type.h \
 		/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dgdb/dgdb/dgdb/types/dh-type-field-info-state.h \
-		/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/kans.h \
 		/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dgdb/dgdb/dgdb/types/dh-subvalue-field.h \
 		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtXml/QDomElement \
 		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtXml/qdom.h \
@@ -2296,6 +2275,7 @@ compiler_clean: compiler_moc_predefs_clean
 		/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dbm/tkrzw/tkrzw/tkrzw_str_util.h \
 		/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dbm/tkrzw/tkrzw/tkrzw_time_util.h \
 		/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dgdb/dgdb/dgdb/dh-location-structure.h \
+		/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/kans.h \
 		/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dgdb/dgdb/dgdb/dtb/_sv-wrapper.h \
 		/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dbm/tkrzw/tkrzw/tkrzw_index.h \
 		/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dbm/tkrzw/tkrzw/tkrzw_dbm_baby.h \
@@ -2308,7 +2288,6 @@ compiler_clean: compiler_moc_predefs_clean
 		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/QDebug \
 		/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dgdb/dgdb/dgdb/graph/dh-frame.h \
 		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/QVector \
-		/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/kans.h \
 		/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/flags.h \
 		/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dgdb/dgdb/dgdb/graph/dh-record.h \
 		/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dgdb/dgdb/dgdb/dtb/sv-wrapper.h

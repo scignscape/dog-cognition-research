@@ -22,6 +22,8 @@
 
 #include "sv-wrapper.h"
 
+USING_KANS(DGDB)
+
 
 using namespace tkrzw;
 

@@ -1053,6 +1053,8 @@ compiler_clean: compiler_moc_predefs_clean
 		/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dgdb/dgdb/dgdb/dtb/_sv-wrapper.h \
 		/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dgdb/dgdb/dgdb/dtb/sv-wrapper.h \
 		/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dgdb/dgdb/dgdb/dh-stage-value.h \
+		/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dgdb/dgdb/dgdb-console/queue-demo-class.h \
+		/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dgdb/dgdb/dgdb/types/stage/dh-stage-queue.h \
 		/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dgdb/dgdb/dgdb/dgdb-hypernode.h \
 		/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dgdb/dgdb/dgdb/conversions.h \
 		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/QBuffer \

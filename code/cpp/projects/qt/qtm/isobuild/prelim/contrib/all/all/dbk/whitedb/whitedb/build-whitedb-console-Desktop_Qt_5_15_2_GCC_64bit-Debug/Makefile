@@ -12,12 +12,12 @@ EQ            = =
 
 ####### Compiler, tools and options
 
-CC            = gcc
-CXX           = g++
+CC            = gcc-7
+CXX           = g++-7
 DEFINES       = -DWHICH_DEFINES=\"./_defines/isobuild_defines.h\" -DQT_QML_DEBUG -DQT_CORE_LIB
 CFLAGS        = -pipe -g -Wall -Wextra -D_REENTRANT -fPIC $(DEFINES)
 CXXFLAGS      = -pipe -g -std=gnu++1z -Wall -Wextra -D_REENTRANT -fPIC $(DEFINES)
-INCPATH       = -I../whitedb-console -I. -I/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/whitedb/whitedb/whitedb-console -I/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src -I/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/global -I/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/whitedb/whitedb/whitedb-console -I/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/whitedb/whitedb -I/home/nlevisrael/Qt/5.15.2/gcc_64/include -I/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore -I. -I/home/nlevisrael/Qt/5.15.2/gcc_64/mkspecs/linux-g++
+INCPATH       = -I../whitedb-console -I. -I/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim -I/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/whitedb/whitedb/whitedb-console -I/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src -I/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/global -I/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/whitedb/whitedb/whitedb-console -I/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/whitedb/whitedb -I/home/nlevisrael/Qt/5.15.2/gcc_64/include -I/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore -I. -I/home/nlevisrael/Qt/5.15.2/gcc_64/mkspecs/linux-g++
 QMAKE         = /home/nlevisrael/Qt/5.15.2/gcc_64/bin/qmake
 DEL_FILE      = rm -f
 CHK_DIR_EXISTS= test -d
@@ -244,6 +244,7 @@ DIST          = /home/nlevisrael/Qt/5.15.2/gcc_64/mkspecs/features/spec_pre.prf 
 		/home/nlevisrael/Qt/5.15.2/gcc_64/mkspecs/features/qt_config.prf \
 		/home/nlevisrael/Qt/5.15.2/gcc_64/mkspecs/linux-g++/qmake.conf \
 		/home/nlevisrael/Qt/5.15.2/gcc_64/mkspecs/features/spec_post.prf \
+		../whitedb-console/.qmake.stash \
 		/home/nlevisrael/Qt/5.15.2/gcc_64/mkspecs/features/exclusive_builds.prf \
 		/home/nlevisrael/Qt/5.15.2/gcc_64/mkspecs/features/toolchain.prf \
 		/home/nlevisrael/Qt/5.15.2/gcc_64/mkspecs/features/default_pre.prf \
@@ -256,6 +257,8 @@ DIST          = /home/nlevisrael/Qt/5.15.2/gcc_64/mkspecs/features/spec_pre.prf 
 		../build-group.pri \
 		/home/nlevisrael/gits/dcr-wip/ar/code/cpp/projects/qt/qtm/both/prelim/contrib/all/all/dbk/whitedb/whitedb/build-group.pri \
 		/home/nlevisrael/gits/dcr-wip/preferred/sysr.pri \
+		/home/nlevisrael/gits/dcr-wip/preferred/sysr-c.pri \
+		/home/nlevisrael/gits/dcr-wip/preferred/compiler.pri \
 		/home/nlevisrael/gits/dcr-wip/ar/code/cpp/projects/qt/qtm/both/prelim/contrib/all/all/dbk/whitedb/whitedb/whitedb-console/whitedb-console.pri \
 		/home/nlevisrael/Qt/5.15.2/gcc_64/mkspecs/features/resolve_config.prf \
 		/home/nlevisrael/Qt/5.15.2/gcc_64/mkspecs/features/default_post.prf \
@@ -475,6 +478,7 @@ Makefile: ../whitedb-console/whitedb-console.pro /home/nlevisrael/Qt/5.15.2/gcc_
 		/home/nlevisrael/Qt/5.15.2/gcc_64/mkspecs/features/qt_config.prf \
 		/home/nlevisrael/Qt/5.15.2/gcc_64/mkspecs/linux-g++/qmake.conf \
 		/home/nlevisrael/Qt/5.15.2/gcc_64/mkspecs/features/spec_post.prf \
+		.qmake.stash \
 		/home/nlevisrael/Qt/5.15.2/gcc_64/mkspecs/features/exclusive_builds.prf \
 		/home/nlevisrael/Qt/5.15.2/gcc_64/mkspecs/features/toolchain.prf \
 		/home/nlevisrael/Qt/5.15.2/gcc_64/mkspecs/features/default_pre.prf \
@@ -487,6 +491,8 @@ Makefile: ../whitedb-console/whitedb-console.pro /home/nlevisrael/Qt/5.15.2/gcc_
 		../build-group.pri \
 		/home/nlevisrael/gits/dcr-wip/ar/code/cpp/projects/qt/qtm/both/prelim/contrib/all/all/dbk/whitedb/whitedb/build-group.pri \
 		/home/nlevisrael/gits/dcr-wip/preferred/sysr.pri \
+		/home/nlevisrael/gits/dcr-wip/preferred/sysr-c.pri \
+		/home/nlevisrael/gits/dcr-wip/preferred/compiler.pri \
 		/home/nlevisrael/gits/dcr-wip/ar/code/cpp/projects/qt/qtm/both/prelim/contrib/all/all/dbk/whitedb/whitedb/whitedb-console/whitedb-console.pri \
 		/home/nlevisrael/Qt/5.15.2/gcc_64/mkspecs/features/resolve_config.prf \
 		/home/nlevisrael/Qt/5.15.2/gcc_64/mkspecs/features/default_post.prf \
@@ -695,6 +701,7 @@ Makefile: ../whitedb-console/whitedb-console.pro /home/nlevisrael/Qt/5.15.2/gcc_
 /home/nlevisrael/Qt/5.15.2/gcc_64/mkspecs/features/qt_config.prf:
 /home/nlevisrael/Qt/5.15.2/gcc_64/mkspecs/linux-g++/qmake.conf:
 /home/nlevisrael/Qt/5.15.2/gcc_64/mkspecs/features/spec_post.prf:
+.qmake.stash:
 /home/nlevisrael/Qt/5.15.2/gcc_64/mkspecs/features/exclusive_builds.prf:
 /home/nlevisrael/Qt/5.15.2/gcc_64/mkspecs/features/toolchain.prf:
 /home/nlevisrael/Qt/5.15.2/gcc_64/mkspecs/features/default_pre.prf:
@@ -707,6 +714,8 @@ Makefile: ../whitedb-console/whitedb-console.pro /home/nlevisrael/Qt/5.15.2/gcc_
 ../build-group.pri:
 /home/nlevisrael/gits/dcr-wip/ar/code/cpp/projects/qt/qtm/both/prelim/contrib/all/all/dbk/whitedb/whitedb/build-group.pri:
 /home/nlevisrael/gits/dcr-wip/preferred/sysr.pri:
+/home/nlevisrael/gits/dcr-wip/preferred/sysr-c.pri:
+/home/nlevisrael/gits/dcr-wip/preferred/compiler.pri:
 /home/nlevisrael/gits/dcr-wip/ar/code/cpp/projects/qt/qtm/both/prelim/contrib/all/all/dbk/whitedb/whitedb/whitedb-console/whitedb-console.pri:
 /home/nlevisrael/Qt/5.15.2/gcc_64/mkspecs/features/resolve_config.prf:
 /home/nlevisrael/Qt/5.15.2/gcc_64/mkspecs/features/default_post.prf:
@@ -769,7 +778,7 @@ compiler_moc_predefs_make_all: moc_predefs.h
 compiler_moc_predefs_clean:
 	-$(DEL_FILE) moc_predefs.h
 moc_predefs.h: /home/nlevisrael/Qt/5.15.2/gcc_64/mkspecs/features/data/dummy.cpp
-	g++ -pipe -g -std=gnu++1z -Wall -Wextra -dM -E -o moc_predefs.h /home/nlevisrael/Qt/5.15.2/gcc_64/mkspecs/features/data/dummy.cpp
+	g++-7 -pipe -g -std=gnu++1z -Wall -Wextra -dM -E -o moc_predefs.h /home/nlevisrael/Qt/5.15.2/gcc_64/mkspecs/features/data/dummy.cpp
 
 compiler_moc_header_make_all:
 compiler_moc_header_clean:
@@ -855,7 +864,8 @@ compiler_clean: compiler_moc_predefs_clean
 		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qset.h \
 		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qcontiguouscache.h \
 		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qsharedpointer.h \
-		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qsharedpointer_impl.h
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qsharedpointer_impl.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/QIODevice
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o /home/nlevisrael/gits/dcr-wip/ar/code/cpp/targets/contrib/all/all/qt/qt-multiple/nomark/targets-5-15-2-Desktop_Qt_5_15_2_GCC_64bit/PROJECT_OBJECTS/whitedb-console/debug/main.o /home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/whitedb/whitedb/whitedb-console/main.cpp
 
 ####### Install

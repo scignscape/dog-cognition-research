@@ -42,7 +42,7 @@ rtti_read<ho_tname<tn>>("(" #ho_tname \
 #include <QtXml>
 
 
- //?KANS_(DgDb)
+KANS_(DGDB)
 
 //class DgDb_Node;
 
@@ -446,7 +446,7 @@ DH_Type_Field_Info_State& DH_Type_Field_Info_State::encode()
  return *this;
 }
 
- //?_KANS(DgDb)
+_KANS(DGDB)
 
 #endif // DH_TYPE__H
 

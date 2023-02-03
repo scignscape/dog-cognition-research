@@ -23,7 +23,7 @@
 //#include "dh-frame.h"
 
 
-//KANS_(DGDB)
+KANS_(DGDB)
 
 class DgDb_Database_Instance;
 
@@ -49,6 +49,8 @@ public:
  ACCESSORS(n8 ,record_id)
 };
 
+
+_KANS(DGDB)
 
 
 #endif // DH_RECORD__H

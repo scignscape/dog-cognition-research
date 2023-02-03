@@ -23,7 +23,7 @@
 
 #include "kans.h"
 
-//KANS_(DGDB)
+KANS_(DGDB)
 
 //struct void*
 //{
@@ -92,7 +92,7 @@ std::function<void(QQueue<void*>&)> default_stage_queue_reader(void (T::*fn)(QQu
 
 
 
-//_KANS(DGDB)
+_KANS(DGDB)
 
 #endif // DH_STAGE_QUEUE__H
 

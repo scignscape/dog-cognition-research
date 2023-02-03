@@ -8,6 +8,8 @@
 
 #include <QDataStream>
 
+#include <QIODevice>
+
 
 Demo_Class::Demo_Class()
  : a_number_(0)

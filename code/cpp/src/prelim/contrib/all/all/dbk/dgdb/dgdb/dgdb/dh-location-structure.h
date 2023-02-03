@@ -20,7 +20,9 @@
 // //  pattern
 //     0b 0000'0000'0000'0000 0000'0000'0000'1000 0000'0000'0000'0000 0000'0000'0000'1000
 
+#include "kans.h"
 
+KANS_(DGDB)
 
 class DH_Location_Structure
 {
@@ -50,8 +52,8 @@ public:
   Signed_Numeric, Typed_Numeric, Typed_QString,
   Typed_Raw_Binary, Typed_Shm_Pointer,
   Typed_Shm_Pointer_With_Path_Code,
-  Typed_In_Edge,  //  does "typed" make sense here?
-  Typed_Out_Edge  //  does "typed" make sense here?
+  Typed_In_Edge,  // //  does "typed" make sense here?
+  Typed_Out_Edge  // //  does "typed" make sense here?
  };
 
 
@@ -86,6 +88,10 @@ public:
 
 
 };
+
+_KANS(DGDB)
+
+USING_KANS(DGDB)
 
 namespace _class_DH_Location_Structure
 {

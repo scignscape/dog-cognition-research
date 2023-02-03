@@ -8,7 +8,7 @@
 #include "dh-stage-queue.h"
 
 
-//USING_KANS(DGDB)
+USING_KANS(DGDB)
 
 //QQueue<void*> DH_Stage_Queue::xvalues = QQueue<void*>();
 

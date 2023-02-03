@@ -5,3 +5,6 @@
 
 
 #include "dh-record.h"
+
+USING_KANS(DGDB)
+

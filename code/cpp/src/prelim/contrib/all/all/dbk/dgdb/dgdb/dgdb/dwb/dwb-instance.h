@@ -20,6 +20,9 @@
 
 #include <sys/types.h>
 
+#include "kans.h"
+
+KANS_(DGDB)
 
 class DH_Stage_Value;
 
@@ -105,6 +108,7 @@ public:
 
 };
 
+_KANS(DGDB)
 
 #endif // DWB_INSTANCE__H
 

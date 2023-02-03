@@ -62,7 +62,7 @@ public:
    data_ = *default_;
    return DBM::RecordProcessor::NOOP;
   }
-  return nullptr;
+  return {};
  }
 
  ACCESSORS__GET(VALUE_Type ,data)

@@ -28,7 +28,7 @@
 #include <QtXml>
 
 
- //?KANS_(DgDb)
+KANS_(DGDB)
 
 //class DgDb_Node;
 
@@ -132,7 +132,8 @@ public:
 };
 
 
- //?_KANS(DgDb)
+_KANS(DGDB)
+
 
 #endif // DH_TYPE__H
 

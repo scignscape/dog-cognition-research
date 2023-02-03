@@ -20,6 +20,8 @@ extern "C" {
 #include <QDataStream>
 #include <QDebug>
 
+#include <QIODevice>
+
 
 int main(int argc, char *argv[])
 {

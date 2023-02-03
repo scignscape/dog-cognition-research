@@ -22,12 +22,11 @@
 
 #include "graph/dh-frame.h"
 
-//? KANS_(DGDB)
 
 #include "tkrzw/tkrzw_index.h"
 #include "tkrzw/tkrzw_str_util.h"
 
-
+KANS_(DGDB)
 
 class DgDb_Database_Instance;
 class DgDb_Hypernode;
@@ -107,7 +106,7 @@ public:
 
 };
 
-//? _KANS(DGDB)
+_KANS(DGDB)
 
 
 #endif // DH_DOMINION__H

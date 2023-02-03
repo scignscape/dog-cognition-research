@@ -23,6 +23,10 @@
 
 #include "dh-stage-value.h"
 
+USING_KANS(DGDB)
+
+
+
 inline QByteArray u1_to_qba(u1 u)
 {
  return QByteArray(1, u);

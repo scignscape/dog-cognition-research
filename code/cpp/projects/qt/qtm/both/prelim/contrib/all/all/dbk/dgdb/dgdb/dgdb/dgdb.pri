@@ -18,6 +18,8 @@ exists($$ROOT_DIR/../preferred/sysr-c.pri): include($$ROOT_DIR/../preferred/sysr
 exists($$ROOT_DIR/../preferred/compiler.pri): include($$ROOT_DIR/../preferred/compiler.pri)
 
 
+
+
 CONFIG += c++17
 
 
@@ -41,29 +43,29 @@ INCLUDEPATH += $$WHITEDB_SRC_GROUP_DIR
 #INCLUDEPATH += $$PHAON_GRAPH_SRC_GROUP_DIR
 
 
-HEADERS += \
-  $$SRC_DIR/dh-location-structure.h  \
-  $$SRC_DIR/dgdb-database-instance.h  \
-  $$SRC_DIR/dh-record-processors.h  \
-  $$SRC_DIR/conversions.h  \
-  $$SRC_DIR/dgdb-hypernode.h  \
-  $$SRC_DIR/dwb/dwb-instance.h  \
-  $$SRC_DIR/dtb/dtb-package.h  \
-  $$SRC_DIR/dtb/sv-wrapper.h  \
-  $$SRC_DIR/dtb/_sv-wrapper.h  \
-  $$SRC_DIR/types/dh-type.h  \
-  $$SRC_DIR/types/dh-type-system.h  \
-  $$SRC_DIR/types/dh-type-builder.h  \
-  $$SRC_DIR/types/dh-subvalue-field.h  \
-  $$SRC_DIR/types/dh-type-field-info-state.h  \
-  $$SRC_DIR/dgdb-data-out-stream.h  \
-  $$SRC_DIR/dh-stage-value.h  \
-  $$SRC_DIR/types/stage/dh-stage-queue.h  \
-  $$SRC_DIR/types/stage/dh-stage-code.h  \
-  $$SRC_DIR/graph/dh-frame.h  \
-  $$SRC_DIR/graph/dh-dominion.h  \
-  $$SRC_DIR/graph/dh-record.h  \
-  $$SRC_DIR/dh-instance.h  \
+#HEADERS += \
+#  $$SRC_DIR/dh-location-structure.h  \
+#  $$SRC_DIR/dgdb-database-instance.h  \
+#  $$SRC_DIR/dh-record-processors.h  \
+#  $$SRC_DIR/conversions.h  \
+#  $$SRC_DIR/dgdb-hypernode.h  \
+#  $$SRC_DIR/dwb/dwb-instance.h  \
+#  $$SRC_DIR/dtb/dtb-package.h  \
+#  $$SRC_DIR/dtb/sv-wrapper.h  \
+#  $$SRC_DIR/dtb/_sv-wrapper.h  \
+#  $$SRC_DIR/types/dh-type.h  \
+#  $$SRC_DIR/types/dh-type-system.h  \
+#  $$SRC_DIR/types/dh-type-builder.h  \
+#  $$SRC_DIR/types/dh-subvalue-field.h  \
+#  $$SRC_DIR/types/dh-type-field-info-state.h  \
+#  $$SRC_DIR/dgdb-data-out-stream.h  \
+#  $$SRC_DIR/dh-stage-value.h  \
+#  $$SRC_DIR/types/stage/dh-stage-queue.h  \
+#  $$SRC_DIR/types/stage/dh-stage-code.h  \
+#  $$SRC_DIR/graph/dh-frame.h  \
+#  $$SRC_DIR/graph/dh-dominion.h  \
+#  $$SRC_DIR/graph/dh-record.h  \
+#  $$SRC_DIR/dh-instance.h  \
 
 
 

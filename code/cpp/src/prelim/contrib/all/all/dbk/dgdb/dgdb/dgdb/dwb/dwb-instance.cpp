@@ -27,11 +27,12 @@ extern "C" {
 #include "whitedb/_whitedb.h"
 }
 
+USING_KANS(DGDB)
 
 
 DWB_Instance::DWB_Instance(QString config_path, QString restore_path)
-  :  config_path_(config_path),
-     restore_path_(restore_path), wdb_instance_(nullptr)
+  :  config_path_(config_path), restore_path_(restore_path), ftok_key_(0),
+     wdb_instance_(nullptr)
 {
 
 }

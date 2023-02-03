@@ -11,9 +11,12 @@ TEMPLATE = app
 
 QT -= gui
 
-include($$ROOT_DIR/../preferred/sysr.pri)
 
-#include($$ROOT_DIR/../preferred/sysr-c.pri)
+exists($$ROOT_DIR/../preferred/sysr.pri): include($$ROOT_DIR/../preferred/sysr.pri)
+exists($$ROOT_DIR/../preferred/sysr-c.pri): include($$ROOT_DIR/../preferred/sysr-c.pri)
+exists($$ROOT_DIR/../preferred/compiler.pri): include($$ROOT_DIR/../preferred/compiler.pri)
+
+
 
 DEFINES += DEFAULT_DEV_DGDB_FOLDER=\\\"$$ROOT_DIR/dev/consoles/dgdb\\\"
 

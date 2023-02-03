@@ -29,7 +29,6 @@
 
 #include "kans.h"
 
-class DgDb_Hypernode;
 
 #define _TYPECODE_QUERY_MACROS(x) \
  x(User_Data ,char*) \
@@ -49,6 +48,10 @@ class DgDb_Hypernode;
  x(WG_TIMETYPE ,QTime) \
  x(QDateTime ,QDateTime) \
 
+
+KANS_(DGDB)
+
+class DgDb_Hypernode;
 
 
 class DH_Stage_Code
@@ -221,6 +224,10 @@ public:
 
 };
 
+_KANS(DGDB)
+
+USING_KANS(DGDB)
+
 
 #define TEMP_MACRO(x ,y) \
 template<> \
@@ -272,9 +279,6 @@ inline DH_Stage_Code DH_Stage_Code::get_prelim_for_type<u4>()
 }
 
 
-
-
-//_KANS(DGDB)
 
 #endif // DH_Stage_Code__H
 

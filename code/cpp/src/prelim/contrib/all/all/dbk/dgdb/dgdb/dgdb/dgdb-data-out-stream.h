@@ -25,7 +25,8 @@
 #include "kans.h"
 
 
- //?KANS_(DgDb)
+KANS_(DGDB)
+
 
 class DH_Type;
 class DH_Type_Builder;
@@ -77,7 +78,8 @@ public:
 // return *this;
 //}
 
- //?_KANS(DgDb)
+_KANS(DGDB)
+
 
 #endif // DGDB_DATA_OUT_STREAM__H
 

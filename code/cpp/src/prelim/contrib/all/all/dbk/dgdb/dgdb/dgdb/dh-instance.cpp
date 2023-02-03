@@ -155,9 +155,13 @@ DH_Record DH_Instance::add_hyperedge_or_multi_relation(DH_Record& source, QStrin
   const DH_Record* annotation,
   DH_Record& target, u4 multi_relation_code)
 {
+//? QPair<QPair<QString, DH_Record>, DH_Record> edge = annotation?
+//   QPair<QPair<QString, DH_Record>, DH_Record>{{connector, *annotation}, target}
+//   : QPair<QPair<QString, DH_Record>, DH_Record>{QPair{connector, QPair{0, nullptr} }, target};
+
  QPair<QPair<QString, DH_Record>, DH_Record> edge = annotation?
    QPair<QPair<QString, DH_Record>, DH_Record>{{connector, *annotation}, target}
-   : QPair<QPair<QString, DH_Record>, DH_Record>{QPair{connector, QPair{0, nullptr} }, target};
+   : QPair<QPair<QString, DH_Record>, DH_Record>{QPair<QString, DH_Record>{connector, DH_Record()}, target};
 
  QVector<QPair<QPair<QString, DH_Record>, DH_Record>> targets {edge};
 

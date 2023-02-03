@@ -21,7 +21,7 @@
 #include "flags.h"
 
 
-//? KANS_(DGDB)
+KANS_(DGDB)
 
 class DH_Instance;
 
@@ -40,7 +40,7 @@ public:
 
 };
 
-//? _KANS(DGDB)
+_KANS(DGDB)
 
 
 #endif // DH_DOMINION__H

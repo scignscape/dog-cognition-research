@@ -17,6 +17,8 @@ extern "C" {
 
 #include <QDebug>
 
+#include <QIODevice>
+
 
 USING_KANS(DGDB)
 

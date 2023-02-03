@@ -1180,7 +1180,8 @@ compiler_clean: compiler_moc_predefs_clean
 		/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dgdb/dgdb-white/dgdb-white/stage/dw-stage-queue.h \
 		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/QDataStream \
 		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qdatastream.h \
-		/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/whitedb/whitedb/whitedb/_whitedb.h
+		/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/whitedb/whitedb/whitedb/_whitedb.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/QIODevice
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o /home/nlevisrael/gits/dcr-wip/ar/code/cpp/targets/contrib/all/all/qt/qt-multiple/nomark/targets-5-15-2-Desktop_Qt_5_15_2_GCC_64bit/PROJECT_OBJECTS/dgdb-white/debug/wdb-instance.o /home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dgdb/dgdb-white/dgdb-white/wdb-instance.cpp
 
 /home/nlevisrael/gits/dcr-wip/ar/code/cpp/targets/contrib/all/all/qt/qt-multiple/nomark/targets-5-15-2-Desktop_Qt_5_15_2_GCC_64bit/PROJECT_OBJECTS/dgdb-white/debug/dw-instance.o: /home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dgdb/dgdb-white/dgdb-white/dw-instance.cpp /home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dgdb/dgdb-white/dgdb-white/dw-instance.h \

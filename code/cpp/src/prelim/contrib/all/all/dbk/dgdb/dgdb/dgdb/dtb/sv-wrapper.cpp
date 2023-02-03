@@ -10,6 +10,9 @@
 
 #include "tkrzw/tkrzw_dbm.h"
 
+USING_KANS(DGDB)
+
+
 QString SV_Wrapper::qstring()
 {
  return QString::fromStdString(std::string{value});

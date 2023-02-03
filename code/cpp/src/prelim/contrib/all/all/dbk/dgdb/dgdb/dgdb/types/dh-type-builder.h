@@ -17,7 +17,7 @@
 
 #include "kans.h"
 
- //?KANS_(DgDb)
+KANS_(DGDB)
 
 class DH_Type;
 
@@ -45,7 +45,7 @@ public:
 };
 
 
- //?_KANS(DgDb)
+_KANS(DGDB)
 
 #endif // DH_TYPE_BUILDER__H
 

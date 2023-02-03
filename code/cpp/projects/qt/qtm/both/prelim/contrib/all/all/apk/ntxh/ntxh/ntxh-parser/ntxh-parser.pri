@@ -17,6 +17,15 @@ exists($$ROOT_DIR/../preferred/compiler.pri): include($$ROOT_DIR/../preferred/co
 
 CONFIG += c++17
 
+equals(QT_MAJOR_VERSION, 5){
+DEFINES += USING_QT5
+}
+equals(QT_MAJOR_VERSION, 6) {
+DEFINES += USING_QT6
+}
+
+
+
 
 INCLUDEPATH += $$SRC_DIR $$SRC_GROUP_DIR $$SRC_ROOT_DIR
 

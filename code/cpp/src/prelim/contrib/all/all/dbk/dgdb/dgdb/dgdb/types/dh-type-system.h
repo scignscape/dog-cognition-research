@@ -37,7 +37,7 @@ register_type_with_name_resolution<tn>(#tn)
 #endif
 
 
- //?KANS_(DgDb)
+KANS_(DGDB)
 
 class DH_Type;
 class DH_Type_Builder;
@@ -76,7 +76,7 @@ public:
 };
 
 
- //?_KANS(DgDb)
+_KANS(DGDB)
 
 #endif // DH_TYPE_SYSTEM__H
 

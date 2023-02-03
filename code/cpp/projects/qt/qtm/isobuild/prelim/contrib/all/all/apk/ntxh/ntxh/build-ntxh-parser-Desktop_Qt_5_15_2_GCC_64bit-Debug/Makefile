@@ -14,7 +14,7 @@ EQ            = =
 
 CC            = gcc-7
 CXX           = g++-7
-DEFINES       = -DWHICH_DEFINES=\"./_defines/isobuild_defines.h\" -DUSE_KANS -DQT_QML_DEBUG -DQT_NO_KEYWORDS -DQT_CORE_LIB
+DEFINES       = -DWHICH_DEFINES=\"./_defines/isobuild_defines.h\" -DUSING_QT5 -DUSE_KANS -DQT_QML_DEBUG -DQT_NO_KEYWORDS -DQT_CORE_LIB
 CFLAGS        = -pipe -g -Wall -Wextra -D_REENTRANT -fPIC $(DEFINES)
 CXXFLAGS      = -pipe -g -std=gnu++1z -Wall -Wextra -D_REENTRANT -fPIC $(DEFINES)
 INCPATH       = -I../ntxh-parser -I. -I/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim -I/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/apk/ntxh/ntxh/ntxh-parser -I/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src -I/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/global -I/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/apk/ntxh/ntxh/ntxh-parser -I/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/apk/ntxh/ntxh -I/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src -I/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/apk/ntxh/relae-graph -I/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/apk/ntxh/ntxh/ntxh -I/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/apk/ntxh/phaon-graph -I/home/nlevisrael/Qt/5.15.2/gcc_64/include -I/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore -I. -I/home/nlevisrael/Qt/5.15.2/gcc_64/mkspecs/linux-g++
@@ -252,6 +252,7 @@ DIST          = /home/nlevisrael/Qt/5.15.2/gcc_64/mkspecs/features/spec_pre.prf 
 		/home/nlevisrael/Qt/5.15.2/gcc_64/mkspecs/features/qt_config.prf \
 		/home/nlevisrael/Qt/5.15.2/gcc_64/mkspecs/linux-g++/qmake.conf \
 		/home/nlevisrael/Qt/5.15.2/gcc_64/mkspecs/features/spec_post.prf \
+		../ntxh-parser/.qmake.stash \
 		/home/nlevisrael/Qt/5.15.2/gcc_64/mkspecs/features/exclusive_builds.prf \
 		/home/nlevisrael/Qt/5.15.2/gcc_64/mkspecs/features/toolchain.prf \
 		/home/nlevisrael/Qt/5.15.2/gcc_64/mkspecs/features/default_pre.prf \
@@ -519,6 +520,7 @@ Makefile: ../ntxh-parser/ntxh-parser.pro /home/nlevisrael/Qt/5.15.2/gcc_64/mkspe
 		/home/nlevisrael/Qt/5.15.2/gcc_64/mkspecs/features/qt_config.prf \
 		/home/nlevisrael/Qt/5.15.2/gcc_64/mkspecs/linux-g++/qmake.conf \
 		/home/nlevisrael/Qt/5.15.2/gcc_64/mkspecs/features/spec_post.prf \
+		.qmake.stash \
 		/home/nlevisrael/Qt/5.15.2/gcc_64/mkspecs/features/exclusive_builds.prf \
 		/home/nlevisrael/Qt/5.15.2/gcc_64/mkspecs/features/toolchain.prf \
 		/home/nlevisrael/Qt/5.15.2/gcc_64/mkspecs/features/default_pre.prf \
@@ -742,6 +744,7 @@ Makefile: ../ntxh-parser/ntxh-parser.pro /home/nlevisrael/Qt/5.15.2/gcc_64/mkspe
 /home/nlevisrael/Qt/5.15.2/gcc_64/mkspecs/features/qt_config.prf:
 /home/nlevisrael/Qt/5.15.2/gcc_64/mkspecs/linux-g++/qmake.conf:
 /home/nlevisrael/Qt/5.15.2/gcc_64/mkspecs/features/spec_post.prf:
+.qmake.stash:
 /home/nlevisrael/Qt/5.15.2/gcc_64/mkspecs/features/exclusive_builds.prf:
 /home/nlevisrael/Qt/5.15.2/gcc_64/mkspecs/features/toolchain.prf:
 /home/nlevisrael/Qt/5.15.2/gcc_64/mkspecs/features/default_pre.prf:
@@ -1007,6 +1010,7 @@ compiler_clean: compiler_moc_predefs_clean
 		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qcontiguouscache.h \
 		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qsharedpointer.h \
 		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qsharedpointer_impl.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/QVectorIterator \
 		/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/apk/ntxh/relae-graph/relae-graph/relae-regex.h \
 		/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/rz-typedefs.h \
 		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/QString \
@@ -1325,6 +1329,7 @@ compiler_clean: compiler_moc_predefs_clean
 		/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/apk/ntxh/ntxh/ntxh-parser/grammar/ntxh-grammar.h \
 		/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/apk/ntxh/relae-graph/relae-graph/relae-grammar.h \
 		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/QRegularExpressionMatch \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/QVectorIterator \
 		/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/apk/ntxh/ntxh/ntxh-parser/grammar/ntxh-parser.h \
 		/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/apk/ntxh/ntxh/ntxh-parser/grammar/ntxh-graph-build.h \
 		/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/apk/ntxh/ntxh/ntxh-parser/grammar/ntxh-parse-context.h \

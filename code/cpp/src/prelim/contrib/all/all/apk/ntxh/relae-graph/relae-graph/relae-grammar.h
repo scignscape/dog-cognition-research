@@ -12,6 +12,8 @@
 
 #include <QRegularExpressionMatch>
 
+#include <QVectorIterator>
+
 #include "relae-regex.h"
 #include "flags.h"
 
@@ -507,13 +509,14 @@ public:
    {
     if(double_dot_flag)
     {
+     main_acc += "..";
      double_dot_flag = false;
      if(c == 0)
-      main_acc += '.' + '.';
+      ;
      else if(c == ' ' || c == '\n' || c == '\r' || c == ']')
-      main_acc += '.' + '.' + c;
+      main_acc += c;
      else if(c == '.')
-      main_acc += '.' + '.' + '.';
+      main_acc += QChar::fromLatin1('.');
      else
      {
       local_name_flag = true;

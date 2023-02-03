@@ -32,6 +32,9 @@
 
 //typedef StdIndex<int64_t, Hyperedge_Data> Triples_Index_type;
 
+
+KANS_(DGDB)
+
 struct Hyperedge_Data;
 
 
@@ -96,6 +99,7 @@ public:
  tkrzw::DBM* find_dbm(QString key);
 };
 
+_KANS(DGDB)
 
 #endif // DWB_INSTANCE__H
 

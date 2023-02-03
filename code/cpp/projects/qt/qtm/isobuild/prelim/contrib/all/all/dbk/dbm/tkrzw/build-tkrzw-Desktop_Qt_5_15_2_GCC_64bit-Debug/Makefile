@@ -17,7 +17,7 @@ CXX           = g++-7
 DEFINES       = -DWHICH_DEFINES=\"./_defines/isobuild_defines.h\" -DDEFAULT_DEV_DGDB_FOLDER=\"/home/nlevisrael/gits/dcr-wip/ar/dev/consoles/dgdb\" -D_TKRZW_PKG_VERSION=\"1.1.0\" -D_TKRZW_PKG_VERSION=\"1.1.0\" -DUSE_KANS -DQT_QML_DEBUG -DQT_CORE_LIB
 CFLAGS        = -pipe -g -Wall -Wextra -D_REENTRANT -fPIC $(DEFINES)
 CXXFLAGS      = -pipe -g -std=gnu++1z -Wall -Wextra -D_REENTRANT -fPIC $(DEFINES)
-INCPATH       = -I../tkrzw -I. -I/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dbm/tkrzw/tkrzw -I/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src -I/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/global -I/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dbm/tkrzw/tkrzw -I/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dbm/tkrzw -I/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/whitedb/whitedb -I/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dbm/tkrzw/dgdb-white -I/home/nlevisrael/Qt/5.15.2/gcc_64/include -I/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore -I. -I/home/nlevisrael/Qt/5.15.2/gcc_64/mkspecs/linux-g++
+INCPATH       = -I../tkrzw -I. -I/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim -I/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dbm/tkrzw/tkrzw -I/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src -I/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/global -I/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dbm/tkrzw/tkrzw -I/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dbm/tkrzw -I/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/whitedb/whitedb -I/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dbm/tkrzw/dgdb-white -I/home/nlevisrael/Qt/5.15.2/gcc_64/include -I/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore -I. -I/home/nlevisrael/Qt/5.15.2/gcc_64/mkspecs/linux-g++
 QMAKE         = /home/nlevisrael/Qt/5.15.2/gcc_64/bin/qmake
 DEL_FILE      = rm -f
 CHK_DIR_EXISTS= test -d
@@ -315,6 +315,8 @@ DIST          = /home/nlevisrael/Qt/5.15.2/gcc_64/mkspecs/features/spec_pre.prf 
 		../build-group.pri \
 		/home/nlevisrael/gits/dcr-wip/ar/code/cpp/projects/qt/qtm/both/prelim/contrib/all/all/dbk/dbm/tkrzw/build-group.pri \
 		/home/nlevisrael/gits/dcr-wip/preferred/sysr.pri \
+		/home/nlevisrael/gits/dcr-wip/preferred/sysr-c.pri \
+		/home/nlevisrael/gits/dcr-wip/preferred/compiler.pri \
 		/home/nlevisrael/gits/dcr-wip/ar/code/cpp/projects/qt/qtm/both/prelim/contrib/all/all/dbk/dbm/tkrzw/tkrzw/tkrzw.pri \
 		/home/nlevisrael/Qt/5.15.2/gcc_64/mkspecs/features/resolve_config.prf \
 		/home/nlevisrael/Qt/5.15.2/gcc_64/mkspecs/features/default_post.prf \
@@ -643,6 +645,8 @@ Makefile: ../tkrzw/tkrzw.pro /home/nlevisrael/Qt/5.15.2/gcc_64/mkspecs/linux-g++
 		../build-group.pri \
 		/home/nlevisrael/gits/dcr-wip/ar/code/cpp/projects/qt/qtm/both/prelim/contrib/all/all/dbk/dbm/tkrzw/build-group.pri \
 		/home/nlevisrael/gits/dcr-wip/preferred/sysr.pri \
+		/home/nlevisrael/gits/dcr-wip/preferred/sysr-c.pri \
+		/home/nlevisrael/gits/dcr-wip/preferred/compiler.pri \
 		/home/nlevisrael/gits/dcr-wip/ar/code/cpp/projects/qt/qtm/both/prelim/contrib/all/all/dbk/dbm/tkrzw/tkrzw/tkrzw.pri \
 		/home/nlevisrael/Qt/5.15.2/gcc_64/mkspecs/features/resolve_config.prf \
 		/home/nlevisrael/Qt/5.15.2/gcc_64/mkspecs/features/default_post.prf \
@@ -864,6 +868,8 @@ Makefile: ../tkrzw/tkrzw.pro /home/nlevisrael/Qt/5.15.2/gcc_64/mkspecs/linux-g++
 ../build-group.pri:
 /home/nlevisrael/gits/dcr-wip/ar/code/cpp/projects/qt/qtm/both/prelim/contrib/all/all/dbk/dbm/tkrzw/build-group.pri:
 /home/nlevisrael/gits/dcr-wip/preferred/sysr.pri:
+/home/nlevisrael/gits/dcr-wip/preferred/sysr-c.pri:
+/home/nlevisrael/gits/dcr-wip/preferred/compiler.pri:
 /home/nlevisrael/gits/dcr-wip/ar/code/cpp/projects/qt/qtm/both/prelim/contrib/all/all/dbk/dbm/tkrzw/tkrzw/tkrzw.pri:
 /home/nlevisrael/Qt/5.15.2/gcc_64/mkspecs/features/resolve_config.prf:
 /home/nlevisrael/Qt/5.15.2/gcc_64/mkspecs/features/default_post.prf:

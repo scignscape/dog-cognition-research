@@ -22,7 +22,7 @@
 
 #include "stage/dh-stage-code.h"
 
- //?KANS_(DgDb)
+KANS_(DGDB)
 
 class DH_Type;
 
@@ -192,7 +192,7 @@ struct DH
 
 };
 
- //?_KANS(DgDb)
+_KANS(DGDB)
 
 #endif // DH_SUBVALUE_FIELD__H
 

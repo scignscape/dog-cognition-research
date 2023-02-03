@@ -97,7 +97,8 @@ void NTXH_Builder::add_type_fields(QString qs, int start)
 {
  QList<QStringList> fs;
 
- QStringList qsl = qs.split(",", QString::SplitBehavior::SkipEmptyParts);
+//? QStringList qsl = qs.split(",", QString::SplitBehavior::SkipEmptyParts);
+ QStringList qsl = qs.split(",", Qt::SkipEmptyParts);
 
  for(QString iqs : qsl)
  {

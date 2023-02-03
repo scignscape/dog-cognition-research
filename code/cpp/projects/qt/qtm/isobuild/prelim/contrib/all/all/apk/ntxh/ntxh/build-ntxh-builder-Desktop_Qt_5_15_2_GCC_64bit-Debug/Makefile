@@ -244,6 +244,7 @@ DIST          = /home/nlevisrael/Qt/5.15.2/gcc_64/mkspecs/features/spec_pre.prf 
 		/home/nlevisrael/Qt/5.15.2/gcc_64/mkspecs/features/qt_config.prf \
 		/home/nlevisrael/Qt/5.15.2/gcc_64/mkspecs/linux-g++/qmake.conf \
 		/home/nlevisrael/Qt/5.15.2/gcc_64/mkspecs/features/spec_post.prf \
+		../ntxh-builder/.qmake.stash \
 		/home/nlevisrael/Qt/5.15.2/gcc_64/mkspecs/features/exclusive_builds.prf \
 		/home/nlevisrael/Qt/5.15.2/gcc_64/mkspecs/features/toolchain.prf \
 		/home/nlevisrael/Qt/5.15.2/gcc_64/mkspecs/features/default_pre.prf \
@@ -503,6 +504,7 @@ Makefile: ../ntxh-builder/ntxh-builder.pro /home/nlevisrael/Qt/5.15.2/gcc_64/mks
 		/home/nlevisrael/Qt/5.15.2/gcc_64/mkspecs/features/qt_config.prf \
 		/home/nlevisrael/Qt/5.15.2/gcc_64/mkspecs/linux-g++/qmake.conf \
 		/home/nlevisrael/Qt/5.15.2/gcc_64/mkspecs/features/spec_post.prf \
+		.qmake.stash \
 		/home/nlevisrael/Qt/5.15.2/gcc_64/mkspecs/features/exclusive_builds.prf \
 		/home/nlevisrael/Qt/5.15.2/gcc_64/mkspecs/features/toolchain.prf \
 		/home/nlevisrael/Qt/5.15.2/gcc_64/mkspecs/features/default_pre.prf \
@@ -726,6 +728,7 @@ Makefile: ../ntxh-builder/ntxh-builder.pro /home/nlevisrael/Qt/5.15.2/gcc_64/mks
 /home/nlevisrael/Qt/5.15.2/gcc_64/mkspecs/features/qt_config.prf:
 /home/nlevisrael/Qt/5.15.2/gcc_64/mkspecs/linux-g++/qmake.conf:
 /home/nlevisrael/Qt/5.15.2/gcc_64/mkspecs/features/spec_post.prf:
+.qmake.stash:
 /home/nlevisrael/Qt/5.15.2/gcc_64/mkspecs/features/exclusive_builds.prf:
 /home/nlevisrael/Qt/5.15.2/gcc_64/mkspecs/features/toolchain.prf:
 /home/nlevisrael/Qt/5.15.2/gcc_64/mkspecs/features/default_pre.prf:

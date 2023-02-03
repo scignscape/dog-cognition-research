@@ -7,6 +7,7 @@
 
 #include "dgdb-data-out-stream.h"
 
+USING_KANS(DGDB)
 
 DgDb_Data_Out_Stream::DgDb_Data_Out_Stream(const QByteArray& device)
   :  device_(device), index_(0)

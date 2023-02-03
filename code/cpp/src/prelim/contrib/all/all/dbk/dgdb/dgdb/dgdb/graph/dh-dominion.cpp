@@ -7,7 +7,7 @@
 #include "dh-dominion.h"
 
 
-//? USING_KANS(DGDB)
+USING_KANS(DGDB)
 
 
 DH_Dominion::DH_Dominion()

@@ -25,7 +25,7 @@
 #include <QDataStream>
 
 
-//KANS_(DGDB)
+KANS_(DGDB)
 
 class DgDb_Database_Instance;
 
@@ -168,7 +168,7 @@ _Frame_With_Source_and_Dominion_Connector operator<<(DgDb_Hypernode* lhs,
   const _Frame_With_Dominion_Connector& rhs);
 
 
-//?_KANS(DGDB)
+_KANS(DGDB)
 
 
 #endif // DH_FRAME__H

@@ -19,6 +19,9 @@
 // //  pattern
 //     0b 0000'0000'0000'0000 0000'0000'0000'1000 0000'0000'0000'0000 0000'0000'0000'1000
 
+#include "kans.h"
+
+KANS_(DGDB)
 
 class DH_Type;
 
@@ -47,6 +50,8 @@ public:
 
 
 };
+
+_KANS(DGDB)
 
 
 #endif // DGDB_HYPERNODE__H

@@ -7,34 +7,49 @@
 
 #include "dgdb-database-instance.h"
 
+
+
 #include <QDir>
 #include <QFileInfo>
 #include <QDebug>
 
+
+
 #include "dh-location-structure.h"
+
 
 #include "dwb/dwb-instance.h"
 
+
 #include "conversions.h"
+
 
 //#include <string_view>
 
 #include "dh-record-processors.h"
 
+
 #include "dgdb-data-out-stream.h"
+
 
 #include "dtb/dtb-package.h"
 
+
 #include "dgdb-hypernode.h"
 
+
 #include "dh-stage-value.h"
+
 
 #include "types/dh-type-system.h"
 #include "types/dh-type.h"
 
+
 #include "dh-instance.h"
 
+
 #include <QDataStream>
+
 
 //class _rec_proc : public tkrzw::DBM::RecordProcessor
 //{
@@ -115,6 +130,13 @@ n8 DgDb_Database_Instance::new_record_id(n8 category_floor)
 }
 
 
+DH_Location_Structure DgDb_Database_Instance::property_site(DgDb_Hypernode& dh, QString label)
+{
+
+}
+
+
+
 char* DgDb_Database_Instance::allocate_shm_block(DH_Type* dht, u4 dh_id,
   QString init_message, u1 max_fixed, u2 total_columns, Block_Options options)
 {
@@ -178,7 +200,7 @@ void DgDb_Database_Instance::init_dtb_package()
  dtb_package_ = new DTB_Package;
 }
 
-s4 DgDb_Database_Instance::read_hypernode_count_status()
+void DgDb_Database_Instance::read_hypernode_count_status()
 {
  dtb_package_->check_info_dbm(private_folder_path_);
  hypernode_count_status_ = dtb_package_->read_hypernode_count_status();
@@ -1150,7 +1172,7 @@ DH_Type* DgDb_Database_Instance::get_type_by_name(QString tn, QString* res)
 }
 
 
-DgDb_Hypernode* DgDb_Database_Instance::new_hypernode_(DH_Type* dht)
+DgDb_Hypernode* DgDb_Database_Instance::_new_hypernode(DH_Type* dht)
 {
  DgDb_Hypernode* result = new_hypernode();
  result->set_dh_type(dht);
@@ -1163,9 +1185,9 @@ DgDb_Hypernode* DgDb_Database_Instance::new_hypernode_(DH_Type* dht)
  return result;
 }
 
-DgDb_Hypernode* DgDb_Database_Instance::new_hypernode_(DH_Type* dht, void* obj)
+DgDb_Hypernode* DgDb_Database_Instance::_new_hypernode(DH_Type* dht, void* obj)
 {
- DgDb_Hypernode* result = new_hypernode_(dht);
+ DgDb_Hypernode* result = _new_hypernode(dht);
  init_hypernode_from_object(result, obj);
  return result;
 }
@@ -1460,3 +1482,5 @@ void DgDb_Database_Instance::process_info_record(QString dbm_key, QString key,
    dtb_package_->process_info_record(dbm, key, empty, full);
 }
 
+
+//#endif //def HIDE

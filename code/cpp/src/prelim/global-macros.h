@@ -12,13 +12,13 @@
 #endif
 
 #ifndef _preproc_NUM_ARGS_
-#define _preproc_NUM_ARGS_(_1, _2, _3, _4, _5, _6, _7, _8, _9, TOTAL, ...) TOTAL
+#define _preproc_NUM_ARGS_(_1, _2, _3, _4, _5, _6, _7, _8, _9, _10, TOTAL, ...) TOTAL
 #endif
 
 //? #define VA_ARGS(...) , ##__VA_ARGS__
 
 #ifndef _preproc_NUM_ARGS
-#define _preproc_NUM_ARGS(...) _preproc_NUM_ARGS_(__VA_ARGS__, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0)
+#define _preproc_NUM_ARGS(...) _preproc_NUM_ARGS_(__VA_ARGS__, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0)
 #endif
 
 #ifndef _preproc_CONCAT_

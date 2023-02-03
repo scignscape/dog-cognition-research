@@ -8,6 +8,8 @@
 
 #include <QDataStream>
 
+#include <QIODevice>
+
 #include "dgdb-white/dw-stage-value.h"
 #include "dgdb-white/stage/dw-stage-queue.h"
 

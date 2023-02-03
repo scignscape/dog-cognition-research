@@ -34,8 +34,16 @@ void NTXH_Document::surround(QString divider, QString text)
    raw_text_.append(text);
  else
  {
+#ifdef USING_QT5
   raw_text_.prepend(text.midRef(0, index));
   raw_text_.append(text.midRef(index + divider.size()));
+#endif
+
+#ifdef USING_QT6
+  raw_text_.prepend(QStringView(text).mid(0, index));
+  raw_text_.append(QStringView(text).mid(index + divider.size()));
+#endif
+
  }
 }
 

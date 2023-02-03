@@ -25,7 +25,7 @@
 
 #include "kans.h"
 
-//KANS_(DGDB)
+KANS_(DGDB)
 
 //?
 static constexpr u1 C_STRING_DECODING_Flag = 4;
@@ -493,8 +493,7 @@ public:
 };
 
 
-
-//_KANS(DGDB)
+_KANS(DGDB)
 
 #endif // DH_STAGE_VALUE__H
 

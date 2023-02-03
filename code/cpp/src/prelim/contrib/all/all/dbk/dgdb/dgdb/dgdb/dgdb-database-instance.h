@@ -29,6 +29,9 @@
 
 #include <QVariant>
 
+
+KANS_(DGDB)
+
 class DgDb_Hypernode;
 class DWB_Instance;
 class DH_Type;
@@ -103,6 +106,42 @@ public:
  _Config Config;
 
 
+ struct Call_Operator_package {
+  DgDb_Database_Instance& _this;
+  DgDb_Hypernode* dh;
+
+  Call_Operator_package* operator->() { return this; };
+
+  inline DH_Location_Structure property_site(QString label)
+  {
+   return _this.property_site(*dh, label);
+  }
+
+  inline void set_property(QString key, QVariant value)
+  {
+   return _this.set_property(dh, key, value);
+  }
+
+  inline QVariant get_property(QString key)
+  {
+   return _this.get_property(dh, key);
+  }
+
+  template<typename VALUE_type>
+  inline VALUE_type get_property(QString key)
+  {
+   return _this.get_property(dh, key).value<VALUE_type>();
+  }
+
+ };
+
+ DH_Location_Structure property_site(DgDb_Hypernode& dh, QString label);
+
+
+ Call_Operator_package operator ()(DgDb_Hypernode* _dh) { return {*this, _dh}; }
+
+
+
  static constexpr s4 _unknown = -1;
  static constexpr s4 _file_create_failed = -2;
  static constexpr s4 _folder_create_failed = -3;
@@ -162,8 +201,8 @@ public:
 
  DgDb_Hypernode* new_hypernode();
 
- DgDb_Hypernode* new_hypernode_(DH_Type* dh_type);
- DgDb_Hypernode* new_hypernode_(DH_Type* dh_type, void* obj);
+ DgDb_Hypernode* _new_hypernode(DH_Type* dh_type);
+ DgDb_Hypernode* _new_hypernode(DH_Type* dh_type, void* obj);
 
  DH_Type* get_type_by_name(QString tn, QString* res = nullptr);
 
@@ -175,7 +214,7 @@ public:
   QString tn = QString::fromStdString(typeid(HYPERNODE_Type).name());
   QString res;
   DH_Type* dht = get_type_by_name(tn, &res);
-  return new_hypernode_(dht);
+  return _new_hypernode(dht);
  }
 
  template<typename HYPERNODE_Type>
@@ -184,7 +223,7 @@ public:
   QString tn = QString::fromStdString(typeid(HYPERNODE_Type).name());
   QString res;
   DH_Type* dht = get_type_by_name(tn, &res);
-  return new_hypernode_(dht, obj);
+  return _new_hypernode(dht, obj);
  }
 
 
@@ -195,7 +234,7 @@ public:
 //  QString tn = QString::fromStdString(typeid(HYPERNODE_Type).name());
 //  QString res;
 //  DH_Type* dht = get_type_by_name(tn, &res);
-//  return new_hypernode_(dht);
+//  return _new_hypernode(dht);
 // }
 
 
@@ -418,7 +457,7 @@ public:
 
  u1 check_construct_dwb_files(QString folder_path);
 
- s4 read_hypernode_count_status();
+ void read_hypernode_count_status();
  void read_interns_count_status();
 
 
@@ -452,6 +491,7 @@ public:
 
 };
 
+_KANS(DGDB)
 
 #endif // DGDB_DATABASE_INSTANCE__H
 

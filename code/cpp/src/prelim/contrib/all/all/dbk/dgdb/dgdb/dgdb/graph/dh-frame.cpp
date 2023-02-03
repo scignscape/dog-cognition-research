@@ -13,7 +13,7 @@
 #include "dh-instance.h"
 
 
-//? USING_KANS(DGDB)
+USING_KANS(DGDB)
 
 
 DH_Frame::DH_Frame(DH_Instance* dh_instance, u4 id)
