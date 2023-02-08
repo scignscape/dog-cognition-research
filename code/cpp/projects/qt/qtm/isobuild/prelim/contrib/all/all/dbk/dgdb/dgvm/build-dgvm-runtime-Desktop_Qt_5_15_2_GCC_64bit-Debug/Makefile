@@ -52,8 +52,10 @@ OBJECTS_DIR   = /home/nlevisrael/gits/dcr-wip/ar/code/cpp/targets/contrib/all/al
 
 ####### Files
 
-SOURCES       = /home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dgdb/dgvm/dgvm-runtime/dgvm-runtime.cpp 
-OBJECTS       = /home/nlevisrael/gits/dcr-wip/ar/code/cpp/targets/contrib/all/all/qt/qt-multiple/nomark/targets-5-15-2-Desktop_Qt_5_15_2_GCC_64bit/PROJECT_OBJECTS/dgvm-runtime/debug/dgvm-runtime.o
+SOURCES       = /home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dgdb/dgvm/dgvm-runtime/dgvm-runtime-environment.cpp \
+		/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dgdb/dgvm/dgvm-runtime/dgvm-runtime.cpp 
+OBJECTS       = /home/nlevisrael/gits/dcr-wip/ar/code/cpp/targets/contrib/all/all/qt/qt-multiple/nomark/targets-5-15-2-Desktop_Qt_5_15_2_GCC_64bit/PROJECT_OBJECTS/dgvm-runtime/debug/dgvm-runtime-environment.o \
+		/home/nlevisrael/gits/dcr-wip/ar/code/cpp/targets/contrib/all/all/qt/qt-multiple/nomark/targets-5-15-2-Desktop_Qt_5_15_2_GCC_64bit/PROJECT_OBJECTS/dgvm-runtime/debug/dgvm-runtime.o
 DIST          = /home/nlevisrael/Qt/5.15.2/gcc_64/mkspecs/features/spec_pre.prf \
 		/home/nlevisrael/Qt/5.15.2/gcc_64/mkspecs/common/unix.conf \
 		/home/nlevisrael/Qt/5.15.2/gcc_64/mkspecs/common/linux.conf \
@@ -276,7 +278,11 @@ DIST          = /home/nlevisrael/Qt/5.15.2/gcc_64/mkspecs/features/spec_pre.prf 
 		/home/nlevisrael/Qt/5.15.2/gcc_64/mkspecs/features/exceptions.prf \
 		/home/nlevisrael/Qt/5.15.2/gcc_64/mkspecs/features/yacc.prf \
 		/home/nlevisrael/Qt/5.15.2/gcc_64/mkspecs/features/lex.prf \
-		../dgvm-runtime/dgvm-runtime.pro /home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dgdb/dgvm/dgvm-runtime/dgvm-runtime.h /home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dgdb/dgvm/dgvm-runtime/dgvm-runtime.cpp
+		../dgvm-runtime/dgvm-runtime.pro /home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dgdb/dgvm/dgvm-runtime/dgvm-runtime-environment.h \
+		/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dgdb/dgvm/dgvm-runtime/dgvm-runtime-environment.templates.h \
+		/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dgdb/dgvm/dgvm-runtime/dgvm-runtime.h \
+		/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dgdb/dgvm/dgvm-runtime/dgvm-runtime.templates.h /home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dgdb/dgvm/dgvm-runtime/dgvm-runtime-environment.cpp \
+		/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dgdb/dgvm/dgvm-runtime/dgvm-runtime.cpp
 QMAKE_TARGET  = dgvm-runtime
 DESTDIR       = /home/nlevisrael/gits/dcr-wip/ar/code/cpp/targets/contrib/all/all/qt/qt-multiple/nomark/targets-5-15-2-Desktop_Qt_5_15_2_GCC_64bit/
 TARGET        = libdgvm-runtime.so.1.0.0
@@ -776,8 +782,8 @@ distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents /home/nlevisrael/Qt/5.15.2/gcc_64/mkspecs/features/data/dummy.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents /home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dgdb/dgvm/dgvm-runtime/dgvm-runtime.h $(DISTDIR)/
-	$(COPY_FILE) --parents /home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dgdb/dgvm/dgvm-runtime/dgvm-runtime.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents /home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dgdb/dgvm/dgvm-runtime/dgvm-runtime-environment.h /home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dgdb/dgvm/dgvm-runtime/dgvm-runtime-environment.templates.h /home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dgdb/dgvm/dgvm-runtime/dgvm-runtime.h /home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dgdb/dgvm/dgvm-runtime/dgvm-runtime.templates.h $(DISTDIR)/
+	$(COPY_FILE) --parents /home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dgdb/dgvm/dgvm-runtime/dgvm-runtime-environment.cpp /home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dgdb/dgvm/dgvm-runtime/dgvm-runtime.cpp $(DISTDIR)/
 
 
 clean: compiler_clean 
@@ -826,7 +832,7 @@ compiler_clean: compiler_moc_predefs_clean
 
 ####### Compile
 
-/home/nlevisrael/gits/dcr-wip/ar/code/cpp/targets/contrib/all/all/qt/qt-multiple/nomark/targets-5-15-2-Desktop_Qt_5_15_2_GCC_64bit/PROJECT_OBJECTS/dgvm-runtime/debug/dgvm-runtime.o: /home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dgdb/dgvm/dgvm-runtime/dgvm-runtime.cpp /home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/QDebug \
+/home/nlevisrael/gits/dcr-wip/ar/code/cpp/targets/contrib/all/all/qt/qt-multiple/nomark/targets-5-15-2-Desktop_Qt_5_15_2_GCC_64bit/PROJECT_OBJECTS/dgvm-runtime/debug/dgvm-runtime-environment.o: /home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dgdb/dgvm/dgvm-runtime/dgvm-runtime-environment.cpp /home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/QDebug \
 		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qdebug.h \
 		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qalgorithms.h \
 		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qglobal.h \
@@ -901,9 +907,21 @@ compiler_clean: compiler_moc_predefs_clean
 		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/QString \
 		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/QDataStream \
 		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qdatastream.h \
-		/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dgdb/dgvm/dgvm-runtime/dgvm-runtime.h \
+		/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dgdb/dgvm/dgvm-runtime/dgvm-runtime-environment.h \
 		/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/kans.h \
+		/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/global-types.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/QtGlobal \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/QMap \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/QPair \
+		/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/global-macros.h \
+		/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/enum-macros.h \
+		/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/tagged-ptr/mz/tagged_ptr.hpp \
 		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/QVector \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/QVariant \
+		/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dgdb/dgvm/dgvm-runtime/dgvm-runtime-environment.templates.h \
+		/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dgdb/dgvm/dgvm-runtime/dgvm-runtime.h \
+		/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/accessors.h \
+		/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dgdb/dgvm/dgvm-runtime/dgvm-runtime.templates.h \
 		/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dbm/tkrzw/tkrzw/tkrzw_dbm_hash.h \
 		/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dbm/tkrzw/tkrzw/tkrzw_compress.h \
 		/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dbm/tkrzw/tkrzw/tkrzw_lib_common.h \
@@ -913,13 +931,6 @@ compiler_clean: compiler_moc_predefs_clean
 		/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dbm/tkrzw/tkrzw/tkrzw_time_util.h \
 		/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dgdb/dgdb/dgdb/dh-location-structure.h \
 		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/QByteArray \
-		/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/global-types.h \
-		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/QtGlobal \
-		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/QMap \
-		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/QPair \
-		/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/global-macros.h \
-		/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/enum-macros.h \
-		/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/accessors.h \
 		/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dgdb/dgdb/dgdb/dgdb-database-instance.h \
 		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/QDir \
 		/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/flags.h \
@@ -930,7 +941,6 @@ compiler_clean: compiler_moc_predefs_clean
 		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtXml/qdom.h \
 		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtXml/qtxmlglobal.h \
 		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtXml/qtxml-config.h \
-		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/QVariant \
 		/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dgdb/dgdb/dgdb/types/stage/dh-stage-code.h \
 		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/QQueue \
 		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qqueue.h \
@@ -1087,7 +1097,275 @@ compiler_clean: compiler_moc_predefs_clean
 		/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dbm/tkrzw/tkrzw/tkrzw_dbm_baby.h \
 		/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dbm/tkrzw/tkrzw/tkrzw_key_comparators.h \
 		/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dbm/tkrzw/tkrzw/tkrzw_dbm_tree.h \
-		/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dbm/tkrzw/tkrzw/tkrzw_thread_util.h
+		/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dbm/tkrzw/tkrzw/tkrzw_thread_util.h \
+		/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/macro-ladder.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o /home/nlevisrael/gits/dcr-wip/ar/code/cpp/targets/contrib/all/all/qt/qt-multiple/nomark/targets-5-15-2-Desktop_Qt_5_15_2_GCC_64bit/PROJECT_OBJECTS/dgvm-runtime/debug/dgvm-runtime-environment.o /home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dgdb/dgvm/dgvm-runtime/dgvm-runtime-environment.cpp
+
+/home/nlevisrael/gits/dcr-wip/ar/code/cpp/targets/contrib/all/all/qt/qt-multiple/nomark/targets-5-15-2-Desktop_Qt_5_15_2_GCC_64bit/PROJECT_OBJECTS/dgvm-runtime/debug/dgvm-runtime.o: /home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dgdb/dgvm/dgvm-runtime/dgvm-runtime.cpp /home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/QDebug \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qdebug.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qalgorithms.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qglobal.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qconfig-bootstrapped.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qconfig.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qtcore-config.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qsystemdetection.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qprocessordetection.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qcompilerdetection.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qtypeinfo.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qsysinfo.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qlogging.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qflags.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qatomic.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qbasicatomic.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qatomic_bootstrap.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qgenericatomic.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qatomic_cxx11.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qatomic_msvc.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qglobalstatic.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qmutex.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qnumeric.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qversiontagging.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qhash.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qchar.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qiterator.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qlist.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qrefcount.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qarraydata.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qhashfunctions.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qstring.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qbytearray.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qnamespace.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qstringliteral.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qstringalgorithms.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qstringview.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qstringbuilder.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qpair.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qvector.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qcontainertools_impl.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qpoint.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qbytearraylist.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qstringlist.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qregexp.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qstringmatcher.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qmap.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qtextstream.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qiodevice.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qobject.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qobjectdefs.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qobjectdefs_impl.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qcoreevent.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qscopedpointer.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qmetatype.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qvarlengtharray.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qcontainerfwd.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qobject_impl.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qlocale.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qvariant.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qshareddata.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qset.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qcontiguouscache.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qsharedpointer.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qsharedpointer_impl.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/QFileInfo \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qfileinfo.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qfile.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qfiledevice.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/QDirIterator \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qdiriterator.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qdir.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/QString \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/QDataStream \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qdatastream.h \
+		/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dgdb/dgvm/dgvm-runtime/dgvm-runtime.h \
+		/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/kans.h \
+		/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/accessors.h \
+		/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/global-types.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/QtGlobal \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/QMap \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/QPair \
+		/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/global-macros.h \
+		/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/enum-macros.h \
+		/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/tagged-ptr/mz/tagged_ptr.hpp \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/QVector \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/QVariant \
+		/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dgdb/dgvm/dgvm-runtime/dgvm-runtime.templates.h \
+		/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dbm/tkrzw/tkrzw/tkrzw_dbm_hash.h \
+		/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dbm/tkrzw/tkrzw/tkrzw_compress.h \
+		/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dbm/tkrzw/tkrzw/tkrzw_lib_common.h \
+		/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dbm/tkrzw/tkrzw/tkrzw_dbm.h \
+		/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dbm/tkrzw/tkrzw/tkrzw_file.h \
+		/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dbm/tkrzw/tkrzw/tkrzw_str_util.h \
+		/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dbm/tkrzw/tkrzw/tkrzw_time_util.h \
+		/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dgdb/dgdb/dgdb/dh-location-structure.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/QByteArray \
+		/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dgdb/dgdb/dgdb/dgdb-database-instance.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/QDir \
+		/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/flags.h \
+		/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dgdb/dgdb/dgdb/types/dh-type.h \
+		/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dgdb/dgdb/dgdb/types/dh-type-field-info-state.h \
+		/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dgdb/dgdb/dgdb/types/dh-subvalue-field.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtXml/QDomElement \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtXml/qdom.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtXml/qtxmlglobal.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtXml/qtxml-config.h \
+		/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dgdb/dgdb/dgdb/types/stage/dh-stage-code.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/QQueue \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qqueue.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/QDateTime \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qdatetime.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/QDate \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtXml/QtXml \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtXml/QtXmlDepends \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/QtCore \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/QtCoreDepends \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qabstractanimation.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qabstracteventdispatcher.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qeventloop.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qabstractitemmodel.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qabstractnativeeventfilter.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qabstractproxymodel.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qabstractstate.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qabstracttransition.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qanimationgroup.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qarraydataops.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qarraydatapointer.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qbasictimer.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qbitarray.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qbuffer.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qbytearraymatcher.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qcache.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qcalendar.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qcborarray.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qcborvalue.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qcborcommon.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qregularexpression.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qurl.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qurlquery.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/quuid.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qcbormap.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qcborstream.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qcborstreamreader.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qfloat16.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qcborstreamwriter.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qcollator.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qcommandlineoption.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qcommandlineparser.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qcoreapplication.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qconcatenatetablesproxymodel.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qcryptographichash.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qdeadlinetimer.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qelapsedtimer.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qeasingcurve.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qendian.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qeventtransition.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qexception.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qfactoryinterface.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qfileselector.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/QObject \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/QStringList \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qfilesystemwatcher.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qfinalstate.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qfuture.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qfutureinterface.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qrunnable.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qresultstore.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qfuturesynchronizer.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qfuturewatcher.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qhistorystate.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qidentityproxymodel.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qisenum.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qitemselectionmodel.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qjsonarray.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qjsonvalue.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qjsondocument.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qjsonobject.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qlibrary.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qlibraryinfo.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qversionnumber.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qline.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qlinkedlist.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qlockfile.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qloggingcategory.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qmargins.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qmath.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qmessageauthenticationcode.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qmetaobject.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qmimedata.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qmimedatabase.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qmimetype.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qobjectcleanuphandler.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qoperatingsystemversion.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qparallelanimationgroup.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qpauseanimation.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qplugin.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qpointer.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qpluginloader.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qprocess.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qpropertyanimation.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qvariantanimation.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qrandom.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qreadwritelock.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qrect.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qsize.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qresource.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qsavefile.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qscopedvaluerollback.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qscopeguard.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qsemaphore.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qsequentialanimationgroup.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qsettings.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qsharedmemory.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qsignalmapper.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qsignaltransition.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qsocketnotifier.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qsortfilterproxymodel.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qstack.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qstandardpaths.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qstate.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qstatemachine.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qstorageinfo.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qstringlistmodel.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qsystemsemaphore.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qtemporarydir.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qtemporaryfile.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qtextboundaryfinder.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qtextcodec.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qthread.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qthreadpool.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qthreadstorage.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qtimeline.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qtimer.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qtimezone.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qtranslator.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qtransposeproxymodel.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qtypetraits.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qwaitcondition.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/QDeadlineTimer \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qwineventnotifier.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qxmlstream.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qtcoreversion.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtXml/qxml.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtXml/qtxmlversion.h \
+		/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dgdb/dgdb/dgdb/dtb/_sv-wrapper.h \
+		/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dgdb/dgdb/dgdb/dtb/sv-wrapper.h \
+		/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dgdb/dgdb/dgdb/dh-stage-value.h \
+		/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dgdb/dgdb/dgdb-demo/queue-demo-class.h \
+		/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dgdb/dgdb/dgdb/types/stage/dh-stage-queue.h \
+		/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dgdb/dgdb/dgdb/dgdb-hypernode.h \
+		/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dgdb/dgdb/dgdb/conversions.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/QBuffer \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/QtEndian \
+		/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dgdb/dgdb/dgdb/types/dh-type-system.h \
+		/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dgdb/dgdb/dgdb/graph/dh-frame.h \
+		/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dgdb/dgdb/dgdb/graph/dh-record.h \
+		/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dgdb/dgdb/dgdb/graph/dh-dominion.h \
+		/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dgdb/dgdb/dgdb/dh-instance.h \
+		/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dbm/tkrzw/tkrzw/tkrzw_index.h \
+		/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dbm/tkrzw/tkrzw/tkrzw_dbm_baby.h \
+		/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dbm/tkrzw/tkrzw/tkrzw_key_comparators.h \
+		/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dbm/tkrzw/tkrzw/tkrzw_dbm_tree.h \
+		/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dbm/tkrzw/tkrzw/tkrzw_thread_util.h \
+		/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/macro-ladder.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o /home/nlevisrael/gits/dcr-wip/ar/code/cpp/targets/contrib/all/all/qt/qt-multiple/nomark/targets-5-15-2-Desktop_Qt_5_15_2_GCC_64bit/PROJECT_OBJECTS/dgvm-runtime/debug/dgvm-runtime.o /home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dgdb/dgvm/dgvm-runtime/dgvm-runtime.cpp
 
 ####### Install

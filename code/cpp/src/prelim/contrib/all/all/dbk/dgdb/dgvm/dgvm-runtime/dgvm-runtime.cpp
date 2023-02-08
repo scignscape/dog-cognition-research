@@ -53,6 +53,12 @@ using namespace _class_DH_Location_Structure;
 #include <sys/shm.h>
 
 
+#include <string>
+#include <vector>
+#include <iostream>
+
+
+
 USING_KANS(DGVM)
 
 DGVM_Runtime::DGVM_Runtime()
@@ -61,12 +67,23 @@ DGVM_Runtime::DGVM_Runtime()
 
 }
 
-//#define TEMP_MACRO_LADDER
-
-
-void DGVM_Runtime::init_database()
+DgDb_Hypernode* DGVM_Runtime::new_hypernode()
 {
- database_ = new DgDb_Database_Instance;
+ DgDb_Hypernode* result = database_->new_hypernode();
+ return result;
+}
+
+//u1 DGVM_Runtime::_get_ptr_tag(n8 raw_value)
+//{
+// mz::tagged_ptr<void**> tptr;
+// tptr.set_raw_value(raw_value);
+// return tptr.tag();
+//}
+
+
+void DGVM_Runtime::init_database(QString folder, const QVector<QString>& known_flags)
+{
+ database_ = new DgDb_Database_Instance(folder);
 
 #define CURRENT_KNOWN_FLAGS(macro_name) macro_name(\
    scratch_mode, local_scratch_mode, auto_stage, auto_commit, avoid_record_pointers, \
@@ -95,7 +112,7 @@ void DGVM_Runtime::init_database()
     #undef _TEMP_MACRO_LADDER
    }};
 
- for(QString f : known_flags_)
+ for(QString f : known_flags)
  {
   switch(flags_map.value(f))
   {
@@ -108,20 +125,31 @@ void DGVM_Runtime::init_database()
   }
  }
 
+ database_->init_dtb_package();
+ database_->init_type_system();
+ database_->check_construct_files();
+ database_->check_interns_dbm();
+ database_->check_nodes_dbm();
+ database_->init_indices();
+ database_->read_hypernode_count_status();
+ database_->read_interns_count_status();
+ database_->init_dwb_blocks();
+
+
 }
 
 
-void DGVM_Runtime::init_flags(QString flags_list)
-{
-#if defined(QT5_MODE)
- known_flags_ = flags_list.split(";", Qt::SkipEmptyParts).toVector();
-#elif defined(QT6_MODE)
- known_flags_ = flags_list.split(";", Qt::SkipEmptyParts);
-#endif
+//void DGVM_Runtime::init_flags(QString flags_list)
+//{
+//#if defined(QT5_MODE)
+// known_flags_ = flags_list.split(";", Qt::SkipEmptyParts).toVector();
+//#elif defined(QT6_MODE)
+// known_flags_ = flags_list.split(";", Qt::SkipEmptyParts);
+//#endif
 
- std::for_each(known_flags_.begin(), known_flags_.end(),
-   [](QString& s) { s = s.trimmed(); } );
-}
+// std::for_each(known_flags_.begin(), known_flags_.end(),
+//   [](QString& s) { s = s.trimmed(); } );
+//}
 
 
 //using namespace tkrzw;

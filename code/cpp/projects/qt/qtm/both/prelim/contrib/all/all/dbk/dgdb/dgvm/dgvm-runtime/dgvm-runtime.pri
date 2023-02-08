@@ -49,10 +49,15 @@ INCLUDEPATH += $$SRC_PROSET_DIR/dgdb
 
 
 HEADERS += \
+  $$SRC_DIR/dgvm-runtime-environment.h \
+  $$SRC_DIR/dgvm-runtime-environment.templates.h \
   $$SRC_DIR/dgvm-runtime.h \
+  $$SRC_DIR/dgvm-runtime.templates.h \
+
 
 
 SOURCES += \
+  $$SRC_DIR/dgvm-runtime-environment.cpp \
   $$SRC_DIR/dgvm-runtime.cpp \
 
 

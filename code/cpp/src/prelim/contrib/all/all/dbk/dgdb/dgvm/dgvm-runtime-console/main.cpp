@@ -13,18 +13,56 @@
 #include <QDataStream>
 
 
+#include "dgvm-runtime/dgvm-runtime-environment.h"
 #include "dgvm-runtime/dgvm-runtime.h"
+
+#include "tagged-ptr/mz/tagged_ptr.hpp"
+
+#include "dgdb/dgdb-hypernode.h"
+USING_KANS(DGDB)
+
 
 USING_KANS(DGVM)
 
+//typedef DGVM_Runtime DGVM_Runtime_Environment;
 
 int main(int argc, char *argv[])
 {
- DGVM_Runtime dgr;
+// DGVM_Runtime dgr;
 
- dgr.init_flags("avoid_record_pointers; tkrzw_auto_commit; scratch_mode; reset_tkrzw");
+ DGVM_Runtime_Environment dre;//(&dgr);
 
- dgr.init_database();
+ dre.init_runtime();
+
+ dre.init_flags("avoid_record_pointers; tkrzw_auto_commit; scratch_mode; reset_tkrzw");
+
+ dre.init_database(DEFAULT_DEV_DGDB_FOLDER "/t1");
+
+ dre.new_hypernode();
+
+ DgDb_Hypernode* dh = dre.yield<DgDb_Hypernode*>();
+
+ dre.push_ptr_value(dh);
+
+ dre.push_byte_value(3);
+ dre.push_byte_value(7);
+
+// dre.push_opt_byte_value(17);
+// dre.push_opt_byte_value(18);
+
+ dre.tag_ptr_value<DgDb_Hypernode>();
+
+ n8 raw = dre.preyield<n8>();
+
+ dre.get_ptr_tag<DgDb_Hypernode>();
+ u1 tag = dre.pull_byte_value();
+
+ qDebug() << "tag = " << tag;
+
+ dre.push_raw_value(raw);
+ dre.detag_ptr<DgDb_Hypernode>();
+
+ DgDb_Hypernode* dh1 = dre.yield<DgDb_Hypernode*>();
 
 
 // DgDb_Database_Instance ddi(DEFAULT_DEV_DGDB_FOLDER "/t1");

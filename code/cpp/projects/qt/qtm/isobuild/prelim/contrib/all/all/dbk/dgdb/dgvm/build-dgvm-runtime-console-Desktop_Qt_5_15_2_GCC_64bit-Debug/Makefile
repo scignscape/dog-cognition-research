@@ -17,7 +17,7 @@ CXX           = g++-7
 DEFINES       = -DWHICH_DEFINES=\"./_defines/isobuild_defines.h\" -DDEFAULT_DEV_TKRZW_FOLDER=\"/home/nlevisrael/gits/dcr-wip/ar/../dev/consoles/dgdb/tkrzw\" -DDEFAULT_DEV_DGDB_FOLDER=\"/home/nlevisrael/gits/dcr-wip/ar/../dev/consoles/dgdb/instances\" -DUSE_KANS -DQT_QML_DEBUG -DQT_XML_LIB -DQT_CORE_LIB
 CFLAGS        = -pipe -g -Wall -Wextra -D_REENTRANT -fPIC $(DEFINES)
 CXXFLAGS      = -pipe -g -std=gnu++1z -Wall -Wextra -D_REENTRANT -fPIC $(DEFINES)
-INCPATH       = -I../dgvm-runtime-console -I. -I/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim -I/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dgdb/dgvm/dgvm-runtime-console -I/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src -I/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/global -I/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dgdb/dgvm/dgvm-runtime-console -I/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dgdb/dgvm -I/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dbm/tkrzw/tkrzw -I/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dbm/tkrzw -I/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/whitedb/whitedb -I/home/nlevisrael/Qt/5.15.2/gcc_64/include -I/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtXml -I/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore -I. -I/home/nlevisrael/Qt/5.15.2/gcc_64/mkspecs/linux-g++
+INCPATH       = -I../dgvm-runtime-console -I. -I/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim -I/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dgdb/dgvm/dgvm-runtime-console -I/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src -I/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/global -I/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dgdb/dgvm/dgvm-runtime-console -I/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dgdb/dgvm -I/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dbm/tkrzw/tkrzw -I/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dbm/tkrzw -I/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/whitedb/whitedb -I/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dgdb/dgdb -I/home/nlevisrael/Qt/5.15.2/gcc_64/include -I/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtXml -I/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore -I. -I/home/nlevisrael/Qt/5.15.2/gcc_64/mkspecs/linux-g++
 QMAKE         = /home/nlevisrael/Qt/5.15.2/gcc_64/bin/qmake
 DEL_FILE      = rm -f
 CHK_DIR_EXISTS= test -d
@@ -871,8 +871,23 @@ compiler_clean: compiler_moc_predefs_clean
 		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/QString \
 		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/QDataStream \
 		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/qdatastream.h \
+		/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dgdb/dgvm/dgvm-runtime/dgvm-runtime-environment.h \
+		/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/kans.h \
+		/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/global-types.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/QtGlobal \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/QMap \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/QPair \
+		/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/global-macros.h \
+		/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/enum-macros.h \
+		/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/tagged-ptr/mz/tagged_ptr.hpp \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/QVector \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/QVariant \
+		/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dgdb/dgvm/dgvm-runtime/dgvm-runtime-environment.templates.h \
 		/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dgdb/dgvm/dgvm-runtime/dgvm-runtime.h \
-		/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/kans.h
+		/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/accessors.h \
+		/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dgdb/dgvm/dgvm-runtime/dgvm-runtime.templates.h \
+		/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dgdb/dgdb/dgdb/dgdb-hypernode.h \
+		/home/nlevisrael/Qt/5.15.2/gcc_64/include/QtCore/QByteArray
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o /home/nlevisrael/gits/dcr-wip/ar/code/cpp/targets/contrib/all/all/qt/qt-multiple/nomark/targets-5-15-2-Desktop_Qt_5_15_2_GCC_64bit/PROJECT_OBJECTS/dgvm-runtime-console/debug/main.o /home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/dbk/dgdb/dgvm/dgvm-runtime-console/main.cpp
 
 ####### Install
