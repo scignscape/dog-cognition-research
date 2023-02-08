@@ -1,0 +1,97 @@
+
+
+#           Copyright Nathaniel Christen 2020.
+#  Distributed under the Boost Software License, Version 1.0.
+#     (See accompanying file LICENSE_1_0.txt or copy at
+#           http://www.boost.org/LICENSE_1_0.txt)
+
+**/testgitignore
+
+**/_unzip
+
+**/quickstart_sparse_array
+**/quickstart_sparse_array/*
+
+**/dgdb/instances/*
+
+**/run-local.sh
+**/run-gdb.sh
+**/run-local*.sh
+
+**/Makefile
+
+**/.qmake.stash
+**/ce.txt
+**/co.txt
+**/moc_*.cpp
+**/moc_*.h
+**/qrc_*.cpp
+
+**/*.o
+**/_plugins/
+**/*.so
+**/*.so.*
+
+
+stash/
+cpp/src/qt-reprozip/bin/*
+cpp/src/qt-reprozip/export/*
+cpp/qmake-console/targets/*
+
+/temp/*
+!/temp/README
+
+*.fcs
+
+*.zip
+!/dev/documents/gen/src-copy.zip
+!/preferred/preferred-zip.zip
+
+*.gz
+*.aux
+*.log
+
+# note: ordinarily from any folder in 
+# cpp/qmake-console/projects the repo 
+# should only commit certain *.sh files.
+# Add more exceptions as necessary. 
+# Also caution about inadvertantly 
+# including extensionlesss files.
+cpp/qmake-console/projects/**/*.*
+cpp/qmake-console/projects/**/Makefile
+!cpp/qmake-console/projects/**/qm.sh
+!cpp/qmake-console/projects/**/mk.sh
+!cpp/qmake-console/projects/**/run.sh
+
+!cpp/src/qt-reprozip/bin/readme
+!cpp/src/qt-reprozip/export/readme
+data/wcm/dbs/*
+!data/wcm/dbs/readme
+build-*
+!build-proset.pri
+!build-group.pri
+!build-kernel.pri
+!build-root.pri
+!build-root-both.pri
+!build-all.pro
+!build-all
+!build-quick.pro
+!build-quick
+!build-most.pro
+!build-most
+!build-first.pro
+!build-first
+!build-custom.pro
+!build-custom
+!build-order.txt
+targets
+Contents
+*.pro.user
+*.err.txt
+*.gen.txt
+screenshots
+_snapshots/*
+*.rz.*
+
+
+
