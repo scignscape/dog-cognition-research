@@ -20,6 +20,7 @@
 
 #include "styles.h"
 
+#include <cmath>
 
 #include <QTimer>
 #include <QScreen>
@@ -227,8 +228,9 @@ ZQ_Web_View_Dialog::ZQ_Web_View_Dialog(QWidget* parent)
  //
 // wep_->load(QUrl("file:///" + url));
 
-// QString url = "http://localhost:4201";
- QString url = "https://zola.planning.nyc.gov/";
+//
+ QString url = "http://localhost:4201/about/#";
+//QString url = "https://zola.planning.nyc.gov/";
 
  qDebug() << "url = " << url;
 
@@ -361,19 +363,17 @@ ZQ_Web_View_Dialog::ZQ_Web_View_Dialog(QWidget* parent)
 
 void ZQ_Web_View_Dialog::process_new_url_geo_fragment(QString fragment)
 {
- QStringList qsl = fragment.split('/');
+ r8 adj_zoom; s1 zoom;
+ std::tuple<r8&, r8&, r8&, r8&, s1&> coords {current_latitude_, current_longitude_,
+   current_zoom_, adj_zoom, zoom};
+ ZQ_Web_Engine_View::parse_zoom_and_coordinates(fragment, coords);
 
- qDebug() << "qsl = " << qsl;
-
- if(qsl.size() < 3)
+ if(std::isnan(adj_zoom))
    return;
-
- current_zoom_ = qsl[0].toDouble();
- current_latitude_ = qsl[1].toDouble();
- current_longitude_ = qsl[2].toDouble();
 
  if(zoom_or_coordinates_changed_callback_)
    zoom_or_coordinates_changed_callback_(current_zoom_, current_latitude_, current_longitude_);
+
  //Q_EMIT zoom_or_coordinates_changed(current_zoom_, current_latitude_, current_longitude_);
 
 }

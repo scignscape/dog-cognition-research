@@ -123,6 +123,36 @@ void ZQ_Web_Engine_View::grab_snapshot(QWidget* full_size)
 }
 
 
+void ZQ_Web_Engine_View::parse_zoom_and_coordinates(QUrl url, std::tuple<r8&, r8&, r8&, r8&, s1&>& result)
+{
+ parse_zoom_and_coordinates(url.fragment(), result);
+}
+
+void ZQ_Web_Engine_View::parse_zoom_and_coordinates(QString url_fragment, std::tuple<r8&, r8&, r8&, r8&, s1&>& result)
+{
+ QStringList qsl = url_fragment.split('/');
+
+ r8 offset = 2;
+
+ qDebug() << "qsl = " << qsl;
+
+#define NaN_Constant std::numeric_limits<r8>::quiet_NaN()
+
+ if(qsl.size() < 3)
+ {
+  std::get<3>(result) = NaN_Constant;
+ }
+ else
+ {
+  std::get<0>(result) = qsl[1].toDouble();
+  std::get<1>(result) = qsl[2].toDouble();
+  std::get<2>(result) = qsl[0].toDouble();
+  std::get<3>(result) = std::get<0>(result) + offset;
+  std::get<4>(result) = (s1) std::get<0>(result);
+ }
+}
+
+
 void ZQ_Web_Engine_View::generate_context_menu(const QPoint& pos,
   n8 origin, Context_Menu_Info* cmi, QMouseEvent* mev)
 {
@@ -152,9 +182,19 @@ void ZQ_Web_Engine_View::generate_context_menu(const QPoint& pos,
  }
 
  QString u = rpage->url().toString();
- QString ru = rpage->requestedUrl().toString();
+ //QString ru = rpage->requestedUrl().toString();
 
- menu->addAction("2D Snapshot " + u + " : " + ru, [this]()
+ s1 zoom; r8 lat, lon, r8_zoom, adj_zoom;
+ std::tuple<r8&, r8&, r8&, r8&, s1&> coords {lat, lon, r8_zoom, adj_zoom, zoom};
+ parse_zoom_and_coordinates(rpage->url(), coords);
+
+ menu->addAction(QString("Pin Location (%1, %2, %3, %4)")
+   .arg(lat).arg(lon).arg(r8_zoom).arg(zoom), [this]()
+ {
+ });
+
+
+ menu->addAction("2D Snapshot", [this]()
  {
   grab_snapshot();
  });

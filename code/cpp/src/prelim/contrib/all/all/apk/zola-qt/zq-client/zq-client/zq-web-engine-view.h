@@ -25,6 +25,8 @@
 
 #include "global-types.h"
 
+#include <tuple>
+
 // //class NavigationRequestInterceptor;
 //class NavigationRequestInterceptor : public QWebEnginePage
 //{
@@ -77,6 +79,9 @@ public:
  const QPoint get_last_click_position();
 
  void contextMenuEvent(QContextMenuEvent *event) override;
+
+ static void parse_zoom_and_coordinates(QUrl url, std::tuple<r8&, r8&, r8&, r8&, s1&>& result);
+ static void parse_zoom_and_coordinates(QString url_fragment, std::tuple<r8&, r8&, r8&, r8&, s1&>& result);
 
  //?    MyWebView* createWindow(QWebEnginePage::WebWindowType type) override;
  void check_sec();
