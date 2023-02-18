@@ -11,6 +11,7 @@
 #include <QVector3D>
 #include <QStringBuilder>
 #include <QHash>
+#include <QQueue>
 
 #include "MapGraphicsScene.h"
 #include "MapGraphicsObject.h"
@@ -36,6 +37,18 @@ class QMT_Client_Data_Set_Base;
 class MAPGRAPHICSSHARED_EXPORT MapGraphicsView : public QWidget, public PrivateQGraphicsInfoSource
 {
  Q_OBJECT
+
+
+ struct Superimposed_Marking_Info {
+
+  r8 latitude;
+  r8 longitude;
+  r8 scale;
+  QPolygonF* polygon;
+  QGraphicsPolygonItem* graphics_item;
+
+ };
+
 public:
  enum DragMode
  {
@@ -61,6 +74,19 @@ public:
  void centerOn(const MapGraphicsObject * item);
 
  void force_reset();
+ void reset_data_layer();
+
+ void add_marking(QPolygonF* qpf, qreal latitude, qreal longitude,
+   QColor color, r8 scale, void** check_result = nullptr);
+
+ void add_superimposed_marking(QPolygonF* qpf, qreal latitude, qreal longitude,
+   QColor color, r8 scale, void** check_result = nullptr);
+
+ void add_superimposed_marking(QPolygonF* qpf, qreal latitude, qreal longitude,
+   const QPen qpen, const QBrush qbr, r8 scale, QGraphicsPolygonItem*& result);
+
+ void reset_superimposed_markings();
+
 
  QPointF mapToScene(const QPoint viewPos) const;
 
@@ -105,6 +131,13 @@ public:
  QPoint map_ll_to_view(const QPointF &pos);
 
  void run_coords_notify_callback(r8 lon, r8 lat);
+
+ void mark_coordinates(const QPoint& pos);
+ void show_coordinate_marking();
+
+
+ QGraphicsScene* secondary_scene_;
+ QGraphicsView* secondary_view_;
 
 
 Q_SIGNALS:
@@ -152,6 +185,13 @@ private:
  QMT_Client_Location_Focus_Base* qmt_client_location_focus_base_;
 
  std::function<void (const QPointF&, quint8)> coords_notify_callback_;
+
+
+ QQueue<Superimposed_Marking_Info> superimposed_markings_;
+
+//public:
+ QPolygonF* held_coordinate_marking_;
+
 
 };
 

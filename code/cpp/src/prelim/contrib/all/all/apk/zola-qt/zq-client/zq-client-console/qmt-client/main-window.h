@@ -33,6 +33,8 @@ public:
 
  void center_on(r8 longitude, r8 latitude, u1 zoom_level);
 
+ void mark_coordinates(const QPoint& pos);
+
 private Q_SLOTS:
  void on_actionExit_triggered();
 

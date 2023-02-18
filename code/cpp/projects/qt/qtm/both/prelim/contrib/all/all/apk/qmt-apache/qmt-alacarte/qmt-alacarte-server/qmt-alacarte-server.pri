@@ -16,6 +16,8 @@ QMAKE_CXX = g++-7
 
 CONFIG += c++17
 
+#TEMPLATE = app
+
 TEMPLATE = lib
 
 # http://localhost:11213/14/8529/5974.png

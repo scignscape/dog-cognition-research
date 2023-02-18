@@ -33,6 +33,7 @@
 
 class Context_Menu_Provider;
 
+struct ZQ_Cross_Map_Coords;
 
 class WebUrlRequestInterceptor : public QWebEngineUrlRequestInterceptor
 {
@@ -91,6 +92,7 @@ class ZQ_Web_View_Dialog : public QDialog
  r8 current_longitude_;
 
  std::function<void(r8, r8, r8)> zoom_or_coordinates_changed_callback_;
+ std::function<void(const ZQ_Cross_Map_Coords&)> mark_location_callback_;
 
 public:
 
@@ -113,6 +115,10 @@ public:
  ACCESSORS(r8 ,current_longitude)
 
  ACCESSORS(MACRO_PASTE(std::function<void(r8, r8, r8)>) ,zoom_or_coordinates_changed_callback)
+ ACCESSORS(MACRO_PASTE(std::function<void(const ZQ_Cross_Map_Coords&)>) ,mark_location_callback)
+
+ void handle_mark_location_requested(const ZQ_Cross_Map_Coords& coords);
+
 
  void add_url_pattern(QUrl url);
 

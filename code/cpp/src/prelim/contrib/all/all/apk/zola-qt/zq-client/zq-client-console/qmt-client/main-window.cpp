@@ -45,6 +45,17 @@ Lanternfly_Main_Window::Lanternfly_Main_Window(QWidget* parent) :
 
  setCentralWidget(lanternfly_frame_);
 
+ QGraphicsView* secondary_view = new QGraphicsView;
+ QGraphicsScene* secondary_scene = new QGraphicsScene;
+ secondary_scene->addEllipse(0, 0, 200, 200, QPen(Qt::blue), QBrush(Qt::red));
+
+ secondary_view->setScene(secondary_scene);
+ secondary_view->show();
+
+ lanternfly_frame_->view()->secondary_scene_ = secondary_scene;
+ lanternfly_frame_->view()->secondary_view_ = secondary_view;
+
+
  //Setup some tile sources
  QSharedPointer<OSMTileSource> osmTiles(new OSMTileSource(OSMTileSource::OSMTiles), &QObject::deleteLater);
  QSharedPointer<GridTileSource> gridTiles(new GridTileSource(), &QObject::deleteLater);
@@ -269,6 +280,12 @@ Lanternfly_Main_Window::Lanternfly_Main_Window(QWidget* parent) :
 
  //QPointF
 }
+
+void Lanternfly_Main_Window::mark_coordinates(const QPoint& pos)
+{
+ lanternfly_frame_->mark_coordinates(pos);
+}
+
 
 void Lanternfly_Main_Window::center_on(r8 longitude, r8 latitude, u1 zoom_level)
 {

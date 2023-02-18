@@ -35,6 +35,8 @@ HEADERS += \
   $$SRC_DIR/zq-web-view-dialog.h \
   $$SRC_DIR/zq-web-engine-page.h \
   $$SRC_DIR/zq-web-page.h \
+  $$SRC_DIR/zq-cross-map-coords.h \
+
 
 
 SOURCES += \

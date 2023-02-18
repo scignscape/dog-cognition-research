@@ -10,6 +10,8 @@
 //#include "context-menu-provider.h"
 //#include "url-or-event-pattern.h"
 
+#include "zq-web-view-dialog.h"
+
 #include <QDialog>
 #include <QTimer>
 
@@ -28,6 +30,8 @@
 #include <QLayout>
 
 #include "zq-web-engine-page.h"
+
+#include "zq-cross-map-coords.h"
 
 ZQ_Web_Engine_View::ZQ_Web_Engine_View(QDialog* parent_dialog)
  :  QWebEngineView(), parent_dialog_(parent_dialog), context_menu_provider_(nullptr),
@@ -78,11 +82,12 @@ bool ZQ_Web_Engine_View::eventFilter(QObject *object, QEvent *event)
   if(mb == Qt::RightButton)
   {
    QPoint qp = mouseEvent->globalPos();
+   QPoint pos = mouseEvent->pos();
 
-   QTimer::singleShot(250, [this, qp]
+   QTimer::singleShot(250, [this, qp, pos]
    {
     Context_Menu_Info* cmi = context_menu_info_.value({qp.x(), qp.y()});
-    generate_context_menu(qp, (n8) this, cmi);
+    generate_context_menu(qp, pos, (n8) this, cmi);
    });
    event->ignore();
   }
@@ -153,8 +158,8 @@ void ZQ_Web_Engine_View::parse_zoom_and_coordinates(QString url_fragment, std::t
 }
 
 
-void ZQ_Web_Engine_View::generate_context_menu(const QPoint& pos,
-  n8 origin, Context_Menu_Info* cmi, QMouseEvent* mev)
+void ZQ_Web_Engine_View::generate_context_menu(const QPoint& gpos,
+  const QPoint& pos, n8 origin, Context_Menu_Info* cmi, QMouseEvent* mev)
 {
  QWidget* origin_widget = nullptr;
 
@@ -189,8 +194,14 @@ void ZQ_Web_Engine_View::generate_context_menu(const QPoint& pos,
  parse_zoom_and_coordinates(rpage->url(), coords);
 
  menu->addAction(QString("Pin Location (%1, %2, %3, %4)")
-   .arg(lat).arg(lon).arg(r8_zoom).arg(zoom), [this]()
+   .arg(lat).arg(lon).arg(r8_zoom).arg(zoom), [this, lat, lon, r8_zoom,
+   adj_zoom, zoom, gpos, pos]()
  {
+  if(ZQ_Web_View_Dialog* parent =  qobject_cast<ZQ_Web_View_Dialog*>(parent_dialog_))
+  {
+   ZQ_Cross_Map_Coords coords {lat, lon, r8_zoom, adj_zoom, zoom, gpos, pos, size()};
+   parent->handle_mark_location_requested(coords);
+  }
  });
 
 
@@ -218,7 +229,7 @@ void ZQ_Web_Engine_View::generate_context_menu(const QPoint& pos,
     grab_snapshot(this);
  });
 
- menu->popup(pos);
+ menu->popup(gpos);
 }
 
  void ZQ_Web_Engine_View::check_sec()
@@ -247,7 +258,7 @@ void ZQ_Web_Engine_View::generate_context_menu(const QPoint& pos,
   if(mb == Qt::RightButton)
   {
    qDebug() << "internal ... ";
-   generate_context_menu(mev->globalPos(), (n8) this, nullptr, mev);
+   generate_context_menu(mev->globalPos(), mev->pos(), (n8) this, nullptr, mev);
    mev->accept();
   }
   else

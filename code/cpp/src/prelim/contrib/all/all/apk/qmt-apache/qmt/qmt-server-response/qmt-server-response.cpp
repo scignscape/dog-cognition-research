@@ -10,7 +10,8 @@
 
 #include "raw-file/qmt-raw-file-server-response.h"
 
-#include "qmt-global-types.h"
+//?#include "qmt-global-types.h"
+#include "global-types.h"
 
 #include "qmt-resource-info.h"
 

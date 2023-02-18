@@ -146,7 +146,8 @@ void ZQ_Web_View_Dialog::add_url_pattern(QUrl url)
 
 
 ZQ_Web_View_Dialog::ZQ_Web_View_Dialog(QWidget* parent)
-  :  QDialog(parent) //?, context_menu_provider_(nullptr), pm_runtime_(nullptr)
+  :  QDialog(parent), mark_location_callback_(nullptr),
+     zoom_or_coordinates_changed_callback_(nullptr) //?, context_menu_provider_(nullptr), pm_runtime_(nullptr)
 {
 //? pm_runtime_ = new Pattern_Matcher_Runtime;
 
@@ -361,6 +362,13 @@ ZQ_Web_View_Dialog::ZQ_Web_View_Dialog(QWidget* parent)
 
 }
 
+void ZQ_Web_View_Dialog::handle_mark_location_requested(const ZQ_Cross_Map_Coords& coords)
+{
+ if(mark_location_callback_)
+   mark_location_callback_(coords);
+}
+
+
 void ZQ_Web_View_Dialog::process_new_url_geo_fragment(QString fragment)
 {
  r8 adj_zoom; s1 zoom;
@@ -417,7 +425,7 @@ void ZQ_Web_View_Dialog::mousePressEvent(QMouseEvent* mev)
   QWidget* qw = qtw_->currentWidget();
   if(ZQ_Web_Engine_View* zwev = qobject_cast<ZQ_Web_Engine_View*>(qw))
   {
-   zwev->generate_context_menu(mev->globalPos(), (n8) this, nullptr, mev);
+   zwev->generate_context_menu(mev->globalPos(), mev->pos(), (n8) this, nullptr, mev);
    mev->accept();
    return;
   }

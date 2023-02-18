@@ -17,7 +17,7 @@ DEFINES += SCREENSHOTS_FOLDER=\\\"$${ROOT_DIR}/../screenshots\\\"
 
 DEFINES += ROOT_FOLDER=\\\"$${ROOT_DIR}\\\"
 
-DEFINES += EXAMPLE_DATA_FOLDER=\\\"$${ROOT_DIR}/example-data/contrib/nathaniel-christen/industry-4_0-section-5\\\"
+DEFINES += EXAMPLE_DATA_FOLDER=\\\"$${ROOT_DIR}/../example-data/contrib/nathaniel-christen/industry-4_0-section-5\\\"
 
 
 INCLUDEPATH += $$NTXH_SRC_GROUP_DIR

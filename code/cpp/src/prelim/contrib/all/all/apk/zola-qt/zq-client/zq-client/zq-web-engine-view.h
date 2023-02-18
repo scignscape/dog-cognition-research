@@ -88,7 +88,7 @@ public:
 
  void check_url_patterns(QString url);
 
- void generate_context_menu(const QPoint& pos, n8 origin,
+ void generate_context_menu(const QPoint& gpos, const QPoint& pos, n8 origin,
    Context_Menu_Info* cmi, QMouseEvent* mev = nullptr);
 
  void mousePressEvent(QMouseEvent* mouseEvent) Q_DECL_OVERRIDE;

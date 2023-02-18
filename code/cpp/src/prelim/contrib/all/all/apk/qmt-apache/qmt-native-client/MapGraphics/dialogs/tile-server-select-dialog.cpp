@@ -169,7 +169,7 @@ Tile_Server_Select_Dialog::Tile_Server_Select_Dialog(int index, QString current_
 
  local_server_combo_box_->addItems({"No Local Server",
    "QMT (port 6600)",
-   "Late Nympth", "Adult", "Unknown/Unidentified"});
+   "Late Nymph", "Adult", "Unknown/Unidentified"});
 
  api_key_ = new QLineEdit(this);
  api_key_->setPlaceholderText("(if needed for the server)");

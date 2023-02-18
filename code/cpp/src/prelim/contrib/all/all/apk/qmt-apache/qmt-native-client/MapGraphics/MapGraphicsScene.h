@@ -4,6 +4,8 @@
 #include "MapGraphics_global.h"
 #include "MapGraphicsObject.h"
 
+class CircleObject;
+
 #include <QObject>
 #include <QList>
 #include <QSet>
@@ -14,6 +16,9 @@ class MAPGRAPHICSSHARED_EXPORT MapGraphicsScene : public QObject
 public:
     MapGraphicsScene(QObject * parent = 0);
     virtual ~MapGraphicsScene();
+
+    QSet<CircleObject*> data_layer_objects;
+
 
     /**
      * @brief Adds or re-parents the given MapGraphicsObject to this scene.
@@ -51,7 +56,7 @@ private Q_SLOTS:
     void handleObjectDestroyed(QObject * object);
 
 private:
-    QSet<MapGraphicsObject *> _objects;
+    QSet<MapGraphicsObject*> _objects;
 
 
 };

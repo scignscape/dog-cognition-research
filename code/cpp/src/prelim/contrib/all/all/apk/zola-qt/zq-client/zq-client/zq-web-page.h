@@ -12,6 +12,8 @@
 
 class ZQ_Web_Page : public QObject
 {
+ Q_OBJECT
+
 public:
     ZQ_Web_Page();
 
@@ -19,4 +21,4 @@ public:
 };
 
 
-#endif
+#endif // ZQ_WEB_PAGE__H

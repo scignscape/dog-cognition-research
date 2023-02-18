@@ -299,6 +299,17 @@ void Main_Window_Controller::load_bus_data()
  set_info_file("bus", path);
 }
 
+
+void Main_Window_Controller::show_coordinate_marking()
+{
+ view_->show_coordinate_marking();
+}
+
+void Main_Window_Controller::reset_data_layer()
+{
+ view_->reset_data_layer();
+}
+
 void Main_Window_Controller::reset_map_style(QPoint qp)
 {
  // //  1 is the index for OpenStreetMap in the french style ...
@@ -384,6 +395,8 @@ void Main_Window_Controller::toggle_marking_outline_visibility()
 
 void Main_Window_Controller::load_single_file_data_set()
 {
+ qDebug() << "edf = " << EXAMPLE_DATA_FOLDER;
+
  QString infile = QFileDialog::getOpenFileName(nullptr, "Select File",
    EXAMPLE_DATA_FOLDER);
 

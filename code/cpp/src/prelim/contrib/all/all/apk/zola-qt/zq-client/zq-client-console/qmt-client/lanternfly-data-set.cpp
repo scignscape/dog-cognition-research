@@ -37,15 +37,19 @@ void Lanternfly_Data_Set::add_markings(Lanternfly_Main_Window& main_window,
  u1 count = 0;
  for(const Sighting& s : sightings_)
  {
-  CircleObject* circle = nullptr;
+  CircleObject* circle = nullptr, ** check = nullptr;
 
-  void* ref = nullptr;
+  QPolygonF* qpf;
+
+  QColor marking_color;
+
+//  void* ref = nullptr;
 
   switch (s.location_classification)
   {
    case Location_Classification::Parks_Recreation:
    {
-    QPolygonF* qpf = new QPolygonF;
+    qpf = new QPolygonF;
     (*qpf) << QPointF(-110, -110);
     (*qpf) << QPointF(-110, 110);
     (*qpf) << QPointF(110, -110);
@@ -54,39 +58,61 @@ void Lanternfly_Data_Set::add_markings(Lanternfly_Main_Window& main_window,
     //?QColor parks_clr = QColor(155, 0, 220, 220);
     static QColor parks_color = QColor(155, 0, 220, 220);
 
-    circle = new CircleObject(main_window.lanternfly_frame()->view(), 125, false, parks_color);
-    ref = qpf;
+    marking_color = parks_color;
+
+    check = &circle;
+
+//    circle = new CircleObject(main_window.lanternfly_frame()->view(), 125, false, parks_color);
+//    ref = qpf;
    }
    break;
 
   case Location_Classification::Transit:
    {
-    QPolygonF* qpf = new QPolygonF;
+    qpf = new QPolygonF;
     (*qpf) << QPointF(-80, 180);
     (*qpf) << QPointF(0, 150);
     (*qpf) << QPointF(80, 180);
     (*qpf) << QPointF(0, 0);
 
     static QColor transit_color = QColor(55, 90, 110, 255);
+    marking_color = transit_color;
 
-    circle = new CircleObject(main_window.lanternfly_frame()->view(), 125, false, transit_color);
-    circle->set_ref(qpf);
+    check = &circle;
+
+//    main_window.lanternfly_frame()->add_marking(qpf,
+//      s.latitude, s.longitude, transit_color);
+
+//    circle = new CircleObject(main_window.lanternfly_frame()->view(), 125, false, transit_color);
+//    circle->set_ref(qpf);
    }
    break;
+  }
+
+  if(check)
+  {
+   main_window.lanternfly_frame()->add_marking(qpf,
+     s.latitude, s.longitude, marking_color, 6, (void**) check);
   }
 
   if(circle)
   {
    circle->set_index_code(++count);
-   circle->setFlags(MapGraphicsObject::ObjectIsSelectable);
-   circle->setLatitude(s.latitude);
-   circle->setLongitude(s.longitude);
-   circle->set_outline_code(s.presentation_code);
-   main_window.lanternfly_frame()->scene()->addObject(circle);
-   if(ref)
-     circle->set_ref(ref);
-   stash.push_back(circle);
+//   circle->setFlags(MapGraphicsObject::ObjectIsSelectable);
+
+//   circle->setLatitude(s.latitude);
+//   circle->setLongitude(s.longitude);
+
+
+//   circle->set_outline_code(s.presentation_code);
+//   main_window.lanternfly_frame()->scene()->addObject(circle);
+//   if(ref)
+//     circle->set_ref(ref);
+
+//?   stash.push_back(circle);
   }
+
+
  }
 
  main_window.lanternfly_frame()->update();

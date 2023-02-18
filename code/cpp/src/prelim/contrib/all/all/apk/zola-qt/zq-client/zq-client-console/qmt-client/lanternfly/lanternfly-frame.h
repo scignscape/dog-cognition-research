@@ -43,6 +43,7 @@ class Lanternfly_Frame : public QFrame
  QMT_Client_Location_Focus* qmt_client_location_focus_;
  QMT_Client_Data_Set* qmt_client_data_set_;
 
+
 public:
 
  Lanternfly_Frame(Lanternfly_Main_Window* mw);
@@ -57,6 +58,12 @@ public:
 
  void check_run_coords_notify_callback(r8 lon, r8 lat);
 
+ void mark_coordinates(const QPoint& pos);
+
+ void show_coordinate_marking(const QPoint& pos);
+
+ void add_marking(QPolygonF* qpf, qreal latitude, qreal longitude,
+   QColor color, r8 scale, void** check_result = nullptr);
 
  void adopt_location(QString name);
 

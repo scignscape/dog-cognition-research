@@ -161,6 +161,11 @@ void OSMTileSource::fetchTile(quint32 x, quint32 y, quint8 z, quint8 alternate, 
                                    QString::number(x),
                                    QString::number(y));
 
+ if(alternate == 2)
+ {
+  qDebug() << "alter 2";
+ }
+
  //Use the unique cacheID to see if this tile has already been requested
  QString cacheID = this->createCacheID(x,y,z);
 

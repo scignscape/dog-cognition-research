@@ -36,10 +36,13 @@
 
 #include "global-types.h"
 
+#include "CircleObject.h"
+
 
 MapGraphicsView::MapGraphicsView(MapGraphicsScene *scene, QWidget *parent) :
   QWidget(parent), coords_notify_callback_(nullptr),
-  qmt_client_location_focus_base_(nullptr)
+  qmt_client_location_focus_base_(nullptr),
+  held_coordinate_marking_(nullptr)
 {
  main_window_controller_ = new Main_Window_Controller(this);
 
@@ -53,6 +56,23 @@ MapGraphicsView::MapGraphicsView(MapGraphicsScene *scene, QWidget *parent) :
          [this](const QPoint& qp)
  {
   QMenu* menu = new QMenu;
+
+
+  menu->addAction("Reset Superimposed Markings", [this, qp]()
+  {
+   reset_superimposed_markings();
+  });
+
+
+  menu->addAction("Show Coordinate Marking", [this, qp]()
+  {
+   main_window_controller_->show_coordinate_marking();
+  });
+
+  menu->addAction("Reset Data Layer", [this, qp]()
+  {
+   main_window_controller_->reset_data_layer();
+  });
 
   menu->addAction("Reset Map Style", [this, qp]()
   {
@@ -526,6 +546,190 @@ quint8 MapGraphicsView::zoomLevel() const
  return _zoomLevel;
 }
 
+void MapGraphicsView::show_coordinate_marking()
+{
+// QBrush qbr(Qt::red);
+
+// QTransform qtr;
+
+// QPointF mll = map_ll_to_scene({-73.9416, 40.7005});
+
+// qDebug() << "mll = " << mll;
+// //40.7005, -73.9416,
+
+// qtr.translate(mll.x(), mll.y());
+// qtr.scale(3, 3);
+
+// QPolygonF qpf3 = qtr.map(*qpf);
+
+// qDebug() << "qpf3 = " << qpf3;
+
+// secondary_scene_->addPolygon(qpf3, QPen(Qt::cyan), QBrush(Qt::yellow));
+// secondary_view_->update();
+// secondary_scene_->update();
+
+// QGraphicsPolygonItem* qgpi = _childScene->addPolygon(qpf3, QPen(Qt::blue), QBrush(Qt::magenta));
+
+// qgpi->setZValue(100'000);
+
+// _childView->update();
+// _childScene->update();
+
+// reset_data_layer();
+////
+// update();
+
+// return;
+
+ if(!held_coordinate_marking_)
+ {
+  QPolygonF* qpf = new QPolygonF;
+  (*qpf) << QPointF(-20, 110);
+  (*qpf) << QPointF(20, 110);
+  (*qpf) << QPointF(110, 20);
+  (*qpf) << QPointF(110, -20);
+  (*qpf) << QPointF(20, -110);
+  (*qpf) << QPointF(-20, -110);
+  (*qpf) << QPointF(-110, -20);
+  (*qpf) << QPointF(-110, 20);
+
+
+  held_coordinate_marking_ = qpf;
+
+ }
+
+
+ add_superimposed_marking(held_coordinate_marking_,
+  //? s.latitude, s.longitude,
+   //?
+//?   40.7125, -73.9022,
+
+ 40.7005, -73.9416,
+//?       40.89313,      -74.03705,
+
+//    ll.y(), ll.x(),
+             QColor(55, 90, 110, 255), .2);
+
+//?
+// view_->
+
+// reset_data_layer();
+////
+// update();
+//  _childView->update();
+//  _childScene->update();
+
+
+}
+
+void MapGraphicsView::add_superimposed_marking(QPolygonF* qpf, qreal latitude, qreal longitude,
+  const QPen qpen, const QBrush qbr, r8 scale, QGraphicsPolygonItem*& result)
+{
+ QTransform qtr;
+ QPointF mll = map_ll_to_scene({longitude, latitude});
+ qtr.translate(mll.x(), mll.y());
+
+ if(scale > 0)
+   qtr.scale(scale, scale);
+
+ // qDebug() << "mll = " << mll;
+
+ result = _childScene->addPolygon(qtr.map(*qpf), qpen, qbr);
+
+ result->setZValue(100'000);
+
+ superimposed_markings_.enqueue({latitude, longitude, scale, qpf, result});
+}
+
+
+void MapGraphicsView::add_superimposed_marking(QPolygonF* qpf, qreal latitude, qreal longitude,
+  QColor color, r8 scale, void** check_result)
+{
+ QGraphicsPolygonItem* qgpi;
+ add_superimposed_marking(qpf, latitude, longitude, QPen(Qt::blue), QBrush(color), scale, qgpi);
+
+ _childView->update();
+ _childScene->update();
+}
+
+
+void MapGraphicsView::reset_superimposed_markings()
+{
+ int sz = superimposed_markings_.size();
+ for(int i = 0; i < sz; ++i)
+ {
+  Superimposed_Marking_Info info = superimposed_markings_.dequeue();
+  QBrush qbr = info.graphics_item->brush();
+  QPen qpen = info.graphics_item->pen();
+  _childScene->removeItem(info.graphics_item);
+
+  QGraphicsPolygonItem* qgpi;
+  add_superimposed_marking(info.polygon, info.latitude, info.longitude, qpen, qbr, info.scale, qgpi);
+
+
+//  QGraphicsPolygonItem* new_qgpi = _childScene->addPolygon(info.polygon(), qgpi->pen(), qgpi->brush());
+//  superimposed_markings_.enqueue(new_qgpi);
+ }
+
+ _childScene->update();
+ _childView->update();
+
+ update();
+}
+
+void MapGraphicsView::add_marking(QPolygonF* qpf, qreal latitude,
+  qreal longitude,
+  QColor color, r8 scale, void** check_result)
+{
+ CircleObject* circle = new CircleObject(this, scale, false, color);
+
+ if(scale > 0)
+ {
+  QTransform qtr;
+  qtr.scale(scale, scale);
+  *qpf = qtr.map(*qpf);
+ }
+
+ void* ref = qpf;
+
+ //circle->set_index_code(++count);
+ circle->setFlags(MapGraphicsObject::ObjectIsSelectable);
+  //circle->set_outline_code(s.presentation_code);
+
+ _scene->addObject(circle);
+
+ _scene->data_layer_objects.insert(circle);
+
+ if(ref)
+   circle->set_ref(ref);
+ //stash.push_back(circle);
+
+ if(check_result)
+   *check_result = circle;
+
+ circle->setLatitude(latitude);
+ circle->setLongitude(longitude);
+
+ circle->setZValue(50000);
+ //update();
+}
+
+void MapGraphicsView::reset_data_layer()
+{
+ for(CircleObject* co : _scene->data_layer_objects)
+ {
+  CircleObject* new_co = new CircleObject(this, co->radius(), false, co->fillColor());
+  new_co->set_ref(co->ref());
+  new_co->setLatitude(co->latitude());
+  new_co->setLongitude(co->longitude());
+
+  _scene->addObject(new_co);
+ }
+
+
+ force_reset();
+}
+
 
 void MapGraphicsView::force_reset()
 {
@@ -535,13 +739,58 @@ void MapGraphicsView::force_reset()
  setZoomLevel(_zoomLevel, Force_Reset);
 }
 
+void MapGraphicsView::mark_coordinates(const QPoint& pos)
+{
+ static QColor parks_color = QColor(155, 0, 220, 220);
+
+ CircleObject* circle = new CircleObject(this, 1125, false, parks_color);
+
+ QPolygonF* qpf = new QPolygonF;
+ (*qpf) << QPointF(-110, -110);
+ (*qpf) << QPointF(-110, 110);
+ (*qpf) << QPointF(110, -110);
+ (*qpf) << QPointF(110, 110);
+
+ //?QColor parks_clr = QColor(155, 0, 220, 220);
+ void* ref = nullptr;
+
+ ref = qpf;
+
+ //mapTo
+
+ QPointF ll = mapToScene(pos);
+
+ QString coords = "Latitude: %1, Longitude: %2"_qt.arg(ll.x()).arg(ll.y());
+
+ qDebug() << "coords = " << coords;
+
+ if(circle)
+ {
+  //?circle->set_index_code(++count);
+  circle->setFlags(MapGraphicsObject::ObjectIsSelectable);
+  circle->setLatitude(ll.x());
+  circle->setLongitude(ll.y());
+
+  circle->set_outline_code(12);
+//  circle->set_outline_code(s.presentation_code);
+  scene()->addObject(circle);
+  if(ref)
+    circle->set_ref(ref);
+
+  this->repaint();
+  this->update();
+//  stash.push_back(circle);
+ }
+
+
+}
 
 void MapGraphicsView::setZoomLevel(quint8 nZoom, ZoomMode zMode)
 {
  if (_tileSource.isNull())
   return;
 
- //This stuff is for handling the re-centering upong zoom in/out
+ // // For the re-centering upon zoom in/out
  const QPointF  centerGeoPos = this->mapToScene(QPoint(this->width()/2,this->height()/2));
  QPointF mousePoint = _childView->mapToScene(_childView->mapFromGlobal(QCursor::pos()));
  QRectF sceneRect = _childScene->sceneRect();
@@ -591,7 +840,18 @@ void MapGraphicsView::setZoomLevel(quint8 nZoom, ZoomMode zMode)
   this->centerOn(centerGeoPos);
 
  //Make MapGraphicsObjects update
+
+ for(CircleObject* co : _scene->data_layer_objects)
+ {
+  _scene->removeObject(co);
+  _scene->addObject(co);
+
+ }
+
+ //?
  this->zoomLevelChanged(nZoom);
+
+ reset_superimposed_markings();
 }
 
 void MapGraphicsView::zoomIn(ZoomMode zMode)

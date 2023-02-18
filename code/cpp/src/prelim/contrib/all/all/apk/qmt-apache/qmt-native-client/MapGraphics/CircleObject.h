@@ -34,6 +34,11 @@ public:
  qreal radius() const;
  void setRadius(qreal radius);
 
+ QColor fillColor()
+ {
+  return _fillColor;
+ }
+
 
  ACCESSORS(u2 ,outline_code)
  ACCESSORS(u2 ,held_outline_code)

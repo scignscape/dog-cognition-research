@@ -69,6 +69,9 @@ public:
  }
 
  void reset_map_style(QPoint qp);
+ void reset_data_layer();
+ void show_coordinate_marking();
+
 
  void show_llcoords(QPoint qp);
  void llcoords_to_street_address(QPoint qp);

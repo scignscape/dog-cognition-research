@@ -22,6 +22,10 @@
 #include "lanternfly-configuration-dialog.h"
 #include "lanternfly-sighting-filter-dialog.h"
 
+#include "CircleObject.h"
+
+#include <QDebug>
+
 
 Lanternfly_Frame::Lanternfly_Frame(Lanternfly_Main_Window* mw) : QFrame(mw)
 {
@@ -113,6 +117,93 @@ void Lanternfly_Frame::adopt_location(QString name)
  }
 }
 
+void Lanternfly_Frame::add_marking(QPolygonF* qpf, qreal latitude,
+  qreal longitude,
+  QColor color, r8 scale, void** check_result)
+{
+ CircleObject* circle = new CircleObject(view_, scale, false, color);
+
+ if(scale > 0)
+ {
+  QTransform qtr;
+  qtr.scale(scale, scale);
+  *qpf = qtr.map(*qpf);
+ }
+
+ void* ref = qpf;
+
+ //circle->set_index_code(++count);
+ circle->setFlags(MapGraphicsObject::ObjectIsSelectable);
+  //circle->set_outline_code(s.presentation_code);
+
+ scene_->addObject(circle);
+
+ scene_->data_layer_objects.insert(circle);
+
+ if(ref)
+   circle->set_ref(ref);
+ //stash.push_back(circle);
+
+ if(check_result)
+   *check_result = circle;
+
+ circle->setLatitude(latitude);
+ circle->setLongitude(longitude);
+
+ circle->setZValue(50000);
+ //update();
+}
+
+
+void Lanternfly_Frame::show_coordinate_marking(const QPoint& pos)
+{
+
+}
+
+
+void Lanternfly_Frame::mark_coordinates(const QPoint& pos)
+{
+ QPointF ll = view_->mapToScene(pos);
+
+ QString coords = "Latitude: %1, Longitude: %2"_qt.arg(ll.x()).arg(ll.y());
+
+ qDebug() << "coords = " << coords;
+
+ QPolygonF* qpf1 = new QPolygonF;
+ (*qpf1) << QPointF(-80, 180);
+ (*qpf1) << QPointF(0, 150);
+ (*qpf1) << QPointF(80, 180);
+ (*qpf1) << QPointF(0, 0);
+
+ //view_->held_coordinate_marking_ = qpf1;
+
+// QTransform qtr;
+// qtr.scale(2, 2);
+// *qpf1 = qtr.map(*qpf1);
+
+ //qpf1->
+
+ //static QColor transit_color = ;
+
+// ll.setY(40.7125);
+// ll.setX(-73.9022);
+
+
+// static QColor parks_color = QColor(155, 0, 220, 220);
+
+// QPolygonF* qpf = new QPolygonF;
+// (*qpf) << QPointF(-110, -110);
+// (*qpf) << QPointF(-110, 110);
+// (*qpf) << QPointF(110, -110);
+// (*qpf) << QPointF(110, 110);
+
+// add_marking(qpf, ll.x(), ll.y(), parks_color, 200);
+
+ //40.7125  long =  -73.9022
+
+ //view_->mark_coordinates(pos);
+// update();
+}
 
 void Lanternfly_Frame::set_view_zoom_level(quint8 level)
 {
