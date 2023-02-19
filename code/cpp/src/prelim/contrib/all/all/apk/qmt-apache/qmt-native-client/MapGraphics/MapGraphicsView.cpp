@@ -546,6 +546,29 @@ quint8 MapGraphicsView::zoomLevel() const
  return _zoomLevel;
 }
 
+void MapGraphicsView::add_superimposed_marking(const QPointF& pos, QPolygonF* qpf,
+  QColor color, r8 scale)
+{
+ QPointF ll = mapToScene(pos.toPoint());
+
+//?add_superimposed_marking(qpf, ll.y(), ll.x(), color, scale);
+//?
+ add_superimposed_marking(qpf, pos.x(), pos.y(), pos, color, scale);
+
+
+  //? s.latitude, s.longitude,
+   //?
+//?   40.7125, -73.9022,
+
+// 40.7005, -73.9416,
+//?       40.89313,      -74.03705,
+
+//    ll.y(), ll.x(),
+//             QColor(55, 90, 110, 255), .2);
+}
+
+
+
 void MapGraphicsView::show_coordinate_marking()
 {
 // QBrush qbr(Qt::red);
@@ -598,17 +621,17 @@ void MapGraphicsView::show_coordinate_marking()
 
  }
 
+//?
+// add_superimposed_marking(held_coordinate_marking_,
+//  //? s.latitude, s.longitude,
+//   //?
+////?   40.7125, -73.9022,
 
- add_superimposed_marking(held_coordinate_marking_,
-  //? s.latitude, s.longitude,
-   //?
-//?   40.7125, -73.9022,
+// 40.7005, -73.9416,
+////?       40.89313,      -74.03705,
 
- 40.7005, -73.9416,
-//?       40.89313,      -74.03705,
-
-//    ll.y(), ll.x(),
-             QColor(55, 90, 110, 255), .2);
+////    ll.y(), ll.x(),
+//             QColor(55, 90, 110, 255), .2);
 
 //?
 // view_->
@@ -623,11 +646,24 @@ void MapGraphicsView::show_coordinate_marking()
 }
 
 void MapGraphicsView::add_superimposed_marking(QPolygonF* qpf, qreal latitude, qreal longitude,
-  const QPen qpen, const QBrush qbr, r8 scale, QGraphicsPolygonItem*& result)
+  const QPointF& pos, const QPen qpen, const QBrush qbr, r8 scale, QGraphicsPolygonItem*& result)
 {
  QTransform qtr;
+
+ QPointF ppos {longitude, latitude};
+
+//? QPointF ll = mapToScene(pos.toPoint());
+// QPointF ll = mapToScene(ppos.toPoint());
+
+ qDebug() << " ll = " << latitude << " and " << longitude;
+
+//?
  QPointF mll = map_ll_to_scene({longitude, latitude});
+ //?QPointF mll = map_ll_to_scene(ppos); //{longitude, latitude});
+
+//?
  qtr.translate(mll.x(), mll.y());
+// qtr.translate(pos.x(), pos.y());
 
  if(scale > 0)
    qtr.scale(scale, scale);
@@ -643,10 +679,10 @@ void MapGraphicsView::add_superimposed_marking(QPolygonF* qpf, qreal latitude, q
 
 
 void MapGraphicsView::add_superimposed_marking(QPolygonF* qpf, qreal latitude, qreal longitude,
-  QColor color, r8 scale, void** check_result)
+  const QPointF& pos, QColor color, r8 scale, void** check_result)
 {
  QGraphicsPolygonItem* qgpi;
- add_superimposed_marking(qpf, latitude, longitude, QPen(Qt::blue), QBrush(color), scale, qgpi);
+ add_superimposed_marking(qpf, latitude, longitude, pos, QPen(Qt::blue), QBrush(color), scale, qgpi);
 
  _childView->update();
  _childScene->update();
@@ -664,7 +700,7 @@ void MapGraphicsView::reset_superimposed_markings()
   _childScene->removeItem(info.graphics_item);
 
   QGraphicsPolygonItem* qgpi;
-  add_superimposed_marking(info.polygon, info.latitude, info.longitude, qpen, qbr, info.scale, qgpi);
+  add_superimposed_marking(info.polygon, info.latitude, info.longitude, {}, qpen, qbr, info.scale, qgpi);
 
 
 //  QGraphicsPolygonItem* new_qgpi = _childScene->addPolygon(info.polygon(), qgpi->pen(), qgpi->brush());
@@ -739,7 +775,7 @@ void MapGraphicsView::force_reset()
  setZoomLevel(_zoomLevel, Force_Reset);
 }
 
-void MapGraphicsView::mark_coordinates(const QPoint& pos)
+void MapGraphicsView::mark_coordinates(const QPointF& pos)
 {
  static QColor parks_color = QColor(155, 0, 220, 220);
 
@@ -758,7 +794,7 @@ void MapGraphicsView::mark_coordinates(const QPoint& pos)
 
  //mapTo
 
- QPointF ll = mapToScene(pos);
+ QPointF ll = mapToScene(pos.toPoint());
 
  QString coords = "Latitude: %1, Longitude: %2"_qt.arg(ll.x()).arg(ll.y());
 

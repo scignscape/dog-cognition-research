@@ -17,6 +17,8 @@
 
 class Lanternfly_Frame;
 
+class ZQ_Cross_Map_Coords;
+
 
 class Lanternfly_Main_Window : public QMainWindow
 {
@@ -33,7 +35,7 @@ public:
 
  void center_on(r8 longitude, r8 latitude, u1 zoom_level);
 
- void mark_coordinates(const QPoint& pos);
+ void mark_coordinates(const ZQ_Cross_Map_Coords& coords); //const QPoint& pos);
 
 private Q_SLOTS:
  void on_actionExit_triggered();

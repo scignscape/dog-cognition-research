@@ -19,6 +19,7 @@
 
 #include "lanternfly/lanternfly-frame.h"
 
+#include "zq-client/zq-cross-map-coords.h"
 
 #include <QSharedPointer>
 #include <QtDebug>
@@ -45,15 +46,15 @@ Lanternfly_Main_Window::Lanternfly_Main_Window(QWidget* parent) :
 
  setCentralWidget(lanternfly_frame_);
 
- QGraphicsView* secondary_view = new QGraphicsView;
- QGraphicsScene* secondary_scene = new QGraphicsScene;
- secondary_scene->addEllipse(0, 0, 200, 200, QPen(Qt::blue), QBrush(Qt::red));
+// QGraphicsView* secondary_view = new QGraphicsView;
+// QGraphicsScene* secondary_scene = new QGraphicsScene;
+// secondary_scene->addEllipse(0, 0, 200, 200, QPen(Qt::blue), QBrush(Qt::red));
 
- secondary_view->setScene(secondary_scene);
- secondary_view->show();
+// secondary_view->setScene(secondary_scene);
+// secondary_view->show();
 
- lanternfly_frame_->view()->secondary_scene_ = secondary_scene;
- lanternfly_frame_->view()->secondary_view_ = secondary_view;
+// lanternfly_frame_->view()->secondary_scene_ = secondary_scene;
+// lanternfly_frame_->view()->secondary_view_ = secondary_view;
 
 
  //Setup some tile sources
@@ -281,9 +282,9 @@ Lanternfly_Main_Window::Lanternfly_Main_Window(QWidget* parent) :
  //QPointF
 }
 
-void Lanternfly_Main_Window::mark_coordinates(const QPoint& pos)
+void Lanternfly_Main_Window::mark_coordinates(const ZQ_Cross_Map_Coords& coords) //const QPoint& pos)
 {
- lanternfly_frame_->mark_coordinates(pos);
+ lanternfly_frame_->mark_coordinates(coords);
 }
 
 

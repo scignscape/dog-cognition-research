@@ -92,7 +92,7 @@ void Lanternfly_Data_Set::add_markings(Lanternfly_Main_Window& main_window,
   if(check)
   {
    main_window.lanternfly_frame()->add_marking(qpf,
-     s.latitude, s.longitude, marking_color, 6, (void**) check);
+     s.latitude, s.longitude, marking_color, 1, (void**) check);
   }
 
   if(circle)

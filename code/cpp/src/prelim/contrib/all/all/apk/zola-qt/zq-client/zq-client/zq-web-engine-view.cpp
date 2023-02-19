@@ -152,8 +152,8 @@ void ZQ_Web_Engine_View::parse_zoom_and_coordinates(QString url_fragment, std::t
   std::get<0>(result) = qsl[1].toDouble();
   std::get<1>(result) = qsl[2].toDouble();
   std::get<2>(result) = qsl[0].toDouble();
-  std::get<3>(result) = std::get<0>(result) + offset;
-  std::get<4>(result) = (s1) std::get<0>(result);
+  std::get<3>(result) = std::get<2>(result) + offset;
+  std::get<4>(result) = (s1) std::get<2>(result);
  }
 }
 

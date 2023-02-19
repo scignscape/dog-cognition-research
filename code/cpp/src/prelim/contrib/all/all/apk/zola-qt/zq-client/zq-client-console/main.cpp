@@ -34,7 +34,7 @@ int main(int argc, char *argv[])
            << " gpos = " << coords.global_window_coords
            << " lpos = " << coords.local_window_coords;
 
-  w.mark_coordinates(coords.local_window_coords.toPoint());
+  w.mark_coordinates(coords); //.local_window_coords.toPoint());
  });
 
 

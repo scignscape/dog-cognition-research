@@ -416,7 +416,7 @@ void Main_Window_Controller::show_llcoords(QPoint qp)
 {
  QPointF ll = view_->mapToScene(qp);
 
- QString coords = "Latitude: %1, Longitude: %2"_qt.arg(ll.x()).arg(ll.y());
+ QString coords = "Latitude: %1, Longitude: %2"_qt.arg(ll.y()).arg(ll.x());
 
  QMessageBox* mbox = new QMessageBox(QMessageBox::Information, "Coordinates: ", coords);
 

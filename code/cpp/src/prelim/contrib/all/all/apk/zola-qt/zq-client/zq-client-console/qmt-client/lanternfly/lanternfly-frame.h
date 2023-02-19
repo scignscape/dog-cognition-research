@@ -28,6 +28,7 @@ class QMT_Client_Location_Focus;
 class QMT_Client_Data_Set;
 
 class Lanternfly_Main_Window;
+class ZQ_Cross_Map_Coords;
 
 class Lanternfly_Frame : public QFrame
 {
@@ -58,7 +59,7 @@ public:
 
  void check_run_coords_notify_callback(r8 lon, r8 lat);
 
- void mark_coordinates(const QPoint& pos);
+ void mark_coordinates(const ZQ_Cross_Map_Coords& coords);
 
  void show_coordinate_marking(const QPoint& pos);
 

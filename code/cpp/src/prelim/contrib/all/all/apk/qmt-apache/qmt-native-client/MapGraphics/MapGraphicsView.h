@@ -79,11 +79,15 @@ public:
  void add_marking(QPolygonF* qpf, qreal latitude, qreal longitude,
    QColor color, r8 scale, void** check_result = nullptr);
 
- void add_superimposed_marking(QPolygonF* qpf, qreal latitude, qreal longitude,
-   QColor color, r8 scale, void** check_result = nullptr);
+
+ void add_superimposed_marking(const QPointF& pos, QPolygonF* qpf,
+   QColor color, r8 scale);
 
  void add_superimposed_marking(QPolygonF* qpf, qreal latitude, qreal longitude,
-   const QPen qpen, const QBrush qbr, r8 scale, QGraphicsPolygonItem*& result);
+   const QPointF& pos, QColor color, r8 scale, void** check_result = nullptr);
+
+ void add_superimposed_marking(QPolygonF* qpf, qreal latitude, qreal longitude,
+   const QPointF& pos, const QPen qpen, const QBrush qbr, r8 scale, QGraphicsPolygonItem*& result);
 
  void reset_superimposed_markings();
 
@@ -132,12 +136,12 @@ public:
 
  void run_coords_notify_callback(r8 lon, r8 lat);
 
- void mark_coordinates(const QPoint& pos);
+ void mark_coordinates(const QPointF& pos);
  void show_coordinate_marking();
 
 
- QGraphicsScene* secondary_scene_;
- QGraphicsView* secondary_view_;
+// QGraphicsScene* secondary_scene_;
+// QGraphicsView* secondary_view_;
 
 
 Q_SIGNALS:
