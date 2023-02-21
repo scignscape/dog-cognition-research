@@ -37,6 +37,8 @@ public:
 
  void mark_coordinates(const ZQ_Cross_Map_Coords& coords); //const QPoint& pos);
 
+ void process_api_request(QString received);
+
 private Q_SLOTS:
  void on_actionExit_triggered();
 

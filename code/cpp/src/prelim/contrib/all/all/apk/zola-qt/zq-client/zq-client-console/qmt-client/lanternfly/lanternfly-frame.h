@@ -30,6 +30,7 @@ class QMT_Client_Data_Set;
 class Lanternfly_Main_Window;
 class ZQ_Cross_Map_Coords;
 
+
 class Lanternfly_Frame : public QFrame
 {
  QVBoxLayout* main_layout_;
@@ -44,12 +45,14 @@ class Lanternfly_Frame : public QFrame
  QMT_Client_Location_Focus* qmt_client_location_focus_;
  QMT_Client_Data_Set* qmt_client_data_set_;
 
+ QString current_url_;
 
 public:
 
  Lanternfly_Frame(Lanternfly_Main_Window* mw);
 
  ACCESSORS(MapGraphicsView* ,view)
+ ACCESSORS(QString ,current_url)
 
  void set_tile_source(QSharedPointer<MapTileSource> src);
 

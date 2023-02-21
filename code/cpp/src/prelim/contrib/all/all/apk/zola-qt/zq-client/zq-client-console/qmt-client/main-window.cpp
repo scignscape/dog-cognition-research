@@ -309,6 +309,32 @@ void Lanternfly_Main_Window::on_actionExit_triggered()
  this->close();
 }
 
+#include <QMessageBox>
+
+void Lanternfly_Main_Window::process_api_request(QString received)
+{
+// QString message = QString("Using IP: %1\nport: %2\n\n")
+//    .arg(tcp_server->serverAddress().toString()).arg(tcp_server->serverPort());
+
+// qDebug() << waiting_message;
+//  QMessageBox::information(nullptr, "API",
+//    received);
+
+ QString file_path = "/home/ ... /demo";
+
+ QMessageBox* mbox = new QMessageBox(QMessageBox::Information,
+   "API Monitor",
+   "API GeoJSON data has been saved (to %1).\n"
+   "Click \"details\" to view the actual API request."_qt
+     .arg(file_path));
+ mbox->setDetailedText(received);
+
+ mbox->exec();
+ mbox->deleteLater();
+
+}
+
+
 
 #ifdef HIDE
 

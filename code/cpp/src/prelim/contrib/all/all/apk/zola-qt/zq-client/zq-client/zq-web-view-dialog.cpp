@@ -169,10 +169,28 @@ ZQ_Web_View_Dialog::ZQ_Web_View_Dialog(QWidget* parent)
   QString path = url.path();
   QString fragment = url.fragment();
 
-  if(path == "/about/")
+  QString url_string = url.toString();
+
+  if(fragment.isEmpty())
   {
-   qDebug() << "new url = " << fragment;
-   process_new_url_geo_fragment(fragment);
+   QString query = url.query(QUrl::ComponentFormattingOption::FullyDecoded);
+
+   s4 index = url_string.indexOf('#');
+   if(index != -1)
+   {
+    QUrl u = url;
+    u.setQuery("");
+    fragment = url_string.mid(index);
+    url_string = u.toString() + "?...#" + fragment;
+   }
+  }
+
+//"http://localhost:4201/about?layer-groups=%5B%22building-footprints%22%2C%22commercial-overlays%22%2C"
+
+  if(path.startsWith("/about") || path.startsWith("/l"))
+  {
+//?   qDebug() << "new url = " << fragment;
+   process_new_url_geo_fragment(url_string, fragment);
   }
 
 
@@ -231,7 +249,10 @@ ZQ_Web_View_Dialog::ZQ_Web_View_Dialog(QWidget* parent)
 
 //
  QString url = "http://localhost:4201/about/#";
+ initial_url_ = url;
+
 //QString url = "https://zola.planning.nyc.gov/";
+// initial_url_ = url;
 
  qDebug() << "url = " << url;
 
@@ -369,18 +390,24 @@ void ZQ_Web_View_Dialog::handle_mark_location_requested(const ZQ_Cross_Map_Coord
 }
 
 
-void ZQ_Web_View_Dialog::process_new_url_geo_fragment(QString fragment)
+void ZQ_Web_View_Dialog::process_new_url_geo_fragment(QString url, QString fragment)
 {
  r8 adj_zoom; s1 zoom;
  std::tuple<r8&, r8&, r8&, r8&, s1&> coords {current_latitude_, current_longitude_,
    current_zoom_, adj_zoom, zoom};
+
  ZQ_Web_Engine_View::parse_zoom_and_coordinates(fragment, coords);
 
  if(std::isnan(adj_zoom))
-   return;
+ {
+  if(info_url_changed_callback_)
+    info_url_changed_callback_(url);
+
+  return;
+ }
 
  if(zoom_or_coordinates_changed_callback_)
-   zoom_or_coordinates_changed_callback_(current_zoom_, current_latitude_, current_longitude_);
+   zoom_or_coordinates_changed_callback_(current_zoom_, current_latitude_, current_longitude_, url);
 
  //Q_EMIT zoom_or_coordinates_changed(current_zoom_, current_latitude_, current_longitude_);
 

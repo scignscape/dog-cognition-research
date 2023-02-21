@@ -18,9 +18,14 @@
 
 #include "main-window.h"
 
-#include "lanternfly-sighting-dialog.h"
-#include "lanternfly-configuration-dialog.h"
-#include "lanternfly-sighting-filter-dialog.h"
+//#include "lanternfly-sighting-dialog.h"
+#include "ses/ses-configuration-dialog.h"
+#include "ses/ses-filter-dialog.h"
+#include "ses/e-designation-dialog.h"
+
+//#include "lanternfly-sighting-dialog.h"
+//#include "lanternfly-configuration-dialog.h"
+//#include "lanternfly-sighting-filter-dialog.h"
 
 #include "zq-client/zq-cross-map-coords.h"
 
@@ -49,9 +54,14 @@ Lanternfly_Frame::Lanternfly_Frame(Lanternfly_Main_Window* mw) : QFrame(mw)
    { #x, [](QDialog*& result) \
      {result = new x;} }, \
 
-   TEMP_MACRO(Lanternfly_Sighting_Dialog)
-   TEMP_MACRO(Lanternfly_Configuration_Dialog)
-   TEMP_MACRO(Lanternfly_Sighting_Filter_Dialog)
+//   TEMP_MACRO(Lanternfly_Sighting_Dialog)
+   TEMP_MACRO(SES_Configuration_Dialog)
+   TEMP_MACRO(SES_Filter_Dialog)
+   TEMP_MACRO(E_Designation_Dialog)
+
+//     TEMP_MACRO(Lanternfly_Sighting_Dialog)
+//     TEMP_MACRO(Lanternfly_Configuration_Dialog)
+//     TEMP_MACRO(Lanternfly_Sighting_Filter_Dialog)
 
 #undef TEMP_MACRO
   };
@@ -91,8 +101,8 @@ Lanternfly_Frame::Lanternfly_Frame(Lanternfly_Main_Window* mw) : QFrame(mw)
 
  view_->set_coords_notify_callback([this](const QPointF qpf, quint8 zoom)
  {
-  coords_line_edit_->setText(QString("%1,%2    (%3)")
-    .arg(qpf.y()).arg(qpf.x()).arg(zoom));
+  coords_line_edit_->setText(QString("%1,%2    (%3)   ->   %4")
+    .arg(qpf.y()).arg(qpf.x()).arg(zoom).arg(current_url_));
  });
 
  view_->setScene(scene_);

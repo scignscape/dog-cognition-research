@@ -118,20 +118,41 @@ MapGraphicsView::MapGraphicsView(MapGraphicsScene *scene, QWidget *parent) :
 
   QMenu* dialogs =  menu->addMenu("Preview Dialogs");
 
-  dialogs->addAction("Lanternfly Configuration", [this, qp]()
+  dialogs->addAction("SES Configuration", [this, qp]()
   {
-   Q_EMIT preview_dialogs_requested("Lanternfly_Configuration_Dialog");
+   Q_EMIT preview_dialogs_requested("SES_Configuration_Dialog");
   });
 
-  dialogs->addAction("Lanternfly Sighting", [this, qp]()
+  dialogs->addAction("E-Designation", [this, qp]()
   {
-   Q_EMIT preview_dialogs_requested("Lanternfly_Sighting_Dialog");
+   Q_EMIT preview_dialogs_requested("E_Designation_Dialog");
   });
 
-  dialogs->addAction("Lanternfly Sighting Filter", [this, qp]()
+//  dialogs->addAction("SES Sighting", [this, qp]()
+//  {
+//   Q_EMIT preview_dialogs_requested("SES_Sighting_Dialog");
+//  });
+
+  dialogs->addAction("SES Filter", [this, qp]()
   {
-   Q_EMIT preview_dialogs_requested("Lanternfly_Sighting_Filter_Dialog");
+   Q_EMIT preview_dialogs_requested("SES_Filter_Dialog");
   });
+
+//  dialogs->addAction("Lanternfly Configuration", [this, qp]()
+//  {
+//   Q_EMIT preview_dialogs_requested("Lanternfly_Configuration_Dialog");
+//  });
+
+//  dialogs->addAction("Lanternfly Sighting", [this, qp]()
+//  {
+//   Q_EMIT preview_dialogs_requested("Lanternfly_Sighting_Dialog");
+//  });
+
+//  dialogs->addAction("Lanternfly Sighting Filter", [this, qp]()
+//  {
+//   Q_EMIT preview_dialogs_requested("Lanternfly_Sighting_Filter_Dialog");
+//  });
+
 
   QMenu* local =  menu->addMenu("Activate Local Tile Server");
 

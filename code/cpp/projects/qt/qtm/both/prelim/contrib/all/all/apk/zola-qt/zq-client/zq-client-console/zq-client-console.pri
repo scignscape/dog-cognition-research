@@ -60,6 +60,9 @@ HEADERS += \
   $$SRC_DIR/qmt-client/qmt-client-data-set.h \
   $$SRC_DIR/qmt-client/qmt-data-set-content-base.h \
   $$SRC_DIR/qmt-client/lanternfly-data-set.h \
+  $$SRC_DIR/qmt-client/ses/ses-configuration-dialog.h \
+  $$SRC_DIR/qmt-client/ses/ses-filter-dialog.h \
+  $$SRC_DIR/qmt-client/ses/e-designation-dialog.h \
 
 
 SOURCES += \
@@ -75,6 +78,9 @@ SOURCES += \
   $$SRC_DIR/qmt-client/qmt-client-data-set.cpp \
   $$SRC_DIR/qmt-client/qmt-data-set-content-base.cpp \
   $$SRC_DIR/qmt-client/lanternfly-data-set.cpp \
+  $$SRC_DIR/qmt-client/ses/ses-configuration-dialog.cpp \
+  $$SRC_DIR/qmt-client/ses/ses-filter-dialog.cpp \
+  $$SRC_DIR/qmt-client/ses/e-designation-dialog.cpp \
 
 
 

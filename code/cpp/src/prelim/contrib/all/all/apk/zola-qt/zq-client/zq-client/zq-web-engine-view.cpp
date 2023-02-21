@@ -97,6 +97,7 @@ bool ZQ_Web_Engine_View::eventFilter(QObject *object, QEvent *event)
    QPoint qp = mouseEvent->globalPos();
    qDebug() << " lb = " << qp;
    positions_.push(qp);
+//   return true;
   }
 
  }
@@ -139,7 +140,7 @@ void ZQ_Web_Engine_View::parse_zoom_and_coordinates(QString url_fragment, std::t
 
  r8 offset = 2;
 
- qDebug() << "qsl = " << qsl;
+//? qDebug() << "qsl = " << qsl;
 
 #define NaN_Constant std::numeric_limits<r8>::quiet_NaN()
 
