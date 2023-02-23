@@ -157,6 +157,16 @@ static inline QString operator ""_qt(const char* cs, size_t size)
  return QString::fromStdString(ss);
 }
 
+inline bool _cut(const QString to_cut, QString& original)
+{
+ if(original.startsWith(to_cut))
+ {
+  original = original.mid(to_cut.size());
+  return to_cut.size();
+ }
+ return 0;
+}
+
 template<typename T>
 struct Defaulting_To_Zero
 {
