@@ -18,6 +18,8 @@
 #include <QMenu>
 #include <QWebEngineContextMenuData>
 
+#include "global-types.h"
+
 class QH_Web_Engine_View;
 
 //class NavigationRequestInterceptor;
@@ -30,6 +32,7 @@ public:
                               bool isMainFrame) Q_DECL_OVERRIDE;
 };
 
+class JsInterface;
 
 class QH_Web_Engine_Page : public QWebEnginePage
 {
@@ -38,6 +41,10 @@ class QH_Web_Engine_Page : public QWebEnginePage
  QString last_youtube_link_;
 
  QH_Web_Engine_View* view_;
+
+ QWebChannel* qweb_channel_;
+ JsInterface* jsInterface_;
+
 
 public:
  QH_Web_Engine_Page(QH_Web_Engine_View* view);
@@ -54,6 +61,13 @@ public:
  void reset_last_youtube_link(const QUrl &url);
 
  QString last_youtube_link_as_non_embed();
+
+ void load_with_web_channel(const QUrl &url);
+ void setup_web_channel();
+ void temp(r8 lat, r8 lon);
+
+ void run_js_interface_callback(QString key, const QJsonValue& msg);
+
 
 Q_SIGNALS:
 

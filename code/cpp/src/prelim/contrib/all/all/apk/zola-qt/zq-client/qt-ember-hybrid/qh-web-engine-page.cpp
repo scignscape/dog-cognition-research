@@ -11,6 +11,8 @@
 
 #include "global-types.h"
 
+#include "JsInterface.h"
+
 NavigationRequestInterceptor::NavigationRequestInterceptor(QWebEnginePage*
                                                            parent)
  : QWebEnginePage(parent)
@@ -55,15 +57,107 @@ bool NavigationRequestInterceptor::acceptNavigationRequest(const QUrl
 
 QH_Web_Engine_Page::QH_Web_Engine_Page(QH_Web_Engine_View* view) : QWebEnginePage(),
   view_(view)
-
 {
-
+ setup_web_channel();
 }
 
 QH_Web_Engine_Page::QH_Web_Engine_Page(QH_Web_Engine_Page* parent) : QWebEnginePage(parent)
 {
+ setup_web_channel();
+}
+
+
+void QH_Web_Engine_Page::run_js_interface_callback(QString key, const QJsonValue& msg) //const QString msg)
+{
+ qDebug() << key;
+
+ qDebug() << msg;
+
+ if(msg.isArray())
+ {
+  QVariantList qvl = msg.toVariant().toList();
+
+  qDebug() << qvl;
+
+
+  if(qvl.size() < 2)
+    return;
+
+  r8 lat, lon;
+
+  if(key == "lat-lon")
+  {
+   lat = qvl[0].toDouble();
+   lon = qvl[1].toDouble();
+  }
+  else if(key == "lon-lat")
+  {
+   lon = qvl[0].toDouble();
+   lat = qvl[1].toDouble();
+  }
+
+  temp(lat, lon);
+ }
+ else if(msg.isObject())
+ {
+  qDebug() << msg;
+
+  QVariantMap qvm = msg.toVariant().toMap();
+
+  r8 lat = qvm.value("lat").toDouble();
+  r8 lng = qvm.value("lng").toDouble();
+
+  temp(lat, lng);
+
+
+
+ }
 
 }
+
+
+void QH_Web_Engine_Page::temp(r8 lat, r8 lon)
+{
+// qDebug() << "P = " << path;
+
+ runJavaScript("run_popup('%1, %2', %1, %2);"_qt.arg(lat).arg(lon));
+
+// static QRegularExpression rx("(\\w+)\\s*\\(\\s*([\\d.-]+)\\s*,\\s*([\\d.-]+)\\s*\\)");
+// //   static QRegularExpression rx("(\\w+)\\(([\\d-]+),");
+
+// QRegularExpressionMatch rxm = rx.match(path);
+
+// if(rxm.hasMatch())
+// {
+//  QString arg = rxm.captured(1);
+//  QString lat = rxm.captured(2);
+//  QString lon = rxm.captured(3);
+
+//  qDebug() << "arg = " << arg;
+//  qDebug() << "lat = " << lat;
+//  qDebug() << "lon = " << lon;
+
+//  runJavaScript("run_popup('%1, %2', %1, %2);"_qt.arg(lat).arg(lon));
+// }
+
+}
+
+void QH_Web_Engine_Page::setup_web_channel()
+{
+ QWebChannel* qweb_channel = new QWebChannel(this);
+ JsInterface* jsInterface = new JsInterface(this);
+
+ setWebChannel(qweb_channel);
+
+ qweb_channel->registerObject(QString("JsInterface"), jsInterface);
+}
+
+
+void QH_Web_Engine_Page::load_with_web_channel(const QUrl &url)
+{
+ load(url);
+}
+
 
 //QH_Web_Engine_Page::QH_Web_Engine_Page():QWebEngineView()
 //{
@@ -168,7 +262,7 @@ bool QH_Web_Engine_Page::acceptNavigationRequest(const QUrl &url,
 
  qDebug()  << "!url" << url_string;
 
- if(_cut("/_qhr-" ,path))
+ if(_cut("/", "/=h" ,path))
  {
   QString fragment = url.fragment();
   QString query = url.query(QUrl::FullyDecoded);

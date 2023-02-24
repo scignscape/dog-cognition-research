@@ -34,6 +34,10 @@ DEFINES += EMBER_PORT=6401
 
 
 HEADERS += \
+  $$SRC_DIR/JsInterface.h \
+
+
+HEADERS += \
   $$SRC_DIR/qh-web-engine-view.h \
   $$SRC_DIR/qh-web-view-dialog.h \
   $$SRC_DIR/qh-web-engine-page.h \

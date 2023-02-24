@@ -157,11 +157,35 @@ static inline QString operator ""_qt(const char* cs, size_t size)
  return QString::fromStdString(ss);
 }
 
+inline bool _midcut(const QString to_cut, QString& original)
+{
+ int index = original.indexOf(to_cut);
+ if(index == -1)
+   return 0;
+
+ original = original.mid(index + to_cut.size());
+ return to_cut.size();
+}
+
 inline bool _cut(const QString to_cut, QString& original)
 {
  if(original.startsWith(to_cut))
  {
   original = original.mid(to_cut.size());
+  return to_cut.size();
+ }
+ return 0;
+}
+
+inline bool _cut(const QString pre_cut, const QString to_cut, QString& original)
+{
+ int index = original.lastIndexOf(pre_cut);
+ if(index == -1)
+   return 0;
+
+ if(original.midRef(index).startsWith(to_cut))
+ {
+  original = original.mid(index + to_cut.size());
   return to_cut.size();
  }
  return 0;

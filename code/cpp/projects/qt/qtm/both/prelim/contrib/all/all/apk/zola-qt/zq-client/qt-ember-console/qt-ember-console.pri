@@ -47,7 +47,6 @@ HEADERS += \
 #  $$SRC_GROUP_DIR/MapGraphics
 
 
-HEADERS += \
 
 
 SOURCES += \

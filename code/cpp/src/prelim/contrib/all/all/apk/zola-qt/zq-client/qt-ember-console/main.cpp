@@ -12,6 +12,104 @@
 
 
 
+#include <QApplication>
+#include <QDebug>
+#include <QWebEngineView>
+#include <QWebChannel>
+
+#include "JsInterface.h"
+
+#include "textio.h"
+
+//QString qWebChannelJs()
+//{
+// static QString result;
+
+// if(result.isEmpty())
+// {
+////  QFile apiFile(":/qtwebchannel/qwebchannel.js"); //load the API from the resources
+
+
+//  QFile apiFile("/quasihome/nlevisrael/ember/qh-demo/public/raw/qwebchannel.js");
+
+//  if(!apiFile.open(QIODevice::ReadOnly))
+//      qDebug()<<"Couldn't load Qt's QWebChannel API!";
+
+//  result = QString::fromLatin1(apiFile.readAll());
+
+//  apiFile.close();
+// }
+
+////? qDebug() << "result = " << result;
+
+// return result;
+
+////    return R"DELIMITER(
+////        // TODO INSERT JS code here
+////    )DELIMITER";
+//}
+
+//#include "main.moc"
+
+//auto main( int argn, char* argv[] )-> int
+//{
+//    QApplication app(argn, argv);
+//    QWebEngineView browser;
+//    browser.resize(QSize(800,600));
+
+//    browser.show();
+////    QString url = "http://localhost:%1/qh-link"_qt.arg(6401);
+//    QString url = "http://localhost:%1/raw/temp.html"_qt.arg(6401);
+
+//    browser.load(QUrl(url));
+
+//    // .. SETUP HERE
+//    QWebChannel channel;
+//    JsInterface jsInterface;
+//    browser.page()->setWebChannel(&channel);
+//    channel.registerObject(QString("JsInterface"), &jsInterface);
+
+
+//    QObject::connect(&browser, &QWebEngineView::loadFinished, [&browser](bool ok)
+//    {
+//        qDebug()<<"Load Finished " << ok;
+
+//        // TEST CODE HERE
+//        QString code = QStringLiteral(
+//        R"DELIM(
+
+//        var links = document.getElementsByTagName('a');
+//        for ( var i=0; i<links.length; ++i)
+//        {
+//            links[i].style.backgroundColor = 'yellow';
+//        };
+
+//        )DELIM");
+////?        browser.page()->runJavaScript(code, 42);
+
+////?
+//        browser.page()->runJavaScript(qWebChannelJs());
+
+////?        QString js = qWebChannelJs();
+////?  KA::TextIO::save_file("/quasihome/nlevisrael/ember/qh-demo/public/assets/images/jjs", js);
+
+//        QString code2 = QStringLiteral(
+//        R"DELIM(
+//        window.webChannel = new QWebChannel(qt.webChannelTransport, function( channel)
+//        {
+//            var cpp = channel.objects.JsInterface;
+//            cpp.log("Hello from JavaScript!");
+//        });
+
+//        )DELIM");
+//        browser.page()->runJavaScript(code2);
+//    });
+
+//    return app.exec();
+//}
+
+
+
 int main(int argc, char *argv[])
 {
  QApplication qapp(argc, argv);
@@ -88,6 +186,33 @@ int main(int argc, char *argv[])
    QUrl& url, const QPoint pos, const QSize window_size,
    QString path, QWebEnginePage::NavigationType navtype)
  {
+
+  if(_midcut(".$", path))
+  {
+   qDebug() << "P = " << path;
+
+   static QRegularExpression rx("(\\w+)\\s*\\(\\s*([\\d.-]+)\\s*,\\s*([\\d.-]+)\\s*\\)");
+//   static QRegularExpression rx("(\\w+)\\(([\\d-]+),");
+
+   QRegularExpressionMatch rxm = rx.match(path);
+
+   if(rxm.hasMatch())
+   {
+    QString arg = rxm.captured(1);
+    QString lat = rxm.captured(2);
+    QString lon = rxm.captured(3);
+
+    qDebug() << "arg = " << arg;
+    qDebug() << "lat = " << lat;
+    qDebug() << "lon = " << lon;
+
+    dlg.wev()->page()->runJavaScript("run_popup('%1, %2', %1, %2);"_qt.arg(lat).arg(lon));
+
+   }
+
+   return;
+  }
+
   QString navtype_string;
 
   switch(navtype)

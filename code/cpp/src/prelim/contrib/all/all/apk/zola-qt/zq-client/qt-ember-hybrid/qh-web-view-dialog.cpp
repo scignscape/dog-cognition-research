@@ -32,6 +32,8 @@
 
 #include <QWebEngineProfile>
 
+#include "JsInterface.h"
+
 
 void QH_Web_View_Dialog::reset_tab_selection()
 {
@@ -145,6 +147,11 @@ void QH_Web_View_Dialog::add_url_pattern(QUrl url)
 }
 
 
+
+
+
+
+
 QH_Web_View_Dialog::QH_Web_View_Dialog(QWidget* parent)
   :  QDialog(parent), mark_location_callback_(nullptr),
      url_changed_callback_(nullptr),
@@ -229,12 +236,27 @@ QH_Web_View_Dialog::QH_Web_View_Dialog(QWidget* parent)
  connect(wev_, SIGNAL(snapshot_saved(QString)), this, SIGNAL(snapshot_saved(QString)));
  connect(wev_, SIGNAL(youtube_download_requested(QString)), this, SIGNAL(youtube_download_requested(QString)));
 
- QString url = "http://localhost:%1/qh-link"_qt.arg(EMBER_PORT);
+ QString url = "http://localhost:%1/raw/temp.html"_qt.arg(EMBER_PORT);
  initial_url_ = url;
 
  qDebug() << "url = " << url;
 
  wep_->load(QUrl(url));
+
+// QString url = "http://localhost:%1/qh-link"_qt.arg(EMBER_PORT);
+
+
+// QWebChannel* channel_ = new QWebChannel(wep_);
+// //attach it to the QWebEnginePage
+// wep_->setWebChannel(channel_);
+// //register a QObject to be exposed to JavaScript
+// channel_->registerObject(QStringLiteral("jshelper"), this);
+
+// QFile apiFile(":/qtwebchannel/qwebchannel.js"); //load the API from the resources
+// if(!apiFile.open(QIODevice::ReadOnly))
+//     qDebug()<<"Couldn't load Qt's QWebChannel API!";
+// QString apiScript = QString::fromLatin1(apiFile.readAll());
+// apiFile.close();
 
 // wep_->load(QUrl("https://www.google.com/maps/place/Philadelphia,+PA/@39.9558052,-75.1581506,13.75z/data=!4m5!3m4!1s0x89c6b7d8d4b54beb:0x89f514d88c3e58c1!8m2!3d39.9525839!4d-75.1652215"));
 
