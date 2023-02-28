@@ -30,6 +30,16 @@ public:
   wep_->run_js_interface_callback(key, msg);
  }
 
+ Q_INVOKABLE void page_callback_str(QString key, QString msg) const
+ {
+  wep_->run_js_interface_callback(key, msg);
+ }
+
+ Q_INVOKABLE void page_callback_jsv(const QJsonValue& key, const QJsonValue& msg) const
+ {
+  wep_->run_js_interface_callback(key, msg);
+ }
+
 };
 
 

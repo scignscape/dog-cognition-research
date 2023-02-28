@@ -236,7 +236,10 @@ QH_Web_View_Dialog::QH_Web_View_Dialog(QWidget* parent)
  connect(wev_, SIGNAL(snapshot_saved(QString)), this, SIGNAL(snapshot_saved(QString)));
  connect(wev_, SIGNAL(youtube_download_requested(QString)), this, SIGNAL(youtube_download_requested(QString)));
 
- QString url = "http://localhost:%1/raw/temp.html"_qt.arg(EMBER_PORT);
+//? QString url = "http://localhost:%1/raw/temp.html"_qt.arg(EMBER_PORT);
+//? QString url = "http://localhost:6409/ctrl-test";
+ QString url = "http://localhost:6409/map-gl";
+
  initial_url_ = url;
 
  qDebug() << "url = " << url;

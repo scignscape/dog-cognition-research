@@ -67,6 +67,8 @@ public:
  void temp(r8 lat, r8 lon);
 
  void run_js_interface_callback(QString key, const QJsonValue& msg);
+ void run_js_interface_callback(const QJsonValue& key, const QJsonValue& msg);
+ void run_js_interface_callback(QString key, QString msg);
 
 
 Q_SIGNALS:

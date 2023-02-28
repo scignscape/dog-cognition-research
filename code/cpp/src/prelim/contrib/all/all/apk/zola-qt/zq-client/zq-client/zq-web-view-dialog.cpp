@@ -248,7 +248,9 @@ ZQ_Web_View_Dialog::ZQ_Web_View_Dialog(QWidget* parent)
 // wep_->load(QUrl("file:///" + url));
 
 //
- QString url = "http://localhost:4201/about/#";
+//? QString url = "http://localhost:4201/about/#";
+
+ QString url = "http://localhost:6409/map-gl";
  initial_url_ = url;
 
 //QString url = "https://zola.planning.nyc.gov/";

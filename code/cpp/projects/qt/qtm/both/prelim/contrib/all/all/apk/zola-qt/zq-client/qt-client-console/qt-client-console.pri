@@ -4,7 +4,7 @@
 #     (See accompanying file LICENSE_1_0.txt or copy at
 #           http://www.boost.org/LICENSE_1_0.txt)
 
-#PROJECT_NAME = qt-client-console
+PROJECT_NAME = zq-client-console
 
 include(../build-group.pri)
 
@@ -23,8 +23,9 @@ CONFIG += c++17
 
 INCLUDEPATH += $$SRC_DIR $$SRC_GROUP_DIR $$SRC_ROOT_DIR
 
+INCLUDEPATH += $$SRC_PROSET_DIR/../qmt-apache/qmt-native-client/MapGraphics
 
-INCLUDEPATH += $$SRC_GROUP_DIR/qt-ember-hybrid
+INCLUDEPATH += $$SRC_DIR/qmt-client
 
 
 INCLUDEPATH += $$NTXH_SRC_GROUP_DIR
@@ -47,11 +48,7 @@ HEADERS += \
 #  $$SRC_GROUP_DIR/MapGraphics
 
 
-# ember install ember-cli-inline-content
-# ember install ember-composable-helpers
-# ember install ember-mapbox-gl
-
-#  ember-mapbox-composer ?
+HEADERS += \
 
 SOURCES += \
   $$SRC_DIR/main.cpp \
@@ -64,15 +61,9 @@ SOURCES += \
 #  $$SRC_DIR/main.cpp \
 
 
-#?
-LIBS += -L$$TARGETSDIR -lqt-ember-hybrid
-
 #LIBS += -L$$TARGETSDIR -lzq-client
 
-##
-#LIBS += -L$$TARGETSDIR  \
-#  -lntxh  -lntxh-parser
-
+LIBS += -L$$TARGETSDIR -lqt-ember-hybrid
 
 
 message(choice: $$CPP_ROOT_DIR/targets/$$CHOICE_CODE/$$PROJECT_SET--$$PROJECT_GROUP--$$PROJECT_NAME)

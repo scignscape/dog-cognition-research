@@ -66,6 +66,19 @@ QH_Web_Engine_Page::QH_Web_Engine_Page(QH_Web_Engine_Page* parent) : QWebEngineP
  setup_web_channel();
 }
 
+void QH_Web_Engine_Page::run_js_interface_callback(const QJsonValue& key, const QJsonValue& msg)
+{
+ qDebug() << key;
+
+ qDebug() << msg;
+}
+
+void QH_Web_Engine_Page::run_js_interface_callback(QString key, QString msg)
+{
+ qDebug() << key;
+
+ qDebug() << msg;
+}
 
 void QH_Web_Engine_Page::run_js_interface_callback(QString key, const QJsonValue& msg) //const QString msg)
 {
@@ -148,7 +161,6 @@ void QH_Web_Engine_Page::setup_web_channel()
  JsInterface* jsInterface = new JsInterface(this);
 
  setWebChannel(qweb_channel);
-
  qweb_channel->registerObject(QString("JsInterface"), jsInterface);
 }
 

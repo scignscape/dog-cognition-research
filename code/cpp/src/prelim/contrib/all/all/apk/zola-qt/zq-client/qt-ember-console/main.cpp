@@ -4,7 +4,7 @@
 //     (See accompanying file LICENSE_1_0.txt or copy at
 //           http://www.boost.org/LICENSE_1_0.txt)
 
-#include "qh-web-view-dialog.h"
+//?#include "qh-web-view-dialog.h"
 
 
 #include <QTcpServer>
@@ -17,9 +17,30 @@
 #include <QWebEngineView>
 #include <QWebChannel>
 
-#include "JsInterface.h"
+//?#include "JsInterface.h"
+
+#include "qh-web-view-dialog.h"
 
 #include "textio.h"
+
+
+//#include "zq-client/zq-web-view-dialog.h"
+
+int main(int argc, char *argv[])
+{
+ QApplication qapp(argc, argv);
+
+// ZQ_Web_View_Dialog dlg(nullptr);
+
+ QH_Web_View_Dialog dlg(nullptr);
+
+ dlg.show();
+
+ return qapp.exec();
+
+}
+
+
 
 //QString qWebChannelJs()
 //{
@@ -108,8 +129,15 @@
 //    return app.exec();
 //}
 
+// ///  sudo DEBUG=ember-cli:*  ember serve --inspect
 
 
+//   this.route('nncc'), function () {
+//this.route('index')
+//});
+
+
+/*
 int main(int argc, char *argv[])
 {
  QApplication qapp(argc, argv);
@@ -276,3 +304,5 @@ Window Size: %7, %8)"_qt
 
  return qapp.exec();
 }
+
+*/
