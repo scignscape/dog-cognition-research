@@ -238,7 +238,8 @@ QH_Web_View_Dialog::QH_Web_View_Dialog(QWidget* parent)
 
 //? QString url = "http://localhost:%1/raw/temp.html"_qt.arg(EMBER_PORT);
 //? QString url = "http://localhost:6409/ctrl-test";
- QString url = "http://localhost:6409/map-gl";
+// QString url = "http://localhost:6409/map-gl";
+ QString url = "http://localhost:6802/qh-map-page";
 
  initial_url_ = url;
 
