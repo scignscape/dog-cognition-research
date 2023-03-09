@@ -32,6 +32,13 @@ else continue; break;
 
 
 
+
+
+
+template<typename T>
+struct _scoped_bool_test__default;
+
+
 #ifndef DEFINED_SCOPED_BOOL_TEST
 #define DEFINED_SCOPED_BOOL_TEST
 
@@ -67,9 +74,43 @@ struct _scoped_bool_test__ ## struct_name_variant ##_## fn_name  \
 
 MAKE_SCOPED_BOOL_TEST(no, isEmpty, !,)
 MAKE_SCOPED_BOOL_TEST(no, isNull, !,)
+
+
 //?MAKE_SCOPED_BOOL_TEST(yes, size, , !=0)
 
+#define MAKE_SCOPED_BOOL_TEST_DEFAULT(ty, struct_name_variant, fn_name) \
+template<> struct _scoped_bool_test__default<ty> : \
+  public _scoped_bool_test__ ## struct_name_variant ##_## fn_name<ty> \
+{ _scoped_bool_test__default(ty val) : \
+  _scoped_bool_test__ ## struct_name_variant ##_## fn_name<ty>(val) {} };
+
+
+MAKE_SCOPED_BOOL_TEST_DEFAULT(QString, no, isEmpty)
+MAKE_SCOPED_BOOL_TEST_DEFAULT(QStringRef, no, isEmpty)
+MAKE_SCOPED_BOOL_TEST_DEFAULT(QStringView, no, isNull)
+
 #endif
+
+
+
+
+//typedef void(*fnt)();
+
+template<>
+struct _scoped_bool_test__default<u4>
+{
+ u4 value;
+ explicit operator bool()
+ {
+  return value != -1;
+ }
+ operator u4() { return value; }
+ _scoped_bool_test__default(u4 val) : value(val)
+ {
+ }
+};
+
+
 
 
 #ifndef SCOPED_BOOL_TEST_MACRO(a1, a2, arg)
@@ -96,7 +137,7 @@ MAKE_SCOPED_BOOL_TEST(no, isNull, !,)
 
 
 #ifndef _if_1
-#define _if_1(arg) if(_scoped_bool_test__no_isEmpty arg)
+#define _if_1(arg) if(_scoped_bool_test__default arg)
 #endif
 
 #ifndef _if

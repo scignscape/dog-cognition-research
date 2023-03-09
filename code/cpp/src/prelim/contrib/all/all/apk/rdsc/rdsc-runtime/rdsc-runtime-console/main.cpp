@@ -13,12 +13,50 @@
 
 USING_KANS(RdSC)
 
-QString folder = "/quasihome/nlevisrael/zola-git/regit/labs-zola";
+//
+#include "scoping-if.h"
 
 //"$>lev:t1 t2 t3;"
 
 int main(int argc, char *argv[])
 {
+
+ QString uri = "abc~~def";
+
+ qDebug() << "uri = " << uri;
+
+ _if(<QString> ix = uri.mid(2))
+ {
+  qDebug() << "ix = " << ix;
+ }
+
+ _if(<QStringRef> ix = uri.midRef(2))
+ {
+  qDebug() << "ix = " << ix;
+ }
+
+ QStringView sv = uri;
+
+ _if(<QStringView> ix = sv.mid(2))
+ {
+  qDebug() << "ix = " << ix;
+ }
+
+ _if(<u4> ix = uri.indexOf("~~"))
+ {
+  uri = uri.mid(ix + 2);
+ }
+
+ qDebug() << "uri = " << uri;
+
+ return 0;
+
+}
+
+QString folder = "/quasihome/nlevisrael/zola-git/regit/labs-zola";
+
+int main1(int argc, char *argv[])
+{ 
  Qh_Runtime qhr;
  Qh_Type_System* qht = qhr.type_system();
 
@@ -29,9 +67,8 @@ int main(int argc, char *argv[])
  //qjfr.json_document(jsond, "test.js");
 
  Pseudo_JPath jp(jsond);
- QVariant qvar = jp.evaluate("$:port;");
+ u4 port = jp.evaluate("$:port;").value<u4>();
 
- qDebug() << "qvar = " << qvar;
 
  return 0;
 }

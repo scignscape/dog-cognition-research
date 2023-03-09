@@ -147,7 +147,7 @@ ACCESSORS__GET(type, name)
 #endif
 
 
-#ifndef ACCESSORS__FNP(ret, type, name)
+#ifndef ACCESSORS__FNP
 #define ACCESSORS__FNP(ret, type, name) \
  ACCESSORS__SET_FNP(ret, type, name) \
  ACCESSORS__GET_FNP(ret, type, name)

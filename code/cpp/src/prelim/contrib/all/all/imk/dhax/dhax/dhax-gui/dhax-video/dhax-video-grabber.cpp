@@ -1,0 +1,164 @@
+
+
+//           Copyright Nathaniel Christen 2020.
+//  Distributed under the Boost Software License, Version 1.0.
+//     (See accompanying file LICENSE_1_0.txt or copy at
+//           http://www.boost.org/LICENSE_1_0.txt)
+
+
+#include "dhax-video-grabber.h"
+
+#include <QtWidgets>
+#include <qabstractvideosurface.h>
+#include <qvideosurfaceformat.h>
+
+
+DHAX_Video_Grabber::DHAX_Video_Grabber(QWidget *widget, QObject *parent)
+ : QAbstractVideoSurface(parent)
+ , widget(widget)
+ , imageFormat(QImage::Format_Invalid)
+{
+}
+
+QList<QVideoFrame::PixelFormat> DHAX_Video_Grabber::supportedPixelFormats(QAbstractVideoBuffer::HandleType handleType) const
+{
+ Q_UNUSED(handleType);
+ return QList<QVideoFrame::PixelFormat>()
+   << QVideoFrame::Format_ARGB32
+   << QVideoFrame::Format_ARGB32_Premultiplied
+   << QVideoFrame::Format_RGB32
+   << QVideoFrame::Format_RGB24
+   << QVideoFrame::Format_RGB565
+   << QVideoFrame::Format_RGB555
+   << QVideoFrame::Format_ARGB8565_Premultiplied
+   << QVideoFrame::Format_BGRA32
+   << QVideoFrame::Format_BGRA32_Premultiplied
+   << QVideoFrame::Format_BGR32
+   << QVideoFrame::Format_BGR24
+   << QVideoFrame::Format_BGR565
+   << QVideoFrame::Format_BGR555
+   << QVideoFrame::Format_BGRA5658_Premultiplied
+   << QVideoFrame::Format_AYUV444
+   << QVideoFrame::Format_AYUV444_Premultiplied
+   << QVideoFrame::Format_YUV444
+   << QVideoFrame::Format_YUV420P
+   << QVideoFrame::Format_YV12
+   << QVideoFrame::Format_UYVY
+   << QVideoFrame::Format_YUYV
+   << QVideoFrame::Format_NV12
+   << QVideoFrame::Format_NV21
+   << QVideoFrame::Format_IMC1
+   << QVideoFrame::Format_IMC2
+   << QVideoFrame::Format_IMC3
+   << QVideoFrame::Format_IMC4
+   << QVideoFrame::Format_Y8
+   << QVideoFrame::Format_Y16
+   << QVideoFrame::Format_Jpeg
+   << QVideoFrame::Format_CameraRaw
+   << QVideoFrame::Format_AdobeDng;
+}
+
+bool DHAX_Video_Grabber::isFormatSupported(const QVideoSurfaceFormat &format) const
+{
+ const QImage::Format imageFormat = QVideoFrame::imageFormatFromPixelFormat(format.pixelFormat());
+ const QSize size = format.frameSize();
+
+ return imageFormat != QImage::Format_Invalid
+   && !size.isEmpty()
+   && format.handleType() == QAbstractVideoBuffer::NoHandle;
+}
+
+bool DHAX_Video_Grabber::start(const QVideoSurfaceFormat &format)
+{
+ const QImage::Format imageFormat = QVideoFrame::imageFormatFromPixelFormat(format.pixelFormat());
+ const QSize size = format.frameSize();
+
+ if (imageFormat != QImage::Format_Invalid && !size.isEmpty()) {
+  this->imageFormat = imageFormat;
+  imageSize = size;
+  sourceRect = format.viewport();
+
+  QAbstractVideoSurface::start(format);
+
+  widget->updateGeometry();
+  updateVideoRect();
+
+  return true;
+ } else {
+  return false;
+ }
+}
+
+void DHAX_Video_Grabber::stop()
+{
+ currentFrame = QVideoFrame();
+ targetRect = QRect();
+
+ QAbstractVideoSurface::stop();
+
+ widget->update();
+}
+
+bool DHAX_Video_Grabber::present(const QVideoFrame &frame)
+{
+ if (frame.isValid())
+ {
+  QVideoFrame cloneFrame(frame);
+  cloneFrame.map(QAbstractVideoBuffer::ReadOnly);
+  const QImage image(cloneFrame.bits(),
+                     cloneFrame.width(),
+                     cloneFrame.height(),
+                     QVideoFrame::imageFormatFromPixelFormat(cloneFrame .pixelFormat()));
+
+  Q_EMIT frameAvailable(image);
+  cloneFrame.unmap();
+ }
+
+ if (surfaceFormat().pixelFormat() != frame.pixelFormat()
+     || surfaceFormat().frameSize() != frame.size()) {
+  setError(IncorrectFormatError);
+  stop();
+
+  return false;
+ } else {
+  currentFrame = frame;
+
+  widget->repaint(targetRect);
+
+  return true;
+ }
+}
+
+void DHAX_Video_Grabber::updateVideoRect()
+{
+ QSize size = surfaceFormat().sizeHint();
+ size.scale(widget->size().boundedTo(size), Qt::KeepAspectRatio);
+
+ targetRect = QRect(QPoint(0, 0), size);
+ targetRect.moveCenter(widget->rect().center());
+}
+
+void DHAX_Video_Grabber::paint(QPainter *painter)
+{
+ if (currentFrame.map(QAbstractVideoBuffer::ReadOnly)) {
+  const QTransform oldTransform = painter->transform();
+
+  if (surfaceFormat().scanLineDirection() == QVideoSurfaceFormat::BottomToTop) {
+   painter->scale(1, -1);
+   painter->translate(0, -widget->height());
+  }
+
+  QImage image(
+     currentFrame.bits(),
+     currentFrame.width(),
+     currentFrame.height(),
+     currentFrame.bytesPerLine(),
+     imageFormat);
+
+  painter->drawImage(targetRect, image, sourceRect);
+
+  painter->setTransform(oldTransform);
+
+  currentFrame.unmap();
+ }
+}

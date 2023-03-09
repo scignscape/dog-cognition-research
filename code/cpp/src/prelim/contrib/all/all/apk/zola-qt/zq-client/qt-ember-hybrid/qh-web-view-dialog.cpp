@@ -241,7 +241,10 @@ QH_Web_View_Dialog::QH_Web_View_Dialog(QWidget* parent)
 // QString url = "http://localhost:6409/map-gl";
 //? QString url = "http://localhost:6802/qh-map-page";
 //? QString url = "http://localhost:4201";
- QString url = "http://localhost:4202";
+//? QString url = "http://localhost:4202";
+
+ QString url = "http://localhost:6600/qmt-l/rs~html/test";
+
 
  initial_url_ = url;
 
@@ -278,7 +281,7 @@ QH_Web_View_Dialog::QH_Web_View_Dialog(QWidget* parent)
 
  wev_->set_scroll_container(wev_scroll_area_);
 
- qtw_->addTab(wev_scroll_area_, "Tour");
+ qtw_->addTab(wev_scroll_area_, "Map View");
 
 //? QString iurl = ROOT_FOLDER "/../testdia/matterport/info.html";
 
