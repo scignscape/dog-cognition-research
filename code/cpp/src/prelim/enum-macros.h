@@ -9,6 +9,38 @@
 #define ENUM_MACROS__H
 
 
+
+
+#define _enum_macro_1(a1) enum_macro(a1)
+
+#define _enum_macro_2(a1, a2) enum_macro(a1)  enum_macro(a2)
+
+#define _enum_macro_3(a1, a2, a3) enum_macro(a1)  enum_macro(a2) \
+  enum_macro(a3)
+
+#define _enum_macro_4(a1, a2, a3, a4) enum_macro(a1)  enum_macro(a2) \
+  enum_macro(a3) enum_macro(a4)
+
+#define _enum_macro_5(a1, a2, a3, a4, a5) enum_macro(a1)  enum_macro(a2) \
+  enum_macro(a3) enum_macro(a4) enum_macro(a5)
+
+#define _enum_macro_6(a1, a2, a3, a4, a5, a6) enum_macro(a1)  enum_macro(a2) \
+  enum_macro(a3) enum_macro(a4) enum_macro(a5) enum_macro(a6)
+
+#define _enum_macro_7(a1, a2, a3, a4, a5, a6, a7) enum_macro(a1)  enum_macro(a2) \
+  enum_macro(a3) enum_macro(a4) enum_macro(a5) enum_macro(a6) enum_macro(a7)
+
+#define _enum_macro_8(a1, a2, a3, a4, a5, a6, a7, a8) enum_macro(a1)  enum_macro(a2) \
+  enum_macro(a3) enum_macro(a4) enum_macro(a5) enum_macro(a6) enum_macro(a7) enum_macro(a8)
+
+#define enum_macros(...) _preproc_CONCAT(_enum_macro_, _preproc_NUM_ARGS(__VA_ARGS__))(__VA_ARGS__)
+
+
+//#define enum_dbl_macros(...) _preproc_CONCAT(_enum_dbl_macro_, _preproc_NUM_ARGS(__VA_ARGS__))(__VA_ARGS__)
+
+
+
+
 #define ENUM_FLAGS_OP_MACROS_(e, f) \
  f e operator|(e lhs, e rhs) \
  { \

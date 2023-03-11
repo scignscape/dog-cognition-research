@@ -6,6 +6,7 @@
 //          http://www.boost.org/LICENSE_1_0.txt)
 
 
+#define enum_label
 
 #ifndef _preproc_STRING
 #define _preproc_STRING(x) #x
