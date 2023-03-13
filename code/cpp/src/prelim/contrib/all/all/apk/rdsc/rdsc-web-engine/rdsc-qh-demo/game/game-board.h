@@ -33,6 +33,7 @@ public:
  Game_Board();
 
  void debug_board(QString file);
+ void to_svg(QString in_folder, QString out_file);
 
 };
 

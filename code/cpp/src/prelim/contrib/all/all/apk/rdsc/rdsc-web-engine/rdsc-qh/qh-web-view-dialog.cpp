@@ -151,12 +151,15 @@ void QH_Web_View_Dialog::add_url_pattern(QUrl url)
 
 
 
-
-
-
-
 QH_Web_View_Dialog::QH_Web_View_Dialog(QWidget* parent)
-  :  QDialog(parent), mark_location_callback_(nullptr),
+ : QH_Web_View_Dialog({}, parent)
+{
+
+}
+
+
+QH_Web_View_Dialog::QH_Web_View_Dialog(QString initial_url, QWidget* parent)
+  :  QDialog(parent), initial_url_(initial_url), mark_location_callback_(nullptr),
      url_changed_callback_(nullptr),
      zoom_or_coordinates_changed_callback_(nullptr) //?, context_menu_provider_(nullptr), pm_runtime_(nullptr)
 {
@@ -245,15 +248,12 @@ QH_Web_View_Dialog::QH_Web_View_Dialog(QWidget* parent)
 //? QString url = "http://localhost:6802/qh-map-page";
 //? QString url = "http://localhost:4201";
 //? QString url = "http://localhost:4202";
+//? QString url = "http://localhost:6600/qmt-l/rs~html/test";
+// initial_url_ = url;
 
- QString url = "http://localhost:6600/qmt-l/rs~html/test";
+ qDebug() << "url = " << initial_url_;
 
-
- initial_url_ = url;
-
- qDebug() << "url = " << url;
-
- wep_->load(QUrl(url));
+ wep_->load(QUrl(initial_url_));
 
 // QString url = "http://localhost:%1/qh-link"_qt.arg(EMBER_PORT);
 

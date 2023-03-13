@@ -109,6 +109,9 @@ public:
 
 
  QH_Web_View_Dialog(QWidget* parent);
+ QH_Web_View_Dialog(QString initial_url = {}, QWidget* parent = nullptr);
+
+
  ~QH_Web_View_Dialog();
 
 // ACCESSORS__RGET(QVector<URL_Or_Event_Pattern> ,url_patterns)

@@ -21,12 +21,15 @@ USING_KANS(RdSC)
 int main(int argc, char *argv[])
 {
  Game_Board board;
- board.debug_board("/home/nlevisrael/gits/dcr-wip/game/" "test.txt");
 
- return 0;
+#define folder "/home/nlevisrael/gits/dcr-wip/qmt/server-files/public"
+
+//? board.debug_board("/home/nlevisrael/gits/dcr-wip/game/" "test.txt");
+ board.to_svg(folder "/board-svg", folder "/board.svg");
+
+// return 0;
 // QApplication qapp(argc, argv);
-
-// QH_Web_View_Dialog dlg(nullptr);
+// QH_Web_View_Dialog dlg("file:///home/nlevisrael/gits/dcr-wip/qmt/server-files/public/test.html");
 
 // dlg.show();
 
