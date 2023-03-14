@@ -15,11 +15,14 @@
 
 #include "kans.h"
 
-USING_KANS(RdSC)
 
+#include <QNetworkReply>
+
+USING_KANS(RdSC)
 
 int main(int argc, char *argv[])
 {
+
  Game_Board board;
 
 #define folder "/home/nlevisrael/gits/dcr-wip/qmt/server-files/public"
@@ -36,4 +39,33 @@ int main(int argc, char *argv[])
 // return qapp.exec();
 
 }
+
+
+
+int main1(int argc, char *argv[])
+{
+QApplication qapp(argc, argv);
+  QNetworkRequest qnr;
+  qnr.setUrl(QUrl(
+    "http://localhost:6600/qmt-l/rs~svg/board"));
+
+  QNetworkAccessManager qnam;
+
+  QEventLoop qel;
+
+  QNetworkReply* reply = qnam.get(qnr);
+
+  QObject::connect(reply, &QNetworkReply::finished, [reply, &qel]()
+  {
+   QByteArray qba = reply->readAll();
+   qDebug() << "qba = " << qba;
+
+   qel.exit();
+  });
+
+  qel.exec();
+
+  qapp.exit();
+}
+
 

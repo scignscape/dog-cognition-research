@@ -242,9 +242,9 @@ QH_Web_View_Dialog::QH_Web_View_Dialog(QWidget* parent)
 //? QString url = "http://localhost:6802/qh-map-page";
 //? QString url = "http://localhost:4201";
 //? QString url = "http://localhost:4202";
+//? QString url = "http://localhost:6600/qmt-l/rs~html/test";
 
- QString url = "http://localhost:6600/qmt-l/rs~html/test";
-
+ QString url = "http://localhost:4202/";
 
  initial_url_ = url;
 

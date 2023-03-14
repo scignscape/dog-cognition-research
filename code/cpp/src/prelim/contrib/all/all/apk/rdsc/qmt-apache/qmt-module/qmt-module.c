@@ -51,6 +51,36 @@ static int qmt_handler(request_rec *req)
  if (req->header_only)
  {
   //?
+  char** fields;
+
+  int sz = get_response_array(details, &fields, "-qmt-response-array");
+
+  char msg[16];
+  sprintf(msg, "sz: %d\n", sz);
+  log_comments("-qmt-handler", msg);
+
+  log_comments("-qmt-handler", "\n\nHField 1: ");
+  log_comments("-qmt-handler", fields[1]);
+
+  log_comments("-qmt-handler", "\n\nHField 2: ");
+  log_comments("-qmt-handler", fields[2]);
+
+  log_comments("-qmt-handler", "\n\nHField 3: ");
+  log_comments("-qmt-handler", fields[3]);
+
+
+//  char msg1[70];
+//  sprintf(msg, "sz: %s", fields);
+//  log_comments("-qmt-handler", msg);
+
+//  if(sz == 0)
+//    ap_rputs(fields[1], req);
+//  else
+//    ap_rwrite(fields[0], sz, req);
+
+  req->content_type = fields[1]; // "text/html;charset=UTF-8";
+//  req->content_type = "image /svg+xml"; // "text/html;charset=UTF-8";
+
  }
  else
  {
@@ -66,12 +96,28 @@ static int qmt_handler(request_rec *req)
 //  sprintf(msg, "sz: %s", fields);
 //  log_comments("-qmt-handler", msg);
 
-  if(sz == 0)
-    ap_rputs(fields[1], req);
-  else
-    ap_rwrite(fields[0], sz, req);
+//  if(sz == 0)
+//    ap_rputs(fields[1], req);
+//  else
+//    ap_rwrite(fields[0], sz, req);
+
+  //  log_comments("-qmt-handler", "\n\nField 1: ");
+  //  log_comments("-qmt-handler", fields[1]);
+
+  //  log_comments("-qmt-handler", "\n\nField 2: ");
+  //  log_comments("-qmt-handler", fields[2]);
+
+  //  log_comments("-qmt-handler", "\n\nField 3: ");
+  //  log_comments("-qmt-handler", fields[3]);
 
   req->content_type = fields[1]; // "text/html;charset=UTF-8";
+ // req->content_type = "image/svg+xml"; // "text/html;charset=UTF-8";
+
+    if(sz == 0)
+      ap_rputs(fields[1], req);
+    else
+      ap_rwrite(fields[0], sz, req);
+
  }
 
  //? apr_table_set(req->headers_out, "X-Content-Type-Options", "nosniff");

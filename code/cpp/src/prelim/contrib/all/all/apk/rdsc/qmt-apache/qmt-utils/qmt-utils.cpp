@@ -230,7 +230,8 @@ int get_response_array(void* uri, char*** response, const char* log_file)
   fct = &full_content_type;
  }
 
- static QStringList field_list {{"content-text", "full-content-type"}};
+ static QStringList field_list {{"content-text", "full-content-type",
+                                }};
 
  char** fields = (char**) malloc(sizeof(char*) * field_list.size());
 
@@ -271,6 +272,8 @@ int get_response_array(void* uri, char*** response, const char* log_file)
   }
  }
 
+ bool field_0_written = false;
+
  if(result)
  {
   log_comments_qstring("-qmt-response-array", "Passing along raw binary\n");
@@ -281,21 +284,46 @@ int get_response_array(void* uri, char*** response, const char* log_file)
 
   if(raw_needs_delete)
     delete raw;
+
+  field_0_written = true;
  }
  else //raw is empty
    fields[0] = 0;
 
- ++field_number;
+// ++field_number;
+
+// QMap<QString, QString> xfield_map; //sr->get_field_map();
+// xfield_map.insert("Accept-Ranges", "bytes");
+// xfield_map.insert("Content-Length", "113350");
+// xfield_map.insert("Content-Type", "image/svg+xml");
+
 
  for(QString field : field_list)
  {
+  if(field_number == 0)
+    if(field_0_written)
+    {
+     ++field_number; continue;
+    }
+
   QByteArray fqba = field_map->value(field)->toLatin1();
+//  QByteArray fqba = xfield_map.value(field).toLatin1();
+
+//  QByteArray fqba;
+//  if(field == "Content-Type")
+//    fqba = "image/svg+xml";
+
+     log_comments_qstring("-qmt-response-array",
+       "\nField: %1 %2 %3\n"_qt.arg(field_number).arg(field).arg(QString::fromLatin1(fqba.data())));
+
+
   char* cs = (char*) malloc(fqba.length() + 1);
   memcpy(cs, fqba.data(), fqba.length());
   cs[fqba.length()] = 0;
   fields[field_number] = cs;
   ++field_number;
  }
+
 
  *response = fields;
  return result;

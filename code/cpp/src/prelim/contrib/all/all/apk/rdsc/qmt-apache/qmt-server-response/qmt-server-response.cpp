@@ -78,12 +78,13 @@ void QMT_Server_Response::log_to_logfile(QString text, int line_count)
 
 QMap<QString, QString*>* QMT_Server_Response::get_field_map()
 {
+ //full_content_type_ = "image/svg+xml";
  QMap<QString, QString*>* result = new QMap<QString, QString*>
  {
   {"content-type", &content_type_},
   {"character-set", &character_set_},
   {"content-text", &content_text_},
-  {"content-file", &content_file_}
+  {"content-file", &content_file_},
  };
 
  if(!full_content_type_.isEmpty())
@@ -108,6 +109,9 @@ QString QMT_Server_Response::get_default_full_content_type()
 
 void QMT_Server_Response::handle_request_from_uri(QString uri)
 {
+// if(uri.endsWith(".svg"))
+//   uri.chop(4);
+
  if(uri.length() > 2)
  {
   if(uri[3] == '~')
@@ -146,6 +150,14 @@ void QMT_Server_Response::text_html_utf8()
  character_set_ = "UTF8";
 }
 
+void QMT_Server_Response::svg_xml_utf8()
+{
+ content_type_ = "image/svg+xml";
+ character_set_ = "UTF8";
+}
+
+
+
 void QMT_Server_Response::text_html_utf8(QString text)
 {
  text_html_utf8();
@@ -180,6 +192,18 @@ void QMT_Server_Response::init_content_file_with_type(QString file_type,
   QString file_path)
 {
  content_file_ = file_path;
- content_type_ = file_type;
+
+ if(file_type == "svg")
+ {
+  svg_xml_utf8();
+//  full_content_type_ =
+//  content_type_ = "image/svg+xml";
+//  character_set_ = "UTF8";
+
+ }
+ else
+ {
+  content_type_ = "text/"_qt + file_type;
+ }
 }
 

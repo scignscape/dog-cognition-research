@@ -69,6 +69,7 @@ public:
  void init_binary_content(const QByteArray& qba);
  void text_html_utf8();
  void text_html_utf8(QString text);
+ void svg_xml_utf8();
 
  void text_html_utf8_error(QString* get_default_message = nullptr);
  void text_html_utf8_error(QString text, QString log_text = {});

@@ -73,8 +73,8 @@ void Game_Board::to_svg(QString in_folder, QString out_file)
   static s1 slot_position_y_offsets[2]{1, 0};
   s1 slot_width_offset = -1;
 
-  for(u1 r = 0; r < 16; ++r)
-   for(u1 c = 0; c < 16; ++c)
+  for(u1 r = 0, _r = 31; r < 16; ++r, _r -= 2)
+   for(u1 c = 0, _c = 1; c < 16; ++c, _c += 2)
    {
     u1 r_2 = r / 2, c_2 = c / 2, rc_2 = (r_2 % 2) == (c_2 % 2);
 
@@ -82,7 +82,7 @@ void Game_Board::to_svg(QString in_folder, QString out_file)
     s1 slot_position_y_offset = slot_position_y_offsets[r % 2];
 
 
-    Game_Position* gp = game_positions_by_coords_[{r * 2 + 1, c * 2 + 1}];
+    Game_Position* gp = game_positions_by_coords_[{_r, _c}];
 
     main_text += R"_(
  <a class="%1" id = "%2" onclick="position_clicked(event)">
@@ -117,7 +117,7 @@ void Game_Board::to_svg(QString in_folder, QString out_file)
   main_text += "\n\n<!-- slot borders -->\n\n";
 
   s1 draw_outer_offset = -9;
-  s1 draw_inner_offset = 11;
+  s1 draw_inner_offset = 14;
   s2 draw_width = slot_width + draw_outer_offset;
 
   for(u2 r = 50; r < 850; r += 100)
@@ -171,7 +171,7 @@ void Game_Board::to_svg(QString in_folder, QString out_file)
 
  auto centers = [&main_text, polygon, init_diamond_octagon_points_vector]()
  {
-  // //  draw slot borders
+  // //  draw centers
   main_text += "\n\n<!-- centers -->\n\n";
 
   static s1 visible_ortho_point = 12;
@@ -204,10 +204,12 @@ void Game_Board::to_svg(QString in_folder, QString out_file)
 
  auto intersections = [&main_text, polygon, init_diamond_octagon_points_vector]()
  {
-  // //  draw slot borders
-  main_text += "\n\n<!-- centers -->\n\n";
+  // //  draw intersections
+  main_text += "\n\n<!-- intersections -->\n\n";
 
-  s1 x_offset = -2, y_offset = -2;
+  s1 base_x_offset = 0, base_y_offset = 0;
+  s1 area_line_offset = -1;
+
 
   static s1 visible_ortho_point = 8;
   static s1 visible_diag_point = 4;
@@ -231,6 +233,9 @@ void Game_Board::to_svg(QString in_folder, QString out_file)
   {
    for(u2 c = 100; c < 800; c += 100)
    {
+    s1 x_offset = base_x_offset + area_line_offset*(c == 300 || c == 500),
+      y_offset = base_y_offset + area_line_offset*(r == 300 || r == 500);
+
     polygon("hidden-intersection-polygon", c + x_offset, r + y_offset, hidden_points);
     polygon("visible-intersection-polygon", c + x_offset, r + y_offset, visible_points);
    }
@@ -239,24 +244,17 @@ void Game_Board::to_svg(QString in_folder, QString out_file)
 
  auto edges = [&main_text, polygon, init_diamond_octagon_points_vector]()
  {
-  // //  draw slot borders
-  main_text += "\n\n<!-- centers -->\n\n";
+  // //  draw edges
+  main_text += "\n\n<!-- edges -->\n\n";
 
-  s1 x_offset = -1, y_offset = -2;
-
-//  static s1 visible_ortho_point = 4;
-//  static s1 visible_diag_point_x = 16;
-//  static s1 visible_diag_point_y = 7;
-
-//  static s1 hidden_ortho_point = 15;
-//  static s1 hidden_diag_point_x = 20;
-//  static s1 hidden_diag_point_y = 15;
+  s1 base_x_offset = 0, base_y_offset = 0;
+  s1 area_line_offset = -1;
 
 
-  static s1 visible_ortho_point_y = 4;
+  static s1 visible_ortho_point_y = 1;
   static s1 visible_ortho_point_x = 13;
   static s1 visible_diag_point_x = 15;
-  static s1 visible_diag_point_y = 3;
+  static s1 visible_diag_point_y = 2;
 
   static s1 hidden_ortho_point_y = 10;
   static s1 hidden_ortho_point_x = 23;
@@ -283,8 +281,60 @@ void Game_Board::to_svg(QString in_folder, QString out_file)
   {
    for(u2 c = 50; c < 850; c += 100)
    {
+    s1 x_offset = base_x_offset,
+      y_offset = base_y_offset + area_line_offset*(r == 300 || r == 500);
+
     polygon("hidden-edge-polygon", c + x_offset, r + y_offset, hidden_points);
     polygon("visible-edge-polygon", c + x_offset, r + y_offset, visible_points);
+   }
+  }
+ };
+
+
+ auto sides = [&main_text, polygon,
+   init_diamond_octagon_points_vector]()
+ {
+  // //  draw sides
+  main_text += "\n\n<!-- sides -->\n\n";
+
+  s1 base_x_offset = 0, base_y_offset = 0;
+  s1 area_line_offset = -1;
+
+  static s1 visible_ortho_point_y = 13;
+  static s1 visible_ortho_point_x = 1;
+  static s1 visible_diag_point_x = 2;
+  static s1 visible_diag_point_y = 15;
+
+  static s1 hidden_ortho_point_y = 23;
+  static s1 hidden_ortho_point_x = 10;
+  static s1 hidden_diag_point_x = 8;
+  static s1 hidden_diag_point_y = 25;
+
+
+  static QVector<QPair<s2, s2>> visible_points;
+  if(visible_points.isEmpty())
+  {
+   init_diamond_octagon_points_vector(visible_points, visible_ortho_point_x,
+     visible_diag_point_x, visible_ortho_point_y, visible_diag_point_y);
+  }
+
+  static QVector<QPair<s2, s2>> hidden_points;
+  if(hidden_points.isEmpty())
+  {
+   init_diamond_octagon_points_vector(hidden_points, hidden_ortho_point_x,
+     hidden_diag_point_x, hidden_ortho_point_y,
+     hidden_diag_point_y);
+  }
+
+  for(u2 r = 50; r < 850; r += 100)
+  {
+   for(u2 c = 100; c < 800; c += 100)
+   {
+    s1 x_offset = base_x_offset + area_line_offset*(c == 300 || c == 500),
+      y_offset = base_y_offset;
+
+    polygon("hidden-side-polygon", c + x_offset, r + y_offset, hidden_points);
+    polygon("visible-side-polygon", c + x_offset, r + y_offset, visible_points);
    }
   }
  };
@@ -316,7 +366,7 @@ void Game_Board::to_svg(QString in_folder, QString out_file)
 //  </g>)"_qt.arg(gridline_css_classes[offset]).arg(r - offset);
 
    h_line(gridline_css_classes[offset], board_left_offset,
-     board_left_offset + total_board_width, r - offset);
+     board_left_offset + total_board_width, r - offset + 1);
 
   }
 
@@ -331,7 +381,7 @@ void Game_Board::to_svg(QString in_folder, QString out_file)
 //   <line x1="%2" y1="0" x2="%2" y2="800"/>
 //  </g>)"_qt.arg(gridline_css_classes[offset]).arg(c - offset);
 
-    v_line(gridline_css_classes[offset], c - offset,
+    v_line(gridline_css_classes[offset], c - offset + 1,
       board_top_offset, board_top_offset + total_board_height);
 
   }
@@ -344,7 +394,7 @@ void Game_Board::to_svg(QString in_folder, QString out_file)
   //  }
 
 
- gridlines(); squares(); slot_borders(); centers(); intersections(); edges();
+ gridlines(); squares(); slot_borders(); centers(); intersections(); edges(); sides();
 
  QString svg_text = board_start + main_text + board_end;
 
