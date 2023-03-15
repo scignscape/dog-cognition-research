@@ -35,6 +35,8 @@ public:
  void debug_board(QString file);
  void to_svg(QString in_folder, QString out_file);
 
+ Game_Position* get_game_position_by_label_code(QString lc);
+
 };
 
 

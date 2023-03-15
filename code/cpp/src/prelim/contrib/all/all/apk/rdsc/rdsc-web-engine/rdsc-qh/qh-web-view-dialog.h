@@ -97,6 +97,9 @@ class QH_Web_View_Dialog : public QDialog
  std::function<void(const QH_Cross_Map_Coords&)> mark_location_callback_;
  std::function<void(QUrl)> url_changed_callback_;
 
+ std::function<void(QH_Web_View_Dialog*, QString, const QJsonValue&)> js_callback_;
+
+
  std::function<void(const QUrl&, const QPoint, const QSize, QString, QWebEnginePage::NavigationType)>
    qh_link_request_callback_;
 
@@ -137,8 +140,12 @@ public:
    QString, QWebEnginePage::NavigationType)>) ,qh_link_request_callback)
 
 
+ ACCESSORS(MACRO_PASTE(std::function<void(QH_Web_View_Dialog*, QString, const QJsonValue&)>) ,js_callback)
 
- void handle_mark_location_requested(const QH_Cross_Map_Coords& coords);
+ void check_run_js_callback(QString key, const QJsonValue& msg);
+ void run_js_in_current_web_page(QString js_code);
+
+//? void handle_mark_location_requested(const QH_Cross_Map_Coords& coords);
 
 
  void add_url_pattern(QUrl url);

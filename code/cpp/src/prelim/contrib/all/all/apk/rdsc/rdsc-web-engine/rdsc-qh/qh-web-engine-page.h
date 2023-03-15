@@ -22,7 +22,7 @@
 
 #include "kans.h"
 
-class QH_Web_Engine_View;
+#include "accessors.h"
 
 
 KANS_(RdSC)
@@ -39,6 +39,10 @@ public:
 };
 
 class JsInterface;
+class QH_Web_View_Dialog;
+class QH_Web_Engine_View;
+
+
 
 class QH_Web_Engine_Page : public QWebEnginePage
 {
@@ -48,6 +52,8 @@ class QH_Web_Engine_Page : public QWebEnginePage
 
  QH_Web_Engine_View* view_;
 
+ QH_Web_View_Dialog* dialog_;
+
  QWebChannel* qweb_channel_;
  JsInterface* jsInterface_;
 
@@ -55,6 +61,8 @@ class QH_Web_Engine_Page : public QWebEnginePage
 public:
  QH_Web_Engine_Page(QH_Web_Engine_View* view);
  QH_Web_Engine_Page(QH_Web_Engine_Page* parent);
+
+ ACCESSORS(QH_Web_View_Dialog* ,dialog)
 
  bool acceptNavigationRequest(const QUrl &url, NavigationType type,
                               bool isMainFrame) override;

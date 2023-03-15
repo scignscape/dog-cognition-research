@@ -13,6 +13,8 @@
 
 #include "JsInterface.h"
 
+#include "qh-web-view-dialog.h"
+
 USING_KANS(RdSC)
 
 NavigationRequestInterceptor::NavigationRequestInterceptor(QWebEnginePage*
@@ -58,12 +60,13 @@ bool NavigationRequestInterceptor::acceptNavigationRequest(const QUrl
 
 
 QH_Web_Engine_Page::QH_Web_Engine_Page(QH_Web_Engine_View* view) : QWebEnginePage(),
-  view_(view)
+  view_(view), dialog_(nullptr)
 {
  setup_web_channel();
 }
 
-QH_Web_Engine_Page::QH_Web_Engine_Page(QH_Web_Engine_Page* parent) : QWebEnginePage(parent)
+QH_Web_Engine_Page::QH_Web_Engine_Page(QH_Web_Engine_Page* parent) :
+   QWebEnginePage(parent), view_(nullptr), dialog_(nullptr)
 {
  setup_web_channel();
 }
@@ -88,45 +91,7 @@ void QH_Web_Engine_Page::run_js_interface_callback(QString key, const QJsonValue
 
  qDebug() << msg;
 
- if(msg.isArray())
- {
-  QVariantList qvl = msg.toVariant().toList();
-
-  qDebug() << qvl;
-
-
-  if(qvl.size() < 2)
-    return;
-
-  r8 lat, lon;
-
-  if(key == "lat-lon")
-  {
-   lat = qvl[0].toDouble();
-   lon = qvl[1].toDouble();
-  }
-  else if(key == "lon-lat")
-  {
-   lon = qvl[0].toDouble();
-   lat = qvl[1].toDouble();
-  }
-
-  temp(lat, lon);
- }
- else if(msg.isObject())
- {
-  qDebug() << msg;
-
-  QVariantMap qvm = msg.toVariant().toMap();
-
-  r8 lat = qvm.value("lat").toDouble();
-  r8 lng = qvm.value("lng").toDouble();
-
-  temp(lat, lng);
-
-
-
- }
+ dialog_->check_run_js_callback(key, msg);
 
 }
 

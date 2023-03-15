@@ -52,6 +52,12 @@ Game_Board::Game_Board()
 }
 
 
+Game_Position* Game_Board::get_game_position_by_label_code(QString lc)
+{
+ return game_positions_by_label_code_.value(lc);
+}
+
+
 void Game_Board::to_svg(QString in_folder, QString out_file)
 {
  QDir qd(in_folder);
@@ -85,7 +91,7 @@ void Game_Board::to_svg(QString in_folder, QString out_file)
     Game_Position* gp = game_positions_by_coords_[{_r, _c}];
 
     main_text += R"_(
- <a class="%1" id = "%2" onclick="position_clicked(event)">
+ <a class="%1" id="%2" onclick="position_clicked(event)">
   <rect x="%3" y="%4" width="%5" height="%5"/>
  </a>
  )_"_qt.arg(square_css_classes[rc_2]).arg(gp->label_code())
@@ -133,7 +139,7 @@ void Game_Board::to_svg(QString in_folder, QString out_file)
   }
  };
 
- auto polygon = [&main_text](QString css_class, u2 x, u2 y, QVector<QPair<s2, s2>> points)
+ auto polygon = [&main_text](QString element_id, QString css_class, u2 x, u2 y, QVector<QPair<s2, s2>> points)
  {
   QVector<QString> points_str(8);
 
@@ -143,9 +149,9 @@ void Game_Board::to_svg(QString in_folder, QString out_file)
   });
 
   main_text += R"(
-<a class='%1'><g>
- <polygon points="%2"/>
-</g></a>)"_qt.arg(css_class).arg(points_str.toList().join(" "));
+<a class="%1" id="%2"><g>
+ <polygon points="%3"/>
+</g></a>)"_qt.arg(css_class).arg(element_id).arg(points_str.toList().join(" "));
 
  };
 
@@ -169,7 +175,7 @@ void Game_Board::to_svg(QString in_folder, QString out_file)
  };
 
 
- auto centers = [&main_text, polygon, init_diamond_octagon_points_vector]()
+ auto centers = [&main_text, this, polygon, init_diamond_octagon_points_vector]()
  {
   // //  draw centers
   main_text += "\n\n<!-- centers -->\n\n";
@@ -192,17 +198,19 @@ void Game_Board::to_svg(QString in_folder, QString out_file)
    init_diamond_octagon_points_vector(hidden_points, hidden_ortho_point, hidden_diag_point);
   }
 
-  for(u2 r = 50; r < 850; r += 100)
+  for(u2 r = 50, _r = 30; r < 850; r += 100, _r -= 4)
   {
-   for(u2 c = 50; c < 850; c += 100)
+   for(u2 c = 50, _c = 2; c < 850; c += 100, _c += 4)
    {
-    polygon("visible-center-polygon", c, r, visible_points);
-    polygon("hidden-center-polygon", c, r, hidden_points);
+    Game_Position* gp = game_positions_by_coords_[{_r, _c}];
+
+    polygon(gp->label_code() + "-v", "visible-center-polygon", c, r, visible_points);
+    polygon(gp->label_code(), "hidden-center-polygon", c, r, hidden_points);
    }
   }
  };
 
- auto intersections = [&main_text, polygon, init_diamond_octagon_points_vector]()
+ auto intersections = [&main_text, this, polygon, init_diamond_octagon_points_vector]()
  {
   // //  draw intersections
   main_text += "\n\n<!-- intersections -->\n\n";
@@ -229,20 +237,22 @@ void Game_Board::to_svg(QString in_folder, QString out_file)
    init_diamond_octagon_points_vector(hidden_points, hidden_ortho_point, hidden_diag_point);
   }
 
-  for(u2 r = 100; r < 800; r += 100)
+  for(u2 r = 100, _r = 28; r < 800; r += 100, _r -= 4)
   {
-   for(u2 c = 100; c < 800; c += 100)
+   for(u2 c = 100, _c = 4; c < 800; c += 100, _c += 4)
    {
     s1 x_offset = base_x_offset + area_line_offset*(c == 300 || c == 500),
       y_offset = base_y_offset + area_line_offset*(r == 300 || r == 500);
 
-    polygon("hidden-intersection-polygon", c + x_offset, r + y_offset, hidden_points);
-    polygon("visible-intersection-polygon", c + x_offset, r + y_offset, visible_points);
+    Game_Position* gp = game_positions_by_coords_[{_r, _c}];
+
+    polygon(gp->label_code() + "-v", "visible-intersection-polygon", c + x_offset, r + y_offset, visible_points);
+    polygon(gp->label_code(), "hidden-intersection-polygon", c + x_offset, r + y_offset, hidden_points);
    }
   }
  };
 
- auto edges = [&main_text, polygon, init_diamond_octagon_points_vector]()
+ auto edges = [&main_text, this, polygon, init_diamond_octagon_points_vector]()
  {
   // //  draw edges
   main_text += "\n\n<!-- edges -->\n\n";
@@ -277,21 +287,23 @@ void Game_Board::to_svg(QString in_folder, QString out_file)
      hidden_diag_point_y);
   }
 
-  for(u2 r = 100; r < 800; r += 100)
+  for(u2 r = 100, _r = 28; r < 800; r += 100, _r -= 4)
   {
-   for(u2 c = 50; c < 850; c += 100)
+   for(u2 c = 50, _c = 2; c < 850; c += 100, _c += 4)
    {
     s1 x_offset = base_x_offset,
       y_offset = base_y_offset + area_line_offset*(r == 300 || r == 500);
 
-    polygon("hidden-edge-polygon", c + x_offset, r + y_offset, hidden_points);
-    polygon("visible-edge-polygon", c + x_offset, r + y_offset, visible_points);
+    Game_Position* gp = game_positions_by_coords_[{_r, _c}];
+
+    polygon(gp->label_code() + "-v", "visible-edge-polygon", c + x_offset, r + y_offset, visible_points);
+    polygon(gp->label_code(), "hidden-edge-polygon", c + x_offset, r + y_offset, hidden_points);
    }
   }
  };
 
 
- auto sides = [&main_text, polygon,
+ auto sides = [&main_text, this, polygon,
    init_diamond_octagon_points_vector]()
  {
   // //  draw sides
@@ -326,15 +338,17 @@ void Game_Board::to_svg(QString in_folder, QString out_file)
      hidden_diag_point_y);
   }
 
-  for(u2 r = 50; r < 850; r += 100)
+  for(u2 r = 50, _r = 30; r < 850; r += 100, _r -= 4)
   {
-   for(u2 c = 100; c < 800; c += 100)
+   for(u2 c = 100, _c = 4; c < 800; c += 100, _c += 4)
    {
     s1 x_offset = base_x_offset + area_line_offset*(c == 300 || c == 500),
       y_offset = base_y_offset;
 
-    polygon("hidden-side-polygon", c + x_offset, r + y_offset, hidden_points);
-    polygon("visible-side-polygon", c + x_offset, r + y_offset, visible_points);
+    Game_Position* gp = game_positions_by_coords_[{_r, _c}];
+
+    polygon(gp->label_code() + "-v", "visible-side-polygon", c + x_offset, r + y_offset, visible_points);
+    polygon(gp->label_code(), "hidden-side-polygon", c + x_offset, r + y_offset, hidden_points);
    }
   }
  };
@@ -393,8 +407,28 @@ void Game_Board::to_svg(QString in_folder, QString out_file)
 
   //  }
 
-
  gridlines(); squares(); slot_borders(); centers(); intersections(); edges(); sides();
+
+ QString tokens_text;
+ auto tokens = [&tokens_text]()
+ {
+  for(u1 i = 0; i < 30; ++i)
+  {
+   tokens_text += R"(
+<a class='south-token' id='token-s%1'>
+ <circle cx='0' cy='0' r='12' />
+</a>
+
+<a class='north-token' id='token-n%1'>
+ <circle cx='0' cy='0' r='12' />
+</a>
+)"_qt.arg(i);
+  }
+ };
+
+ tokens();
+
+ board_end.replace("%TOKENS%", tokens_text);
 
  QString svg_text = board_start + main_text + board_end;
 

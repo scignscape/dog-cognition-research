@@ -39,7 +39,7 @@
 
 #include "kans.h"
 
-//KANS_(RdSC)
+KANS_(RdSC)
 
 
 
@@ -109,6 +109,6 @@ Q_SIGNALS:
 
 };
 
-//_KANS(RdSC)
+_KANS(RdSC)
 
 #endif

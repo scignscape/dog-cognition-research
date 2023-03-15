@@ -160,7 +160,7 @@ QH_Web_View_Dialog::QH_Web_View_Dialog(QWidget* parent)
 
 QH_Web_View_Dialog::QH_Web_View_Dialog(QString initial_url, QWidget* parent)
   :  QDialog(parent), initial_url_(initial_url), mark_location_callback_(nullptr),
-     url_changed_callback_(nullptr),
+     url_changed_callback_(nullptr), js_callback_(nullptr),
      zoom_or_coordinates_changed_callback_(nullptr) //?, context_menu_provider_(nullptr), pm_runtime_(nullptr)
 {
 //? pm_runtime_ = new Pattern_Matcher_Runtime;
@@ -177,6 +177,7 @@ QH_Web_View_Dialog::QH_Web_View_Dialog(QString initial_url, QWidget* parent)
 
 //?
  wep_ = new QH_Web_Engine_Page(wev_);
+ wep_->set_dialog(this);
 
  QObject::connect(wep_, &QH_Web_Engine_Page::urlChanged,[this](const QUrl& url)
  {
@@ -238,6 +239,7 @@ QH_Web_View_Dialog::QH_Web_View_Dialog(QString initial_url, QWidget* parent)
 
  //?
  wev_->setPage(wep_);
+
 
  connect(wev_, SIGNAL(snapshot_saved(QString)), this, SIGNAL(snapshot_saved(QString)));
  connect(wev_, SIGNAL(youtube_download_requested(QString)), this, SIGNAL(youtube_download_requested(QString)));
@@ -395,11 +397,23 @@ QH_Web_View_Dialog::QH_Web_View_Dialog(QString initial_url, QWidget* parent)
 
 }
 
-void QH_Web_View_Dialog::handle_mark_location_requested(const QH_Cross_Map_Coords& coords)
+void QH_Web_View_Dialog::check_run_js_callback(QString key, const QJsonValue& msg)
 {
- if(mark_location_callback_)
-   mark_location_callback_(coords);
+ if(js_callback_)
+   js_callback_(this, key, msg);
 }
+
+void QH_Web_View_Dialog::run_js_in_current_web_page(QString js_code)
+{
+ wep_->runJavaScript(js_code);
+}
+
+
+//void QH_Web_View_Dialog::handle_mark_location_requested(const QH_Cross_Map_Coords& coords)
+//{
+// if(mark_location_callback_)
+//   mark_location_callback_(coords);
+//}
 
 
 //void QH_Web_View_Dialog::process_new_url_geo_fragment(QString url, QString fragment)
