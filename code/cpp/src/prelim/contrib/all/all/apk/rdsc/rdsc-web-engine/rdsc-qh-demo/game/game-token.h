@@ -17,6 +17,9 @@
 
 #include <QString>
 
+class Game_Position;
+class Game_Player;
+
 class Game_Token
 {
 public:
@@ -75,12 +78,25 @@ public:
 private:
  Token_Kind kind_;
 
- u1 capture_rank_;
+ //u1 capture_rank_;
  u1 cluster_size_;
+
+ // //  0 = entry  -1 = on board
+  //    otherwise 1-12 = hold file
+ s1 capture_status_;
+
+ Game_Position* current_position_;
+
+ QString svg_id_;
+
+ Game_Player* player_;
 
 public:
 
- Game_Token(Token_Kind kind = Token_Kind::N_A);
+ Game_Token(Game_Player* player, Token_Kind kind = Token_Kind::N_A);
+
+ bool south();
+ bool north();
 
  QString token_kind_string()
  {
@@ -117,8 +133,11 @@ public:
   return static_map.value(kind_, "<error>");
  }
 
+ ACCESSORS(QString ,svg_id)
 
-
+ ACCESSORS(Game_Position* ,current_position)
+ ACCESSORS(s1 ,capture_status)
+ ACCESSORS(Game_Player* ,player)
 
 };
 

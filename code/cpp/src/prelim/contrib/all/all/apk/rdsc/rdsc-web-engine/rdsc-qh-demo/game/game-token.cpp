@@ -7,8 +7,25 @@
 
 #include "game-token.h"
 
-Game_Token::Game_Token(Token_Kind kind)
-  :  kind_(kind)
+#include "game-player.h"
+
+
+Game_Token::Game_Token(Game_Player* player, Token_Kind kind)
+  :  kind_(kind), player_(player),
+     capture_status_(0), current_position_(nullptr)
 {
 
 }
+
+
+bool Game_Token::south()
+{
+ return player_->play_order() == 1;
+}
+
+bool Game_Token::north()
+{
+ return player_->play_order() == 2;
+}
+
+

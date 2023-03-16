@@ -7,15 +7,21 @@
 
 #include "game-board.h"
 
+#include "game-driver.h"
+#include "game-token.h"
+
 #include "textio.h"
 USING_KANS(TextIO)
 
 #include "rdsc-2d/mat2d.templates.h"
 #include "rdsc-1d/vec1d.h"
 
+#include "rdsc-qh/qh-web-view-dialog.h"
 
-Game_Board::Game_Board()
-  :  slot_positions_(16, 16, decltype(slot_positions_) ::Fixed_Preinit),
+
+
+Game_Board::Game_Board(Game_Driver* driver)
+  :  driver_(driver), slot_positions_(16, 16, decltype(slot_positions_) ::Fixed_Preinit),
      non_slot_positions_(15, 15, decltype(slot_positions_) ::Fixed_Preinit),
      next_token_number_(0)
 {
@@ -52,16 +58,51 @@ Game_Board::Game_Board()
 
 }
 
-void Game_Board::start_game()
-{
- next_token_number_ = 1;
-}
-
 
 Game_Position* Game_Board::get_game_position_by_label_code(QString lc)
 {
  return game_positions_by_label_code_.value(lc);
 }
+
+void Game_Board::handle_token_placement(QH_Web_View_Dialog* dlg, Game_Token* token, QString pos_id)
+{
+ Game_Position* gp = get_game_position_by_label_code(pos_id);
+
+ if(gp)
+ {
+//   u2 r = gp->position_row();
+//   u2 c = gp->position_column();
+
+//  s2 tn = next_token_number();
+  QString token_id = token->svg_id();
+  QString hide_group;
+  QString show_group;
+  if(token->south())
+  {
+   hide_group = "south-adding-text-group";
+   show_group = "north-adding-text-group";
+  }
+  else
+  {
+   hide_group = "north-adding-text-group";
+   show_group = "south-adding-text-group";
+  }
+
+  s2 token_mid_offset_x = 25, token_mid_offset_y = 25;
+
+  s2 x = gp->svg_x() + token_mid_offset_x, y = gp->svg_y() + token_mid_offset_y;
+
+  //c * 100, y = r * 100;
+  //runJavaScript("position_token('%1', %2, %3);"_qt.arg(id).arg(x).arg(y));
+
+  dlg->run_js_in_current_web_page("show_token_at_position('%1', %2, %3);"_qt.arg(token_id).arg(x).arg(y));
+  dlg->run_js_in_current_web_page("hide_svg_element('%1');"_qt.arg(hide_group));
+  dlg->run_js_in_current_web_page("show_svg_element('%1');"_qt.arg(show_group));
+
+  increment_next_token_number();
+ }
+}
+
 
 
 void Game_Board::to_svg(QString in_folder, QString out_file)
@@ -422,19 +463,25 @@ void Game_Board::to_svg(QString in_folder, QString out_file)
  gridlines(); squares(); slot_borders(); centers(); intersections(); edges(); sides();
 
  QString tokens_text;
- auto tokens = [&tokens_text]()
+ auto tokens = [&tokens_text, this]()
  {
   for(u1 i = 0; i < 30; ++i)
   {
+   QString s_id = "token-s"_qt + QString::number(i);
+   QString n_id = "token-n"_qt + QString::number(i);
+
+   driver_->register_new_token(1, s_id);
+   driver_->register_new_token(2, n_id);
+
    tokens_text += R"(
-<a class='south-token' id='token-s%1'>
+<a class='south-token' id='%1'>
  <circle cx='0' cy='0' r='12' />
 </a>
 
-<a class='north-token' id='token-n%1'>
+<a class='north-token' id='%2'>
  <circle cx='0' cy='0' r='12' />
 </a>
-)"_qt.arg(i);
+)"_qt.arg(s_id).arg(n_id);
   }
  };
 
