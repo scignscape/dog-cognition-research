@@ -28,14 +28,28 @@ class Game_Board
 
  QMap<QPair<u1, u1>, Game_Position*> game_positions_by_coords_;
 
+ s2 next_token_number_;
+
 public:
 
  Game_Board();
+
+ ACCESSORS(s2 ,next_token_number)
 
  void debug_board(QString file);
  void to_svg(QString in_folder, QString out_file);
 
  Game_Position* get_game_position_by_label_code(QString lc);
+
+ void start_game();
+
+ void increment_next_token_number()
+ {
+  if(next_token_number_ < 0)
+    next_token_number_ = 1 - next_token_number_;
+  else
+    next_token_number_ = -1 - next_token_number_;
+ }
 
 };
 

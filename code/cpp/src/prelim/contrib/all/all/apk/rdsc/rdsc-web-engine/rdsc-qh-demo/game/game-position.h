@@ -62,6 +62,9 @@ private:
  u1 board_row_;
  u1 board_column_;
 
+ u2 svg_x_;
+ u2 svg_y_;
+
  u1 board_area_number_;
 
  QString label_code_;
@@ -83,6 +86,9 @@ public:
  ACCESSORS(u1 ,board_column)
 
  ACCESSORS(u1 ,board_area_number)
+
+ ACCESSORS(s2 ,svg_x)
+ ACCESSORS(s2 ,svg_y)
 
  ACCESSORS(QString ,label_code)
 

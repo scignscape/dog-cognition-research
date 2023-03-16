@@ -16,7 +16,8 @@ USING_KANS(TextIO)
 
 Game_Board::Game_Board()
   :  slot_positions_(16, 16, decltype(slot_positions_) ::Fixed_Preinit),
-     non_slot_positions_(15, 15, decltype(slot_positions_) ::Fixed_Preinit)
+     non_slot_positions_(15, 15, decltype(slot_positions_) ::Fixed_Preinit),
+     next_token_number_(0)
 {
  for(u1 r = 1, _r = 1; r <= 16; ++r, _r += 2)
   for(u1 c = 0, _c = 1; c < 16; ++c, _c += 2)
@@ -49,6 +50,11 @@ Game_Board::Game_Board()
   gp->set_adjacent_positions(3, game_positions_by_coords_.value({r-1, c+1}));
  }
 
+}
+
+void Game_Board::start_game()
+{
+ next_token_number_ = 1;
 }
 
 
@@ -90,13 +96,19 @@ void Game_Board::to_svg(QString in_folder, QString out_file)
 
     Game_Position* gp = game_positions_by_coords_[{_r, _c}];
 
+    s2 svg_x = c * slot_width + slot_position_x_offset;
+    s2 svg_y = r * slot_width + slot_position_y_offset;
+
+    gp->set_svg_x(svg_x); gp->set_svg_y(svg_y);
+
+
     main_text += R"_(
  <a class="%1" id="%2" onclick="position_clicked(event)">
   <rect x="%3" y="%4" width="%5" height="%5"/>
  </a>
  )_"_qt.arg(square_css_classes[rc_2]).arg(gp->label_code())
-     .arg(c * slot_width + slot_position_x_offset)
-     .arg(r * slot_width + slot_position_y_offset).arg(slot_width + slot_width_offset);
+     .arg(svg_x)
+     .arg(svg_y).arg(slot_width + slot_width_offset);
 
    }
  };
