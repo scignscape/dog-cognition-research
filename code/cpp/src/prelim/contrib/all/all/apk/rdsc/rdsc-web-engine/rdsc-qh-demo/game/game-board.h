@@ -47,6 +47,7 @@ public:
  void to_svg(QString in_folder, QString out_file);
 
  Game_Position* get_game_position_by_label_code(QString lc);
+ Game_Position* get_game_position_by_coords(u1 row, u1 column);
 
  void handle_token_placement(QH_Web_View_Dialog* dlg, Game_Token* token, QString pos_id);
 

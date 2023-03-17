@@ -20,6 +20,8 @@
 class Game_Position;
 class Game_Player;
 
+class Token_Group;
+
 class Game_Token
 {
 public:
@@ -91,6 +93,8 @@ private:
 
  Game_Player* player_;
 
+ Token_Group* current_cluster_;
+
 public:
 
  Game_Token(Game_Player* player, Token_Kind kind = Token_Kind::N_A);
@@ -138,6 +142,8 @@ public:
  ACCESSORS(Game_Position* ,current_position)
  ACCESSORS(s1 ,capture_status)
  ACCESSORS(Game_Player* ,player)
+
+ ACCESSORS(Token_Group* ,current_cluster)
 
 };
 

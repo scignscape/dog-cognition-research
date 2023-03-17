@@ -93,6 +93,7 @@ public:
  ACCESSORS(QString ,label_code)
 
  ACCESSORS(Position_Kind ,position_kind)
+ ACCESSORS(Game_Token* ,current_occupier)
 
  void set_adjacent_positions(u1 index, Game_Position* gp)
  {

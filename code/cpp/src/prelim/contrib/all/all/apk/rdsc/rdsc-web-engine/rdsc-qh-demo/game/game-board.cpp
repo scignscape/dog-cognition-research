@@ -64,6 +64,11 @@ Game_Position* Game_Board::get_game_position_by_label_code(QString lc)
  return game_positions_by_label_code_.value(lc);
 }
 
+Game_Position* Game_Board::get_game_position_by_coords(u1 row, u1 column)
+{
+ return game_positions_by_coords_.value({row, column});
+}
+
 
 
 void Game_Board::to_svg(QString in_folder, QString out_file)

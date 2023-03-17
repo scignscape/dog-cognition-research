@@ -46,6 +46,7 @@ HEADERS += \
   $$SRC_DIR/game/game-token.h \
   $$SRC_DIR/game/game-board.h \
   $$SRC_DIR/game/game-position.h \
+  $$SRC_DIR/game/token-group.h \
 
 
 SOURCES += \
@@ -55,6 +56,9 @@ SOURCES += \
   $$SRC_DIR/game/game-token.cpp \
   $$SRC_DIR/game/game-board.cpp \
   $$SRC_DIR/game/game-position.cpp \
+  $$SRC_DIR/game/token-group.cpp \
+
+
 
 
 

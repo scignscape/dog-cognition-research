@@ -11,7 +11,7 @@
 
 
 Game_Token::Game_Token(Game_Player* player, Token_Kind kind)
-  :  kind_(kind), player_(player),
+  :  kind_(kind), player_(player), current_cluster_(nullptr),
      capture_status_(0), current_position_(nullptr)
 {
 

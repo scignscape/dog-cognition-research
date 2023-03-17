@@ -11,6 +11,7 @@
 
 #include "game-player.h"
 
+#include "token-group.h"
 
 #include "rdsc-qh/qh-web-view-dialog.h"
 
@@ -124,6 +125,113 @@ void Game_Driver::switch_current_player()
    current_player_ = south_player_;
 }
 
+
+u1 Game_Driver::check_cluster(Game_Token* token, QVector<Token_Group*>& surrounding_clusters,
+  QVector<Game_Token*>& surrounding_tokens)
+{
+ Game_Position* gp = token->current_position();
+
+ QSet<Token_Group*> _surrounding_clusters;
+ QSet<Game_Token*> _surrounding_tokens;
+
+
+ for(s2 r = -2; r <= 2; r += 2)
+ {
+  for(s2 c = -2; c <= 2; c += 2)
+  {
+   if((r == 0) && (c == 0))
+     continue;
+   Game_Position* gp1 = board_.get_game_position_by_coords(gp->position_row() + r, gp->position_column() + c);
+   if(Game_Token* token1 = gp1->current_occupier())
+   {
+    if(token1->player() == token->player())
+    {
+     if(token1->current_cluster())
+       _surrounding_clusters.insert(token1->current_cluster());
+     else
+       _surrounding_tokens.insert(token1);
+    }
+   }
+  }
+ }
+
+ u1 result = 0;
+ // 1 = clusters
+ // 2 = tokens
+ // 3 - clusters and tokens
+
+ if(!_surrounding_clusters.isEmpty())
+ {
+  surrounding_clusters = _surrounding_clusters.values().toVector();
+  ++result;
+ }
+
+ if(!surrounding_tokens.isEmpty())
+ {
+  surrounding_tokens = _surrounding_tokens.values().toVector();
+  result += 2;
+ }
+
+ return result;
+}
+
+void Game_Driver::_place(Game_Token* token, Game_Position* gp)
+{
+ token->set_current_position(gp);
+ gp->set_current_occupier(token);
+}
+
+void Game_Driver::_place(Game_Token* token, Token_Group* cluster)
+{
+ token->set_current_cluster(cluster);
+ cluster->add_token(token);
+}
+
+void Game_Driver::_place_confirmed(Game_Token* token, Token_Group* cluster)
+{
+ token->set_current_cluster(cluster);
+ cluster->add_and_confirm_token(token);
+}
+
+
+Token_Group* Game_Driver::merge_token_groups(const QVector<Token_Group*>& clusters)
+{
+ Token_Group* result = new Token_Group;
+ for(Token_Group* c : clusters)
+ {
+  result->absorb(c);
+  delete c;
+ }
+ return result;
+}
+
+
+void Game_Driver::merge_tokens_into_group(Token_Group* cluster, const QVector<Game_Token*>& tokens)
+{
+ for(Game_Token* token : tokens)
+ {
+  cluster->add_and_confirm_token(token);
+ }
+}
+
+
+Token_Group* Game_Driver::merge_tokens_into_new_group(const QVector<Game_Token*>& tokens)
+{
+ Token_Group* result = new Token_Group;
+ merge_tokens_into_group(result, tokens);
+ return result;
+}
+
+
+
+Token_Group* Game_Driver::merge_token_groups(const QVector<Token_Group*>& clusters, const QVector<Game_Token*>& tokens)
+{
+ Token_Group* result = merge_token_groups(clusters);
+ merge_tokens_into_group(result, tokens);
+ return result;
+}
+
+
 void Game_Driver::handle_token_placement(QH_Web_View_Dialog& dlg, Game_Token* token, QString pos_id)
 {
  Game_Position* gp = board_.get_game_position_by_label_code(pos_id);
@@ -131,9 +239,86 @@ void Game_Driver::handle_token_placement(QH_Web_View_Dialog& dlg, Game_Token* to
  if(gp)
  {
   // //  first check the placement is legal ...
+  if(gp->position_kind() != Game_Position::Position_Kind::Slot)
+  {
+   // //  one issue is no non-slots ...
+   return;
+  }
 
-  token->set_current_position(gp);
+  _place(token, gp);
+
+  QVector<Token_Group*> surrounding_clusters;
+  QVector<Game_Token*> surrounding_tokens;
+
+  switch(check_cluster(token, surrounding_clusters, surrounding_tokens))
+  {
+  case 0: break; // // token will be singleton
+
+  case 1: // // check merge ...
+   if(surrounding_clusters.size() == 1)
+   {
+    _place(token, surrounding_clusters.first());
+//    _place_confirmed(token, surrounding_clusters.first());
+    break;
+   }
+   // //  otherwise need to merge ...
+   {
+    Token_Group* new_cluster = merge_token_groups(surrounding_clusters);
+    _place(token, new_cluster);
+    //    _place_confirmed(token, new_cluster);
+    //
+
+//    new_cluster->add_token(token);
+//    token->set_current_cluster(new_cluster);
+//     // // this is if placement ...
+//    new_cluster->confirm_token(token);
+   }
+   break;
+
+  case 2: // // only previous singletons ...
+   {
+    Token_Group* new_cluster = merge_tokens_into_new_group(surrounding_tokens);
+    _place(token, new_cluster);
+    //    _place_confirmed(token, new_cluster);
+    //
+
+//    new_cluster->add_token(token);
+//    token->set_current_cluster(new_cluster);
+//     // // this is if placement ...
+//    new_cluster->confirm_token(token);
+   }
+   break;
+
+  case 3: // // check merge ...
+   if(surrounding_clusters.size() == 1)
+   {
+    merge_tokens_into_group(surrounding_clusters.first(), surrounding_tokens);
+    _place(token, surrounding_clusters.first());
+     // _place_confirmed(token, surrounding_clusters.first());
+
+    break;
+   }
+   // //  otherwise need to merge ...
+   {
+    Token_Group* new_cluster = merge_token_groups(surrounding_clusters);
+    merge_tokens_into_group(new_cluster, surrounding_tokens);
+    _place(token, new_cluster);
+    //    _place_confirmed(token, new_cluster);
+    //
+//    new_cluster->add_token(token);
+//    token->set_current_cluster(new_cluster);
+//     // // this is if placement ...
+//    new_cluster->confirm_token(token);
+   }
+   break;
+
+
+  default: break;
+  }
+
+
   token->set_capture_status(-1);
+
 
   QString token_id = token->svg_id();
   s2 token_mid_offset_x = 25, token_mid_offset_y = 25;

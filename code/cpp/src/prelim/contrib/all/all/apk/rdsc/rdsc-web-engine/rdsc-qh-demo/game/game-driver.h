@@ -17,6 +17,7 @@
 class Game_Token;
 class Game_Player;
 
+class Token_Group;
 
 class Game_Driver
 {
@@ -35,6 +36,10 @@ class Game_Driver
     North_to_Place, South_to_Move, South_to_Move_2_of_2, South_to_Place };
 
  Game_States current_state_;
+
+ void _place(Game_Token* token, Game_Position* gp);
+ void _place(Game_Token* token, Token_Group* cluster);
+ void _place_confirmed(Game_Token* token, Token_Group* cluster);
 
 public:
 
@@ -57,6 +62,13 @@ public:
  void run_js_for_current_player(QH_Web_View_Dialog& dlg, QString js);
  void highlight_current_player_sidebar(QH_Web_View_Dialog& dlg);
 
+ u1 check_cluster(Game_Token* token, QVector<Token_Group*>& surrounding_clusters,
+   QVector<Game_Token*>& surrounding_tokens);
+
+ Token_Group* merge_token_groups(const QVector<Token_Group*>& clusters);
+ Token_Group* merge_token_groups(const QVector<Token_Group*>& clusters, const QVector<Game_Token*>& tokens);
+ void merge_tokens_into_group(Token_Group* cluster, const QVector<Game_Token*>& tokens);
+ Token_Group* merge_tokens_into_new_group(const QVector<Game_Token*>& tokens);
 };
 
 
