@@ -49,9 +49,9 @@ int main(int argc, char *argv[])
 
 // return 0;
  QApplication qapp(argc, argv);
- QH_Web_View_Dialog dlg("http://localhost:6600/test27.html");
+ QH_Web_View_Dialog dlg("http://localhost:6600/test41.html");
 
- driver.start_game();
+ driver.start_game(dlg);
 
  dlg.set_js_callback([&driver](QH_Web_View_Dialog* _dlg, QString key, const QJsonValue& msg)
  {  
@@ -60,10 +60,10 @@ int main(int argc, char *argv[])
   QString pos_id = msg.toString();
 
   if(key == "position-clicked")
-    driver.handle_position_clicked(_dlg, pos_id);
+    driver.handle_position_clicked(*_dlg, pos_id);
 
-  if(key == "token-clicked")
-    driver.handle_token_clicked(_dlg, pos_id);
+  else if(key == "token-clicked")
+    driver.handle_token_clicked(*_dlg, pos_id);
 
  });
 

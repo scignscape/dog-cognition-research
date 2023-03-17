@@ -50,13 +50,13 @@ public:
 
  void handle_token_placement(QH_Web_View_Dialog* dlg, Game_Token* token, QString pos_id);
 
- void increment_next_token_number()
- {
-  if(next_token_number_ < 0)
-    next_token_number_ = -next_token_number_;
-  else
-    next_token_number_ = -1 - next_token_number_;
- }
+// void increment_next_token_number()
+// {
+//  if(next_token_number_ < 0)
+//    next_token_number_ = -next_token_number_;
+//  else
+//    next_token_number_ = -1 - next_token_number_;
+// }
 
 };
 

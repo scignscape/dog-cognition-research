@@ -64,45 +64,6 @@ Game_Position* Game_Board::get_game_position_by_label_code(QString lc)
  return game_positions_by_label_code_.value(lc);
 }
 
-void Game_Board::handle_token_placement(QH_Web_View_Dialog* dlg, Game_Token* token, QString pos_id)
-{
- Game_Position* gp = get_game_position_by_label_code(pos_id);
-
- if(gp)
- {
-//   u2 r = gp->position_row();
-//   u2 c = gp->position_column();
-
-//  s2 tn = next_token_number();
-  QString token_id = token->svg_id();
-  QString hide_group;
-  QString show_group;
-  if(token->south())
-  {
-   hide_group = "south-adding-text-group";
-   show_group = "north-adding-text-group";
-  }
-  else
-  {
-   hide_group = "north-adding-text-group";
-   show_group = "south-adding-text-group";
-  }
-
-  s2 token_mid_offset_x = 25, token_mid_offset_y = 25;
-
-  s2 x = gp->svg_x() + token_mid_offset_x, y = gp->svg_y() + token_mid_offset_y;
-
-  //c * 100, y = r * 100;
-  //runJavaScript("position_token('%1', %2, %3);"_qt.arg(id).arg(x).arg(y));
-
-  dlg->run_js_in_current_web_page("show_token_at_position('%1', %2, %3);"_qt.arg(token_id).arg(x).arg(y));
-  dlg->run_js_in_current_web_page("hide_svg_element('%1');"_qt.arg(hide_group));
-  dlg->run_js_in_current_web_page("show_svg_element('%1');"_qt.arg(show_group));
-
-  increment_next_token_number();
- }
-}
-
 
 
 void Game_Board::to_svg(QString in_folder, QString out_file)

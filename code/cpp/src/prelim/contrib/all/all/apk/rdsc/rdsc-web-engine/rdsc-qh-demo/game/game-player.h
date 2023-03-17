@@ -52,11 +52,22 @@ public:
   return recycled_tokens_.dequeue();
  }
 
- u2 next_token_count()
+ void increment_entry_token_count()
  {
-  if(current_token_count_for_entry_ > max_token_count_for_entry_)
-    return 0;
-  return current_token_count_for_entry_++;
+  if(current_token_count_for_entry_)
+  {
+   if(current_token_count_for_entry_ < max_token_count_for_entry_)
+     ++current_token_count_for_entry_;
+   else
+     current_token_count_for_entry_ = 0;
+  }
+ }
+
+ u2 get_remaining_entry_token_count()
+ {
+  if(current_token_count_for_entry_)
+    return max_token_count_for_entry_ - current_token_count_for_entry_ + 1;
+  return 0;
  }
 
 };

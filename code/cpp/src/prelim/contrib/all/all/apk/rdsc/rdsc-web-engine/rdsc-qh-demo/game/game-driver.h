@@ -42,15 +42,20 @@ public:
 
  ACCESSORS__RGET(Game_Board ,board)
 
- void start_game();
+ void start_game(QH_Web_View_Dialog& dlg);
 
- void handle_token_clicked(QH_Web_View_Dialog* dlg, QString token_id);
- void handle_position_clicked(QH_Web_View_Dialog* dlg, QString position_id);
+ void handle_token_clicked(QH_Web_View_Dialog& dlg, QString token_id);
+ void handle_position_clicked(QH_Web_View_Dialog& dlg, QString position_id);
+ void handle_token_placement(QH_Web_View_Dialog& dlg, Game_Token* token, QString pos_id);
 
  void register_token(QString key, Game_Token* token);
  Game_Token* register_new_token(u1 player_order, QString key);
 
-void check_prepare_token_placement();
+ void check_prepare_token_placement(QH_Web_View_Dialog& dlg);
+ void switch_current_player();
+
+ void run_js_for_current_player(QH_Web_View_Dialog& dlg, QString js);
+ void highlight_current_player_sidebar(QH_Web_View_Dialog& dlg);
 
 };
 
