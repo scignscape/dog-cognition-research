@@ -84,13 +84,36 @@ bool QH_Web_Engine_View::eventFilter(QObject *object, QEvent *event)
   if(mb == Qt::RightButton)
   {
    QPoint qp = mouseEvent->globalPos();
-   QPoint pos = mouseEvent->pos();
+//   QPoint pos = mouseEvent->pos();
 
-   QTimer::singleShot(250, [this, qp, pos]
-   {
-    Context_Menu_Info* cmi = context_menu_info_.value({qp.x(), qp.y()});
-    generate_context_menu(qp, pos, (n8) this, cmi);
-   });
+//   qDebug() << "last_context_menu_position_" << qp;
+//   qDebug() << "last_pos" << pos;
+
+//   QPoint p1 = scroll_container_->viewport()->mapToGlobal(qp);
+//   QPoint p2 = mapFromGlobal(p1);
+
+//   QPoint p3 = scroll_container_->viewport()->mapToGlobal(pos);
+//   QPoint p4 = mapFromGlobal(p4);
+
+
+
+////   QPoint p1 = scroll_container_->viewport()->mapToGlobal(qp);
+////   QPoint p2 = mapFromGlobal(p2);
+
+//   qDebug() << "p1 = " << p1;
+//   qDebug() << "p2 = " << p2;
+//   qDebug() << "p3 = " << p3;
+//   qDebug() << "p4 = " << p4;
+////   qDebug() << "p5 = " << p5;
+////   qDebug() << "p6 = " << p6;
+
+   last_context_menu_position_ = qp;
+
+//   QTimer::singleShot(250, [this, qp, pos]
+//   {
+//    Context_Menu_Info* cmi = context_menu_info_.value({qp.x(), qp.y()});
+//    generate_context_menu(qp, pos, (n8) this, cmi);
+//   });
    event->ignore();
   }
 
@@ -175,8 +198,8 @@ void QH_Web_Engine_View::generate_context_menu(const QPoint& gpos,
 
  QH_Web_Engine_Page* rpage = qobject_cast<QH_Web_Engine_Page*>(this->page());
 
- QMenu* menu = new QMenu(this);
- menu->popup(gpos);
+// QMenu* menu = new QMenu(this);
+// menu->popup(gpos);
 }
 
  void QH_Web_Engine_View::check_sec()

@@ -17,6 +17,17 @@ Game_Token::Game_Token(Game_Player* player, Token_Kind kind)
 
 }
 
+void Game_Token::update_neighbors(const QVector<Game_Token*>& d,
+  const QVector<Game_Token*>& o)
+{
+ set_diagonal_neighbors(d);
+ set_orthogonal_neighbors(o);
+ for(Game_Token* other : d)
+   other->update_diagonal_neighbor(this);
+ for(Game_Token* other : o)
+   other->update_orthogonal_neighbor(this);
+}
+
 
 bool Game_Token::south()
 {

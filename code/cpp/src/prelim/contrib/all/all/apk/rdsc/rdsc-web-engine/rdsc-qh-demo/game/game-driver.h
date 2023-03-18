@@ -41,6 +41,17 @@ class Game_Driver
  void _place(Game_Token* token, Token_Group* cluster);
  void _place_confirmed(Game_Token* token, Token_Group* cluster);
 
+ struct _surrounding {
+  QVector<Token_Group*> clusters;
+ // QVector<Game_Token*> cluster_tokens;
+  QVector<Game_Token*> singletons;
+  QVector<Game_Token*> diagonal;
+  QVector<Game_Token*> orthogonal;
+ };
+
+ u1 check_cluster(Game_Token* token, _surrounding& s);
+
+
 public:
 
  Game_Driver();
@@ -62,8 +73,6 @@ public:
  void run_js_for_current_player(QH_Web_View_Dialog& dlg, QString js);
  void highlight_current_player_sidebar(QH_Web_View_Dialog& dlg);
 
- u1 check_cluster(Game_Token* token, QVector<Token_Group*>& surrounding_clusters,
-   QVector<Game_Token*>& surrounding_tokens);
 
  Token_Group* merge_token_groups(const QVector<Token_Group*>& clusters);
  Token_Group* merge_token_groups(const QVector<Token_Group*>& clusters, const QVector<Game_Token*>& tokens);

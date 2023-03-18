@@ -69,6 +69,8 @@ class QH_Web_Engine_View : public QWebEngineView
 
  QStack<QPoint> positions_;
 
+ QPoint last_context_menu_position_;
+
 public:
 
  QH_Web_Engine_View(QDialog* parent_dialog);
@@ -77,6 +79,8 @@ public:
  ACCESSORS(Pattern_Matcher_Runtime* ,pm_runtime)
 
  ACCESSORS(QScrollArea* ,scroll_container)
+
+ ACCESSORS__CONST_RGET(QPoint ,last_context_menu_position)
 
  QH_Web_Engine_View* sec;
 

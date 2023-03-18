@@ -8,6 +8,7 @@
 #ifndef ENUM_MACROS__H
 #define ENUM_MACROS__H
 
+#include "global-macros.h"
 
 
 
@@ -41,46 +42,66 @@
 
 
 
-#define ENUM_FLAGS_OP_MACROS_(e, f) \
+#define ENUM_FLAGS_OP_MACROS_(e, ty, f) \
  f e operator|(e lhs, e rhs) \
  { \
-  return (e) ( (u1) lhs | (u1) rhs ); \
+  return (e) ( (ty) lhs | (ty) rhs ); \
  } \
  f e operator|=(e& lhs, e rhs) \
  { \
   return lhs = (e) (lhs | rhs); \
  } \
- f u1 operator^(e lhs, e rhs) \
+ f ty operator^(e lhs, e rhs) \
  { \
-  return (u1) lhs ^ (u1) rhs; \
+  return (ty) lhs ^ (ty) rhs; \
  } \
- f u1 operator^(e lhs, u1 rhs) \
+ f ty operator^(e lhs, ty rhs) \
  { \
-  return (u1) lhs ^ (u1) rhs; \
+  return (ty) lhs ^ (ty) rhs; \
  } \
- f u1 operator>>(e lhs, u1 rhs) \
+ f ty operator>>(e lhs, ty rhs) \
  { \
-  return (u1) lhs >> (u1) rhs; \
+  return (ty) lhs >> (ty) rhs; \
  } \
  f e operator^=(e& lhs, e rhs) \
  { \
   return lhs = (e) (lhs ^ rhs); \
  } \
- f e operator^=(e& lhs, u1 rhs) \
+ f e operator^=(e& lhs, ty rhs) \
  { \
   return lhs = (e) (lhs ^ rhs); \
  } \
- f u1 operator&(e lhs, e rhs) \
+ f ty operator&(e lhs, e rhs) \
  { \
-  return (u1) lhs & (u1) rhs; \
+  return (ty) lhs & (ty) rhs; \
  } \
- f u1 operator&(e lhs, u1 rhs) \
+ f ty operator&(e lhs, ty rhs) \
  { \
-  return (u1) lhs & rhs; \
+  return (ty) lhs & rhs; \
+ } \
+ f e operator&=(e& lhs, e rhs) \
+ { \
+  return lhs = (e) (lhs & rhs); \
+ } \
+ f e operator&=(e& lhs, ty rhs) \
+ { \
+  return lhs = (e) (lhs & rhs); \
  } \
 
- #define ENUM_FLAGS_OP_MACROS(e) ENUM_FLAGS_OP_MACROS_(e, friend constexpr)
- #define ENUM_FLAGS_OP_MACROS_FREESTANDING(e) ENUM_FLAGS_OP_MACROS_(e,inline)
+
+ #define ENUM_FLAGS_OP_MACROS_2(e, ty) ENUM_FLAGS_OP_MACROS_(e, ty, friend constexpr)
+ #define ENUM_FLAGS_OP_MACROS_1(e) ENUM_FLAGS_OP_MACROS_(e, u1, friend constexpr)
+
+ #define ENUM_FLAGS_OP_MACROS(...) \
+   _preproc_CONCAT(ENUM_FLAGS_OP_MACROS_, _preproc_NUM_ARGS(__VA_ARGS__))(__VA_ARGS__)
+
+
+#define ENUM_FLAGS_OP_MACROS_FREESTANDING_2(e, ty) ENUM_FLAGS_OP_MACROS_(e, ty, inline)
+#define ENUM_FLAGS_OP_MACROS_FREESTANDING_1(e) ENUM_FLAGS_OP_MACROS_(e, u1, inline)
+
+#define ENUM_FLAGS_OP_MACROS_FREESTANDING(...) \
+  _preproc_CONCAT(ENUM_FLAGS_OP_MACROS_FREESTANDING_, _preproc_NUM_ARGS(__VA_ARGS__))(__VA_ARGS__)
+
 
 
 //friend constexpr e operator,(e& lhs, e rhs) \

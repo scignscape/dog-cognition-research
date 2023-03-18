@@ -142,6 +142,16 @@ public:
 
  ACCESSORS(MACRO_PASTE(std::function<void(QH_Web_View_Dialog*, QString, const QJsonValue&)>) ,js_callback)
 
+ QPoint map_point_for_context_menu(const QPoint& qp)
+ {
+  QPoint result = wev_->mapToGlobal(qp + QPoint{8, 8});
+  if(result != wev_->last_context_menu_position())
+    qDebug() << "Unexpected position mismatch: " <<
+      wev_->last_context_menu_position() << " and " << result;
+
+  return result;
+ }
+
  void check_run_js_callback(QString key, const QJsonValue& msg);
  void run_js_in_current_web_page(QString js_code);
 

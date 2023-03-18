@@ -15,6 +15,7 @@
 
 #include "kans.h"
 
+#include <QJsonArray>
 
 #include <QNetworkReply>
 
@@ -49,21 +50,51 @@ int main(int argc, char *argv[])
 
   // return 0;
  QApplication qapp(argc, argv);
- QH_Web_View_Dialog dlg("http://localhost:6600/test41.html");
+ QH_Web_View_Dialog dlg("http://localhost:6600/test60.html");
 
  driver.start_game(dlg);
 
- dlg.set_js_callback([&driver](QH_Web_View_Dialog* _dlg, QString key, const QJsonValue& msg)
+ dlg.set_js_callback([&driver, &dlg](QH_Web_View_Dialog* _dlg, QString key, const QJsonValue& msg)
  {  
   qDebug() << "key = " << key;
 
-  QString pos_id = msg.toString();
+  QString el_id;
+  if(msg.isArray())
+    el_id = msg.toArray().first().toString();
+  else
+    el_id = msg.toString();
 
   if(key == "position-clicked")
-    driver.handle_position_clicked(*_dlg, pos_id);
+    driver.handle_position_clicked(*_dlg, el_id);
 
   else if(key == "token-clicked")
-    driver.handle_token_clicked(*_dlg, pos_id);
+    driver.handle_token_clicked(*_dlg,  el_id);
+
+  else if(key == "position-context-menu")
+  {
+   QPoint qp(msg.toArray().at(1).toInt(), msg.toArray().at(2).toInt());
+   //QPoint qp1(msg.toArray().at(3).toInt(), msg.toArray().at(4).toInt());
+
+   //   u2 x = msg.toArray().at(1).toInt();
+//   u2 y = msg.toArray().at(2).toInt();
+   qDebug() << "pos id = " <<  el_id << " qp = " << qp << "ey = " << msg.toArray().at(3).toInt()
+            << " pY = " << msg.toArray().at(4).toInt() << " == " << qp.y() + msg.toArray().at(4).toInt();
+
+//?   QMenu* menu = new QMenu;
+//?   menu->addAction("test1");
+//?   menu->addAction("test2");
+
+   QPoint np = dlg.map_point_for_context_menu(qp);
+   qDebug() << "np = " << np;
+//?   menu->popup(np);
+  }
+
+  else if(key == "token-context-menu")
+  {
+   u2 x = msg.toArray().at(1).toInt();
+   u2 y = msg.toArray().at(2).toInt();
+   qDebug() << "token id = " <<  el_id << " x = " << x << " y = " << y;
+  }
 
  });
 

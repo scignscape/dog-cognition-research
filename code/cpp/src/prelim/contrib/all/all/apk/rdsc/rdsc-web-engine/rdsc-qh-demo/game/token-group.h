@@ -39,6 +39,9 @@ public:
 
  void absorb(Token_Group* other);
 
+ void update_densities();
+
+
 };
 
 

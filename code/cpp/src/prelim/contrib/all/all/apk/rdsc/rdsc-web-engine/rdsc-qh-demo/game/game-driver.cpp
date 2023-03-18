@@ -126,13 +126,12 @@ void Game_Driver::switch_current_player()
 }
 
 
-u1 Game_Driver::check_cluster(Game_Token* token, QVector<Token_Group*>& surrounding_clusters,
-  QVector<Game_Token*>& surrounding_tokens)
+u1 Game_Driver::check_cluster(Game_Token* token, _surrounding& s)
 {
  Game_Position* gp = token->current_position();
 
- QSet<Token_Group*> _surrounding_clusters;
- QSet<Game_Token*> _surrounding_tokens;
+ QSet<Token_Group*> surrounding_clusters;
+ QSet<Game_Token*> surrounding_singletons;
 
 
  for(s2 r = -2; r <= 2; r += 2)
@@ -146,10 +145,14 @@ u1 Game_Driver::check_cluster(Game_Token* token, QVector<Token_Group*>& surround
    {
     if(token1->player() == token->player())
     {
-     if(token1->current_cluster())
-       _surrounding_clusters.insert(token1->current_cluster());
+     if((r == 0) || (c == 0))
+       s.orthogonal.push_back(token1);
      else
-       _surrounding_tokens.insert(token1);
+       s.diagonal.push_back(token1);
+     if(token1->current_cluster())
+       surrounding_clusters.insert(token1->current_cluster());
+     else
+       surrounding_singletons.insert(token1);
     }
    }
   }
@@ -160,15 +163,15 @@ u1 Game_Driver::check_cluster(Game_Token* token, QVector<Token_Group*>& surround
  // 2 = tokens
  // 3 - clusters and tokens
 
- if(!_surrounding_clusters.isEmpty())
+ if(!surrounding_clusters.isEmpty())
  {
-  surrounding_clusters = _surrounding_clusters.values().toVector();
+  s.clusters = surrounding_clusters.values().toVector();
   ++result;
  }
 
- if(!surrounding_tokens.isEmpty())
+ if(!surrounding_singletons.isEmpty())
  {
-  surrounding_tokens = _surrounding_tokens.values().toVector();
+  s.singletons = surrounding_singletons.values().toVector();
   result += 2;
  }
 
@@ -247,23 +250,22 @@ void Game_Driver::handle_token_placement(QH_Web_View_Dialog& dlg, Game_Token* to
 
   _place(token, gp);
 
-  QVector<Token_Group*> surrounding_clusters;
-  QVector<Game_Token*> surrounding_tokens;
+  _surrounding s;
 
-  switch(check_cluster(token, surrounding_clusters, surrounding_tokens))
+  switch(check_cluster(token, s))
   {
   case 0: break; // // token will be singleton
 
   case 1: // // check merge ...
-   if(surrounding_clusters.size() == 1)
+   if(s.clusters.size() == 1)
    {
-    _place(token, surrounding_clusters.first());
+    _place(token, s.clusters.first());
 //    _place_confirmed(token, surrounding_clusters.first());
     break;
    }
    // //  otherwise need to merge ...
    {
-    Token_Group* new_cluster = merge_token_groups(surrounding_clusters);
+    Token_Group* new_cluster = merge_token_groups(s.clusters);
     _place(token, new_cluster);
     //    _place_confirmed(token, new_cluster);
     //
@@ -277,7 +279,7 @@ void Game_Driver::handle_token_placement(QH_Web_View_Dialog& dlg, Game_Token* to
 
   case 2: // // only previous singletons ...
    {
-    Token_Group* new_cluster = merge_tokens_into_new_group(surrounding_tokens);
+    Token_Group* new_cluster = merge_tokens_into_new_group(s.singletons);
     _place(token, new_cluster);
     //    _place_confirmed(token, new_cluster);
     //
@@ -289,19 +291,19 @@ void Game_Driver::handle_token_placement(QH_Web_View_Dialog& dlg, Game_Token* to
    }
    break;
 
-  case 3: // // check merge ...
-   if(surrounding_clusters.size() == 1)
+  case 3:
+   if(s.clusters.size() == 1)
    {
-    merge_tokens_into_group(surrounding_clusters.first(), surrounding_tokens);
-    _place(token, surrounding_clusters.first());
+    merge_tokens_into_group(s.clusters.first(), s.singletons);
+    _place(token, s.clusters.first());
      // _place_confirmed(token, surrounding_clusters.first());
 
     break;
    }
    // //  otherwise need to merge ...
    {
-    Token_Group* new_cluster = merge_token_groups(surrounding_clusters);
-    merge_tokens_into_group(new_cluster, surrounding_tokens);
+    Token_Group* new_cluster = merge_token_groups(s.clusters);
+    merge_tokens_into_group(new_cluster, s.singletons);
     _place(token, new_cluster);
     //    _place_confirmed(token, new_cluster);
     //
@@ -316,9 +318,9 @@ void Game_Driver::handle_token_placement(QH_Web_View_Dialog& dlg, Game_Token* to
   default: break;
   }
 
-
   token->set_capture_status(-1);
-
+  token->update_neighbors(s.diagonal, s.orthogonal);
+  token->current_cluster()->update_densities();
 
   QString token_id = token->svg_id();
   s2 token_mid_offset_x = 25, token_mid_offset_y = 25;
@@ -326,6 +328,7 @@ void Game_Driver::handle_token_placement(QH_Web_View_Dialog& dlg, Game_Token* to
   dlg.run_js_in_current_web_page("show_token_at_position('%1', %2, %3);"_qt.arg(token_id).arg(x).arg(y));
 
   current_player_->increment_entry_token_count();
+
 
   u2 remaining = current_player_->get_remaining_entry_token_count();
   run_js_for_current_player(dlg,

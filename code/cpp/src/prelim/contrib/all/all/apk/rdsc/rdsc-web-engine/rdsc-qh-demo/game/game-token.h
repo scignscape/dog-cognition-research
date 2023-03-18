@@ -14,6 +14,8 @@
 
 #include "global-types.h"
 
+#include "enum-macros.h"
+
 
 #include <QString>
 
@@ -26,36 +28,43 @@ class Game_Token
 {
 public:
 
- enum class Token_Kind : u1 {
+ enum class Token_Kind : u2 {
   N_A
 
 #define enum_macro(x, y) ,x = y
 
   enum_macro(Singleton, 1)
   enum_macro(Paired, 2)
-  enum_macro(Inner, 4)
-  enum_macro(Buffer, 8)
-  enum_macro(Outer, 16)
-  enum_macro(Inner_Outer, Inner | Outer)
+  enum_macro(Queen, 4)
+  enum_macro(Jack, 8)
+  enum_macro(King, 16)
+  enum_macro(Ace, Queen | King)
   enum_macro(South, 32)
   enum_macro(North, 64)
 
+  enum_macro(Clear_Singleton, Paired | Queen | Jack | King | North | South)
+  enum_macro(Clear_QJK, Paired | North | South)
+
   enum_macro(South_Singleton, South | Singleton)
   enum_macro(South_Paired, South | Paired)
-  enum_macro(South_Inner, South | Inner)
-  enum_macro(South_Buffer, South | Buffer)
-  enum_macro(South_Outer, South | Outer)
-  enum_macro(South_Inner_Outer, South | Inner_Outer)
+  enum_macro(South_Queen, South | Queen)
+  enum_macro(South_Jack, South | Jack)
+  enum_macro(South_King, South | King)
+  enum_macro(South_Ace, South | Ace)
 
   enum_macro(North_Singleton, North | Singleton)
   enum_macro(North_Paired, North | Paired)
-  enum_macro(North_Inner, North | Inner)
-  enum_macro(North_Buffer, North | Buffer)
-  enum_macro(North_Outer, North | Outer)
-  enum_macro(North_Inner_Outer, North | Inner_Outer)
+  enum_macro(North_Queen, North | Queen)
+  enum_macro(North_Jack, North | Jack)
+  enum_macro(North_King, North | King)
+  enum_macro(North_Ace, North | Ace)
 
 #undef enum_macro
  };
+
+ ENUM_FLAGS_OP_MACROS(Token_Kind, u2)
+
+
 
 //  Singleton = 1, Paired = 2,  Inner = 4,
 //    Buffer = 8, Outer = 16, Inner_Outer = Inner | Outer,
@@ -94,10 +103,35 @@ private:
  Game_Player* player_;
 
  Token_Group* current_cluster_;
+ QVector<Game_Token*> diagonal_neighbors_;
+ QVector<Game_Token*> orthogonal_neighbors_;
 
 public:
 
  Game_Token(Game_Player* player, Token_Kind kind = Token_Kind::N_A);
+
+ ACCESSORS(QVector<Game_Token*> ,diagonal_neighbors)
+ ACCESSORS(QVector<Game_Token*> ,orthogonal_neighbors)
+
+ u1 total_density()
+ {
+  return diagonal_neighbors_.size() + orthogonal_neighbors_.size();
+ }
+
+ void update_neighbors(const QVector<Game_Token*>& d,
+   const QVector<Game_Token*>& o);
+
+ void update_diagonal_neighbor(Game_Token* other)
+ {
+  if(!diagonal_neighbors_.contains(other))
+    diagonal_neighbors_.push_back(other);
+ }
+
+ void update_orthogonal_neighbor(Game_Token* other)
+ {
+  if(!orthogonal_neighbors_.contains(other))
+    orthogonal_neighbors_.push_back(other);
+ }
 
  bool south();
  bool north();
@@ -111,26 +145,26 @@ public:
 #define enum_macro(x, y)  {Token_Kind::x, #x},
    enum_macro(Singleton, 1)
    enum_macro(Paired, 2)
-   enum_macro(Inner, 4)
-   enum_macro(Buffer, 8)
-   enum_macro(Outer, 16)
-   enum_macro(Inner_Outer, Inner | Outer)
+   enum_macro(Queen, 4)
+   enum_macro(Jack, 8)
+   enum_macro(King, 16)
+   enum_macro(Ace, Queen | King)
    enum_macro(South, 32)
    enum_macro(North, 64)
 
    enum_macro(South_Singleton, South | Singleton)
    enum_macro(South_Paired, South | Paired)
-   enum_macro(South_Inner, South | Inner)
-   enum_macro(South_Buffer, South | Buffer)
-   enum_macro(South_Outer, South | Outer)
-   enum_macro(South_Inner_Outer, South | Inner_Outer)
+   enum_macro(South_Queen, South | Queen)
+   enum_macro(South_Jack, South | Jack)
+   enum_macro(South_King, South | King)
+   enum_macro(South_Ace, South | Ace)
 
    enum_macro(North_Singleton, North | Singleton)
    enum_macro(North_Paired, North | Paired)
-   enum_macro(North_Inner, North | Inner)
-   enum_macro(North_Buffer, North | Buffer)
-   enum_macro(North_Outer, North | Outer)
-   enum_macro(North_Inner_Outer, North | Inner_Outer)
+   enum_macro(North_Queen, North | Queen)
+   enum_macro(North_Jack, North | Jack)
+   enum_macro(North_King, North | King)
+   enum_macro(North_Ace, North | Ace)
 #undef enum_macro
   };
 
@@ -144,6 +178,44 @@ public:
  ACCESSORS(Game_Player* ,player)
 
  ACCESSORS(Token_Group* ,current_cluster)
+
+ void set_as_ace()
+ {
+  kind_ &= Token_Kind::Clear_QJK;
+  kind_ |= Token_Kind::Ace;
+ }
+
+ void set_as_king()
+ {
+  kind_ &= Token_Kind::Clear_QJK;
+  kind_ |= Token_Kind::King;
+ }
+
+ void set_as_queen()
+ {
+  kind_ &= Token_Kind::Clear_QJK;
+  kind_ |= Token_Kind::Queen;
+ }
+
+ void set_as_jack()
+ {
+  kind_ &= Token_Kind::Clear_QJK;
+  kind_ |= Token_Kind::Jack;
+ }
+
+ void qjk_from_densities(u1 min, u1 max)
+ {
+  if(total_density() == min)
+    set_as_queen();
+  else if(total_density() == max)
+    set_as_king();
+  else
+    set_as_jack();
+ }
+
+
+
+
 
 };
 
