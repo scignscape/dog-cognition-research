@@ -44,6 +44,8 @@ public:
 
   enum_macro(Clear_Singleton, Paired | Queen | Jack | King | North | South)
   enum_macro(Clear_QJK, Paired | North | South)
+  enum_macro(Clear_NS, Singleton | Paired | Queen | Jack | King)
+
 
   enum_macro(South_Singleton, South | Singleton)
   enum_macro(South_Paired, South | Paired)
@@ -90,7 +92,7 @@ private:
  Token_Kind kind_;
 
  //u1 capture_rank_;
- u1 cluster_size_;
+//? u1 cluster_size_;
 
  // //  0 = entry  -1 = on board
   //    otherwise 1-12 = hold file
@@ -113,9 +115,25 @@ public:
  ACCESSORS(QVector<Game_Token*> ,diagonal_neighbors)
  ACCESSORS(QVector<Game_Token*> ,orthogonal_neighbors)
 
+ u1 current_king_rank();
+
+ u1 current_cluster_size();
+ QString current_cluster_status();
+
  u1 total_density()
  {
   return diagonal_neighbors_.size() + orthogonal_neighbors_.size();
+ }
+
+ void clear_neighbors();
+ void clear_diagonal_neighbor(Game_Token* other)
+ {
+  diagonal_neighbors_.removeAll(other);
+ }
+
+ void clear_orthogonal_neighbor(Game_Token* other)
+ {
+  orthogonal_neighbors_.removeAll(other);
  }
 
  void update_neighbors(const QVector<Game_Token*>& d,

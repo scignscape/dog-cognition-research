@@ -45,7 +45,8 @@ void Token_Group::absorb(Token_Group* other)
 void Token_Group::update_densities()
 {
  std::vector<u1> _densities(tokens_.keys().size());
- std::transform(tokens_.keys().begin(), tokens_.keys().end(), _densities.begin(),
+ auto keys = tokens_.keys();
+ std::transform(keys.begin(), keys.end(), _densities.begin(),
    [](Game_Token* token)
   {
    return token->total_density();

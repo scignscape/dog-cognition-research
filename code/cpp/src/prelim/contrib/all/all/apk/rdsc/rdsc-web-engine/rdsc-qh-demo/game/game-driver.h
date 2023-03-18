@@ -18,10 +18,15 @@ class Game_Token;
 class Game_Player;
 
 class Token_Group;
+class Game_Variant;
+
+class Message_Display_Window;
 
 class Game_Driver
 {
  Game_Board board_;
+
+ Game_Variant* current_variant_;
 
  QMap<QString, Game_Token*> tokens_by_svg_id_;
  QMap<u2, Game_Player*> players_by_player_order_;
@@ -37,6 +42,8 @@ class Game_Driver
 
  Game_States current_state_;
 
+ Message_Display_Window* message_display_window_;
+
  void _place(Game_Token* token, Game_Position* gp);
  void _place(Game_Token* token, Token_Group* cluster);
  void _place_confirmed(Game_Token* token, Token_Group* cluster);
@@ -51,6 +58,10 @@ class Game_Driver
 
  u1 check_cluster(Game_Token* token, _surrounding& s);
 
+ void display_message(QString msg, QH_Web_View_Dialog* dlg = nullptr);
+
+ void get_token_info(Game_Token* token);
+
 
 public:
 
@@ -58,11 +69,21 @@ public:
 
  ACCESSORS__RGET(Game_Board ,board)
 
+ ACCESSORS(Message_Display_Window* ,message_display_window)
+
+ void show_token_at_position(QH_Web_View_Dialog& dlg, Game_Token* token, Game_Position* gp);
+
  void start_game(QH_Web_View_Dialog& dlg);
 
  void handle_token_clicked(QH_Web_View_Dialog& dlg, QString token_id);
  void handle_position_clicked(QH_Web_View_Dialog& dlg, QString position_id);
  void handle_token_placement(QH_Web_View_Dialog& dlg, Game_Token* token, QString pos_id);
+
+ void handle_non_slot_token_placement(QH_Web_View_Dialog& dlg, Game_Token* token, Game_Position* gp);
+
+
+ void handle_position_context_menu(QH_Web_View_Dialog& dlg,  QString position_id, const QPoint& global_position);
+ void handle_token_context_menu(QH_Web_View_Dialog& dlg, QString token_id, const QPoint& global_position);
 
  void register_token(QString key, Game_Token* token);
  Game_Token* register_new_token(u1 player_order, QString key);

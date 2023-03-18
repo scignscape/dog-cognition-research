@@ -18,6 +18,10 @@
 #include <QJsonArray>
 
 #include <QNetworkReply>
+#include <QStatusBar>
+#include <QLabel>
+
+#include "game/message-display-window.h"
 
 USING_KANS(RdSC)
 
@@ -50,7 +54,14 @@ int main(int argc, char *argv[])
 
   // return 0;
  QApplication qapp(argc, argv);
- QH_Web_View_Dialog dlg("http://localhost:6600/test60.html");
+
+ QH_Web_View_Dialog dlg("http://localhost:6600/test66.html");
+
+// dlg.showMinimized();
+// dlg.showNormal();
+// dlg.setParent(&mw);
+
+ //dlg.stat
 
  driver.start_game(dlg);
 
@@ -58,17 +69,17 @@ int main(int argc, char *argv[])
  {  
   qDebug() << "key = " << key;
 
-  QString el_id;
+  QString element_id;
   if(msg.isArray())
-    el_id = msg.toArray().first().toString();
+    element_id = msg.toArray().first().toString();
   else
-    el_id = msg.toString();
+    element_id = msg.toString();
 
   if(key == "position-clicked")
-    driver.handle_position_clicked(*_dlg, el_id);
+    driver.handle_position_clicked(*_dlg, element_id);
 
   else if(key == "token-clicked")
-    driver.handle_token_clicked(*_dlg,  el_id);
+    driver.handle_token_clicked(*_dlg,  element_id);
 
   else if(key == "position-context-menu")
   {
@@ -77,7 +88,7 @@ int main(int argc, char *argv[])
 
    //   u2 x = msg.toArray().at(1).toInt();
 //   u2 y = msg.toArray().at(2).toInt();
-   qDebug() << "pos id = " <<  el_id << " qp = " << qp << "ey = " << msg.toArray().at(3).toInt()
+   qDebug() << "pos id = " <<  element_id << " qp = " << qp << "ey = " << msg.toArray().at(3).toInt()
             << " pY = " << msg.toArray().at(4).toInt() << " == " << qp.y() + msg.toArray().at(4).toInt();
 
 //?   QMenu* menu = new QMenu;
@@ -91,9 +102,15 @@ int main(int argc, char *argv[])
 
   else if(key == "token-context-menu")
   {
-   u2 x = msg.toArray().at(1).toInt();
-   u2 y = msg.toArray().at(2).toInt();
-   qDebug() << "token id = " <<  el_id << " x = " << x << " y = " << y;
+   QPoint qp(msg.toArray().at(1).toInt(), msg.toArray().at(2).toInt());
+//   u2 x = msg.toArray().at(1).toInt();
+//   u2 y = msg.toArray().at(2).toInt();
+   //qDebug() << "token id = " <<  element_id << " x = " << x << " y = " << y;
+
+   QPoint gp = dlg.map_point_for_context_menu(qp);
+
+//   driver.handle_position_clicked()
+   driver.handle_token_context_menu(dlg, element_id, gp);
   }
 
  });
@@ -103,6 +120,29 @@ int main(int argc, char *argv[])
  dlg.show();
 
  dlg.resize(1000, 810);
+
+
+ Message_Display_Window mdw;
+
+ //mw.setParent(&dlg);
+
+ //mw.setWindowFlags(Qt::WindowStaysOnTopHint);
+
+  // mw.statusBar()->showMessage("game starting ...");
+  // mdw.set_status_bar(mw.statusBar());
+ //mw.show();
+
+ mdw.add_message("game starting ...");
+
+ driver.set_message_display_window(&mdw);
+
+ dlg.connect(&dlg, &QDialog::finished, [&mdw](int diallg_result)
+ {
+  mdw.close();
+ });
+
+ mdw.show();
+
 
  return qapp.exec();
 }

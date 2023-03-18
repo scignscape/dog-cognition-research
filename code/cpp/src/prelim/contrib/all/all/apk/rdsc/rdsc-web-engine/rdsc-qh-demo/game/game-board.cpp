@@ -82,15 +82,16 @@ void Game_Board::to_svg(QString in_folder, QString out_file)
 
  u1 slot_width = 50;
 
- auto squares = [&main_text, slot_width, this]()
+ static s1 slot_position_x_offsets[2]{1, 0};
+ static s1 slot_position_y_offsets[2]{1, 0};
+ s1 slot_width_offset = -1;
+
+ auto squares = [&main_text, slot_width, slot_width_offset, this]()
  {
   main_text += "\n\n<!-- squares -->\n\n";
   // //  draw squares
   static QString square_css_classes [2] {"dark-square", "light-square"};
 
-  static s1 slot_position_x_offsets[2]{1, 0};
-  static s1 slot_position_y_offsets[2]{1, 0};
-  s1 slot_width_offset = -1;
 
   for(u1 r = 0, _r = 31; r < 16; ++r, _r -= 2)
    for(u1 c = 0, _c = 1; c < 16; ++c, _c += 2)
@@ -223,6 +224,14 @@ void Game_Board::to_svg(QString in_folder, QString out_file)
    {
     Game_Position* gp = game_positions_by_coords_[{_r, _c}];
 
+    s1 slot_position_x_offset = slot_position_x_offsets[c % 2];
+    s1 slot_position_y_offset = slot_position_y_offsets[r % 2];
+
+    s2 svg_x = c - 25; //slot_position_x_offset;
+    s2 svg_y = r - 25; // + slot_position_y_offset;
+    gp->set_svg_x(svg_x); gp->set_svg_y(svg_y);
+
+
     polygon(gp->label_code() + "-v", "visible-center-polygon", c, r, visible_points);
     polygon(gp->label_code(), "hidden-center-polygon", c, r, hidden_points);
    }
@@ -264,6 +273,10 @@ void Game_Board::to_svg(QString in_folder, QString out_file)
       y_offset = base_y_offset + area_line_offset*(r == 300 || r == 500);
 
     Game_Position* gp = game_positions_by_coords_[{_r, _c}];
+
+    s2 svg_x = c - 25; //slot_position_x_offset;
+    s2 svg_y = r - 25; // + slot_position_y_offset;
+    gp->set_svg_x(svg_x); gp->set_svg_y(svg_y);
 
     polygon(gp->label_code() + "-v", "visible-intersection-polygon", c + x_offset, r + y_offset, visible_points);
     polygon(gp->label_code(), "hidden-intersection-polygon", c + x_offset, r + y_offset, hidden_points);
@@ -314,6 +327,10 @@ void Game_Board::to_svg(QString in_folder, QString out_file)
       y_offset = base_y_offset + area_line_offset*(r == 300 || r == 500);
 
     Game_Position* gp = game_positions_by_coords_[{_r, _c}];
+    s2 svg_x = c - 25; //slot_position_x_offset;
+    s2 svg_y = r - 25; // + slot_position_y_offset;
+    gp->set_svg_x(svg_x); gp->set_svg_y(svg_y);
+
 
     polygon(gp->label_code() + "-v", "visible-edge-polygon", c + x_offset, r + y_offset, visible_points);
     polygon(gp->label_code(), "hidden-edge-polygon", c + x_offset, r + y_offset, hidden_points);
@@ -365,6 +382,10 @@ void Game_Board::to_svg(QString in_folder, QString out_file)
       y_offset = base_y_offset;
 
     Game_Position* gp = game_positions_by_coords_[{_r, _c}];
+    s2 svg_x = c - 25; //slot_position_x_offset;
+    s2 svg_y = r - 25; // + slot_position_y_offset;
+    gp->set_svg_x(svg_x); gp->set_svg_y(svg_y);
+
 
     polygon(gp->label_code() + "-v", "visible-side-polygon", c + x_offset, r + y_offset, visible_points);
     polygon(gp->label_code(), "hidden-side-polygon", c + x_offset, r + y_offset, hidden_points);
