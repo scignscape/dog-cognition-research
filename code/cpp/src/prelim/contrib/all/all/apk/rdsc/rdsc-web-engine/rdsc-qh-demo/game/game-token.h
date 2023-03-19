@@ -43,6 +43,7 @@ public:
   enum_macro(North, 64)
 
   enum_macro(Clear_Singleton, Paired | Queen | Jack | King | North | South)
+  enum_macro(North_South_Mask, North | South)
   enum_macro(Clear_QJK, Paired | North | South)
   enum_macro(Clear_NS, Singleton | Paired | Queen | Jack | King)
 
@@ -184,6 +185,7 @@ public:
    enum_macro(North_King, North | King)
    enum_macro(North_Ace, North | Ace)
 #undef enum_macro
+
   };
 
   return static_map.value(kind_, "<error>");
@@ -196,6 +198,13 @@ public:
  ACCESSORS(Game_Player* ,player)
 
  ACCESSORS(Token_Group* ,current_cluster)
+
+ void set_as_pawn()
+ {
+  kind_ &= Token_Kind::North_South_Mask;
+  kind_ |= Token_Kind::Singleton;
+ }
+
 
  void set_as_ace()
  {

@@ -361,6 +361,8 @@ void Game_Driver::handle_token_placement(QH_Web_View_Dialog& dlg, Game_Token* to
 
   if(token->current_cluster())
     token->current_cluster()->update_densities();
+  else
+    token->set_as_pawn();
 
   show_token_at_position(dlg, token, gp);
   current_player_->increment_entry_token_count();
