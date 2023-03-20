@@ -403,7 +403,7 @@ void QH_Web_View_Dialog::check_run_js_callback(QString key, const QJsonValue& ms
    js_callback_(this, key, msg);
 }
 
-void QH_Web_View_Dialog::run_js_in_current_web_page(QString js_code)
+void QH_Web_View_Dialog::run_js_in_current_web_page(QString js_code) const
 {
  wep_->runJavaScript(js_code);
 }

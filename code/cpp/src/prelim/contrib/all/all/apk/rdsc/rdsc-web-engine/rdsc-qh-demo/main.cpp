@@ -49,13 +49,13 @@ int main(int argc, char *argv[])
 
   // // //? board.debug_board("/home/nlevisrael/gits/dcr-wip/game/" "test.txt");
  #define folder "/home/nlevisrael/gits/dcr-wip/qmt/server-files/public"
- driver.board().to_svg(folder "/board-svg", folder "/board39.svg");
+ driver.board().to_svg(folder "/board-svg", folder "/board50.svg");
 
-// return 0;
+ //return 0;
 
  QApplication qapp(argc, argv);
 
- QH_Web_View_Dialog dlg("http://localhost:6600/test70.html");
+ QH_Web_View_Dialog dlg("http://localhost:6600/test81.html");
 
 // dlg.showMinimized();
 // dlg.showNormal();
@@ -95,8 +95,10 @@ int main(int argc, char *argv[])
 //?   menu->addAction("test1");
 //?   menu->addAction("test2");
 
-   QPoint np = dlg.map_point_for_context_menu(qp);
-   qDebug() << "np = " << np;
+   QPoint gp = dlg.map_point_for_context_menu(qp);
+
+   driver.handle_position_context_menu(dlg, element_id, gp);
+
 //?   menu->popup(np);
   }
 

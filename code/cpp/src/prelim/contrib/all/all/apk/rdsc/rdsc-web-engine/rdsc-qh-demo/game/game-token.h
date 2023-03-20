@@ -116,6 +116,8 @@ public:
  ACCESSORS(QVector<Game_Token*> ,diagonal_neighbors)
  ACCESSORS(QVector<Game_Token*> ,orthogonal_neighbors)
 
+ ACCESSORS(Token_Kind ,kind);
+
  u1 current_king_rank();
 
  u1 current_cluster_size();
@@ -199,12 +201,23 @@ public:
 
  ACCESSORS(Token_Group* ,current_cluster)
 
+
+ void set_as_north()
+ {
+  kind_ |= Token_Kind::North;
+ }
+
+ void set_as_south()
+ {
+  kind_ |= Token_Kind::South;
+ }
+
+
  void set_as_pawn()
  {
   kind_ &= Token_Kind::North_South_Mask;
   kind_ |= Token_Kind::Singleton;
  }
-
 
  void set_as_ace()
  {

@@ -31,6 +31,12 @@ class Game_Driver
  QMap<QString, Game_Token*> tokens_by_svg_id_;
  QMap<u2, Game_Player*> players_by_player_order_;
 
+ struct Chess_Icon { QString file_path; QString svg_id; };
+ QMap<QString, Chess_Icon*> north_chess_icons_;
+ QMap<QString, Chess_Icon*> south_chess_icons_;
+
+ QMap<Game_Token*, Chess_Icon*> tokens_on_board_;
+
  Game_Token* current_selected_token_;
 
  Game_Player* current_player_;
@@ -73,7 +79,13 @@ public:
 
  void show_token_at_position(QH_Web_View_Dialog& dlg, Game_Token* token, Game_Position* gp);
 
+ void show_chess_icons(const QH_Web_View_Dialog& dlg);
+ void register_north_chess_icon(QString file_path, QString svg_id);
+ void register_south_chess_icon(QString file_path, QString svg_id);
+
  void start_game(QH_Web_View_Dialog& dlg);
+ void check_token_chess_icon(Game_Token* token);
+
 
  void handle_token_clicked(QH_Web_View_Dialog& dlg, QString token_id);
  void handle_position_clicked(QH_Web_View_Dialog& dlg, QString position_id);

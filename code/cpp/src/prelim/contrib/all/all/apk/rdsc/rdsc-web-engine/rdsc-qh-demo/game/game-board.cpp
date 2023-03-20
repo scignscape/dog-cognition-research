@@ -454,41 +454,62 @@ void Game_Board::to_svg(QString in_folder, QString out_file)
  QString north_copier, south_copier;
 
  QString icons_text;
- auto icons = [&icons_text, in_folder, &north_copier, &south_copier]()
+ auto icons = [&icons_text, in_folder, &north_copier, &south_copier, this]()
  {
 
   QString icons_folder = in_folder + "/chess-icons";
 
   for(QString piece : pieces)
   {
-   north_copier +=
-     "\n<use id='north-%1-#1' class='north-chess-icon_copied' xlink:href='#north-%1_proto'/>"_qt
-     .arg(piece).replace("#1", "%1");
+   QString south_id = "-s%1"_qt.prepend(piece);
+   QString north_id = "-n%1"_qt.prepend(piece);
 
    south_copier +=
-     "\n<use id='south-%1-#1' class='south-chess-icon_copied' xlink:href='#south-%1_proto'/>"_qt
-     .arg(piece).replace("#1", "%1");
+     "\n<use id='%1' class='south-chess-icon_copied' xlink:href='#south-%1_proto'/>"_qt
+     .arg(south_id);
+
+   north_copier +=
+     "\n<use id='%1' class='north-chess-icon_copied' xlink:href='#north-%1_proto'/>"_qt
+     .arg(north_id);
 
 
-   QString north_text = load_file(icons_folder + "/north-" + piece);
-   QString south_text = load_file(icons_folder + "/south-" + piece);
+   QString south_file = icons_folder + "/south-" + piece;
+   QString north_file = icons_folder + "/north-" + piece;
 
-   north_text.replace("%ID%", "north-"_qt + piece + "_proto");
+   driver_->register_south_chess_icon(south_file, south_id);
+   driver_->register_north_chess_icon(north_file, north_id);
+
+   QString south_text = load_file(south_file);
+   QString north_text = load_file(north_file);
+
    south_text.replace("%ID%", "south-"_qt + piece + "_proto");
+   north_text.replace("%ID%", "north-"_qt + piece + "_proto");
 
-   icons_text += "\n<!-- north " + piece + " -->\n" + north_text +
-     "\n <!-- end north " + piece + " -->\n";
    icons_text += "\n<!-- south " + piece + " -->\n" + south_text +
      "\n <!-- end south " + piece + " -->\n";
+   icons_text += "\n<!-- north " + piece + " -->\n" + north_text +
+     "\n <!-- end north " + piece + " -->\n";
   }
  };
  icons();
+
+// tokens_text += R"(
+//<a class='south-token_base south-token_display-select' id='token-s0'>
+//<circle cx='0' cy='0' r='12' />
+//</a>
+//<a class='north-token_base north-token_display-select' id='token-n0'>
+//<circle cx='0' cy='0' r='12' />
+//</a>)";
+
+
+ driver_->register_new_token(1, "token-s0");
+ driver_->register_new_token(2, "token-n0");
 
 
  QString tokens_text;
  auto tokens = [&tokens_text, in_folder, north_copier, south_copier, this]()
  {
-  for(u1 i = 0; i < 30; ++i)
+  for(u1 i = 1; i <= 30; ++i)
   {
    QString s_id = "token-s"_qt + QString::number(i);
    QString n_id = "token-n"_qt + QString::number(i);
@@ -496,19 +517,31 @@ void Game_Board::to_svg(QString in_folder, QString out_file)
    driver_->register_new_token(1, s_id);
    driver_->register_new_token(2, n_id);
 
-   tokens_text += R"(
+   s1 g_translate_x = -15, g_translate_y = -15;
+   r4 scale_x = .6, scale_y = .6;
+
+   tokens_text += R"_(
 <a class='south-token_base south-token_in-play' id='%1'>
  <circle cx='0' cy='0' r='12' />
+  <g transform="translate(%5, %6) scale(%7, %8)">
   <!-- chess icon representations -->
   %2
+  <!-- end chess icon representations -->
+  </g>
 </a>
 
 <a class='north-token_base north-token_in-play' id='%3'>
  <circle cx='0' cy='0' r='12' />
+  <g transform="translate(%5, %6) scale(%7, %8)">
   <!-- chess icon representations -->
   %4
+  <!-- end chess icon representations -->
+  </g>
 </a>
-)"_qt.arg(s_id).arg(south_copier.arg(i)).arg(n_id).arg(north_copier.arg(i));
+)_"_qt.arg(s_id).arg(south_copier.arg(i))
+      .arg(n_id).arg(north_copier.arg(i))
+      .arg(g_translate_x).arg(g_translate_y)
+      .arg(scale_x).arg(scale_y);
   }
  };
 

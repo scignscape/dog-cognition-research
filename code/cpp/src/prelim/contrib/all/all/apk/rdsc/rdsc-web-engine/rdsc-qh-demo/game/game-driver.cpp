@@ -259,12 +259,106 @@ Token_Group* Game_Driver::merge_token_groups(const QVector<Token_Group*>& cluste
  return result;
 }
 
+void Game_Driver::check_token_chess_icon(Game_Token* token)
+{
+ Chess_Icon* icon = nullptr;
+
+
+// if(gp->flags.is_non_slot)
+// {
+// }
+
+ switch(token->kind())
+ {
+ case Game_Token::Token_Kind::North_Ace:
+   icon = north_chess_icons_.value("ace-n%1"); break;
+ case Game_Token::Token_Kind::North_Jack:
+   icon = north_chess_icons_.value("jack-n%1"); break;
+ case Game_Token::Token_Kind::North_Queen:
+   icon = north_chess_icons_.value("queen-n%1"); break;
+ case Game_Token::Token_Kind::North_King:
+   icon = north_chess_icons_.value("king-n%1"); break;
+
+
+ case Game_Token::Token_Kind::North_Singleton:
+  {
+   Game_Position* gp = token->current_position();
+   switch(gp->position_kind())
+   {
+   case Game_Position::Position_Kind::Center:
+    icon = north_chess_icons_.value("bishop-n%1"); break;
+   case Game_Position::Position_Kind::Intersection:
+    icon = north_chess_icons_.value("knight-n%1"); break;
+   case Game_Position::Position_Kind::Side:
+   case Game_Position::Position_Kind::Edge:
+    icon = north_chess_icons_.value("rook-n%1"); break;
+   case Game_Position::Position_Kind::Slot:
+    icon = north_chess_icons_.value("pawn-n%1"); break;
+   default: break;
+   }
+  }
+  break;
+
+ case Game_Token::Token_Kind::South_Ace:
+   icon = south_chess_icons_.value("ace-n%1"); break;
+ case Game_Token::Token_Kind::South_Jack:
+   icon = south_chess_icons_.value("jack-n%1"); break;
+ case Game_Token::Token_Kind::South_Queen:
+   icon = south_chess_icons_.value("queen-n%1"); break;
+ case Game_Token::Token_Kind::South_King:
+   icon = south_chess_icons_.value("king-n%1"); break;
+
+
+ case Game_Token::Token_Kind::South_Singleton:
+  {
+   Game_Position* gp = token->current_position();
+   switch(gp->position_kind())
+   {
+   case Game_Position::Position_Kind::Center:
+    icon = south_chess_icons_.value("bishop-s%1"); break;
+   case Game_Position::Position_Kind::Intersection:
+    icon = south_chess_icons_.value("knight-s%1"); break;
+   case Game_Position::Position_Kind::Side:
+   case Game_Position::Position_Kind::Edge:
+    icon = south_chess_icons_.value("rook-s%1"); break;
+   case Game_Position::Position_Kind::Slot:
+    icon = south_chess_icons_.value("pawn-s%1"); break;
+   default: break;
+   }
+  }
+ default: break;
+ }
+
+ tokens_on_board_[token] = icon;
+
+// if(icon)
+// {
+//  //QString tid = token->svg_id();
+// }
+
+}
+
 
 void Game_Driver::handle_non_slot_token_placement(QH_Web_View_Dialog& dlg, Game_Token* token, Game_Position* gp)
 {
  _place(token, gp);
 // token->set_capture_status(-1);
 // token->clear_neighbors();
+
+// QString tid = token->svg_id();
+// QString mid = tid.mid("token"_qt.size());
+// mid.prepend("jack");
+// qDebug() << "tid = " << tid;
+
+ Game_Token::Token_Kind kind;
+ if(token->player() == north_player_)
+   kind = Game_Token::Token_Kind::North_Singleton;
+ else if(token->player() == south_player_)
+   kind = Game_Token::Token_Kind::South_Singleton;
+
+ check_token_chess_icon(token);
+
+//? dlg.run_js_in_current_web_page("show_chess_icon('%1','%2')"_qt.arg(mid).arg(tid));
 
  show_token_at_position(dlg, token, gp);
  current_player_->increment_entry_token_count();
@@ -275,6 +369,13 @@ void Game_Driver::handle_non_slot_token_placement(QH_Web_View_Dialog& dlg, Game_
 void Game_Driver::handle_token_placement(QH_Web_View_Dialog& dlg, Game_Token* token, QString pos_id)
 {
  Game_Position* gp = board_.get_game_position_by_label_code(pos_id);
+
+ token->set_player(current_player_);
+ if(current_player_ == north_player_)
+   token->set_as_north();
+ else if(current_player_ == south_player_)
+   token->set_as_south();
+
 
  if(gp)
  {
@@ -364,9 +465,17 @@ void Game_Driver::handle_token_placement(QH_Web_View_Dialog& dlg, Game_Token* to
   else
     token->set_as_pawn();
 
+  check_token_chess_icon(token);
+
   show_token_at_position(dlg, token, gp);
   current_player_->increment_entry_token_count();
 
+//  QString tid = token->svg_id();
+//  QString mid = tid.mid("token"_qt.size());
+//  mid.prepend("ace");
+//  qDebug() << "tid = " << tid;
+
+//  dlg.run_js_in_current_web_page("show_chess_icon('%1', '%2')"_qt.arg(mid).arg(tid));
 
   u2 remaining = current_player_->get_remaining_entry_token_count();
   run_js_for_current_player(dlg,
@@ -412,9 +521,48 @@ King Rank: %7)"_qt
 
 }
 
+void Game_Driver::register_north_chess_icon(QString file_path, QString svg_id)
+{
+ north_chess_icons_[svg_id] = new Chess_Icon {file_path, svg_id};
+}
+
+void Game_Driver::register_south_chess_icon(QString file_path, QString svg_id)
+{
+ south_chess_icons_[svg_id] = new Chess_Icon {file_path, svg_id};
+}
+
+
+void Game_Driver::show_chess_icons(const QH_Web_View_Dialog& dlg)
+{
+ for(auto [token, icon] : tokens_on_board_.toStdMap())
+ {
+  if(icon)
+  {
+   QString tid = token->svg_id();
+   QString id = tid.mid("token-_"_qt.size());
+
+   id = icon->svg_id.arg(id);
+   dlg.run_js_in_current_web_page("show_chess_icon('%1','%2')"_qt.arg(id).arg(tid));
+
+   qDebug() << "show_chess_icon('%1','%2')"_qt.arg(id).arg(tid);
+
+  }
+ }
+ //QMapIterator<> it()
+ // tokens_on_board_
+ //tokens_on_board_
+}
+
 
 void Game_Driver::handle_position_context_menu(QH_Web_View_Dialog& dlg,  QString position_id, const QPoint& global_position)
 {
+ QMenu* menu = new QMenu;
+ menu->addAction("Show Chess Icons", [this, &dlg]()
+ {
+  show_chess_icons(dlg);
+ });
+ menu->addAction("Rewind (undo move)");
+ menu->popup(global_position);
 
 }
 

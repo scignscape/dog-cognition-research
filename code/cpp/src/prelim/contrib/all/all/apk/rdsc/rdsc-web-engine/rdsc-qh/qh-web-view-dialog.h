@@ -153,7 +153,7 @@ public:
  }
 
  void check_run_js_callback(QString key, const QJsonValue& msg);
- void run_js_in_current_web_page(QString js_code);
+ void run_js_in_current_web_page(QString js_code) const;
 
 //? void handle_mark_location_requested(const QH_Cross_Map_Coords& coords);
 
