@@ -219,6 +219,12 @@ public:
   kind_ |= Token_Kind::Singleton;
  }
 
+ void set_as_singleton()
+ {
+  kind_ &= Token_Kind::North_South_Mask;
+  kind_ |= Token_Kind::Singleton;
+ }
+
  void set_as_ace()
  {
   kind_ &= Token_Kind::Clear_QJK;

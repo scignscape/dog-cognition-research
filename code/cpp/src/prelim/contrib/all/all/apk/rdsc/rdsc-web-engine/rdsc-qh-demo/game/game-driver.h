@@ -31,6 +31,11 @@ class Game_Driver
  QMap<QString, Game_Token*> tokens_by_svg_id_;
  QMap<u2, Game_Player*> players_by_player_order_;
 
+ struct Move_Indicator { QString id; Game_Position* current_position_; };
+ QVector<Move_Indicator*> move_indicators_;
+ QVector<Move_Indicator*> capture_move_indicators_;
+
+
  struct Chess_Icon { QString file_path; QString svg_id; };
  QMap<QString, Chess_Icon*> north_chess_icons_;
  QMap<QString, Chess_Icon*> south_chess_icons_;
@@ -68,6 +73,7 @@ class Game_Driver
 
  void get_token_info(Game_Token* token);
 
+ Game_Token* get_token_for_placement();
 
 public:
 
@@ -83,6 +89,11 @@ public:
  void register_north_chess_icon(QString file_path, QString svg_id);
  void register_south_chess_icon(QString file_path, QString svg_id);
 
+ void register_move_indicator(QString id);
+ void register_capture_move_indicator(QString id);
+
+
+
  void start_game(QH_Web_View_Dialog& dlg);
  void check_token_chess_icon(Game_Token* token);
 
@@ -91,8 +102,9 @@ public:
  void handle_position_clicked(QH_Web_View_Dialog& dlg, QString position_id);
  void handle_token_placement(QH_Web_View_Dialog& dlg, Game_Token* token, QString pos_id);
 
- void handle_non_slot_token_placement(QH_Web_View_Dialog& dlg, Game_Token* token, Game_Position* gp);
+ Game_Token* handle_non_slot_token_placement(QH_Web_View_Dialog& dlg, Game_Token* token, Game_Position* gp);
 
+ void switch_players(QH_Web_View_Dialog& dlg);
 
  void handle_position_context_menu(QH_Web_View_Dialog& dlg,  QString position_id, const QPoint& global_position);
  void handle_token_context_menu(QH_Web_View_Dialog& dlg, QString token_id, const QPoint& global_position);
@@ -100,7 +112,8 @@ public:
  void register_token(QString key, Game_Token* token);
  Game_Token* register_new_token(u1 player_order, QString key);
 
- void check_prepare_token_placement(QH_Web_View_Dialog& dlg);
+ Game_Token* confirm_token_placement(QH_Web_View_Dialog& dlg);
+ void check_prepare_token_placement(Game_Token* token, QH_Web_View_Dialog& dlg);
  void switch_current_player();
 
  void run_js_for_current_player(QH_Web_View_Dialog& dlg, QString js);
@@ -111,6 +124,9 @@ public:
  Token_Group* merge_token_groups(const QVector<Token_Group*>& clusters, const QVector<Game_Token*>& tokens);
  void merge_tokens_into_group(Token_Group* cluster, const QVector<Game_Token*>& tokens);
  Token_Group* merge_tokens_into_new_group(const QVector<Game_Token*>& tokens);
+
+ void prepare_move_option_indicators(Game_Token* token, QH_Web_View_Dialog& dlg);
+
 };
 
 

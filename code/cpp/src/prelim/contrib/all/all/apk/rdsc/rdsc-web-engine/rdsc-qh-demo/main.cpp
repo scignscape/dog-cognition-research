@@ -49,13 +49,13 @@ int main(int argc, char *argv[])
 
   // // //? board.debug_board("/home/nlevisrael/gits/dcr-wip/game/" "test.txt");
  #define folder "/home/nlevisrael/gits/dcr-wip/qmt/server-files/public"
- driver.board().to_svg(folder "/board-svg", folder "/board50.svg");
+ driver.board().to_svg(folder "/board-svg", folder "/board52.svg");
 
  //return 0;
 
  QApplication qapp(argc, argv);
 
- QH_Web_View_Dialog dlg("http://localhost:6600/test81.html");
+ QH_Web_View_Dialog dlg("http://localhost:6600/test83.html");
 
 // dlg.showMinimized();
 // dlg.showNormal();

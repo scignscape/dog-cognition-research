@@ -465,12 +465,12 @@ void Game_Board::to_svg(QString in_folder, QString out_file)
    QString north_id = "-n%1"_qt.prepend(piece);
 
    south_copier +=
-     "\n<use id='%1' class='south-chess-icon_copied' xlink:href='#south-%1_proto'/>"_qt
-     .arg(south_id);
+     "\n<use id='%1' class='south-chess-icon_copied' "_qt.arg(south_id);
 
-   north_copier +=
-     "\n<use id='%1' class='north-chess-icon_copied' xlink:href='#north-%1_proto'/>"_qt
-     .arg(north_id);
+   south_copier += "xlink:href='#south-%2_proto'/>"_qt.arg(piece);
+
+   north_copier += "\n<use id='%1' class='north-chess-icon_copied' "_qt.arg(north_id);
+   north_copier += "xlink:href='#north-%2_proto'/>"_qt.arg(piece);
 
 
    QString south_file = icons_folder + "/south-" + piece;
@@ -522,7 +522,7 @@ void Game_Board::to_svg(QString in_folder, QString out_file)
 
    tokens_text += R"_(
 <a class='south-token_base south-token_in-play' id='%1'>
- <circle cx='0' cy='0' r='12' />
+ <circle cx='0' cy='0' r='13' />
   <g transform="translate(%5, %6) scale(%7, %8)">
   <!-- chess icon representations -->
   %2
@@ -531,7 +531,7 @@ void Game_Board::to_svg(QString in_folder, QString out_file)
 </a>
 
 <a class='north-token_base north-token_in-play' id='%3'>
- <circle cx='0' cy='0' r='12' />
+ <circle cx='0' cy='0' r='13' />
   <g transform="translate(%5, %6) scale(%7, %8)">
   <!-- chess icon representations -->
   %4
@@ -544,12 +544,38 @@ void Game_Board::to_svg(QString in_folder, QString out_file)
       .arg(scale_x).arg(scale_y);
   }
  };
-
  tokens();
+
+ QString move_indicators_text;
+ auto move_indicators = [&move_indicators_text, this]()
+ {
+  for(u1 i = 1; i <= 42; ++i)
+  {
+   QString id = "mi"_qt + QString::number(i);
+   driver_->register_move_indicator(id);
+
+   move_indicators_text += R"_(
+<a class='move-indicator' id='%1'>
+ <circle cx='0' cy='0' r='12' /></a>)_"_qt.arg(id);
+  }
+
+  for(u1 i = 1; i <= 8; ++i)
+  {
+   QString id = "cmi"_qt + QString::number(i);
+   driver_->register_move_indicator(id);
+
+   move_indicators_text += R"_(
+<a class='capture-move-indicator' id='%1'>
+ <circle cx='0' cy='0' r='12' /></a>)_"_qt.arg(id);
+  }
+ };
+ move_indicators();
 
  board_end.replace("%TOKENS%", tokens_text);
 
  board_end.replace("%ICONS%", icons_text);
+
+ board_end.replace("%MOVE-INDICATORS%", move_indicators_text);
 
  QString svg_text = board_start + main_text + board_end;
 
