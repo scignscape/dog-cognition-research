@@ -63,6 +63,8 @@ SOURCES += \
   $$SRC_DIR/game/message-display-window.cpp \
   $$SRC_DIR/game/game-variant.cpp \
   $$SRC_DIR/game/variants/au/au-game-variant.cpp \
+  $$SRC_DIR/game/variants/au/move-options/au.bishop.cpp \
+
 
 
 

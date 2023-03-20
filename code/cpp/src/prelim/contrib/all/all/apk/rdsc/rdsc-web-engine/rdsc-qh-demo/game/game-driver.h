@@ -92,7 +92,7 @@ public:
  void register_move_indicator(QString id);
  void register_capture_move_indicator(QString id);
 
-
+ Game_Position* get_game_position_via_offset(Game_Position* starting, QPair<s2, s2> offsets);
 
  void start_game(QH_Web_View_Dialog& dlg);
  void check_token_chess_icon(Game_Token* token);

@@ -153,48 +153,19 @@ void Game_Driver::prepare_move_option_indicators(Game_Token* token, QH_Web_View_
  if(!gp)
    return;
 
+ QVector<Game_Variant::Move_Option> position_options;
 
+ current_variant_->check_move_options(token, gp, position_options);
 
- Game_Token::Token_Kind kind = (Game_Token::Token_Kind) (token->kind() & Game_Token::Token_Kind::Clear_NS);
- switch(kind)
- {
- case Game_Token::Token_Kind::Singleton:
-  {
-   switch(gp->position_kind())
-   {
-   case Game_Position::Position_Kind::Center:
-     qDebug() << "bishop"; break;
-   case Game_Position::Position_Kind::Intersection:
-     qDebug() << "knight"; break;
-   case Game_Position::Position_Kind::Edge:
-     qDebug() << "vrook"; break;
-   case Game_Position::Position_Kind::Side:
-     qDebug() << "hrook"; break;
-   case Game_Position::Position_Kind::Slot:
-     qDebug() << "pawn"; break;
-   default: break;
-   }
-   break;
-  }
-  break;
-
- case Game_Token::Token_Kind::Ace:
-   qDebug() << "ace"; break;
-
- case Game_Token::Token_Kind::Queen:
-   qDebug() << "queen"; break;
-
- case Game_Token::Token_Kind::Jack:
-   qDebug() << "jack"; break;
-
- case Game_Token::Token_Kind::King:
-   qDebug() << "king"; break;
-
- default: break;
-
- }
 }
 
+Game_Position* Game_Driver::get_game_position_via_offset(Game_Position* starting, QPair<s2, s2> offsets)
+{
+ s2 r = starting->position_column() + offsets.first;
+ s2 c = starting->position_column() + offsets.second;
+
+ return board_.get_game_position_by_coords(r, c);
+}
 
 
 void Game_Driver::switch_current_player()

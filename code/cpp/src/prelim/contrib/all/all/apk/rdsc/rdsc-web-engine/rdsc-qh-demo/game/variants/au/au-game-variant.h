@@ -25,11 +25,15 @@ class Game_Driver;
 class AU_Game_Variant : public Game_Variant
 {
 
+ void check_move_options_Bishop(Game_Token* token, Game_Position* start_position, QVector<Move_Option>& move_options);
+
+ //void check_move_option(Game_Token* token, Game_Position* start_position, QPair<s1, s1> offsets, QVector<Move_Option>& move_options);
+
 public:
 
  AU_Game_Variant(QString name, Game_Driver* parent_driver);
 
-
+ void check_move_options(Game_Token* token, Game_Position* start_position, QVector<Move_Option>& move_options) Q_DECL_OVERRIDE;
 };
 
 
