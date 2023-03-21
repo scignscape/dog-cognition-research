@@ -28,7 +28,8 @@
 Game_Driver::Game_Driver()
   :  board_(this), current_selected_token_(0), current_player_(nullptr),
      south_player_(nullptr), north_player_(nullptr),
-     message_display_window_(nullptr)
+     message_display_window_(nullptr),
+     move_indicators_capture_count_(0), move_indicators_count_(0)
 {
  current_variant_ = new AU_Game_Variant("A/U", this);
 
@@ -113,12 +114,18 @@ Game_Token* Game_Driver::confirm_token_placement(QH_Web_View_Dialog& dlg)
 }
 
 
+void Game_Driver::run_js_code(QH_Web_View_Dialog& dlg, QString js)
+{
+ dlg.run_js_in_current_web_page(js);
+}
+
+
 void Game_Driver::run_js_for_current_player(QH_Web_View_Dialog& dlg, QString js)
 {
  if(current_player_ == south_player_)
-   dlg.run_js_in_current_web_page(js.arg("south"));
+   run_js_code(dlg, js.arg("south"));
  else if(current_player_ == north_player_)
-   dlg.run_js_in_current_web_page(js.arg("north"));
+   run_js_code(dlg, js.arg("north"));
 }
 
 
@@ -157,11 +164,67 @@ void Game_Driver::prepare_move_option_indicators(Game_Token* token, QH_Web_View_
 
  current_variant_->check_move_options(token, gp, position_options);
 
+ u1 count = 0;
+ u1 capture_count = 0;
+ for(const Game_Variant::Move_Option& mo : position_options)
+ {
+  Move_Indicator* mi;
+  if(mo.index < 0)
+    mi = capture_move_indicators_.value(capture_count++);
+  else
+    mi = move_indicators_.value(count++);
+  mi->current_position = mo.position;
+ }
+
+ move_indicators_count_ = count;
+ move_indicators_capture_count_ = capture_count;
+
+ js_show_move_indicators(dlg);
+
 }
+
+void Game_Driver::js_show_move_indicators(QH_Web_View_Dialog& dlg)
+{
+ QVector<QString> js_args(move_indicators_count_);
+ QVector<QString> js_cargs(move_indicators_capture_count_);
+
+ s2 token_mid_offset_x = 25, token_mid_offset_y = 25;
+
+ auto fn = [token_mid_offset_x, token_mid_offset_y](Move_Indicator* mi) -> QString
+ {
+  return "['%1', %2, %3]"_qt.arg(mi->id)
+    .arg(mi->current_position->svg_x() + token_mid_offset_x).arg(mi->current_position->svg_y() + token_mid_offset_y);
+ };
+
+ if(move_indicators_count_)
+ {
+  std::transform(move_indicators_.begin(), move_indicators_.begin() + move_indicators_count_,
+    js_args.begin(), fn);
+
+  QString js_code = "show_move_indicators([%1]);"_qt.arg(js_args.toList().join(','));
+
+  run_js_code(dlg, js_code);
+ }
+
+ if(move_indicators_capture_count_)
+ {
+  std::transform(capture_move_indicators_.begin(), capture_move_indicators_.begin() + move_indicators_capture_count_,
+    js_cargs.begin(), fn);
+
+  QString js_ccode = "show_capture_move_indicators([%1]);"_qt.arg(js_cargs.toList().join(','));
+
+ }
+
+
+// qDebug() << "js_code = " << js_code;
+// qDebug() << "js_ccode = " << js_ccode;
+
+}
+
 
 Game_Position* Game_Driver::get_game_position_via_offset(Game_Position* starting, QPair<s2, s2> offsets)
 {
- s2 r = starting->position_column() + offsets.first;
+ s2 r = starting->position_row() + offsets.first;
  s2 c = starting->position_column() + offsets.second;
 
  return board_.get_game_position_by_coords(r, c);

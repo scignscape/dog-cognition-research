@@ -562,7 +562,7 @@ void Game_Board::to_svg(QString in_folder, QString out_file)
   for(u1 i = 1; i <= 8; ++i)
   {
    QString id = "cmi"_qt + QString::number(i);
-   driver_->register_move_indicator(id);
+   driver_->register_capture_move_indicator(id);
 
    move_indicators_text += R"_(
 <a class='capture-move-indicator' id='%1'>

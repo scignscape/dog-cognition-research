@@ -31,10 +31,13 @@ class Game_Driver
  QMap<QString, Game_Token*> tokens_by_svg_id_;
  QMap<u2, Game_Player*> players_by_player_order_;
 
- struct Move_Indicator { QString id; Game_Position* current_position_; };
+ struct Move_Indicator { QString id; Game_Position* current_position; };
  QVector<Move_Indicator*> move_indicators_;
  QVector<Move_Indicator*> capture_move_indicators_;
+ u2 move_indicators_count_;
+ u2 move_indicators_capture_count_;
 
+ void js_show_move_indicators(QH_Web_View_Dialog& dlg);
 
  struct Chess_Icon { QString file_path; QString svg_id; };
  QMap<QString, Chess_Icon*> north_chess_icons_;
@@ -116,6 +119,7 @@ public:
  void check_prepare_token_placement(Game_Token* token, QH_Web_View_Dialog& dlg);
  void switch_current_player();
 
+ void run_js_code(QH_Web_View_Dialog& dlg, QString js);
  void run_js_for_current_player(QH_Web_View_Dialog& dlg, QString js);
  void highlight_current_player_sidebar(QH_Web_View_Dialog& dlg);
 

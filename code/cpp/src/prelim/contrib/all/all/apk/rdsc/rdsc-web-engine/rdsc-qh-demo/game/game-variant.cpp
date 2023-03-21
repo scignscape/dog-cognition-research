@@ -37,8 +37,9 @@ s2 Game_Variant::check_move_option(Game_Token* token, Game_Position* start_posit
  if(gp)
  {
   move_options.push_back({gp, result});
+  return result;
  }
- return result;
+ return 0;
 }
 
 Game_Position* Game_Variant::check_move_option(Game_Token* token, Game_Position* start_position,
