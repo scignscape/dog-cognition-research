@@ -12,10 +12,11 @@
 
 Game_Player::Game_Player(u2 play_order, u2 max_token_count_for_entry, u2 current_token_count_for_entry)
   :  play_order_(play_order), current_token_count_for_entry_(current_token_count_for_entry),
-     max_token_count_for_entry_(max_token_count_for_entry)
+     max_token_count_for_entry_(max_token_count_for_entry), current_display_count_(0)
 {
 
 }
+
 
 
 

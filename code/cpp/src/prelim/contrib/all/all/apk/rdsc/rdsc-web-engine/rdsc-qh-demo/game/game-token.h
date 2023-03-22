@@ -116,6 +116,8 @@ private:
  QVector<Game_Token*> diagonal_neighbors_;
  QVector<Game_Token*> orthogonal_neighbors_;
 
+ u2 current_placement_order_;
+
 public:
 
  Game_Token(Game_Player* player, Token_Kind kind = Token_Kind::N_A);
@@ -125,6 +127,10 @@ public:
 
  ACCESSORS(s1 ,move_option_count)
  ACCESSORS(s1 ,move_option_capture_count)
+
+ ACCESSORS(u2 ,current_placement_order)
+
+ QString current_placement_order_label();
 
  void clear_move_option_count()
  {

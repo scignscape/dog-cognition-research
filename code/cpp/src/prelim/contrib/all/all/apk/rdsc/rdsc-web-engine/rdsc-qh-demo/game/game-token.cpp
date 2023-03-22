@@ -15,10 +15,17 @@
 Game_Token::Game_Token(Game_Player* player, Token_Kind kind)
   :  kind_(kind), player_(player), current_cluster_(nullptr),
      capture_status_(0), current_position_(nullptr),
-     move_option_count_(0)
+     move_option_count_(0), current_placement_order_(0)
 {
 
 }
+
+QString Game_Token::current_placement_order_label()
+{
+ static QString chars = "_sn";
+ return "txt-%1%2"_qt.arg(chars[player_->play_order()]).arg(current_placement_order_);
+}
+
 
 void Game_Token::clear_neighbors()
 {

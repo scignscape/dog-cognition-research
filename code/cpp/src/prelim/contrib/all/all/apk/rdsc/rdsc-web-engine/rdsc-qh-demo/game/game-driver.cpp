@@ -110,6 +110,9 @@ Game_Token* Game_Driver::confirm_token_placement(QH_Web_View_Dialog& dlg)
   run_js_for_current_player(dlg,
     "update_#1_entry_token_count(%1)"_qt.arg(remaining).replace('#', '%'));
  }
+
+ u2 dc = current_player_->increment_current_display_count();
+ result->set_current_placement_order(dc);
  return result;
 }
 
@@ -697,9 +700,26 @@ void Game_Driver::handle_token_placement(QH_Web_View_Dialog& dlg, Game_Token* to
 void Game_Driver::show_token_at_position(QH_Web_View_Dialog& dlg, Game_Token* token, Game_Position* gp)
 {
  QString token_id = token->svg_id();
- s2 token_mid_offset_x = 25, token_mid_offset_y = 25;
+ static s2 token_mid_offset_x = 25, token_mid_offset_y = 25;
  s2 x = gp->svg_x() + token_mid_offset_x, y = gp->svg_y() + token_mid_offset_y;
  dlg.run_js_in_current_web_page("show_token_at_position('%1', %2, %3);"_qt.arg(token_id).arg(x).arg(y));
+
+ // //  the style sheet tries to center the text when seen in a browser;
+  //    this adjusts it for the native front-end (is there a small
+  //    discrepancy in the text placement between the two environments?)
+ static s2 txt_offset_x = 2, txt_offset_y = -2;
+
+ QString txt_id = token->current_placement_order_label();
+
+ QString js = "activate_text_indicator('%1', %2, %3);"_qt.arg(txt_id)
+   .arg(x + txt_offset_x).arg(y + txt_offset_y);
+
+ qDebug() << "hs = " << js;
+
+
+ dlg.run_js_in_current_web_page("activate_text_indicator('%1', %2, %3);"_qt.arg(txt_id)
+   .arg(x - txt_offset_x).arg(y - txt_offset_y));
+
 }
 
 

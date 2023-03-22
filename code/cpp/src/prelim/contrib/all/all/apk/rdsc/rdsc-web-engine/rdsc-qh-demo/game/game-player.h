@@ -30,6 +30,8 @@ class Game_Player
 
  QQueue<Game_Token*> recycled_tokens_;
 
+ u2 current_display_count_;
+
 public:
 
  Game_Player(u2 play_order,
@@ -39,6 +41,11 @@ public:
 
  ACCESSORS(u2 ,current_token_count_for_entry)
  ACCESSORS(u2 ,max_token_count_for_entry)
+
+ u2 increment_current_display_count()
+ {
+  return ++current_display_count_;
+ }
 
  void push_recycled_token(Game_Token* token)
  {

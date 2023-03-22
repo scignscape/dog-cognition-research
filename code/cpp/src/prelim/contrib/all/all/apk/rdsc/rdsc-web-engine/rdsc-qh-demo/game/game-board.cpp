@@ -571,9 +571,31 @@ void Game_Board::to_svg(QString in_folder, QString out_file)
  };
  move_indicators();
 
+
+ QString text_indicators_text;
+ auto text_indicators = [&text_indicators_text]()
+ {
+  for(u1 i = 1; i <= 30; ++i)
+  {
+   QString s_id = "txt-s"_qt + QString::number(i);
+   QString n_id = "txt-n"_qt + QString::number(i);
+   text_indicators_text += R"_(
+<g class="hidden-text-indicator" id="txt-s%1">
+ <text class="text-indicator" x="%2" y="5">%1</text>
+</g>
+<g class="hidden-text-indicator" id="txt-n%1">
+ <text class="text-indicator" x="%2" y="5">%1</text>
+</g>
+                           )_"_qt.arg(i).arg(i < 10? -4 : -7);
+  }
+ };
+ text_indicators();
+
  board_end.replace("%TOKENS%", tokens_text);
 
  board_end.replace("%ICONS%", icons_text);
+
+ board_end.replace("%TEXT-INDICATORS%", text_indicators_text);
 
  board_end.replace("%MOVE-INDICATORS%", move_indicators_text);
 
