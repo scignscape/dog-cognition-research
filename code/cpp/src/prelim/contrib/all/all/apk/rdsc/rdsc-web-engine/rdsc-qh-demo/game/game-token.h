@@ -99,6 +99,13 @@ private:
   //    otherwise 1-12 = hold file
  s1 capture_status_;
 
+ // //  0 = not checked   -1 = nothing
+  //    -1 for move_option_count_ also means
+  //    that move_option_capture_count_
+  //    has been checked
+ s2 move_option_count_;
+ s2 move_option_capture_count_;
+
  Game_Position* current_position_;
 
  QString svg_id_;
@@ -115,6 +122,26 @@ public:
 
  ACCESSORS(QVector<Game_Token*> ,diagonal_neighbors)
  ACCESSORS(QVector<Game_Token*> ,orthogonal_neighbors)
+
+ ACCESSORS(s1 ,move_option_count)
+ ACCESSORS(s1 ,move_option_capture_count)
+
+ void clear_move_option_count()
+ {
+  set_move_option_count(0);
+ }
+
+ void clear_move_option_capture_count()
+ {
+  set_move_option_capture_count(0);
+ }
+
+ void clear_move_option_counts()
+ {
+  clear_move_option_count();
+  clear_move_option_capture_count();
+ }
+
 
  ACCESSORS(Token_Kind ,kind);
 

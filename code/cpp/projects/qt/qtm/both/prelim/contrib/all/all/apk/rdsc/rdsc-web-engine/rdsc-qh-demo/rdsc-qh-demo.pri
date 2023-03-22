@@ -48,7 +48,7 @@ HEADERS += \
   $$SRC_DIR/game/game-position.h \
   $$SRC_DIR/game/token-group.h \
   $$SRC_DIR/game/message-display-window.h \
-  $$SRC_DIR/game/game-variant.h \
+  $$SRC_DIR/game/variants/game-variant.h \
   $$SRC_DIR/game/variants/au/au-game-variant.h \
 
 
@@ -61,7 +61,7 @@ SOURCES += \
   $$SRC_DIR/game/game-position.cpp \
   $$SRC_DIR/game/token-group.cpp \
   $$SRC_DIR/game/message-display-window.cpp \
-  $$SRC_DIR/game/game-variant.cpp \
+  $$SRC_DIR/game/variants/game-variant.cpp \
   $$SRC_DIR/game/variants/au/au-game-variant.cpp \
   $$SRC_DIR/game/variants/au/move-options/au.bishop.cpp \
 

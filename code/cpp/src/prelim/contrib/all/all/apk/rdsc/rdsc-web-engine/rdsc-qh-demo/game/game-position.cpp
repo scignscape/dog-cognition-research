@@ -123,6 +123,130 @@ void Game_Position::init()
 
 }
 
+bool Game_Position::Occupiers::blocks_direction(const QPair<s2, s2>& offsets)
+{
+ switch (adjacent_occupier_index)
+ {
+ case 0: return (offsets.first < 0) && (offsets.second < 0);
+ case 1: return (offsets.first > 0) && (offsets.second < 0);
+ case 2: return (offsets.first > 0) && (offsets.second > 0);
+ case 3: return (offsets.first < 0) && (offsets.second > 0);
+ }
+}
+
+Game_Position::Dislodge_Info Game_Position::get_dislodge_info()
+{
+ for(u1 i = 0; i < 4; ++i)
+ {
+  if(Game_Position* gp = adjacent_positions_[i])
+  {
+   if(Game_Token* token = adjacent_positions_[i]->current_occupier_)
+     return {token, adjacent_positions_[i]->adjacent_positions_[i], (s1) i};
+  }
+ }
+ return {nullptr, nullptr};
+}
+
+u2 Game_Position::distance(Game_Position* other)
+{
+ return qMax(qAbs(position_row_ - other->position_row_), qAbs(position_column_ - other->position_column_));
+}
+
+Game_Position* Game_Position::find_common_adjacent(Game_Position* other, Game_Position* exclude)
+{
+ for(u1 i = 0; i < 4; ++i)
+ {
+  if(Game_Position* gp = adjacent_positions_[i])
+  {
+   if(gp == exclude)
+     continue;
+   if(gp->distance(other) == 1)
+     return gp;
+  }
+ }
+ return nullptr;
+}
+
+
+
+Game_Position* Game_Position::get_adjacent_center_position()
+{
+ for(u1 i = 0; i < 4; ++i)
+ {
+  if(Game_Position* gp = adjacent_positions_[i])
+  {
+   if(gp->position_kind_ == Game_Position::Position_Kind::Center)
+     return gp;
+  }
+ }
+ return nullptr;
+}
+
+
+Game_Position::Dislodge_Info Game_Position::get_secondary_dislodge_info(Game_Position* curl_position,
+  Game_Position* prior_position, Game_Position* secondary_curl_position, s1 former_direction)
+{
+ for(u1 i = 0; i < 4; ++i)
+ {
+  if(Game_Position* gp = adjacent_positions_[i])
+  {
+   if(gp == prior_position)
+     continue;
+   if(Game_Token* token = adjacent_positions_[i]->current_occupier_)
+   {
+    Game_Position* new_position; //= adjacent_positions_[i]->find_common_adjacent(curl_position, this);
+    if((former_direction == -2) || (i == former_direction))
+    {
+     new_position = adjacent_positions_[i]->find_common_adjacent(secondary_curl_position, this);
+     return {token, new_position, -2};
+    }
+    else
+    {
+     new_position = adjacent_positions_[i]->find_common_adjacent(curl_position, this);
+     return {token, new_position, -1};
+    }
+
+//    if(i == 3) // // so i + 1 (i.e., clockwise rotation) becomes 0
+//      return {token, adjacent_positions_[i]->adjacent_positions_[0], (u1)(0)};
+
+//    return {token, adjacent_positions_[i]->adjacent_positions_[i + 1], (u1)(i + 1)};
+
+
+
+//    if(i == former_direction)
+//    {
+//     // //  "wrap" around square
+
+//     if(i == 3) // // so i + 1 (i.e., clockwise rotation) becomes 0
+//       return {token, adjacent_positions_[i]->adjacent_positions_[0], (u1)(0)};
+
+//     return {token, adjacent_positions_[i]->adjacent_positions_[i + 1], (u1)(i + 1)};
+//    }
+//    else
+//      // //  "curl back"
+//     return {token, adjacent_positions_[i]->adjacent_positions_[former_direction], former_direction};
+   }
+  }
+ }
+ return {nullptr, nullptr, 0};
+}
+
+
+
+Game_Position::Occupiers Game_Position::occupiers()
+{
+ //Game_Position::Occupiers result = {current_occupier_}
+ for(u1 i = 0; i < 4; ++i)
+ {
+  if(Game_Position* gp = adjacent_positions_[i])
+  {
+   if(Game_Token* token = adjacent_positions_[i]->current_occupier_)
+     return {current_occupier_, token, i};
+  }
+ }
+ return {current_occupier_, nullptr, 0};
+}
+
 
 QString Game_Position::summary()
 {

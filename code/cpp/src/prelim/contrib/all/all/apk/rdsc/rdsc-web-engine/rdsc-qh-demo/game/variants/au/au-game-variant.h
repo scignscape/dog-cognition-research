@@ -17,7 +17,7 @@
 #include <QString>
 #include <QQueue>
 
-#include "game/game-variant.h"
+#include "game/variants/game-variant.h"
 
 
 class Game_Driver;

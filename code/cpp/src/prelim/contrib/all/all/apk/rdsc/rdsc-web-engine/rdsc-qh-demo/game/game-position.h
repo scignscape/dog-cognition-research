@@ -50,6 +50,27 @@ public:
 
 //Position_Kind_Enumerate(_enum_macro)
 
+ struct Occupiers {
+   Game_Token* current_occupier;
+   Game_Token* adjacent_occupier;
+   u1 adjacent_occupier_index;
+   bool blocks_direction(const QPair<s2, s2>& offsets);
+   void reset() { current_occupier = nullptr;
+     adjacent_occupier = nullptr; adjacent_occupier_index = 0;}
+   bool all_clear() { return current_occupier == nullptr
+     && adjacent_occupier == nullptr; }
+ };
+
+ struct Dislodge_Info {
+   Game_Token* adjacent_occupier;
+   Game_Position* new_position;
+   s1 direction;
+   operator bool()
+   {
+    return adjacent_occupier;
+   }
+ };
+
 private:
 
  Game_Token* current_occupier_;
@@ -99,6 +120,15 @@ public:
  {
   adjacent_positions_[index] = gp;
  }
+
+ Game_Position* get_adjacent_center_position();
+ u2 distance(Game_Position* other);
+ Game_Position* find_common_adjacent(Game_Position* other, Game_Position* exclude);
+
+ Occupiers occupiers();
+ Dislodge_Info get_dislodge_info();
+ Dislodge_Info get_secondary_dislodge_info(Game_Position* curl_position,
+   Game_Position* prior_position, Game_Position* secondary_curl_position, s1 former_direction);
 
  QString summary();
 

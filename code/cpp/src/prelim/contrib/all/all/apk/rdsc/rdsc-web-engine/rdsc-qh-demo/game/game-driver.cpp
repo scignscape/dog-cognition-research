@@ -21,7 +21,7 @@
 
 #include <QMessageBox>
 
-#include "game-variant.h"
+#include "game/variants/game-variant.h"
 #include "variants/au/au-game-variant.h"
 
 
@@ -129,6 +129,35 @@ void Game_Driver::run_js_for_current_player(QH_Web_View_Dialog& dlg, QString js)
 }
 
 
+void Game_Driver::finalize_token_move(Game_Token* token, Move_Indicator* mi, QH_Web_View_Dialog& dlg)
+{
+ Game_Position* gp = mi->current_position;
+
+ handle_token_move_or_placement(dlg, token, gp);
+
+ js_unhighlight_token(token, dlg);
+ check_reset_move_indicators(dlg);
+
+ finalize_token_move_or_placement(dlg, token, gp);
+
+ switch_players(dlg);
+}
+
+void Game_Driver::handle_move_indicator_clicked(QH_Web_View_Dialog& dlg, QString id)
+{
+ // //  all ids start with "mi" ...
+ u2 count = id.mid(2).toUInt();
+
+ Move_Indicator* mi = move_indicators_.value(count - 1);
+
+ if(!mi)
+   //  //  something's wrong here ...
+   return;
+
+ finalize_token_move(current_selected_token_, mi, dlg);
+
+}
+
 void Game_Driver::handle_token_clicked(QH_Web_View_Dialog& dlg, QString token_id)
 {
  if(Game_Token* token = tokens_by_svg_id_.value(token_id))
@@ -156,9 +185,47 @@ void Game_Driver::handle_token_clicked(QH_Web_View_Dialog& dlg, QString token_id
 
 void Game_Driver::prepare_move_option_indicators(Game_Token* token, QH_Web_View_Dialog& dlg)
 {
+ if(current_selected_token_)
+ {
+  if(current_selected_token_->capture_status() == -1)
+    js_unhighlight_token(current_selected_token_, dlg);
+
+  if(token == current_selected_token_)
+  {
+   token->clear_move_option_counts();
+   check_reset_move_indicators(dlg);
+   current_selected_token_ = nullptr;
+   return;
+  }
+  else
+  {
+   if(current_selected_token_->move_option_count() != 0)
+   {
+    if(current_selected_token_->move_option_count() == -1)
+    {
+     move_indicators_count_ = 0;
+     move_indicators_capture_count_ = current_selected_token_->move_option_capture_count();
+     if(move_indicators_capture_count_)
+       js_hide_move_indicators(dlg);
+    }
+    else
+    {
+     move_indicators_count_ = current_selected_token_->move_option_count();
+     move_indicators_capture_count_ = current_selected_token_->move_option_capture_count();
+     js_hide_move_indicators(dlg);
+    }
+   }
+   current_selected_token_->clear_move_option_counts();
+  }
+
+ }
+
  Game_Position* gp = token->current_position();
  if(!gp)
    return;
+
+ current_selected_token_ = token;
+ js_highlight_token(token, dlg);
 
  QVector<Game_Variant::Move_Option> position_options;
 
@@ -176,12 +243,43 @@ void Game_Driver::prepare_move_option_indicators(Game_Token* token, QH_Web_View_
   mi->current_position = mo.position;
  }
 
- move_indicators_count_ = count;
- move_indicators_capture_count_ = capture_count;
+ token->set_move_option_count(count?count:-1);
 
- js_show_move_indicators(dlg);
+ if(count | capture_count)
+ {
+  token->set_move_option_capture_count(capture_count);
+  move_indicators_count_ = count;
+  move_indicators_capture_count_ = capture_count;
+
+  js_show_move_indicators(dlg);
+ }
 
 }
+
+QString Game_Driver::current_player_string()
+{
+ if(current_player_ == south_player_)
+   return "south";
+ else if(current_player_ == north_player_)
+   return "north";
+
+ return {};
+}
+
+void Game_Driver::js_highlight_token(Game_Token* token, QH_Web_View_Dialog& dlg)
+{
+ QString js_code = "highlight_%1_token('%2');"_qt.arg(current_player_string()).arg(token->svg_id());
+
+ run_js_code(dlg, js_code);
+}
+
+void Game_Driver::js_unhighlight_token(Game_Token* token, QH_Web_View_Dialog& dlg)
+{
+ QString js_code = "unhighlight_%1_token('%2');"_qt.arg(current_player_string()).arg(token->svg_id());
+
+ run_js_code(dlg, js_code);
+}
+
 
 void Game_Driver::js_show_move_indicators(QH_Web_View_Dialog& dlg)
 {
@@ -226,6 +324,12 @@ Game_Position* Game_Driver::get_game_position_via_offset(Game_Position* starting
 {
  s2 r = starting->position_row() + offsets.first;
  s2 c = starting->position_column() + offsets.second;
+
+ Game_Position* gp = board_.get_game_position_by_coords(r, c);
+
+ if(!gp)
+   qDebug() << "missing gp ";
+
 
  return board_.get_game_position_by_coords(r, c);
 }
@@ -465,6 +569,98 @@ Game_Token* Game_Driver::handle_non_slot_token_placement(QH_Web_View_Dialog& dlg
 }
 
 
+void Game_Driver::finalize_token_move(QH_Web_View_Dialog& dlg, Game_Token* token, Game_Position* gp)
+{
+ check_token_chess_icon(token);
+ show_token_at_position(dlg, token, gp);
+}
+
+
+void Game_Driver::finalize_token_move_or_placement(QH_Web_View_Dialog& dlg, Game_Token* token, Game_Position* gp)
+{
+ current_selected_token_ = nullptr;
+ token->set_capture_status(-1);
+ finalize_token_move(dlg, token, gp);
+}
+
+
+void Game_Driver::handle_token_move_or_placement(QH_Web_View_Dialog& dlg, Game_Token* token, Game_Position* gp)
+{
+ QVector<Game_Position::Dislodge_Info> dislodge_info;
+
+ current_variant_->check_dislodge(token, gp, dislodge_info);
+
+ _place(token, gp);
+
+ update_token_move_or_placement(dlg, token, gp);
+
+ if(!dislodge_info.isEmpty())
+ {
+  for(Game_Position::Dislodge_Info info : dislodge_info)
+  {
+   _place(info.adjacent_occupier, info.new_position);
+   update_token_move_or_placement(dlg, info.adjacent_occupier, info.new_position);
+   finalize_token_move(dlg, info.adjacent_occupier, info.new_position);
+  }
+ }
+}
+
+void Game_Driver::update_token_move_or_placement(QH_Web_View_Dialog& dlg, Game_Token* token, Game_Position* gp)
+{
+ _surrounding s;
+
+ switch(check_cluster(token, s))
+ {
+ case 0: break; // // token will be singleton
+
+ case 1: // // check merge ...
+  if(s.clusters.size() == 1)
+  {
+   _place(token, s.clusters.first());
+   break;
+  }
+  // //  otherwise need to merge ...
+  {
+   Token_Group* new_cluster = merge_token_groups(s.clusters);
+   _place(token, new_cluster);
+  }
+  break;
+
+ case 2: // // only previous singletons ...
+  {
+   Token_Group* new_cluster = merge_tokens_into_new_group(s.singletons);
+   _place(token, new_cluster);
+  }
+  break;
+
+ case 3:
+  if(s.clusters.size() == 1)
+  {
+   merge_tokens_into_group(s.clusters.first(), s.singletons);
+   _place(token, s.clusters.first());
+   break;
+  }
+  // //  otherwise need to merge ...
+  {
+   Token_Group* new_cluster = merge_token_groups(s.clusters);
+   merge_tokens_into_group(new_cluster, s.singletons);
+   _place(token, new_cluster);
+  }
+  break;
+ default: break;
+ }
+
+//   token->set_capture_status(-1);
+ token->update_neighbors(s.diagonal, s.orthogonal);
+
+ if(token->current_cluster())
+   token->current_cluster()->update_densities();
+ else
+   token->set_as_pawn();
+
+}
+
+
 void Game_Driver::handle_token_placement(QH_Web_View_Dialog& dlg, Game_Token* token, QString pos_id)
 {
  Game_Position* gp = board_.get_game_position_by_label_code(pos_id);
@@ -473,12 +669,6 @@ void Game_Driver::handle_token_placement(QH_Web_View_Dialog& dlg, Game_Token* to
    // // clicked by mistake?
    return;
 
- //token->set_player(current_player_);
-
-// if(current_player_ == north_player_)
-//   token->set_as_north();
-// else if(current_player_ == south_player_)
-//   token->set_as_south();
 
  Game_Token* placed_token = nullptr;
 
@@ -493,68 +683,14 @@ void Game_Driver::handle_token_placement(QH_Web_View_Dialog& dlg, Game_Token* to
   else
   {
    placed_token = confirm_token_placement(dlg);
-   _place(placed_token, gp);
 
-   _surrounding s;
-
-   switch(check_cluster(placed_token, s))
-   {
-   case 0: break; // // token will be singleton
-
-   case 1: // // check merge ...
-    if(s.clusters.size() == 1)
-    {
-     _place(placed_token, s.clusters.first());
-     break;
-    }
-    // //  otherwise need to merge ...
-    {
-     Token_Group* new_cluster = merge_token_groups(s.clusters);
-     _place(placed_token, new_cluster);
-    }
-    break;
-
-   case 2: // // only previous singletons ...
-    {
-     Token_Group* new_cluster = merge_tokens_into_new_group(s.singletons);
-     _place(placed_token, new_cluster);
-    }
-    break;
-
-   case 3:
-    if(s.clusters.size() == 1)
-    {
-     merge_tokens_into_group(s.clusters.first(), s.singletons);
-     _place(placed_token, s.clusters.first());
-     break;
-    }
-    // //  otherwise need to merge ...
-    {
-     Token_Group* new_cluster = merge_token_groups(s.clusters);
-     merge_tokens_into_group(new_cluster, s.singletons);
-     _place(placed_token, new_cluster);
-    }
-    break;
-   default: break;
-   }
-
-//   placed_token->set_capture_status(-1);
-   placed_token->update_neighbors(s.diagonal, s.orthogonal);
-
-   if(placed_token->current_cluster())
-     placed_token->current_cluster()->update_densities();
-   else
-     placed_token->set_as_pawn();
+   handle_token_move_or_placement(dlg, placed_token, gp);
   }
 
   if(placed_token)
   {
-   current_selected_token_ = nullptr;
-   placed_token->set_capture_status(-1);
-   check_token_chess_icon(placed_token);
-   show_token_at_position(dlg, placed_token, gp);
+   finalize_token_move_or_placement(dlg, placed_token, gp);
   }
-
  }
 }
 
@@ -666,8 +802,26 @@ void Game_Driver::handle_token_context_menu(QH_Web_View_Dialog& dlg, QString tok
 }
 
 
+void Game_Driver::js_hide_move_indicators(QH_Web_View_Dialog& dlg)
+{
+ run_js_code(dlg, "hide_move_indicators()");
+}
+
+
+void Game_Driver::check_reset_move_indicators(QH_Web_View_Dialog& dlg)
+{
+ if(move_indicators_count_ | move_indicators_capture_count_)
+ {
+  move_indicators_count_ = move_indicators_capture_count_ = 0;
+  js_hide_move_indicators(dlg);
+ }
+}
+
+
 void Game_Driver::switch_players(QH_Web_View_Dialog& dlg)
 {
+ check_reset_move_indicators(dlg);
+
  run_js_for_current_player(dlg, "hide_%1_adding_group()");
  switch_current_player();
  highlight_current_player_sidebar(dlg);

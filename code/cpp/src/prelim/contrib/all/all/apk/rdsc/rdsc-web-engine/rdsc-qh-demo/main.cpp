@@ -49,13 +49,13 @@ int main(int argc, char *argv[])
 
   // // //? board.debug_board("/home/nlevisrael/gits/dcr-wip/game/" "test.txt");
  #define folder "/home/nlevisrael/gits/dcr-wip/qmt/server-files/public"
- driver.board().to_svg(folder "/board-svg", folder "/board52.svg");
+ driver.board().to_svg(folder "/board-svg", folder "/board58.svg");
 
  //return 0;
 
  QApplication qapp(argc, argv);
 
- QH_Web_View_Dialog dlg("http://localhost:6600/test85.html");
+ QH_Web_View_Dialog dlg("http://localhost:6600/test90.html");
 
 // dlg.showMinimized();
 // dlg.showNormal();
@@ -80,6 +80,10 @@ int main(int argc, char *argv[])
 
   else if(key == "token-clicked")
     driver.handle_token_clicked(*_dlg,  element_id);
+
+  else if(key == "move-indicator-clicked")
+    driver.handle_move_indicator_clicked(*_dlg,  element_id);
+
 
   else if(key == "position-context-menu")
   {

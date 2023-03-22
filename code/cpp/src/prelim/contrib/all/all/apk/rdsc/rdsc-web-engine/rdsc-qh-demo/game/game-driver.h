@@ -78,6 +78,14 @@ class Game_Driver
 
  Game_Token* get_token_for_placement();
 
+ void js_highlight_token(Game_Token* token, QH_Web_View_Dialog& dlg);
+ void js_unhighlight_token(Game_Token* token, QH_Web_View_Dialog& dlg);
+
+ void js_hide_move_indicators(QH_Web_View_Dialog& dlg);
+ void check_reset_move_indicators(QH_Web_View_Dialog& dlg);
+
+ QString current_player_string();
+
 public:
 
  Game_Driver();
@@ -87,6 +95,8 @@ public:
  ACCESSORS(Message_Display_Window* ,message_display_window)
 
  void show_token_at_position(QH_Web_View_Dialog& dlg, Game_Token* token, Game_Position* gp);
+
+ void handle_move_indicator_clicked(QH_Web_View_Dialog& dlg, QString id);
 
  void show_chess_icons(const QH_Web_View_Dialog& dlg);
  void register_north_chess_icon(QString file_path, QString svg_id);
@@ -130,6 +140,12 @@ public:
  Token_Group* merge_tokens_into_new_group(const QVector<Game_Token*>& tokens);
 
  void prepare_move_option_indicators(Game_Token* token, QH_Web_View_Dialog& dlg);
+ void finalize_token_move(Game_Token* token, Move_Indicator* mi, QH_Web_View_Dialog& dlg);
+ void finalize_token_move_or_placement(QH_Web_View_Dialog& dlg, Game_Token* token, Game_Position* gp);
+ void finalize_token_move(QH_Web_View_Dialog& dlg, Game_Token* token, Game_Position* gp);
+ void handle_token_move_or_placement(QH_Web_View_Dialog& dlg, Game_Token* token, Game_Position* gp);
+ void update_token_move_or_placement(QH_Web_View_Dialog& dlg, Game_Token* token, Game_Position* gp);
+
 
 };
 
