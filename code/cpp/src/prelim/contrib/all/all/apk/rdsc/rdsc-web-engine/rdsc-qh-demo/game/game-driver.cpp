@@ -24,6 +24,8 @@
 #include "game/variants/game-variant.h"
 #include "variants/au/au-game-variant.h"
 
+#include "global-macros.h"
+
 
 Game_Driver::Game_Driver()
   :  board_(this), current_selected_token_(0), current_player_(nullptr),
@@ -378,6 +380,8 @@ u1 Game_Driver::check_cluster(Game_Token* token, _surrounding& s)
    if((r == 0) && (c == 0))
      continue;
    Game_Position* gp1 = board_.get_game_position_by_coords(gp->position_row() + r, gp->position_column() + c);
+   unless(gp1) // //  could happen if we're at the edge of the board ...
+     continue;
    if(Game_Token* token1 = gp1->current_occupier())
    {
     if(token1->player() == token->player())

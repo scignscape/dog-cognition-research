@@ -67,6 +67,7 @@ SOURCES += \
   $$SRC_DIR/game/variants/au/move-options/au.bishop.cpp \
   $$SRC_DIR/game/variants/au/move-options/au.knight.cpp \
   $$SRC_DIR/game/variants/au/move-options/au.rook.cpp \
+  $$SRC_DIR/game/variants/au/move-options/au.jqk.cpp \
 
 
 

@@ -40,7 +40,10 @@ void AU_Game_Variant::check_move_options(Game_Token* token,
    case Game_Position::Position_Kind::Side:
      check_move_options_Rook(token, start_position, move_options); break;
    case Game_Position::Position_Kind::Slot:
-     qDebug() << "pawn"; break;
+     check_move_options_JQK(token, start_position, move_options); break;
+
+
+    // qDebug() << "pawn"; break;
    default: break;
    }
    break;

@@ -29,6 +29,7 @@ class AU_Game_Variant : public Game_Variant
    QVector<Move_Option>& move_options, s1 increment, s2 minimum_legal_move,
    s1 minimum_check);
 
+ void check_move_options_JQK(Game_Token* token, Game_Position* start_position, QVector<Move_Option>& move_options);
  void check_move_options_Rook(Game_Token* token, Game_Position* start_position, QVector<Move_Option>& move_options);
  void check_move_options_Bishop(Game_Token* token, Game_Position* start_position, QVector<Move_Option>& move_options);
  void check_move_options_Knight(Game_Token* token, Game_Position* start_position, QVector<Move_Option>& move_options);

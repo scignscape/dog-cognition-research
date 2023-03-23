@@ -6,6 +6,9 @@
 //          http://www.boost.org/LICENSE_1_0.txt)
 
 
+#ifndef unless
+#define unless(x) if((!x))
+#endif
 
 #ifndef block_init_2
 #define block_init_2(x, y) x = [&]() ->decltype(x) {decltype(x) y;

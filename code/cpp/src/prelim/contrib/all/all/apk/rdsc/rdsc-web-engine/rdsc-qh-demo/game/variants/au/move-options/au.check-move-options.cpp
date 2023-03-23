@@ -29,16 +29,17 @@ void AU_Game_Variant::check_move_options_Generic(Direction_Codes dc,
 // static u2 r_neg_c_pos_mask = 0b0000'0000'1000'0000;
 // static u2 r_pos_c_pos_mask = 0b0000'0000'0000'1000;
 
- static std::array<u2, 16> block_init(d_mask)
-   for(u1 i = 0; i < 16; ++i)
-     _[i] = 1 << i;
-   block_result
+// static std::array<u2, 16> block_init(d_mask)
+//   for(u1 i = 0; i < 16; ++i)
+//     _[i) = 1 << i;
+//   block_result
 
+ auto d_mask = [](u1 i) { return 1 << i; };
 
-// static u2 r_neg_c_neg_mask = d_mask[15];
-// static u2 r_pos_c_neg_mask = d_mask[11];
-// static u2 r_pos_c_pos_mask = d_mask[7];
-// static u2 r_neg_c_pos_mask = d_mask[3];
+// static u2 r_neg_c_neg_mask = d_mask(15);
+// static u2 r_pos_c_neg_mask = d_mask(11);
+// static u2 r_pos_c_pos_mask = d_mask(7);
+// static u2 r_neg_c_pos_mask = d_mask(3);
 
 // static u2 d15_mask = 1 << 15;
 // static u2 d11_mask = 1 << 11;
@@ -46,17 +47,17 @@ void AU_Game_Variant::check_move_options_Generic(Direction_Codes dc,
 // static u2 d3_mask = 1 << 3;
 
 
- static u2 r_neg_mask =  d_mask[0] | d_mask[1] | d_mask[2]
-   | d_mask[3] | d_mask[15];
+ static u2 r_neg_mask =  d_mask(0) | d_mask(1) | d_mask(2)
+   | d_mask(3) | d_mask(15);
 
- static u2 r_pos_mask =  d_mask[7] | d_mask[8] | d_mask[9]
-   | d_mask[10] | d_mask[11];
+ static u2 r_pos_mask =  d_mask(7) | d_mask(8) | d_mask(9)
+   | d_mask(10) | d_mask(11);
 
- static u2 c_neg_mask =  d_mask[15] | d_mask[14] | d_mask[13]
-   | d_mask[12] | d_mask[11];
+ static u2 c_neg_mask =  d_mask(15) | d_mask(14) | d_mask(13)
+   | d_mask(12) | d_mask(11);
 
- static u2 c_pos_mask =  d_mask[3] | d_mask[4] | d_mask[5]
-   | d_mask[6] | d_mask[7];
+ static u2 c_pos_mask =  d_mask(3) | d_mask(4) | d_mask(5)
+   | d_mask(6) | d_mask(7);
 
 
 // static u2 c_neg_mask =  r_neg_c_neg_mask | r_pos_c_neg_mask;
@@ -81,14 +82,27 @@ void AU_Game_Variant::check_move_options_Generic(Direction_Codes dc,
    switch(dc)
    {
    case Direction_Codes::Diagonals:
-     return d_mask[15] | d_mask[11] | d_mask[7] | d_mask[3];
+     return d_mask(15) | d_mask(11) | d_mask(7) | d_mask(3);
    case Direction_Codes::Double_Vertical:
-     return d_mask[10] | d_mask[8] | d_mask[2] | d_mask[0];
+     return d_mask(10) | d_mask(8) | d_mask(2) | d_mask(0);
    case Direction_Codes::Double_Horizontal:
-     return d_mask[14] | d_mask[12] | d_mask[6] | d_mask[4];
+     return d_mask(14) | d_mask(12) | d_mask(6) | d_mask(4);
+  case Direction_Codes::Primary_6:
+  case Direction_Codes::Single_Orthogonal:
+     return d_mask(1) | d_mask(5) | d_mask(9) | d_mask(13);
+
    default: _= 0;
    }
   block_result
+
+ if(dc == Direction_Codes::Primary_6)
+ {
+  // //  have to add the primary diagonals
+  if(start_position->flags.ne || start_position->flags.sw)
+    directions |= d_mask(15) | d_mask(7);
+  else if(start_position->flags.nw || start_position->flags.se)
+    directions |= d_mask(11) | d_mask(3);
+ }
 
  u2 count = 0;
 
@@ -104,7 +118,7 @@ void AU_Game_Variant::check_move_options_Generic(Direction_Codes dc,
 //#define clear_r_pos_c_pos  directions &= ~r_pos_c_pos_mask
 //#define clear_r_neg_c_pos  directions &= ~r_neg_c_pos_mask
 
-#define clear_d(dir) directions &= ~d_mask[dir]
+#define clear_d(dir) directions &= ~d_mask(dir)
 //  #define clear_r_neg_c_neg  directions &= ~r_neg_c_neg_mask
 //  #define clear_r_pos_c_neg  directions &= ~r_pos_c_neg_mask
 //  #define clear_r_pos_c_pos  directions &= ~r_pos_c_pos_mask
@@ -166,13 +180,18 @@ void AU_Game_Variant::check_move_options_Generic(Direction_Codes dc,
  };
 
  std::vector<u2> block_init(possible_directions)
-   switch (dc)
+//   switch (dc)
+//   {
+//   case Direction_Codes::Diagonals: return {15, 11, 7, 3};
+//   case Direction_Codes::Double_Vertical: return {10, 8, 2, 0};
+//   case Direction_Codes::Double_Horizontal: return {14, 12, 6, 4};
+//   case Direction_Codes::Single_Orthogonal: return {13, 9, 5, 1};
+//   default: return {};
+//   }
+   for(u1 i = 0; i <= 15; ++i)
    {
-   case Direction_Codes::Diagonals: return {15, 11, 7, 3};
-   case Direction_Codes::Double_Vertical: return {10, 8, 2, 0};
-   case Direction_Codes::Double_Horizontal: return {14, 12, 6, 4};
-   case Direction_Codes::Single_Orthogonal: return {13, 9, 5, 1};
-   default: return {};
+    if(directions & d_mask(i))
+      _.push_back(i);
    }
    block_result
 
@@ -187,7 +206,7 @@ void AU_Game_Variant::check_move_options_Generic(Direction_Codes dc,
 //  for(u1 i = 0; i <= 15; ++i)
   for(u1 i : possible_directions)
   {
-   if(directions & d_mask[i])
+   if(directions & d_mask(i))
    {
     if(check_move_option(token, start_position, offsets(i), os, move_options,
         count + 1, Move_Option_Details::No_Captures, &blocking_token, minimum_legal_move))
