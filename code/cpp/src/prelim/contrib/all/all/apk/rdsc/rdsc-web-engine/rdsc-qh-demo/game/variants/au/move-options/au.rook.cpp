@@ -10,10 +10,14 @@
 
 #include "global-macros.h"
 
-void AU_Game_Variant::check_move_options_Bishop(Game_Token* token,
+void AU_Game_Variant::check_move_options_Rook(Game_Token* token,
    Game_Position* start_position, QVector<Move_Option>& move_options)
 {
- check_move_options_Generic(Direction_Codes::Diagonals, token, start_position, move_options);
+ // //  these should be the only two kinds where there is a rook movement ...
+ if(start_position->position_kind() == Game_Position::Position_Kind::Edge)
+   check_move_options_Generic(Direction_Codes::Double_Vertical, token, start_position, move_options);
+ else if(start_position->position_kind() == Game_Position::Position_Kind::Side)
+   check_move_options_Generic(Direction_Codes::Double_Horizontal, token, start_position, move_options);
 }
 
 #ifdef HIDE
@@ -169,6 +173,7 @@ void AU_Game_Variant::check_move_options_Bishop(Game_Token* token,
 
 
 #endif
+
 
 
 

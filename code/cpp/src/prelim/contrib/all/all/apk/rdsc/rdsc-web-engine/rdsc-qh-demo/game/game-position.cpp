@@ -134,6 +134,30 @@ bool Game_Position::Occupiers::blocks_direction(const QPair<s2, s2>& offsets)
  }
 }
 
+std::array<Game_Position*, 4> Game_Position::get_half_step_adjacents()
+{
+ return (std::array<Game_Position*, 4>&)(adjacent_positions_);
+}
+
+s1 Game_Position::get_dislodge_info(Game_Token*& adjacent_occupier, Game_Position*& adjacent_position)
+{
+ for(u1 i = 0; i < 4; ++i)
+ {
+  if(Game_Position* gp = adjacent_positions_[i])
+  {
+   if(Game_Token* token = adjacent_positions_[i]->current_occupier_)
+   {
+    adjacent_occupier = token;
+    adjacent_position = adjacent_positions_[i];
+    return i;
+   }
+  }
+ }
+ adjacent_occupier = nullptr; adjacent_position = nullptr;
+ return -1;
+}
+
+
 Game_Position::Dislodge_Info Game_Position::get_dislodge_info()
 {
  for(u1 i = 0; i < 4; ++i)
@@ -146,6 +170,7 @@ Game_Position::Dislodge_Info Game_Position::get_dislodge_info()
  }
  return {nullptr, nullptr};
 }
+
 
 u2 Game_Position::distance(Game_Position* other)
 {

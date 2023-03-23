@@ -622,3 +622,49 @@ void Game_Board::debug_board(QString file)
 
 }
 
+Game_Position* Game_Board::get_game_position_by_path_code(Game_Position* start_position, u1 direction)
+{
+ // //  path codes:
+  //    6 5 4
+  //    7   3
+  //    8 1 2
+
+ switch(direction)
+ {
+ case 1:
+  return get_game_position_by_coords(start_position->position_row() - 2,
+    start_position->position_column());
+
+ case 2:
+  return get_game_position_by_coords(start_position->position_row() - 2,
+    start_position->position_column() + 2);
+
+ case 3:
+  return get_game_position_by_coords(start_position->position_row(),
+    start_position->position_column() + 2);
+
+ case 4:
+  return get_game_position_by_coords(start_position->position_row() + 2,
+    start_position->position_column() + 2);
+
+ case 5:
+  return get_game_position_by_coords(start_position->position_row() + 2,
+    start_position->position_column());
+
+ case 6:
+  return get_game_position_by_coords(start_position->position_row() + 2,
+    start_position->position_column() - 2);
+
+ case 7:
+  return get_game_position_by_coords(start_position->position_row(),
+    start_position->position_column() - 2);
+
+ case 8:
+  return get_game_position_by_coords(start_position->position_row() - 2,
+    start_position->position_column() - 2);
+
+ default: return nullptr;
+ }
+}
+
+

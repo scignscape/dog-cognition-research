@@ -24,8 +24,17 @@ class Game_Driver;
 
 class AU_Game_Variant : public Game_Variant
 {
+ void check_move_options_Generic(Direction_Codes dc,
+   Game_Token* token, Game_Position* start_position, QVector<Move_Option>& move_options);
 
+ void check_move_options_Rook(Game_Token* token, Game_Position* start_position, QVector<Move_Option>& move_options);
  void check_move_options_Bishop(Game_Token* token, Game_Position* start_position, QVector<Move_Option>& move_options);
+ void check_move_options_Knight(Game_Token* token, Game_Position* start_position, QVector<Move_Option>& move_options);
+
+ void check_move_options_Knight_light_slot(Game_Position* gp,
+   QVector<Move_Option>& move_options, u2& count);
+ void check_move_options_Knight_dark_slot(Game_Position* gp,
+   QVector<Move_Option>& move_options, u2& count);
 
  //void check_move_option(Game_Token* token, Game_Position* start_position, QPair<s1, s1> offsets, QVector<Move_Option>& move_options);
 

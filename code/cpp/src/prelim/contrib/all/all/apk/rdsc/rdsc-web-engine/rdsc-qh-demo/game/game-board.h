@@ -48,6 +48,8 @@ public:
 
  Game_Position* get_game_position_by_label_code(QString lc);
  Game_Position* get_game_position_by_coords(u1 row, u1 column);
+ Game_Position* get_game_position_by_path_code(Game_Position* start_position, u1 direction);
+
 
  void handle_token_placement(QH_Web_View_Dialog* dlg, Game_Token* token, QString pos_id);
 

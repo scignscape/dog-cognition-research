@@ -74,7 +74,7 @@ void Game_Driver::register_token(QString key, Game_Token* token)
 }
 
 
-void Game_Driver::highlight_current_player_sidebar(QH_Web_View_Dialog& dlg)
+void Game_Driver::highlight_current_player_sidebar(const QH_Web_View_Dialog& dlg)
 {
  run_js_for_current_player(dlg, "highlight_%1_sidebar()");
 }
@@ -117,13 +117,13 @@ Game_Token* Game_Driver::confirm_token_placement(QH_Web_View_Dialog& dlg)
 }
 
 
-void Game_Driver::run_js_code(QH_Web_View_Dialog& dlg, QString js)
+void Game_Driver::run_js_code(const QH_Web_View_Dialog& dlg, QString js)
 {
  dlg.run_js_in_current_web_page(js);
 }
 
 
-void Game_Driver::run_js_for_current_player(QH_Web_View_Dialog& dlg, QString js)
+void Game_Driver::run_js_for_current_player(const QH_Web_View_Dialog& dlg, QString js)
 {
  if(current_player_ == south_player_)
    run_js_code(dlg, js.arg("south"));
@@ -161,27 +161,41 @@ void Game_Driver::handle_move_indicator_clicked(QH_Web_View_Dialog& dlg, QString
 
 }
 
+
+void Game_Driver::handle_text_indicator_clicked(QH_Web_View_Dialog& dlg, QString token_id)
+{
+ if(Game_Token* token = tokens_by_text_indicator_.value(token_id))
+ {
+  handle_token_clicked(dlg, token);
+ }
+}
+
 void Game_Driver::handle_token_clicked(QH_Web_View_Dialog& dlg, QString token_id)
 {
  if(Game_Token* token = tokens_by_svg_id_.value(token_id))
  {
-  qDebug() << "token: " << token->svg_id();
+  handle_token_clicked(dlg, token);
+ }
+}
 
-  Game_Player* player = token->player();
-  if(player != current_player_)
-  {
-   // // maybe intending a capture ...
-  }
-  else
-  {
-   if(token->capture_status() == 0)
-     check_prepare_token_placement(token, dlg);
-   else if(token->capture_status() == -1)
-     prepare_move_option_indicators(token, dlg);
-  }
+void Game_Driver::handle_token_clicked(QH_Web_View_Dialog& dlg, Game_Token* token)
+{
+ qDebug() << "token: " << token->svg_id();
+
+ Game_Player* player = token->player();
+ if(player != current_player_)
+ {
+  // // maybe intending a capture ...
+ }
+ else
+ {
+  if(token->capture_status() == 0)
+    check_prepare_token_placement(token, dlg);
+  else if(token->capture_status() == -1)
+    prepare_move_option_indicators(token, dlg);
+ }
 
   //board_.handle_token_clicked(dlg, token);
- }
 
 }
 
@@ -711,11 +725,10 @@ void Game_Driver::show_token_at_position(QH_Web_View_Dialog& dlg, Game_Token* to
 
  QString txt_id = token->current_placement_order_label();
 
+ tokens_by_text_indicator_[txt_id] = token;
+
  QString js = "activate_text_indicator('%1', %2, %3);"_qt.arg(txt_id)
    .arg(x + txt_offset_x).arg(y + txt_offset_y);
-
- qDebug() << "hs = " << js;
-
 
  dlg.run_js_in_current_web_page("activate_text_indicator('%1', %2, %3);"_qt.arg(txt_id)
    .arg(x - txt_offset_x).arg(y - txt_offset_y));
@@ -774,6 +787,16 @@ void Game_Driver::register_capture_move_indicator(QString id)
 }
 
 
+void Game_Driver::show_text_indicators(const QH_Web_View_Dialog& dlg)
+{
+ run_js_code(dlg, "show_text_indicators()");
+}
+
+void Game_Driver::hide_text_indicators(const QH_Web_View_Dialog& dlg)
+{
+ run_js_code(dlg, "hide_text_indicators()");
+}
+
 
 void Game_Driver::show_chess_icons(const QH_Web_View_Dialog& dlg)
 {
@@ -804,6 +827,17 @@ void Game_Driver::handle_position_context_menu(QH_Web_View_Dialog& dlg,  QString
  {
   show_chess_icons(dlg);
  });
+
+ menu->addAction("Show Text Indicators", [this, &dlg]()
+ {
+  show_text_indicators(dlg);
+ });
+
+ menu->addAction("Hide Text Indicators", [this, &dlg]()
+ {
+  hide_text_indicators(dlg);
+ });
+
  menu->addAction("Rewind (undo move)");
  menu->popup(global_position);
 

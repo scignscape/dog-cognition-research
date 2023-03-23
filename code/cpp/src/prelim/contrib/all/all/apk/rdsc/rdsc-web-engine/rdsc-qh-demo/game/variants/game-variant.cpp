@@ -61,9 +61,65 @@ void Game_Variant::check_secondary_dislodge(Game_Position* prior_gp, Game_Token*
    info = info.new_position->get_secondary_dislodge_info(nullptr, info.adjacent_occupier->current_position(), center, -2);
   }
  }
-
 }
 
+void Game_Variant::check_double_step_path(Game_Position* start_position,
+  u1 path, Double_Step_Path_Details& details)
+{
+ // //  path codes:
+  //    6 5 4
+  //    7   3
+  //    8 1 2
+
+ u1 first_direction = path >> 4, second_direction = path & 15;
+
+ details.first_position = parent_driver_->board().get_game_position_by_path_code(
+   start_position, first_direction);
+
+ if(details.first_position)
+ {
+  details.first_occupier = details.first_position->current_occupier();
+  details.last_position = parent_driver_->board().get_game_position_by_path_code(
+    details.first_position, second_direction);
+
+  details.last_occupier = details.last_position->current_occupier();
+
+  s1 dislodge_direction = details.last_position->get_dislodge_info(
+    details.last_adj_occupier, details.last_adj_position);
+
+  auto invert = [] (s1 d)
+  {
+   if (d < 0) return d;
+   return (s1) ((4 - d) % 4);
+  };
+  // //  path codes:
+   //    6 5 4            1 x 2
+   //    7   3     <-     x   x
+   //    8 1 2            0 x 3
+   //      inverted ...
+   //    6 5 4            3 x 0
+   //    7   3     <-     x   x
+   //    8 1 2            2 x 1
+
+
+//  if( (8 - second_direction) / 2 == invert(dislodge_direction) )
+  if( invert(dislodge_direction) * 2 + second_direction == 8)
+  {
+   details.intermediate_occupier = details.last_adj_occupier;
+   details.intermediate_position = details.last_adj_position;
+  }
+  else
+  {
+   details.intermediate_occupier = nullptr;
+   details.intermediate_position = nullptr;
+  }
+ }
+ else
+ {
+  details.reset();
+ }
+
+}
 
 s2 Game_Variant::check_move_option(Game_Token* token, Game_Position* start_position,
    QPair<s2, s2> offsets, Game_Position::Occupiers& os,

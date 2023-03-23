@@ -31,6 +31,8 @@ class Game_Driver
  QMap<QString, Game_Token*> tokens_by_svg_id_;
  QMap<u2, Game_Player*> players_by_player_order_;
 
+ QMap<QString, Game_Token*> tokens_by_text_indicator_;
+
  struct Move_Indicator { QString id; Game_Position* current_position; };
  QVector<Move_Indicator*> move_indicators_;
  QVector<Move_Indicator*> capture_move_indicators_;
@@ -111,7 +113,10 @@ public:
  void check_token_chess_icon(Game_Token* token);
 
 
+ void handle_text_indicator_clicked(QH_Web_View_Dialog& dlg, QString token_id);
  void handle_token_clicked(QH_Web_View_Dialog& dlg, QString token_id);
+ void handle_token_clicked(QH_Web_View_Dialog& dlg, Game_Token* token);
+
  void handle_position_clicked(QH_Web_View_Dialog& dlg, QString position_id);
  void handle_token_placement(QH_Web_View_Dialog& dlg, Game_Token* token, QString pos_id);
 
@@ -129,10 +134,12 @@ public:
  void check_prepare_token_placement(Game_Token* token, QH_Web_View_Dialog& dlg);
  void switch_current_player();
 
- void run_js_code(QH_Web_View_Dialog& dlg, QString js);
- void run_js_for_current_player(QH_Web_View_Dialog& dlg, QString js);
- void highlight_current_player_sidebar(QH_Web_View_Dialog& dlg);
+ void run_js_code(const QH_Web_View_Dialog& dlg, QString js);
+ void run_js_for_current_player(const QH_Web_View_Dialog& dlg, QString js);
+ void highlight_current_player_sidebar(const QH_Web_View_Dialog& dlg);
 
+ void show_text_indicators(const QH_Web_View_Dialog& dlg);
+ void hide_text_indicators(const QH_Web_View_Dialog& dlg);
 
  Token_Group* merge_token_groups(const QVector<Token_Group*>& clusters);
  Token_Group* merge_token_groups(const QVector<Token_Group*>& clusters, const QVector<Game_Token*>& tokens);

@@ -34,7 +34,8 @@ void AU_Game_Variant::check_move_options(Game_Token* token,
    case Game_Position::Position_Kind::Center:
      check_move_options_Bishop(token, start_position, move_options); break;
    case Game_Position::Position_Kind::Intersection:
-     qDebug() << "knight"; break;
+     check_move_options_Knight(token, start_position, move_options); break;
+     //qDebug() << "knight"; break;
    case Game_Position::Position_Kind::Edge:
      qDebug() << "vrook"; break;
    case Game_Position::Position_Kind::Side:

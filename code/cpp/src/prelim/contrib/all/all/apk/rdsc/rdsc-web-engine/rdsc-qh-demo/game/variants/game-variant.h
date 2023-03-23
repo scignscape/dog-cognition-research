@@ -42,6 +42,11 @@ private:
 
 protected:
 
+ enum class Direction_Codes {
+  N_A, Diagonals, Double_Vertical, Double_Horizontal, Single_Orthogonal, Primary_6
+ };
+
+
  enum class Move_Option_Details {
   N_A, No_Captures, Allow_Captures, Look_for_Jump_Screen
  };
@@ -82,11 +87,28 @@ public:
 
  ACCESSORS(QString ,name)
 
+ struct Double_Step_Path_Details {
+  Game_Position* first_position;
+  Game_Token* first_occupier;
+  Game_Position* intermediate_position;
+  Game_Token* intermediate_occupier;
+  Game_Position* last_position;
+  Game_Token* last_occupier;
+  Game_Position* last_adj_position;
+  Game_Token* last_adj_occupier;
+
+  void reset() { *this = {nullptr,nullptr,nullptr,nullptr,nullptr,nullptr,nullptr,nullptr}; }
+ };
+
+ virtual void check_double_step_path(Game_Position* start_position,
+   u1 path, Double_Step_Path_Details& details);
+
  virtual void check_move_options(Game_Token* token, Game_Position* start_position,
    QVector<Move_Option>& move_options);
 
  virtual void check_dislodge(Game_Token* token, Game_Position* gp,
    QVector<Game_Position::Dislodge_Info>& affected_tokens);
+
  virtual void check_secondary_dislodge(Game_Position* prior_gp, Game_Token* token, Game_Position* gp,
    QVector<Game_Position::Dislodge_Info>& affected_tokens, u1 prior_direction);
 

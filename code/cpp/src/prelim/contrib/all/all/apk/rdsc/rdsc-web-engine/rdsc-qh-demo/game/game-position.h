@@ -19,6 +19,7 @@
 //#include "magic-enum/include/magic_enum.hpp"
 
 class Game_Token;
+class Game_Board;
 
 class Game_Position
 {
@@ -121,11 +122,17 @@ public:
   adjacent_positions_[index] = gp;
  }
 
+
  Game_Position* get_adjacent_center_position();
  u2 distance(Game_Position* other);
  Game_Position* find_common_adjacent(Game_Position* other, Game_Position* exclude);
 
+ std::array<Game_Position*, 4> get_half_step_adjacents();
+
  Occupiers occupiers();
+
+ s1 get_dislodge_info(Game_Token*& adjacent_occupier, Game_Position*& adjacent_position);
+
  Dislodge_Info get_dislodge_info();
  Dislodge_Info get_secondary_dislodge_info(Game_Position* curl_position,
    Game_Position* prior_position, Game_Position* secondary_curl_position, s1 former_direction);

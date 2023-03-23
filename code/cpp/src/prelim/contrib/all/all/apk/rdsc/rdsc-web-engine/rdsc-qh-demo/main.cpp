@@ -25,8 +25,13 @@
 
 USING_KANS(RdSC)
 
-int main1(int argc, char *argv[])
+
+
+int mai1(int argc, char *argv[])
 {
+ u1 test = 8;
+
+ qDebug() << "test = " << test << ": " << (test >> 4) << ", " << (test & 15);
 
 // Game_Board board;
 //#define folder "/home/nlevisrael/gits/dcr-wip/qmt/server-files/public"
@@ -49,13 +54,13 @@ int main(int argc, char *argv[])
 
   // // //? board.debug_board("/home/nlevisrael/gits/dcr-wip/game/" "test.txt");
  #define folder "/home/nlevisrael/gits/dcr-wip/qmt/server-files/public"
- driver.board().to_svg(folder "/board-svg", folder "/board64.svg");
+ driver.board().to_svg(folder "/board-svg", folder "/board70.svg");
 
 // return 0;
 
  QApplication qapp(argc, argv);
 
- QH_Web_View_Dialog dlg("http://localhost:6600/test97.html");
+ QH_Web_View_Dialog dlg("http://localhost:6600/test01.html");
 
 // dlg.showMinimized();
 // dlg.showNormal();
@@ -80,6 +85,9 @@ int main(int argc, char *argv[])
 
   else if(key == "token-clicked")
     driver.handle_token_clicked(*_dlg,  element_id);
+
+  else if(key == "text-indicator-clicked")
+    driver.handle_text_indicator_clicked(*_dlg,  element_id);
 
   else if(key == "move-indicator-clicked")
     driver.handle_move_indicator_clicked(*_dlg,  element_id);
@@ -155,7 +163,7 @@ int main(int argc, char *argv[])
 
 
 
-int main2(int argc, char *argv[])
+int mai32(int argc, char *argv[])
 {
 QApplication qapp(argc, argv);
   QNetworkRequest qnr;
@@ -181,4 +189,12 @@ QApplication qapp(argc, argv);
   qapp.exit();
 }
 
+
+//template<typename T>
+//struct modp { T t1; T t2; modp(T _t1, T _t2) : t1(_t1), t2(_t2) {}
+//  friend bool operator %= (modp lhs, u1 i) {return lhs.t1 % i == lhs.t2 % i;} };
+//#define Loop_over(...) [](){ __VA_ARGS__ result;
+//#define Loop_result(...) return result; }();
+
+//#define Loop_(x, ...)  Loop_##x(__VA_ARGS__)
 
