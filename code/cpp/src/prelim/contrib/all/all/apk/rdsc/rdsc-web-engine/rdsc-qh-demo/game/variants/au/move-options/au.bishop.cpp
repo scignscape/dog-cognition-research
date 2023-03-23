@@ -13,7 +13,15 @@
 void AU_Game_Variant::check_move_options_Bishop(Game_Token* token,
    Game_Position* start_position, QVector<Move_Option>& move_options)
 {
- check_move_options_Generic(Direction_Codes::Diagonals, token, start_position, move_options);
+ check_move_options_Generic(Direction_Codes::Diagonals, token, start_position,
+   move_options, 1, 5, 2);
+
+// s1 increment = 1; // stop at non-slot is possible
+// s2 minimum_legal_move = 5; // 2 steps ...
+// // // check positions less than minimum move
+//  //   for tokens  that would block the move..
+// s1 minimum_check = 2;
+
 }
 
 #ifdef HIDE

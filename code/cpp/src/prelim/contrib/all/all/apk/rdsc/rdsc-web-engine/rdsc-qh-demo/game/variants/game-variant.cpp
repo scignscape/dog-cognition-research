@@ -134,7 +134,7 @@ s2 Game_Variant::check_move_option(Game_Token* token, Game_Position* start_posit
  if(os.current_occupier == token)
  {
   // //  normally this test might not be needed
-   //    because minimum check would be set at 2
+   //    because minimum check would be set at least 2
  }
  else if(os.current_occupier)
  {
@@ -160,9 +160,12 @@ s2 Game_Variant::check_move_option(Game_Token* token, Game_Position* start_posit
 
  if(result == index)
  {
-  if(qMin(qAbs(offsets.first), qAbs(offsets.second)) < minimum_legal_move)
+  if(qMax(qAbs(offsets.first), qAbs(offsets.second)) < minimum_legal_move)
     result = 0;
  }
+
+ if(gp->label_code() == "c5sw")
+   qDebug() << gp->label_code();
 
  if(result)
    move_options.push_back({gp, result});

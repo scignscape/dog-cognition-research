@@ -37,9 +37,8 @@ void AU_Game_Variant::check_move_options(Game_Token* token,
      check_move_options_Knight(token, start_position, move_options); break;
      //qDebug() << "knight"; break;
    case Game_Position::Position_Kind::Edge:
-     qDebug() << "vrook"; break;
    case Game_Position::Position_Kind::Side:
-     qDebug() << "hrook"; break;
+     check_move_options_Rook(token, start_position, move_options); break;
    case Game_Position::Position_Kind::Slot:
      qDebug() << "pawn"; break;
    default: break;

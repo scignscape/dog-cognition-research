@@ -349,8 +349,8 @@ Game_Position* Game_Driver::get_game_position_via_offset(Game_Position* starting
  if(!gp)
    qDebug() << "missing gp ";
 
-
- return board_.get_game_position_by_coords(r, c);
+ return gp;
+ //return board_.get_game_position_by_coords(r, c);
 }
 
 
