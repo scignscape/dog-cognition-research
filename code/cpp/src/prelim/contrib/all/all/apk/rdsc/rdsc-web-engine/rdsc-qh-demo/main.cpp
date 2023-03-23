@@ -60,7 +60,7 @@ int main(int argc, char *argv[])
 
  QApplication qapp(argc, argv);
 
- QH_Web_View_Dialog dlg("http://localhost:6600/test01.html");
+ QH_Web_View_Dialog dlg("http://localhost:6600/test04.html");
 
 // dlg.showMinimized();
 // dlg.showNormal();

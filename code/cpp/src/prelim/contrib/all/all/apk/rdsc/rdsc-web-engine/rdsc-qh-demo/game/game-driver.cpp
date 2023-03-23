@@ -29,7 +29,9 @@ Game_Driver::Game_Driver()
   :  board_(this), current_selected_token_(0), current_player_(nullptr),
      south_player_(nullptr), north_player_(nullptr),
      message_display_window_(nullptr),
-     move_indicators_capture_count_(0), move_indicators_count_(0)
+     move_indicators_capture_count_(0),
+     move_indicators_count_(0),
+     current_indicator_status_(Indicator_Status::N_A)
 {
  current_variant_ = new AU_Game_Variant("A/U", this);
 
@@ -727,12 +729,14 @@ void Game_Driver::show_token_at_position(QH_Web_View_Dialog& dlg, Game_Token* to
 
  tokens_by_text_indicator_[txt_id] = token;
 
- QString js = "activate_text_indicator('%1', %2, %3);"_qt.arg(txt_id)
-   .arg(x + txt_offset_x).arg(y + txt_offset_y);
+// QString js = "activate_text_indicator('%1', %2, %3);"_qt.arg(txt_id)
+//   .arg(x + txt_offset_x).arg(y + txt_offset_y);
 
- dlg.run_js_in_current_web_page("activate_text_indicator('%1', %2, %3);"_qt.arg(txt_id)
-   .arg(x - txt_offset_x).arg(y - txt_offset_y));
+ dlg.run_js_in_current_web_page("activate_text_indicator('%1', %2, %3, %4);"_qt.arg(txt_id)
+   .arg(x - txt_offset_x).arg(y - txt_offset_y)
+   .arg(current_indicator_status_ == Indicator_Status::Text? "true" : "false"));
 
+ show_chess_icon(dlg, token);
 }
 
 
@@ -789,29 +793,61 @@ void Game_Driver::register_capture_move_indicator(QString id)
 
 void Game_Driver::show_text_indicators(const QH_Web_View_Dialog& dlg)
 {
+ if(current_indicator_status_ == Indicator_Status::Chess_Icons)
+   run_js_code(dlg, "hide_chess_icons()");
+
+ current_indicator_status_ = Indicator_Status::Text;
  run_js_code(dlg, "show_text_indicators()");
 }
 
 void Game_Driver::hide_text_indicators(const QH_Web_View_Dialog& dlg)
 {
+ current_indicator_status_ = Indicator_Status::N_A;
  run_js_code(dlg, "hide_text_indicators()");
+}
+
+
+void Game_Driver::show_chess_icon(const QH_Web_View_Dialog& dlg,
+  Game_Token* token)
+{
+ if(Game_Driver::Chess_Icon* icon = tokens_on_board_.value(token))
+   show_chess_icon(dlg, token, icon);
+}
+
+void Game_Driver::show_chess_icon(const QH_Web_View_Dialog& dlg,
+  Game_Token* token, Game_Driver::Chess_Icon* icon)
+{
+ QString tid = token->svg_id();
+ QString id = tid.mid("token-_"_qt.size());
+
+ id = icon->svg_id.arg(id);
+ dlg.run_js_in_current_web_page("show_chess_icon('%1','%2', %3)"_qt
+   .arg(id).arg(tid)
+   .arg(current_indicator_status_ == Indicator_Status::Chess_Icons? "true" : "false"));
+
+// qDebug() << "show_chess_icon('%1','%2')"_qt.arg(id).arg(tid);
+}
+
+
+void Game_Driver::hide_chess_icons(const QH_Web_View_Dialog& dlg)
+{
+ current_indicator_status_ = Indicator_Status::N_A;
+ run_js_code(dlg, "hide_chess_icons()");
 }
 
 
 void Game_Driver::show_chess_icons(const QH_Web_View_Dialog& dlg)
 {
+ if(current_indicator_status_ == Indicator_Status::Text)
+   run_js_code(dlg, "hide_text_indicators()");
+
+ current_indicator_status_ = Indicator_Status::Chess_Icons;
+
  for(auto [token, icon] : tokens_on_board_.toStdMap())
  {
   if(icon)
   {
-   QString tid = token->svg_id();
-   QString id = tid.mid("token-_"_qt.size());
-
-   id = icon->svg_id.arg(id);
-   dlg.run_js_in_current_web_page("show_chess_icon('%1','%2')"_qt.arg(id).arg(tid));
-
-   qDebug() << "show_chess_icon('%1','%2')"_qt.arg(id).arg(tid);
-
+   show_chess_icon(dlg, token, icon);
   }
  }
  //QMapIterator<> it()
@@ -826,6 +862,11 @@ void Game_Driver::handle_position_context_menu(QH_Web_View_Dialog& dlg,  QString
  menu->addAction("Show Chess Icons", [this, &dlg]()
  {
   show_chess_icons(dlg);
+ });
+
+ menu->addAction("Hide Chess Icons", [this, &dlg]()
+ {
+  hide_chess_icons(dlg);
  });
 
  menu->addAction("Show Text Indicators", [this, &dlg]()

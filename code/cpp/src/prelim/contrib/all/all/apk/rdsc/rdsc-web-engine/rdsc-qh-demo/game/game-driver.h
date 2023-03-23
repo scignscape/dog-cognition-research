@@ -56,6 +56,9 @@ class Game_Driver
  enum class Game_States { N_A, Neutral, North_to_Move, North_to_Move_2_of_2,
     North_to_Place, South_to_Move, South_to_Move_2_of_2, South_to_Place };
 
+ enum class Indicator_Status { N_A, Text, Chess_Icons };
+ Indicator_Status current_indicator_status_;
+
  Game_States current_state_;
 
  Message_Display_Window* message_display_window_;
@@ -87,6 +90,13 @@ class Game_Driver
  void check_reset_move_indicators(QH_Web_View_Dialog& dlg);
 
  QString current_player_string();
+
+ void show_chess_icon(const QH_Web_View_Dialog& dlg,
+   Game_Token* token, Game_Driver::Chess_Icon* icon);
+
+ void show_chess_icon(const QH_Web_View_Dialog& dlg, Game_Token* token);
+
+ void hide_chess_icons(const QH_Web_View_Dialog& dlg);
 
 public:
 
