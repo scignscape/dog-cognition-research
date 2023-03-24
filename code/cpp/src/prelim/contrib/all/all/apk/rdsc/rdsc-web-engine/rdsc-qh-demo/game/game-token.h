@@ -107,6 +107,7 @@ private:
  s2 move_option_capture_count_;
 
  Game_Position* current_position_;
+ Game_Position* prior_position_;
 
  QString svg_id_;
 
@@ -129,6 +130,9 @@ public:
  ACCESSORS(s1 ,move_option_capture_count)
 
  ACCESSORS(u2 ,current_placement_order)
+
+ ACCESSORS(Game_Position* ,current_position)
+ ACCESSORS(Game_Position* ,prior_position)
 
  QString current_placement_order_label();
 
@@ -228,12 +232,13 @@ public:
 
  ACCESSORS(QString ,svg_id)
 
- ACCESSORS(Game_Position* ,current_position)
  ACCESSORS(s1 ,capture_status)
  ACCESSORS(Game_Player* ,player)
 
  ACCESSORS(Token_Group* ,current_cluster)
 
+ void hold_current_position();
+ bool check_hold_current_position();
 
  void set_as_north()
  {

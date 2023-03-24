@@ -7,7 +7,7 @@
 
 
 #ifndef unless
-#define unless(x) if((!x))
+#define unless(x) if(!(x))
 #endif
 
 #ifndef block_init_2

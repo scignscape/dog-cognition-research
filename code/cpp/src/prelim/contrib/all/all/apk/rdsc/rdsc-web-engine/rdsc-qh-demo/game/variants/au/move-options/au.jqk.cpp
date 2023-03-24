@@ -11,15 +11,18 @@
 #include "global-macros.h"
 
 void AU_Game_Variant::check_move_options_JQK(Game_Token* token,
-   Game_Position* start_position, QVector<Move_Option>& move_options)
+   Game_Position* start_position, Move_Option_Vector& move_options)
 {
- // increment = 2; // no stop at non-slot
+ // increment = 1; // no stop at non-slot
  // minimum_legal_move = 1; // 1 step ...
  // // // check positions less than minimum move
  //  //   for tokens  that would block the move..
  // s1 minimum_check = 1;
+
+ // // Move_Option_Sequence_Details: increment, first_increment, minimum_legal_move, first_check
+  //   increment = 2 (no stop at non-slot)
  check_move_options_Generic(Direction_Codes::Primary_6, token,
-   start_position, move_options, 2, 2, 2);
+   start_position, move_options, {1, 1, 2, 2, 0, 0});
 
 
 

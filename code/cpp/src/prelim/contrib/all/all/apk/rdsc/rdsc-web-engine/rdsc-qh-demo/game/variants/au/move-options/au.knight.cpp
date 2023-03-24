@@ -56,12 +56,12 @@ void _check_move_options(OBJECT_Type* _this, PATHS_Type& paths, Game_Position* g
     continue;
   if(details.last_occupier)
     continue;
-  move_options.push_back({details.last_position, (s2) ++count});
+  move_options.push_back({details.last_position, (s2) ++count, -2});
  }
 }
 
 void AU_Game_Variant::check_move_options_Knight_light_slot(Game_Position* gp,
-  QVector<Move_Option>& move_options, u2& count)
+  Move_Option_Vector& move_options, u2& count)
 {
  // //  path codes:
   //    6 5 4
@@ -79,7 +79,7 @@ void AU_Game_Variant::check_move_options_Knight_light_slot(Game_Position* gp,
 
 
 void AU_Game_Variant::check_move_options_Knight_dark_slot(Game_Position* gp,
-  QVector<Move_Option>& move_options, u2& count)
+  Move_Option_Vector& move_options, u2& count)
 {
 // static QVector<u1> paths;
 // if(paths.isEmpty())
@@ -123,7 +123,7 @@ void AU_Game_Variant::check_move_options_Knight_dark_slot(Game_Position* gp,
  // #define modeq(x, y, m) ((x) % m) == ((y) % m)
 
 void AU_Game_Variant::check_move_options_Knight(Game_Token* token,
-  Game_Position* start_position, QVector<Move_Option>& move_options)
+  Game_Position* start_position, Move_Option_Vector& move_options)
 {
  u2 count = 0;
  std::array<Game_Position*, 4> slot_positions = start_position->get_half_step_adjacents();
@@ -136,6 +136,12 @@ void AU_Game_Variant::check_move_options_Knight(Game_Token* token,
     check_move_options_Knight_light_slot(gp, move_options, count);
  }
 
+ // // Move_Option_Sequence_Details: increment, first_increment, minimum_legal_move, first_check
+  //   increment = 2 (no stop at non-slot)
+
+ // //  now check for jump options
+ check_move_options_Generic(Direction_Codes::Single_Orthogonal, token, start_position,
+   move_options, {2, 2, 2, 2, 1, 0});
 }
 
 

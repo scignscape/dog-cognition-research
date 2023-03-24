@@ -19,6 +19,7 @@
 
 #include <QString>
 #include <QQueue>
+#include <QVector>
 
 #include <QPair>
 
@@ -32,6 +33,26 @@ public:
  struct Move_Option {
    Game_Position* position;
    s2 index; // //  negative index means capture
+   // //  negative: -2 = knight's move
+    //    -1 = cut double
+    //    -3 = 2-jump
+    //    other arimaas?
+   s1 direction_code;
+ };
+
+ struct Move_Option_Sequence_Details {
+  s1 increment;
+  s1 first_increment;
+  s2 minimum_legal_move;
+  s2 first_check;
+  u1 screen_minimum;
+  u1 screen_maximum;
+ };
+
+ struct Move_Option_Vector : QVector<Move_Option>
+ {
+  QMap<s1, Game_Position*> max_positions;
+  QMap<s1, QVector<Game_Position*>> jump_screens;
  };
 
 private:
@@ -46,9 +67,19 @@ protected:
   N_A, Diagonals, Double_Vertical, Double_Horizontal, Single_Orthogonal, Primary_6
  };
 
+ struct Move_Option_Details {
 
- enum class Move_Option_Details {
-  N_A, No_Captures, Allow_Captures, Look_for_Jump_Screen
+  enum class Specs {
+   N_A, No_Captures, Allow_Captures, Look_for_Jump_Screen };
+
+  Specs specs;
+  s1 direction_code;
+  u1 ring_index;
+  u1 wind_index;
+  u2 total_count;
+
+  // //  screen info: first = current, second = min, third = max
+  QMap<s1, std::array<u1, 3>>* screen_info;
  };
 
  Game_Token::Token_Kind get_underlying_token_kind(Game_Token* token)
@@ -63,7 +94,7 @@ protected:
 
  virtual s2 check_move_option(Game_Token* token, Game_Position* start_position,
    QPair<s2, s2> offsets, Game_Position::Occupiers& os,
-   QVector<Move_Option>& move_options, u2 index, Move_Option_Details details,
+   Move_Option_Vector& move_options, Move_Option_Details details,
    Game_Token** blocking_token = nullptr, s2 minimum_legal_move = 0);
 
 //   , u2 index,
@@ -74,7 +105,7 @@ protected:
 //   Game_Token** indirect_blocking_token = nullptr, Game_Token** blocking_token = nullptr);
 
 // virtual s2 check_move_option(Game_Token* token, Game_Position* start_position,
-//   QPair<s2, s2> offsets, QVector<Move_Option>& move_options, u2 index,
+//   QPair<s2, s2> offsets, Move_Option_Vector& move_options, u2 index,
 //   Game_Token** indirect_blocking_token = nullptr, Game_Token** blocking_token = nullptr);
 
 // virtual Game_Position* check_move_option(Game_Token* token, Game_Position* start_position,
@@ -104,7 +135,7 @@ public:
    u1 path, Double_Step_Path_Details& details);
 
  virtual void check_move_options(Game_Token* token, Game_Position* start_position,
-   QVector<Move_Option>& move_options);
+   Move_Option_Vector& move_options);
 
  virtual void check_dislodge(Game_Token* token, Game_Position* gp,
    QVector<Game_Position::Dislodge_Info>& affected_tokens);

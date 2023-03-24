@@ -22,7 +22,7 @@ AU_Game_Variant::AU_Game_Variant(QString name, Game_Driver* parent_driver)
 
 
 void AU_Game_Variant::check_move_options(Game_Token* token,
-  Game_Position* start_position, QVector<Move_Option>& move_options)
+  Game_Position* start_position, Move_Option_Vector& move_options)
 {
  Game_Token::Token_Kind kind = get_underlying_token_kind(token);
  switch(kind)

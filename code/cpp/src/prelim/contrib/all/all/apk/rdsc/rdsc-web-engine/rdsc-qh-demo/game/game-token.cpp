@@ -15,7 +15,8 @@
 Game_Token::Game_Token(Game_Player* player, Token_Kind kind)
   :  kind_(kind), player_(player), current_cluster_(nullptr),
      capture_status_(0), current_position_(nullptr),
-     move_option_count_(0), current_placement_order_(0)
+     move_option_count_(0), current_placement_order_(0),
+     prior_position_(nullptr)
 {
 
 }
@@ -39,6 +40,21 @@ void Game_Token::clear_neighbors()
 
  diagonal_neighbors_.clear();
  orthogonal_neighbors_.clear();
+}
+
+void Game_Token::hold_current_position()
+{
+ prior_position_ = current_position_;
+}
+
+bool Game_Token::check_hold_current_position()
+{
+ if(capture_status_ == -1)
+ {
+  hold_current_position();
+  return true;
+ }
+ return false;
 }
 
 

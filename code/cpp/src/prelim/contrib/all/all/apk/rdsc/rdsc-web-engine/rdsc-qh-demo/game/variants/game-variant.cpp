@@ -18,7 +18,7 @@ Game_Variant::Game_Variant(QString name, Game_Driver* parent_driver)
 
 }
 
-void Game_Variant::check_move_options(Game_Token* token, Game_Position* start_position, QVector<Move_Option>& move_options)
+void Game_Variant::check_move_options(Game_Token* token, Game_Position* start_position, Move_Option_Vector& move_options)
 {
 
 }
@@ -123,12 +123,12 @@ void Game_Variant::check_double_step_path(Game_Position* start_position,
 
 s2 Game_Variant::check_move_option(Game_Token* token, Game_Position* start_position,
    QPair<s2, s2> offsets, Game_Position::Occupiers& os,
-   QVector<Move_Option>& move_options, u2 index, Move_Option_Details details,
+   Move_Option_Vector& move_options, Move_Option_Details details,
    Game_Token** blocking_token, s2 minimum_legal_move)
 {
  if(blocking_token)
    *blocking_token = nullptr;
- s2 result = index;
+ s2 result = details.total_count;
  Game_Position* gp = check_move_option(token, start_position, offsets, os);
 
  if(os.current_occupier == token)
@@ -138,13 +138,30 @@ s2 Game_Variant::check_move_option(Game_Token* token, Game_Position* start_posit
  }
  else if(os.current_occupier)
  {
-  if(blocking_token)
-    *blocking_token = os.current_occupier;
-
-  if(details == Move_Option_Details::Allow_Captures)
-    result = -index;
-  else
+  if(details.specs == Move_Option_Details::Specs::Look_for_Jump_Screen)
+  {
+   std::array<u1, 3>& arr = (*details.screen_info)[details.direction_code];
+   //++arr[0];
+   if(arr[0]++ < arr[1])
+     result = 0;
+   else if(arr[0] > arr[2])
+   {
     result = 0;
+    if(blocking_token)
+      *blocking_token = os.current_occupier;
+   }
+  }
+  else
+  {
+   //if()
+   if(blocking_token)
+     *blocking_token = os.current_occupier;
+
+   if(details.specs == Move_Option_Details::Specs::Allow_Captures)
+     result = -result;
+   else
+     result = 0;
+  }
  }
  else if(os.adjacent_occupier)
  {
@@ -158,17 +175,27 @@ s2 Game_Variant::check_move_option(Game_Token* token, Game_Position* start_posit
   }
  }
 
- if(result == index)
+ if( (result == details.total_count) && details.screen_info)
+ {
+  // //  not enough screens yet ...
+  if((*details.screen_info)[details.direction_code][0]
+      < (*details.screen_info)[details.direction_code][1])
+    result = 0;
+ }
+ if(result == details.total_count)
  {
   if(qMax(qAbs(offsets.first), qAbs(offsets.second)) < minimum_legal_move)
     result = 0;
  }
 
- if(gp->label_code() == "c5sw")
-   qDebug() << gp->label_code();
+// if(gp->label_code() == "c5sw")
+//   qDebug() << gp->label_code();
 
  if(result)
-   move_options.push_back({gp, result});
+ {
+  move_options.push_back({gp, result, details.direction_code});
+  move_options.max_positions[details.direction_code] = gp;
+ }
 
  return result;
 }
@@ -192,7 +219,7 @@ Game_Position* Game_Variant::check_move_option(Game_Token* token, Game_Position*
 
 #ifdef HIDE
 s2 Game_Variant::check_move_option(Game_Token* token, Game_Position* start_position,
-  QPair<s2, s2> offsets, QVector<Move_Option>& move_options, u2 index,
+  QPair<s2, s2> offsets, Move_Option_Vector& move_options, u2 index,
   Game_Token** indirect_blocking_token, Game_Token** blocking_token)
 {
  s2 result = index;

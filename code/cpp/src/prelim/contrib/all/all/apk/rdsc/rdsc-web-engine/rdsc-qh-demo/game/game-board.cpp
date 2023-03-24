@@ -549,7 +549,8 @@ void Game_Board::to_svg(QString in_folder, QString out_file)
  QString move_indicators_text;
  auto move_indicators = [&move_indicators_text, this]()
  {
-  for(u1 i = 1; i <= 42; ++i)
+  // // is 60 enough?
+  for(u1 i = 1; i <= 60; ++i)
   {
    QString id = "mi"_qt + QString::number(i);
    driver_->register_move_indicator(id);

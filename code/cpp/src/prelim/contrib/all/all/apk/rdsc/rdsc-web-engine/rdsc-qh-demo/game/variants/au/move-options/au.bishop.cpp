@@ -11,10 +11,11 @@
 #include "global-macros.h"
 
 void AU_Game_Variant::check_move_options_Bishop(Game_Token* token,
-   Game_Position* start_position, QVector<Move_Option>& move_options)
+   Game_Position* start_position, Move_Option_Vector& move_options)
 {
+ // Move_Option_Sequence_Details: increment, first_increment, minimum_legal_move, first_check
  check_move_options_Generic(Direction_Codes::Diagonals, token, start_position,
-   move_options, 1, 5, 2);
+   move_options, {1, 1, 5, 2, 0, 0});
 
 // s1 increment = 1; // stop at non-slot is possible
 // s2 minimum_legal_move = 5; // 2 steps ...

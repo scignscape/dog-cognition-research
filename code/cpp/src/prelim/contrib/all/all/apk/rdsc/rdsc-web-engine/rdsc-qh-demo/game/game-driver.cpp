@@ -140,6 +140,7 @@ void Game_Driver::finalize_token_move(Game_Token* token, Move_Indicator* mi, QH_
 {
  Game_Position* gp = mi->current_position;
 
+ token->hold_current_position();
  handle_token_move_or_placement(dlg, token, gp);
 
  js_unhighlight_token(token, dlg);
@@ -248,7 +249,7 @@ void Game_Driver::prepare_move_option_indicators(Game_Token* token, QH_Web_View_
  current_selected_token_ = token;
  js_highlight_token(token, dlg);
 
- QVector<Game_Variant::Move_Option> position_options;
+ Game_Variant::Move_Option_Vector position_options;
 
  current_variant_->check_move_options(token, gp, position_options);
 
@@ -421,6 +422,9 @@ u1 Game_Driver::check_cluster(Game_Token* token, _surrounding& s)
 
 void Game_Driver::_place(Game_Token* token, Game_Position* gp)
 {
+ if(token->prior_position())
+   token->prior_position()->set_current_occupier(nullptr);
+
  token->set_current_position(gp);
  gp->set_current_occupier(token);
 }
@@ -568,7 +572,11 @@ Game_Token* Game_Driver::get_token_for_placement()
 
 Game_Token* Game_Driver::handle_non_slot_token_placement(QH_Web_View_Dialog& dlg, Game_Token* token, Game_Position* gp)
 {
- Game_Token* result = confirm_token_placement(dlg);
+ Game_Token* result;
+ if(token->check_hold_current_position())
+   result = token;
+ else
+   result = confirm_token_placement(dlg);
  if(result)
  {
   _place(result, gp);
@@ -705,7 +713,10 @@ void Game_Driver::handle_token_placement(QH_Web_View_Dialog& dlg, Game_Token* to
   }
   else
   {
-   placed_token = confirm_token_placement(dlg);
+   if(token->check_hold_current_position())
+     placed_token = token;
+   else
+     placed_token = confirm_token_placement(dlg);
 
    handle_token_move_or_placement(dlg, placed_token, gp);
   }

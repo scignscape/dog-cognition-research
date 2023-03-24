@@ -12,8 +12,8 @@
 
 void AU_Game_Variant::check_move_options_Generic(Direction_Codes dc,
    Game_Token* token,
-   Game_Position* start_position, QVector<Move_Option>& move_options,
-   s1 increment, s2 minimum_legal_move, s1 minimum_check)
+   Game_Position* start_position, Move_Option_Vector& move_options,
+   Move_Option_Sequence_Details sequence_details)
 {
 
  // // directions
@@ -58,6 +58,9 @@ void AU_Game_Variant::check_move_options_Generic(Direction_Codes dc,
 
  static u2 c_pos_mask =  d_mask(3) | d_mask(4) | d_mask(5)
    | d_mask(6) | d_mask(7);
+
+ static u2 diagonals_mask = d_mask(15) | d_mask(11)
+   | d_mask(7) | d_mask(3);
 
 
 // static u2 c_neg_mask =  r_neg_c_neg_mask | r_pos_c_neg_mask;
@@ -104,10 +107,6 @@ void AU_Game_Variant::check_move_options_Generic(Direction_Codes dc,
     directions |= d_mask(11) | d_mask(3);
  }
 
- u2 count = 0;
-
-
-
 #define clear_r_neg  directions &= ~r_neg_mask
 #define clear_c_neg  directions &= ~c_neg_mask
 #define clear_r_pos  directions &= ~r_pos_mask
@@ -124,10 +123,10 @@ void AU_Game_Variant::check_move_options_Generic(Direction_Codes dc,
 //  #define clear_r_pos_c_pos  directions &= ~r_pos_c_pos_mask
 //  #define clear_r_neg_c_pos  directions &= ~r_neg_c_pos_mask
 
-#define check_clear_r_neg_max  if(r_neg <= r_neg_max) clear_r_neg;
-#define check_clear_c_neg_max  if(c_neg <= c_neg_max) clear_c_neg;
-#define check_clear_r_pos_max  if(r_pos >= r_pos_max) clear_r_pos;
-#define check_clear_c_pos_max  if(c_pos >= c_pos_max) clear_c_pos;
+#define check_clear_r_neg_max(inc)  if(r_neg - inc < r_neg_max) clear_r_neg;
+#define check_clear_c_neg_max(inc)  if(c_neg - inc < c_neg_max) clear_c_neg;
+#define check_clear_r_pos_max(inc)  if(r_pos + inc > r_pos_max) clear_r_pos;
+#define check_clear_c_pos_max(inc)  if(c_pos + inc > c_pos_max) clear_c_pos;
 
 // s2 minimum_legal_move = 5; // 2 steps ...
 // s1 increment = 1; // stop at non-slot is possible
@@ -137,15 +136,15 @@ void AU_Game_Variant::check_move_options_Generic(Direction_Codes dc,
 // s1 minimum_check = 2;
 
 
- s1 r_neg = -minimum_check;
- s1 r_pos = minimum_check;
- s1 c_neg = -minimum_check;
- s1 c_pos = minimum_check;
+ s1 r_neg = -sequence_details.first_check;
+ s1 r_pos = sequence_details.first_check;
+ s1 c_neg = -sequence_details.first_check;
+ s1 c_pos = sequence_details.first_check;
 
- check_clear_r_neg_max
- check_clear_c_neg_max
- check_clear_r_pos_max
- check_clear_c_pos_max
+ check_clear_r_neg_max(0)
+ check_clear_c_neg_max(0)
+ check_clear_r_pos_max(0)
+ check_clear_c_pos_max(0)
 
  auto offsets = [&] (u1 i) -> QPair<s2, s2>
  {
@@ -199,18 +198,63 @@ void AU_Game_Variant::check_move_options_Generic(Direction_Codes dc,
  Game_Token* blocking_token = nullptr;
  Game_Token* indirect_blocking_token = nullptr;
 
+ Move_Option_Details::Specs specs;
+
+ QMap<s1, std::array<u1, 3>> _screen_info, *screen_info = nullptr;
+
+ u1 screen_minimum = sequence_details.screen_minimum;
+ u1 screen_maximum = sequence_details.screen_maximum;
+ if(screen_minimum)
+ {
+  unless(screen_maximum)
+    screen_maximum = screen_minimum;
+  for(u1 i : possible_directions)
+    _screen_info[i] = {0, screen_minimum, screen_maximum};
+  screen_info = &_screen_info;
+  specs = Move_Option_Details::Specs::Look_for_Jump_Screen;
+ }
+ else
+   specs = Move_Option_Details::Specs::No_Captures;
+
+
+ u2 total_count = 0;
+
+ u1 ring_index = 0;
  while(directions)
  {
+  u1 increment = ring_index? sequence_details.increment : sequence_details.first_increment;
+  ++ring_index;
   Game_Position::Occupiers os;
 
+
 //  for(u1 i = 0; i <= 15; ++i)
+  u1 wind_index = 0;
   for(u1 i : possible_directions)
   {
+   ++wind_index;
+
+   // //  when increment is 1 (or some other odd number)
+    //    skip every other orthogonal ring ...
+   if(increment % 2)
+   {
+    unless(ring_index % 2)
+    {
+     // // d_mask is one of the diagonals ...
+     unless(d_mask(i) & diagonals_mask)
+       continue;
+    }
+   }
+
    if(directions & d_mask(i))
    {
+    Move_Option_Details details {specs,
+      (s1) i, ring_index, wind_index, (u2) (total_count + 1), screen_info};
+
+    //screen_info
+
     if(check_move_option(token, start_position, offsets(i), os, move_options,
-        count + 1, Move_Option_Details::No_Captures, &blocking_token, minimum_legal_move))
-      ++count;
+        details, &blocking_token, sequence_details.minimum_legal_move))
+      ++total_count;
     else if(blocking_token || indirect_blocking_token)
       clear_d(i); // clear_r_neg_c_neg;
    }
@@ -218,23 +262,23 @@ void AU_Game_Variant::check_move_options_Generic(Direction_Codes dc,
 
   if(directions & r_neg_mask)
   {
-   check_clear_r_neg_max
+   check_clear_r_neg_max(increment)
    else r_neg -= increment;
   }
   if(directions & c_neg_mask)
   {
-   check_clear_c_neg_max
+   check_clear_c_neg_max(increment)
    else c_neg -= increment;
   }
 
   if(directions & r_pos_mask)
   {
-   check_clear_r_pos_max
+   check_clear_r_pos_max(increment)
    else r_pos += increment;
   }
   if(directions & c_pos_mask)
   {
-   check_clear_c_pos_max
+   check_clear_c_pos_max(increment)
    else c_pos += increment;
   }
  }

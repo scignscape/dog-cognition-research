@@ -11,7 +11,7 @@
 #include "global-macros.h"
 
 void AU_Game_Variant::check_move_options_Rook(Game_Token* token,
-   Game_Position* start_position, QVector<Move_Option>& move_options)
+   Game_Position* start_position, Move_Option_Vector& move_options)
 {
  // s1 increment = 2; // no stop at non-slot
  // s2 minimum_legal_move = 3; // 1 step ...
@@ -19,14 +19,18 @@ void AU_Game_Variant::check_move_options_Rook(Game_Token* token,
  //  //   for tokens  that would block the move..
  // s1 minimum_check = 2;
 
+
+ // // Move_Option_Sequence_Details: increment, first_increment, minimum_legal_move, first_check
+  //   increment = 2 (no stop at non-slot)
+
  // //  these should be the only two kinds where there is a rook movement ...
  if(start_position->position_kind() == Game_Position::Position_Kind::Edge)
    check_move_options_Generic(Direction_Codes::Double_Vertical, token, start_position,
-   move_options, 2, 3, 3);
+   move_options, {2, 2, 3, 3, 0, 0});
 
  else if(start_position->position_kind() == Game_Position::Position_Kind::Side)
    check_move_options_Generic(Direction_Codes::Double_Horizontal, token, start_position,
-   move_options, 2, 3, 3);
+   move_options, {2, 2, 3, 3, 0, 0});
 }
 
 #ifdef HIDE
