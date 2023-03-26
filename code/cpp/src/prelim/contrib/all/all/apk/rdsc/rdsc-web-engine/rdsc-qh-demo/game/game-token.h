@@ -24,12 +24,22 @@ class Game_Player;
 
 class Token_Group;
 
+#define H4R(...)
+
+H4R(ij!)
+
+// class c test ...
+
 class Game_Token
 {
 public:
 
+ // test: -fparse-all-comments
  enum class Token_Kind : u2 {
   N_A
+
+H4R("all")
+
 
 #define enum_macro(x, y) ,x = y
 

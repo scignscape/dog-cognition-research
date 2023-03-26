@@ -97,6 +97,7 @@ class Game_Driver
  void show_chess_icon(const QH_Web_View_Dialog& dlg, Game_Token* token);
 
  void hide_chess_icons(const QH_Web_View_Dialog& dlg);
+ void clear_move_option_data();
 
 public:
 

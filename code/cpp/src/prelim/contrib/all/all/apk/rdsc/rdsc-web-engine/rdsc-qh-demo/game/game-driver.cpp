@@ -204,6 +204,23 @@ void Game_Driver::handle_token_clicked(QH_Web_View_Dialog& dlg, Game_Token* toke
 
 }
 
+void Game_Driver::clear_move_option_data()
+{
+ for(u1 i = 0; i < move_indicators_count_; ++i)
+ {
+  Move_Indicator* mi = move_indicators_[i];
+  mi->current_position->clear_current_move_option_data();
+  mi->current_position = nullptr;
+ }
+
+ for(u1 i = 0; i < move_indicators_capture_count_; ++i)
+ {
+  Move_Indicator* mi = capture_move_indicators_[i];
+  mi->current_position->clear_current_move_option_data();
+  mi->current_position = nullptr;
+ }
+
+}
 
 void Game_Driver::prepare_move_option_indicators(Game_Token* token, QH_Web_View_Dialog& dlg)
 {
@@ -238,6 +255,7 @@ void Game_Driver::prepare_move_option_indicators(Game_Token* token, QH_Web_View_
     }
    }
    current_selected_token_->clear_move_option_counts();
+   clear_move_option_data();
   }
 
  }
@@ -249,13 +267,13 @@ void Game_Driver::prepare_move_option_indicators(Game_Token* token, QH_Web_View_
  current_selected_token_ = token;
  js_highlight_token(token, dlg);
 
- Game_Variant::Move_Option_Vector position_options;
+ Game_Variant::Move_Option_Vector move_options;
 
- current_variant_->check_move_options(token, gp, position_options);
+ current_variant_->check_move_options(token, gp, move_options);
 
  u1 count = 0;
  u1 capture_count = 0;
- for(const Game_Variant::Move_Option& mo : position_options)
+ for(const Game_Variant::Move_Option& mo : move_options)
  {
   Move_Indicator* mi;
   if(mo.index < 0)
@@ -263,6 +281,7 @@ void Game_Driver::prepare_move_option_indicators(Game_Token* token, QH_Web_View_
   else
     mi = move_indicators_.value(count++);
   mi->current_position = mo.position;
+  mi->current_position->set_current_move_option_data(mi);
  }
 
  token->set_move_option_count(count?count:-1);
@@ -920,8 +939,9 @@ void Game_Driver::js_hide_move_indicators(QH_Web_View_Dialog& dlg)
 
 void Game_Driver::check_reset_move_indicators(QH_Web_View_Dialog& dlg)
 {
- if(move_indicators_count_ | move_indicators_capture_count_)
+ if(move_indicators_count_ || move_indicators_capture_count_)
  {
+  clear_move_option_data();
   move_indicators_count_ = move_indicators_capture_count_ = 0;
   js_hide_move_indicators(dlg);
  }

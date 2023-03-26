@@ -13,6 +13,7 @@
 Game_Position::Game_Position(u1 position_row, u1 position_column)
   :  position_row_(position_row), position_column_(position_column),
      board_row_(0), board_column_(0), board_area_number_(0),
+     current_move_option_data_(nullptr),
      position_kind_(Position_Kind::N_A), svg_x_(0), svg_y_(0)
 {
  init();

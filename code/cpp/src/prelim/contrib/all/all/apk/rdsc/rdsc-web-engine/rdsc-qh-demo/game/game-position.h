@@ -93,6 +93,8 @@ private:
 
  Position_Kind position_kind_;
 
+ void* current_move_option_data_;
+
 
  void init();
 
@@ -116,6 +118,13 @@ public:
 
  ACCESSORS(Position_Kind ,position_kind)
  ACCESSORS(Game_Token* ,current_occupier)
+
+ ACCESSORS(void* ,current_move_option_data)
+
+ void clear_current_move_option_data()
+ {
+  current_move_option_data_ = nullptr;
+ }
 
  void set_adjacent_positions(u1 index, Game_Position* gp)
  {
