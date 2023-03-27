@@ -7,7 +7,7 @@
 
 #include <functional>
 
-using Qj_Callback = std::function<void(QString, int)>;
+using Qj_Callback = std::function<void(QString, QString, int)>;
 
 
 

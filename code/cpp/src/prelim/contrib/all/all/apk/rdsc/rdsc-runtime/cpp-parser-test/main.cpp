@@ -9,9 +9,9 @@ int main()
 {
   CppParser  parser;
 
-  parser.set_qj_callback([](QString content, int i)
+  parser.set_qj_callback([](QString content, QString rest_of_line, int i)
   {
-   qDebug() << content << " i = " << i;
+   qDebug() << content << " + " << rest_of_line << " i = " << i;
   });
 
 

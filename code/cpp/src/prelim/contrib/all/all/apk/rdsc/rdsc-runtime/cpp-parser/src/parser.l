@@ -341,8 +341,8 @@ This context starts after #if, #elif, and #pragma to capture everyting till a ne
 %x ctxDisabledCode
 
 /*  Qj  */
-%x ctxQj_Generic
-
+%x ctx_Qj_Generic
+%x ctx_Qj_First_Line
 
 %x ctxMemInitList
 
@@ -968,12 +968,12 @@ This context starts after #if, #elif, and #pragma to capture everyting till a ne
 }
 
 
-<ctxQj_Generic>^{WS}*Qj{WS}*"(;)".*{NL} {
+<ctx_Qj_Generic>{WS}*Qj{WS}*"(;)" {
     LOG();
 
-    //  <ctxGeneral,ctxQj_Generic,ctxDisabledCode>^{WS}*Qj{WS}*"(;)"
+    //  <ctxGeneral,ctx_Qj_Generic,ctxDisabledCode>^{WS}*Qj{WS}*"(;)"
 
-    g.qh_context_->run_qj_callback(QString::fromLatin1(yytext), g.mLineNo);
+    g.qh_context_->run_qj_callback(QString::fromLatin1(yytext), {}, g.mLineNo);
 
 //    if (YYSTATE == ctxDisabledCode) {
 //      ENDCONTEXT();
@@ -981,7 +981,7 @@ This context starts after #if, #elif, and #pragma to capture everyting till a ne
 
     g.qh_context_->run_message("Ending Context");
 
-    if (YYSTATE == ctxQj_Generic) {
+    if (YYSTATE == ctx_Qj_Generic) {
       ENDCONTEXT();
     }
 
@@ -993,22 +993,74 @@ This context starts after #if, #elif, and #pragma to capture everyting till a ne
   }
 
 
-<ctxQj_Generic>^.*{NL} {
+<ctx_Qj_Generic,ctx_Qj_First_Line>{NL} {
  LOG();
 
- g.qh_context_->read_line(QString::fromLatin1(yytext));
+//     g.qh_context_->read_line(QString::fromLatin1(yytext));
+
+ if (YYSTATE == ctx_Qj_First_Line)
+ {
+  g.qh_context_->run_qj_callback(g.qh_context_->held_text(),
+    {}, g.mLineNo);
+  g.qh_context_->unhold_text();
+  ENDCONTEXT();
+  BEGINCONTEXT(ctx_Qj_Generic);
+ }
+ else
+ {
+  g.qh_context_->read_line(g.qh_context_->held_text());
+  g.qh_context_->unhold_text();
+ }
 
  INCREMENT_INPUT_LINE_NUM()
 }
 
+     <ctx_Qj_First_Line>{WS}*"//".*{NL} {
+      LOG();
+
+
+      g.qh_context_->run_qj_callback(g.qh_context_->held_text(),
+        QString::fromLatin1(yytext), g.mLineNo);
+
+//      g.qh_context_->hold_text(QString::fromLatin1(yytext));
+
+      ENDCONTEXT();
+      BEGINCONTEXT(ctx_Qj_Generic);
+      INCREMENT_INPUT_LINE_NUM()
+
+
+     }
+
+
+<ctx_Qj_Generic,ctx_Qj_First_Line>. {
+ LOG();
+
+ if (YYSTATE == ctx_Qj_First_Line)
+ {
+  g.qh_context_->run_qj_callback(g.qh_context_->held_text(),
+    {}, g.mLineNo);
+  g.qh_context_->unhold_text();
+  ENDCONTEXT();
+  BEGINCONTEXT(ctx_Qj_Generic);
+ }
+
+ g.qh_context_->hold_text(QString::fromLatin1(yytext));
+}
+
+
   <ctxGeneral>^{WS}*Qj{WS}*"("[^)]*")" {
     LOG();
 
-    g.qh_context_->run_qj_callback(QString::fromLatin1(yytext), g.mLineNo);
+//    g.qh_context_->hold_text(QString::fromLatin1(yytext));
+//    g.qh_context_->run_qj_callback(g.qh_context_->held_text(),
+//      QString::fromLatin1(yytext), g.mLineNo);
 
-    INCREMENT_INPUT_LINE_NUM()
+    g.qh_context_->hold_text(QString::fromLatin1(yytext));
 
-    BEGINCONTEXT(ctxQj_Generic);
+//    INCREMENT_INPUT_LINE_NUM()
+
+    BEGINCONTEXT(ctx_Qj_First_Line);
+//    BEGINCONTEXT(ctx_Qj_Generic);
 
 //    BEGINCONTEXT(ctxDisabledCode);
 //    startNewMacroDependentParsing();

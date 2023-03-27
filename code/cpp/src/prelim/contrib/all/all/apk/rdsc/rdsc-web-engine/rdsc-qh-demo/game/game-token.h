@@ -36,9 +36,9 @@ public:
  enum class Token_Kind : u2 {
   N_A
 
-  Qj (enum:def)
-  #define enum_macro(x, y) ,x = y
+#define enum_macro(x, y) ,x = y
 
+  Qj (enum:def)
   enum_macro(Singleton, 1)
   enum_macro(Paired, 2)
   enum_macro(Queen, 4)
