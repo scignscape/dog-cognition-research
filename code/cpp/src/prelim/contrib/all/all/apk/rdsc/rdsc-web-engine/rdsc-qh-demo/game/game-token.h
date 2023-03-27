@@ -24,9 +24,7 @@ class Game_Player;
 
 class Token_Group;
 
-#define H4R(...)
-
-H4R(ij!)
+#define Qj(...)
 
 // class c test ...
 
@@ -38,10 +36,8 @@ public:
  enum class Token_Kind : u2 {
   N_A
 
-H4R("all")
-
-
-#define enum_macro(x, y) ,x = y
+  Qj (enum:def)
+  #define enum_macro(x, y) ,x = y
 
   enum_macro(Singleton, 1)
   enum_macro(Paired, 2)
@@ -72,10 +68,14 @@ H4R("all")
   enum_macro(North_King, North | King)
   enum_macro(North_Ace, North | Ace)
 
+  Qj (;)
+
 #undef enum_macro
  };
 
+ Qj (enum:ops)
  ENUM_FLAGS_OP_MACROS(Token_Kind, u2)
+ Qj (;)
 
 
 
@@ -133,6 +133,15 @@ public:
 
  Game_Token(Game_Player* player, Token_Kind kind = Token_Kind::N_A);
 
+ Qj (accessors)
+ ACCESSORS(QString ,svg_id)
+
+ ACCESSORS(s1 ,capture_status)
+ ACCESSORS(Game_Player* ,player)
+
+ ACCESSORS(Token_Group* ,current_cluster)
+
+
  ACCESSORS(QVector<Game_Token*> ,diagonal_neighbors)
  ACCESSORS(QVector<Game_Token*> ,orthogonal_neighbors)
 
@@ -143,6 +152,10 @@ public:
 
  ACCESSORS(Game_Position* ,current_position)
  ACCESSORS(Game_Position* ,prior_position)
+
+ ACCESSORS(Token_Kind ,kind);
+
+ Qj (;)
 
  QString current_placement_order_label();
 
@@ -162,8 +175,6 @@ public:
   clear_move_option_capture_count();
  }
 
-
- ACCESSORS(Token_Kind ,kind);
 
  u1 current_king_rank();
 
@@ -210,7 +221,10 @@ public:
   //return QString::fromStdString(ee);
 
   static QMap<Token_Kind, QString> static_map {
-#define enum_macro(x, y)  {Token_Kind::x, #x},
+
+  Qj(enum:str)
+  #define enum_macro(x, y)  {Token_Kind::x, #x},
+
    enum_macro(Singleton, 1)
    enum_macro(Paired, 2)
    enum_macro(Queen, 4)
@@ -233,19 +247,16 @@ public:
    enum_macro(North_Jack, North | Jack)
    enum_macro(North_King, North | King)
    enum_macro(North_Ace, North | Ace)
-#undef enum_macro
+
+  #undef enum_macro
+  Qj(;)
+
 
   };
 
   return static_map.value(kind_, "<error>");
  }
 
- ACCESSORS(QString ,svg_id)
-
- ACCESSORS(s1 ,capture_status)
- ACCESSORS(Game_Player* ,player)
-
- ACCESSORS(Token_Group* ,current_cluster)
 
  void hold_current_position();
  bool check_hold_current_position();

@@ -9,12 +9,15 @@ int main()
 {
   CppParser  parser;
 
-  parser.set_qj_callback([](int i)
+  parser.set_qj_callback([](QString content, int i)
   {
-   qDebug() << "i = " << i;
+   qDebug() << content << " i = " << i;
   });
 
-  const std::string testFilePath = "/quasihome/nlevisrael/cpp/test/main.cpp";
+
+  //const std::string testFilePath = "/quasihome/nlevisrael/cpp/test/main.cpp";
+
+  const std::string testFilePath = "/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/all/all/apk/rdsc/rdsc-web-engine/rdsc-qh-demo/game/game-token.h";
   const auto ast          = parser.parseFile(testFilePath);
 
   const auto& members = ast->members();

@@ -21,26 +21,33 @@
    CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-/**
- * @file Internal interface for lexer and parser APIs.
- */
-
 #pragma once
 
-#include <functional>
+#include "cppconst.h"
 
-#include "cppast.h"
+struct CppTypeModifier
+{
+  CppRefType   refType_;
+  std::uint8_t ptrLevel_; // Pointer level. e.g. int** ppi has pointer level of 2.
 
-#include "qh/qj-callback.h"
+  // Stores bits as per location of const in a var definition.
+  // Below table clarifies the value of const-bits:
+  // --------------------------------------------------
+  // | DEFINITION                             | VALUE |
+  // | ------------------------------------------------
+  // | int const * pi                         | 0b001 |
+  // | int const i                            | 0b001 |
+  // | int * const pi                         | 0b010 |
+  // | int * const * const ppi                | 0b110 |
+  // | int **const ppi                        | 0b100 |
+  // | int const * const * const ppi          | 0b111 |
+  // | ------------------------------------------------
+  //
+  // It is 8 bit unsigned integer which is enough to store info for pointers of 8 level deep.
+  std::uint32_t constBits_;
+};
 
-using ErrorHandler =
-  std::function<void(const char* errLineText, size_t lineNum, size_t errorStartPos, int lexerContext)>;
-
-//using Qj_Callback = std::function<void(int)>;
-
-void set_qj_callback(Qj_Callback qjc);
-
-void setErrorHandler(ErrorHandler errorHandler);
-void resetErrorHandler();
-
-CppCompoundPtr parseStream(char* stm, size_t stmSize);
+inline CppTypeModifier makeCppTypeModifier(CppRefType refType, std::uint8_t ptrLevel, std::uint8_t constBits)
+{
+  return CppTypeModifier {refType, ptrLevel, constBits};
+}

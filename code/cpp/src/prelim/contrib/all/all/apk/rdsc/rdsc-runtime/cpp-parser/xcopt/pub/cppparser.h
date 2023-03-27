@@ -28,10 +28,6 @@
 #include <functional>
 #include <utility>
 
-
-#include "src/qh/qj-callback.h"
-
-
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
 /**
@@ -45,6 +41,8 @@ class CppParser
 public:
   using ErrorHandler =
     std::function<void(const char* errLineText, size_t lineNum, size_t errorStartPos, int lexerContext)>;
+
+ using Qj_Callback = std::function<void(int)>;
 
 
 public:

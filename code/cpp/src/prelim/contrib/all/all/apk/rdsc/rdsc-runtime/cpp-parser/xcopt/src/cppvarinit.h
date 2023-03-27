@@ -21,26 +21,15 @@
    CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-/**
- * @file Internal interface for lexer and parser APIs.
- */
-
 #pragma once
 
-#include <functional>
-
+#include "cppconst.h"
 #include "cppast.h"
 
-#include "qh/qj-callback.h"
 
-using ErrorHandler =
-  std::function<void(const char* errLineText, size_t lineNum, size_t errorStartPos, int lexerContext)>;
+struct CppVarAssign
+{
+  CppExpr*      assignValue_; // Value assigned at declaration.
+  AssignType    assignType_;
+};
 
-//using Qj_Callback = std::function<void(int)>;
-
-void set_qj_callback(Qj_Callback qjc);
-
-void setErrorHandler(ErrorHandler errorHandler);
-void resetErrorHandler();
-
-CppCompoundPtr parseStream(char* stm, size_t stmSize);

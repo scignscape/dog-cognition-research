@@ -21,26 +21,49 @@
    CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-/**
- * @file Internal interface for lexer and parser APIs.
- */
+/***************************************************************************************/
 
 #pragma once
 
-#include <functional>
-
 #include "cppast.h"
+#include "cppconst.h"
 
-#include "qh/qj-callback.h"
+#include "cppobj-info-accessor.h"
 
-using ErrorHandler =
-  std::function<void(const char* errLineText, size_t lineNum, size_t errorStartPos, int lexerContext)>;
+inline bool isConst(const CppFunctionBase* func)
+{
+  return (func->attr() & kConst) == kConst;
+}
+inline bool isVirtual(const CppFunctionBase* func)
+{
+  return (func->attr() & (kVirtual | kOverride)) == kVirtual;
+}
+inline bool isPureVirtual(const CppFunctionBase* func)
+{
+  return (func->attr() & kPureVirtual) == kPureVirtual;
+}
+inline bool isStatic(const CppFunctionBase* func)
+{
+  return (func->attr() & kStatic) == kStatic;
+}
+inline bool isInline(const CppFunctionBase* func)
+{
+  return (func->attr() & kInline) == kInline;
+}
+inline bool isOverride(const CppFunctionBase* func)
+{
+  return (func->attr() & kOverride) == kOverride;
+}
+inline bool isDeleted(const CppFunctionBase* func)
+{
+  return (func->attr() & kDelete) == kDelete;
+}
+inline bool isFinal(const CppFunctionBase* func)
+{
+  return (func->attr() & kFinal) == kFinal;
+}
 
-//using Qj_Callback = std::function<void(int)>;
-
-void set_qj_callback(Qj_Callback qjc);
-
-void setErrorHandler(ErrorHandler errorHandler);
-void resetErrorHandler();
-
-CppCompoundPtr parseStream(char* stm, size_t stmSize);
+inline bool isMethod(CppConstFunctionEPtr func)
+{
+  return func->owner() && isClassLike(func->owner());
+}

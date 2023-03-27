@@ -21,26 +21,40 @@
    CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-/**
- * @file Internal interface for lexer and parser APIs.
- */
-
 #pragma once
 
-#include <functional>
-
 #include "cppast.h"
+#include "cppobjfactory.h"
+#include "cpptoken.h"
 
-#include "qh/qj-callback.h"
+extern CppObjFactory* gObjFactory;
 
-using ErrorHandler =
-  std::function<void(const char* errLineText, size_t lineNum, size_t errorStartPos, int lexerContext)>;
+template <typename... Params>
+CppCompound* newCompound(Params... params)
+{
+  return gObjFactory->CreateCompound(params...);
+}
 
-//using Qj_Callback = std::function<void(int)>;
+template <typename... Params>
+CppConstructor* newConstructor(Params... params)
+{
+  return gObjFactory->CreateConstructor(params...);
+}
 
-void set_qj_callback(Qj_Callback qjc);
+template <typename... Params>
+CppDestructor* newDestructor(Params... params)
+{
+  return gObjFactory->CreateDestructor(params...);
+}
 
-void setErrorHandler(ErrorHandler errorHandler);
-void resetErrorHandler();
+template <typename... Params>
+CppFunction* newFunction(Params... params)
+{
+  return gObjFactory->CreateFunction(params...);
+}
 
-CppCompoundPtr parseStream(char* stm, size_t stmSize);
+template <typename... Params>
+CppTypeConverter* newTypeConverter(Params... params)
+{
+  return gObjFactory->CreateTypeConverter(params...);
+}

@@ -21,26 +21,38 @@
    CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-/**
- * @file Internal interface for lexer and parser APIs.
- */
-
 #pragma once
 
-#include <functional>
+#include <boost/filesystem.hpp>
 
 #include "cppast.h"
+#include "cppconst.h"
 
-#include "qh/qj-callback.h"
+namespace fs = boost::filesystem;
 
-using ErrorHandler =
-  std::function<void(const char* errLineText, size_t lineNum, size_t errorStartPos, int lexerContext)>;
+using CppProgFileSelecter = std::function<bool(const std::string&)>;
 
-//using Qj_Callback = std::function<void(int)>;
+void collectFiles(std::vector<std::string>& files, const fs::path& path, const CppProgFileSelecter& fileSelector);
 
-void set_qj_callback(Qj_Callback qjc);
+inline std::vector<std::string> collectFiles(const std::string& folder, const CppProgFileSelecter& fileSelector)
+{
+  std::vector<std::string> files;
+  collectFiles(files, folder, fileSelector);
 
-void setErrorHandler(ErrorHandler errorHandler);
-void resetErrorHandler();
+  return files;
+}
 
-CppCompoundPtr parseStream(char* stm, size_t stmSize);
+inline CppAccessType defaultAccessType(CppCompoundType type)
+{
+  return (type == CppCompoundType::kClass) ? CppAccessType::kPrivate : CppAccessType::kPublic;
+}
+
+inline CppAccessType effectiveAccessType(CppAccessType objAccessType, CppCompoundType ownerType)
+{
+  return (objAccessType != CppAccessType::kUnknown) ? objAccessType : defaultAccessType(ownerType);
+}
+
+inline CppAccessType resolveInheritanceType(CppAccessType inheritanceType, CppCompoundType type)
+{
+  return (inheritanceType != CppAccessType::kUnknown) ? inheritanceType : defaultAccessType(type);
+}

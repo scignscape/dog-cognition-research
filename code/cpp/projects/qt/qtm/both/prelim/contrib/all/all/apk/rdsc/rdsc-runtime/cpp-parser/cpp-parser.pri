@@ -58,6 +58,9 @@ system("$${BTYACC} -v -b parser -d $${SRC_DIR}/src/parser.y")
 message("mv parser.tab.c $${SRC_DIR}/src/parser.tab.cpp")
 system(mv parser.tab.c $${SRC_DIR}/src/parser.tab.cpp)
 
+message("mv parser.tab.h $${SRC_DIR}/src/parser.tab.h")
+system(mv parser.tab.h $${SRC_DIR}/src/parser.tab.h)
+
 
 HEADERS += \
  $$SRC_DIR/hack/unistd.h \
@@ -87,6 +90,7 @@ HEADERS += \
  $$SRC_DIR/src/parser.tab.h \
  $$SRC_DIR/src/utils.h \
  $$SRC_DIR/src/qh/qh-context.h \
+ $$SRC_DIR/src/qh/qj-callback.h \
 
 
 SOURCES += \
@@ -97,11 +101,11 @@ SOURCES += \
  $$SRC_DIR/src/cppwriter.cpp \
  $$SRC_DIR/src/lexer-helper.cpp \
  $$SRC_DIR/src/parser.lex.cpp \
- $$SRC_DIR/src/parser.tab.c \
  $$SRC_DIR/src/parser.tab.cpp \
  $$SRC_DIR/src/utils.cpp \
  $$SRC_DIR/src/qh/qh-context.cpp \
 
+# $$SRC_DIR/src/parser.tab.c \ //?
 
 
 

@@ -244,7 +244,8 @@ QH_Web_View_Dialog::QH_Web_View_Dialog(QWidget* parent)
 //? QString url = "http://localhost:4202";
 //? QString url = "http://localhost:6600/qmt-l/rs~html/test";
 
- QString url = "http://localhost:4202/";
+//? QString url = "http://localhost:4202/";
+ QString url = "https://www.njmap2.com/blueprint/water/?override=1&zoom=8&lat=40.772221877329024&lng=-75.07781982421876&sc=0&basemap=Bing%20Aerial&layers=910,284,207&ois=&oms=&po=";
 
  initial_url_ = url;
 

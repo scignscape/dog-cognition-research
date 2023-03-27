@@ -21,26 +21,23 @@
    CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-/**
- * @file Internal interface for lexer and parser APIs.
- */
-
 #pragma once
 
-#include <functional>
+#include "cpptoken.h"
 
-#include "cppast.h"
+#include <iterator>
+#include <string>
 
-#include "qh/qj-callback.h"
+template <class Iter>
+inline std::reverse_iterator<Iter> rev(Iter i)
+{
+  return std::reverse_iterator<Iter>(i);
+}
 
-using ErrorHandler =
-  std::function<void(const char* errLineText, size_t lineNum, size_t errorStartPos, int lexerContext)>;
+CppToken classNameFromIdentifier(const CppToken& identifier);
 
-//using Qj_Callback = std::function<void(int)>;
+std::string pruneClassName(const CppToken& identifier);
 
-void set_qj_callback(Qj_Callback qjc);
+std::string readFile(const std::string& filename);
 
-void setErrorHandler(ErrorHandler errorHandler);
-void resetErrorHandler();
-
-CppCompoundPtr parseStream(char* stm, size_t stmSize);
+std::vector<CppToken> explode(CppToken token, const char* delim);

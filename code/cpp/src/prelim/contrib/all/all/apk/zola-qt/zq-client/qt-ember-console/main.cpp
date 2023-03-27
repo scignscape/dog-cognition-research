@@ -34,6 +34,7 @@ int main(int argc, char *argv[])
 
  QH_Web_View_Dialog dlg(nullptr);
 
+ dlg.setWindowTitle("NJ Hydrology/Hydroengineering");
  dlg.show();
 
  return qapp.exec();

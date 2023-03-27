@@ -31,12 +31,10 @@
 
 #include "cppast.h"
 
-#include "qh/qj-callback.h"
-
 using ErrorHandler =
   std::function<void(const char* errLineText, size_t lineNum, size_t errorStartPos, int lexerContext)>;
 
-//using Qj_Callback = std::function<void(int)>;
+using Qj_Callback = std::function<void(int)>;
 
 void set_qj_callback(Qj_Callback qjc);
 

@@ -21,26 +21,59 @@
    CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-/**
- * @file Internal interface for lexer and parser APIs.
- */
-
 #pragma once
 
-#include <functional>
+#include <algorithm>
+#include <cstring>
+#include <string>
 
-#include "cppast.h"
+inline size_t stripChar(char* s, size_t len, char c)
+{
+  auto* end = std::remove(s, s + len, c);
+  return end - s;
+}
 
-#include "qh/qj-callback.h"
+inline void stripChar(std::string& s, char c)
+{
+  auto len = stripChar(&s[0], s.length(), c);
+  s.resize(len);
+}
 
-using ErrorHandler =
-  std::function<void(const char* errLineText, size_t lineNum, size_t errorStartPos, int lexerContext)>;
+inline std::string& trimBlob(std::string& s)
+{
+  auto len = s.size();
 
-//using Qj_Callback = std::function<void(int)>;
+  for (; len > 0; --len)
+  {
+    if (!isspace(s[len - 1]))
+      break;
+  }
+  s.resize(len);
 
-void set_qj_callback(Qj_Callback qjc);
+  size_t start = 0;
+  for (size_t i = 0; i < s.size(); ++i)
+  {
+    if (!isspace(s[i]))
+      break;
+    if (s[i] == '\n')
+      start = i + 1;
+  }
 
-void setErrorHandler(ErrorHandler errorHandler);
-void resetErrorHandler();
+  if (start > 0)
+    s = s.substr(start);
+  return s;
+}
 
-CppCompoundPtr parseStream(char* stm, size_t stmSize);
+//! strips new-line char and collapses multiple white chars.
+inline std::string& cleanseIdentifier(std::string& id)
+{
+  stripChar(id, '\n');
+  auto end = std::unique(id.begin(), id.end(), [](char c1, char c2) {
+    return ((c1 == ' ' && c2 == ' ') || (c1 == '\t' && c2 == '\t') || (c1 == ' ' && c2 == '\t')
+            || (c1 == '\t' && c2 == ' '));
+  });
+  id.resize(end - id.begin());
+  std::replace(id.begin(), id.end(), '\t', ' ');
+
+  return id;
+}

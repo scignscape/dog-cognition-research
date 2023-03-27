@@ -52,11 +52,12 @@ LIBS += -L$${ROOT_DIR}/../preferred/tools  -lboost_program_options -lboost_syste
 
 #LIBS += -L../build -lboost_program_options -lboost_system -lboost_filesystem
 
-#INCLUDEPATH += /quasihome/nlevisrael/cpp/common/third_party/boost_tp/
 
 #QMAKE_LFLAGS += "-g -O0 -Wall -std=c++1z -fvisibility=hidden -fvisibility-inlines-hidden -fprofile-arcs -ftest-coverage --coverage"
 
 #QMAKE_LFLAGS += -fvisibility=hidden -fvisibility-inlines-hidden -fprofile-arcs -ftest-coverage --coverage
+
+INCLUDEPATH += $$SRC_GROUP_DIR/cpp-parser
 
 QMAKE_LFLAGS +=  --coverage
 

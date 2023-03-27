@@ -340,10 +340,6 @@ This context starts after #if, #elif, and #pragma to capture everyting till a ne
 */
 %x ctxDisabledCode
 
-/*  Qj  */
-%x ctxQj_Generic
-
-
 %x ctxMemInitList
 
 %x ctxObjectiveC
@@ -967,52 +963,30 @@ This context starts after #if, #elif, and #pragma to capture everyting till a ne
   }
 }
 
-
-<ctxQj_Generic>^{WS}*Qj{WS}*"(;)".*{NL} {
+  <ctxGeneral,ctxDisabledCode>^{WS}*Qj{WS}*"(;)" {
     LOG();
 
-    //  <ctxGeneral,ctxQj_Generic,ctxDisabledCode>^{WS}*Qj{WS}*"(;)"
+    g.qh_context_->run_qj_callback(g.mLineNo);
 
-    g.qh_context_->run_qj_callback(QString::fromLatin1(yytext), g.mLineNo);
-
-//    if (YYSTATE == ctxDisabledCode) {
-//      ENDCONTEXT();
-//    }
-
-    g.qh_context_->run_message("Ending Context");
-
-    if (YYSTATE == ctxQj_Generic) {
+    if (YYSTATE == ctxDisabledCode) {
       ENDCONTEXT();
     }
+//    startNewMacroDependentParsing();
 
-    INCREMENT_INPUT_LINE_NUM()
-
-//?    startNewMacroDependentParsing();
-
-//?    g.currentCodeEnablementInfo.macroDependentCodeEnablement = MacroDependentCodeEnablement::kDisabled;
+//    g.currentCodeEnablementInfo.macroDependentCodeEnablement = MacroDependentCodeEnablement::kDisabled;
   }
 
-
-<ctxQj_Generic>^.*{NL} {
- LOG();
-
- g.qh_context_->read_line(QString::fromLatin1(yytext));
-
- INCREMENT_INPUT_LINE_NUM()
-}
 
   <ctxGeneral>^{WS}*Qj{WS}*"("[^)]*")" {
     LOG();
 
-    g.qh_context_->run_qj_callback(QString::fromLatin1(yytext), g.mLineNo);
+    g.qh_context_->run_qj_callback(g.mLineNo);
 
-    INCREMENT_INPUT_LINE_NUM()
 
-    BEGINCONTEXT(ctxQj_Generic);
+    BEGINCONTEXT(ctxDisabledCode);
+    startNewMacroDependentParsing();
 
-//    BEGINCONTEXT(ctxDisabledCode);
-//    startNewMacroDependentParsing();
-//    g.currentCodeEnablementInfo.macroDependentCodeEnablement = MacroDependentCodeEnablement::kDisabled;
+    g.currentCodeEnablementInfo.macroDependentCodeEnablement = MacroDependentCodeEnablement::kDisabled;
   }
 
 
