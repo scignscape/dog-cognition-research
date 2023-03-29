@@ -5,6 +5,6 @@
 #           http://www.boost.org/LICENSE_1_0.txt)
 
 
-PROJECT_GROUP = ntxh
+PROJECT_GROUP = Qh_CPP
 
 include(../build-proset.pri)

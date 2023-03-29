@@ -4,10 +4,44 @@
 
 #include <QDebug>
 
+#include "textio.h"
+
 Qh_Context::Qh_Context()
  : qjc_(nullptr)
 {
 
+}
+
+void Qh_Context::enter_context(QString context_string, u2 line_number)
+{
+ output("@at %1: %2\n"_qt.arg(line_number).arg(context_string));
+}
+
+void Qh_Context::enter_context(u2 line_number)
+{
+ enter_context(held_text_, line_number);
+}
+
+
+void Qh_Context::leave_context(QString context_string, u2 line_number)
+{
+ output("@lv %1: %2\n"_qt.arg(line_number).arg(context_string));
+}
+
+void Qh_Context::leave_context(u2 line_number)
+{
+ leave_context(held_text_, line_number);
+}
+
+
+void Qh_Context::save_output()
+{
+ KA::TextIO::save_file(output_file_, output_text_);
+}
+
+void Qh_Context::output(QString text)
+{
+ output_text_ += text;
 }
 
 void Qh_Context::unhold_text()
@@ -32,9 +66,15 @@ void Qh_Context::run_message(QString msg)
 }
 
 
-void Qh_Context::read_line(QString line)
+void Qh_Context::read_line(QString text, u2 line_number)
 {
- qDebug() << "line = " << line;
+ output("@ln %1: %2\n"_qt.arg(line_number).arg( text));
+ //qDebug() << "line = " << line;
+}
+
+void Qh_Context::read_line(u2 line_number)
+{
+ read_line(held_text_, line_number);
 }
 
 

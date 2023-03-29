@@ -33,12 +33,15 @@
 
 #include "qh/qj-callback.h"
 
+class Qh_Context;
+
 using ErrorHandler =
   std::function<void(const char* errLineText, size_t lineNum, size_t errorStartPos, int lexerContext)>;
 
 //using Qj_Callback = std::function<void(int)>;
 
 void set_qj_callback(Qj_Callback qjc);
+Qh_Context& qh_context();
 
 void setErrorHandler(ErrorHandler errorHandler);
 void resetErrorHandler();

@@ -150,6 +150,11 @@ void CppParser::set_qj_callback(Qj_Callback qjc)
  ::set_qj_callback(qjc);
 }
 
+Qh_Context& CppParser::qh_context()
+{
+ return ::qh_context();
+}
+
 
 void CppParser::setErrorHandler(ErrorHandler errorHandler)
 {

@@ -975,6 +975,8 @@ This context starts after #if, #elif, and #pragma to capture everyting till a ne
 
     g.qh_context_->run_qj_callback(QString::fromLatin1(yytext), {}, g.mLineNo);
 
+        g.qh_context_->leave_context(QString::fromLatin1(yytext), g.mLineNo);
+
 //    if (YYSTATE == ctxDisabledCode) {
 //      ENDCONTEXT();
 //    }
@@ -1002,25 +1004,30 @@ This context starts after #if, #elif, and #pragma to capture everyting till a ne
  {
   g.qh_context_->run_qj_callback(g.qh_context_->held_text(),
     {}, g.mLineNo);
+  g.qh_context_->enter_context(g.mLineNo);
+
   g.qh_context_->unhold_text();
   ENDCONTEXT();
   BEGINCONTEXT(ctx_Qj_Generic);
  }
  else
  {
-  g.qh_context_->read_line(g.qh_context_->held_text());
+  g.qh_context_->read_line(g.mLineNo);
   g.qh_context_->unhold_text();
  }
 
  INCREMENT_INPUT_LINE_NUM()
 }
 
-     <ctx_Qj_First_Line>{WS}*"//".*{NL} {
-      LOG();
+<ctx_Qj_First_Line>{WS}*"//".*{NL} {
+ LOG();
 
+ g.qh_context_->run_qj_callback(g.qh_context_->held_text(),
+   QString::fromLatin1(yytext), g.mLineNo);
 
-      g.qh_context_->run_qj_callback(g.qh_context_->held_text(),
-        QString::fromLatin1(yytext), g.mLineNo);
+ g.qh_context_->enter_context(g.mLineNo);
+
+ g.qh_context_->unhold_text();
 
 //      g.qh_context_->hold_text(QString::fromLatin1(yytext));
 
@@ -1029,7 +1036,7 @@ This context starts after #if, #elif, and #pragma to capture everyting till a ne
       INCREMENT_INPUT_LINE_NUM()
 
 
-     }
+}
 
 
 <ctx_Qj_Generic,ctx_Qj_First_Line>. {
@@ -1039,6 +1046,9 @@ This context starts after #if, #elif, and #pragma to capture everyting till a ne
  {
   g.qh_context_->run_qj_callback(g.qh_context_->held_text(),
     {}, g.mLineNo);
+
+  g.qh_context_->enter_context(g.mLineNo);
+
   g.qh_context_->unhold_text();
   ENDCONTEXT();
   BEGINCONTEXT(ctx_Qj_Generic);

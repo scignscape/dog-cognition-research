@@ -31,6 +31,7 @@
 
 #include "src/qh/qj-callback.h"
 
+class Qh_Context;
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -53,6 +54,8 @@ public:
     : objFactory_(std::move(rhs.objFactory_))
   {
   }
+
+  Qh_Context& qh_context();//{ return LexerData::qh_context; }
 
 //?  Qj_Callback qjc_;
 

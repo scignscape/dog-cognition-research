@@ -2119,6 +2119,12 @@ void set_qj_callback(Qj_Callback qjc)
  LexerData::qh_context_->set_qj_callback(qjc);
 }
 
+Qh_Context& qh_context()
+{
+ return *LexerData::qh_context_;
+}
+
+
 
 void setErrorHandler(ErrorHandler errorHandler)
 {
