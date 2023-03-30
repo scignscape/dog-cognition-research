@@ -7,7 +7,24 @@
 
 #include <QDebug>
 
+#include <QLibrary>
+
 int main()
+{
+ QString path = "/home/nlevisrael/gits/dcr-wip/ar/code/cpp/targets/contrib/all/all/qt/qt-multiple/nomark/targets-5-15-2-Desktop_Qt_5_15_2_GCC_64bit/librdsc-qh-demo.so.1.0.0";
+ QLibrary myLib(path, QLibrary::ResolveAllSymbolsHint);
+
+ typedef void (*MyPrototype)();
+
+ MyPrototype myFunction = (MyPrototype) myLib.resolve("test_game");
+ if (myFunction)
+     myFunction();
+
+ return 0;
+}
+
+
+int main1()
 {
   CppParser  parser;
 

@@ -9,9 +9,16 @@ PROJECT_NAME = qh-cpp-console
 
 include(../build-group.pri)
 
+include($$ROOT_DIR/../preferred/poppler.pri)
+
+
+
+
 TEMPLATE = app
 
-QT -= gui
+QT += widgets
+
+#QT -= gui
 
 exists($$ROOT_DIR/../preferred/sysr.pri): include($$ROOT_DIR/../preferred/sysr.pri)
 exists($$ROOT_DIR/../preferred/sysr-c.pri): include($$ROOT_DIR/../preferred/sysr-c.pri)
@@ -37,13 +44,26 @@ DEFINES += ROOT_FOLDER=\\\"$$ROOT_DIR\\\"
 
 
 HEADERS += \
+  $$SRC_DIR/pdf-viewer/pdf-document-controller.h \
+  $$SRC_DIR/pdf-viewer/pdf-document-info.h \
+  $$SRC_DIR/pdf-viewer/pdf-document-state.h \
+  $$SRC_DIR/json/qh-json-file-reader.h \
+  $$SRC_DIR/json/pseudo-jpath.h \
+
 
 
 SOURCES += \
   $$SRC_DIR/main.cpp \
+  $$SRC_DIR/pdf-viewer/pdf-document-controller.cpp \
+  $$SRC_DIR/pdf-viewer/pdf-document-info.cpp \
+  $$SRC_DIR/pdf-viewer/pdf-document-state.cpp \
+  $$SRC_DIR/json/qh-json-file-reader.cpp \
+  $$SRC_DIR/json/pseudo-jpath.cpp \
 
 
 LIBS += -L$$TARGETSDIR -lqh-cpp   -lqh-cpp-parser
+
+LIBS += -L$$POPPLER_LIB_DIR  -lpoppler -lpoppler-qt5
 
 
 message(choice: $$CPP_ROOT_DIR/targets/$$CHOICE_CODE/$$PROJECT_SET--$$PROJECT_GROUP--$$PROJECT_NAME)

@@ -8,7 +8,7 @@ PROJECT_NAME = rdsc-qh-demo
 
 include(../build-group.pri)
 
-TEMPLATE = app
+#TEMPLATE = app
 
 QT += gui widgets webenginewidgets location
 
