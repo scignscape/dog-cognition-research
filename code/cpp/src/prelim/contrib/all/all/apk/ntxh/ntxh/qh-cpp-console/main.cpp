@@ -16,6 +16,9 @@ USING_KANS(TextIO)
 #include "json/qh-json-file-reader.h"
 #include "json/pseudo-jpath.h"
 
+#include "sdi/sdi-sentence.h"
+
+
 #include <QJsonDocument>
 #include <QJsonArray>
 #include <QVector>
@@ -64,7 +67,7 @@ int main(int argc, char *argv[])
 // jpa.evaluate("$|0");
 
 
- QVector<QPair<QPair<u4, u4>, QPair<u4, u4>>> ses;
+ QVector<QPair<QPair<u4, u4>, QPair<u4, u4>>> sentence_start_and_ends;
 
  for(QJsonValue v : sentences_array)
  {
@@ -75,7 +78,7 @@ int main(int argc, char *argv[])
   QJsonArray a_s = o.value("start").toArray();
   QJsonArray a_e = o.value("end").toArray();
 
-  ses.push_back({{a_s[0].toInt(), a_s[1].toInt()},
+  sentence_start_and_ends.push_back({{a_s[0].toInt(), a_s[1].toInt()},
     {a_e[0].toInt(), a_e[1].toInt()}});
 //  v.toObject(
 //  Pseudo_JPath jpa((QJsonDocument(v.toObject())));
@@ -104,85 +107,84 @@ int main(int argc, char *argv[])
 
  QString circles;
 
+ SDI_Sentence* sentence = new SDI_Sentence;
+
+ QVector<SDI_Sentence*> sentences;
+
  u1 count = 0;
- for(QPair<QPair<u4, u4>, QPair<u4, u4>> se : ses)
+ for(QPair<QPair<u4, u4>, QPair<u4, u4>> se : sentence_start_and_ends)
  {
-  r8 x1 = (double) se.first.first / rescale;
-  r8 y1 = (double) se.first.second / rescale;
-
-  r8 x2 = (double) se.second.first / rescale;
-  r8 y2 = (double) se.second.second / rescale;
-
-  u2 x1_px = pt_to_px(x1);
-  u2 y1_px = pt_to_px(y1);
-
-  u2 x2_px = pt_to_px(x2);
-  u2 y2_px = pt_to_px(y2);
-
-  u2 lh = pt_to_px(default_letter_height);
-
-  circles += R"_(
-             <g id="south-move-text-group" transform="translate(%1, %2)">
-              <a class='sentence-start_base sentence-start_display-select' id='token-s0'>
-              <circle cx='0' cy='0' r='3' />
-              </a>
-             </g>
-
-               <g id="south-move-text-group" transform="translate(%3, %4)">
-                <a class='sentence-start_base sentence-start_display-select' id='token-s0'>
-                <circle cx='0' cy='0' r='3' />
-                </a>
-               </g>
-
-             )_"_qt.arg(x1_px).arg(h_px - y1_px)
-    .arg(x2_px).arg(h_px - y2_px);
-
   ++count;
 
+  r8 top_letter_height = default_letter_height + 4; // allow and extra 4 pts on top
+  r8 bottom_letter_height = default_letter_height;
+
+  r8 first_line_height_adjustment = (count == 1)? default_letter_height : 0;
+
+  r8 line_spacing_factor = default_letter_height + 3; //? what exactly?
+
+
+
+  sentence->init_coordinates(se, height, width - 10, 10,
+    top_letter_height, bottom_letter_height, line_spacing_factor, first_line_height_adjustment);
+
+  sentences.push_back(sentence);
+ }
+
+//  circles += R"_(
+//             <g id="south-move-text-group" transform="translate(%1, %2)">
+//              <a class='sentence-start_base sentence-start_display-select' id='token-s0'>
+//              <circle cx='0' cy='0' r='3' />
+//              </a>
+//             </g>
+
+//               <g id="south-move-text-group" transform="translate(%3, %4)">
+//                <a class='sentence-start_base sentence-start_display-select' id='token-s0'>
+//                <circle cx='0' cy='0' r='3' />
+//                </a>
+//               </g>
+
+//             )_"_qt.arg(x1_px).arg(h_px - y1_px)
+//    .arg(x2_px).arg(h_px - y2_px);
+
+//  ++count;
+
+//  if(count == 3)
+//  {
+
+//   u2 start_x = x1_px;
+//   u2 start_y_baseline = h_px - y1_px;
+//   u2 start_y_topline = start_y_baseline - lh;
+
+//   u2 endline_x = w_px + 10;
+//   u2 endline_y_top = start_y_topline;
+//   u2 endline_y_bottom = start_y_baseline + 3;
+
+//   u2 end_x = x2_px;
+//   u2 end_y_baseline = h_px - y2_px;
+//   u2 end_y_topline = end_y_baseline - lh;
+
+//   u2 startline_x = 10;
+//   u2 startline_y_top = end_y_topline - 3;
+//   u2 startline_y = end_y_baseline;
+
+ count = 0;
+
+ for(SDI_Sentence* sentence : sentences)
+ {
+  ++count;
+  QString points;
   if(count == 3)
   {
-
-   u2 start_x = x1_px;
-   u2 start_y_baseline = h_px - y1_px;
-   u2 start_y_topline = start_y_baseline - lh;
-
-   u2 endline_x = w_px + 10;
-   u2 endline_y_top = start_y_topline;
-   u2 endline_y_bottom = start_y_baseline + 3;
-
-   u2 end_x = x2_px;
-   u2 end_y_baseline = h_px - y2_px;
-   u2 end_y_topline = end_y_baseline - lh;
-
-   u2 startline_x = 10;
-   u2 startline_y_top = end_y_topline - 3;
-   u2 startline_y = end_y_baseline;
-
-   QString point1 = "%1,%2"_qt.arg(start_x).arg(start_y_baseline);
-   QString point2 = "%1,%2"_qt.arg(start_x).arg(start_y_topline);
-   QString point3 = "%1,%2"_qt.arg(endline_x).arg(endline_y_top);
-   QString point4 = "%1,%2"_qt.arg(endline_x).arg(endline_y_bottom);
-
-   QString point5 = "%1,%2"_qt.arg(end_x).arg(end_y_topline);
-   QString point6 = "%1,%2"_qt.arg(end_x).arg(end_y_baseline);
-   QString point7 = "%1,%2"_qt.arg(startline_x).arg(startline_y);
-   QString point8 = "%1,%2"_qt.arg(startline_x).arg(startline_y_top);
-
-
+   sentence->svg_coordinates_string(points);
    circles += R"_(
               <g id="south-move-text-group" transform="translate(0, 0)">
    <a class='sentence-start_base sentence-start_display-select' id='discourse-s0'>
-    <polygon points="%1 %2 %3 %4 %5 %6 %7 %8" />
+    <polygon points="%1" />
    </a>
     </g>
-     )_"_qt.arg(point1).arg(point2).arg(point3).arg(point4)
-   .arg(point5).arg(point6).arg(point7).arg(point8);
-
+     )_"_qt.arg(points);
   }
-
-
-  // r8 x2 = (double) x2u / rescale;
-  // r8 y2 = (double) y2u / rescale;
  }
 
 // r8 x1 = (double)  / rescale;

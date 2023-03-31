@@ -49,6 +49,9 @@ HEADERS += \
   $$SRC_DIR/pdf-viewer/pdf-document-state.h \
   $$SRC_DIR/json/qh-json-file-reader.h \
   $$SRC_DIR/json/pseudo-jpath.h \
+  $$SRC_DIR/sdi/sdi-sentence.h \
+
+
 
 
 
@@ -59,6 +62,7 @@ SOURCES += \
   $$SRC_DIR/pdf-viewer/pdf-document-state.cpp \
   $$SRC_DIR/json/qh-json-file-reader.cpp \
   $$SRC_DIR/json/pseudo-jpath.cpp \
+  $$SRC_DIR/sdi/sdi-sentence.cpp \
 
 
 LIBS += -L$$TARGETSDIR -lqh-cpp   -lqh-cpp-parser
