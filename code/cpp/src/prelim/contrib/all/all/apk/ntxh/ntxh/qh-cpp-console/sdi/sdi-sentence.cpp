@@ -82,11 +82,7 @@ void SDI_Sentence::init_coordinates(QPair<QPair<u4, u4>, QPair<u4, u4>>& start_a
  r4 tlh = pt_to_px(top_letter_height);
  r4 blh = pt_to_px(bottom_letter_height);
 
- r4 left_margin_px = pt_to_px(left_margin);
- r4 right_margin_px = pt_to_px(right_margin);
-
  r4 page_height_px = pt_to_px(page_height);
-
 
  r4 start_x = x1_px;
  r4 start_y_baseline = page_height_px - y1_px;
@@ -96,22 +92,38 @@ void SDI_Sentence::init_coordinates(QPair<QPair<u4, u4>, QPair<u4, u4>>& start_a
  r4 end_y_baseline = page_height_px - y2_px;
  r4 end_y_topline = end_y_baseline - blh;
 
- r4 right_margin_x = right_margin_px;
- r4 right_margin_y_top = start_y_topline;
- r4 right_margin_y_bottom = end_y_topline;
+ if(number_of_lines_ == 1)
+ {
+  // //  here we only need four points ...
+
+  svg_coordinates_ = {{start_x, start_y_baseline},
+    {start_x, start_y_topline},
+    {end_x, qMax(start_y_topline, end_y_topline)},
+    {end_x, qMin(start_y_baseline, end_y_baseline)}};
+ }
+ else
+ {
+  r4 left_margin_px = pt_to_px(left_margin);
+  r4 right_margin_px = pt_to_px(right_margin);
+
+  r4 right_margin_x = right_margin_px;
+  r4 right_margin_y_top = start_y_topline;
+  r4 right_margin_y_bottom = end_y_topline;
 
 
- r4 left_margin_x = left_margin_px;
- r4 left_margin_y_top = start_y_baseline;
- r4 left_margin_y_bottom = end_y_baseline;
+  r4 left_margin_x = left_margin_px;
+  r4 left_margin_y_top = start_y_baseline;
+  r4 left_margin_y_bottom = end_y_baseline;
 
- svg_coordinates_ = {{start_x, start_y_baseline},
-   {start_x, start_y_topline},
-   {right_margin_x, right_margin_y_top},
-   {right_margin_x, right_margin_y_bottom},
-   {end_x, end_y_topline},
-   {end_x, end_y_baseline},
-   {left_margin_x, left_margin_y_bottom},
-   {left_margin_x, left_margin_y_top} };
+  svg_coordinates_ = {{start_x, start_y_baseline},
+    {start_x, start_y_topline},
+    {right_margin_x, right_margin_y_top},
+    {right_margin_x, right_margin_y_bottom},
+    {end_x, end_y_topline},
+    {end_x, end_y_baseline},
+    {left_margin_x, left_margin_y_bottom},
+    {left_margin_x, left_margin_y_top} };
+
+ }
 }
 

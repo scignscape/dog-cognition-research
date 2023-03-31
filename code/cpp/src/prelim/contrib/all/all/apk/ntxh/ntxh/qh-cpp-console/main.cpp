@@ -107,13 +107,14 @@ int main(int argc, char *argv[])
 
  QString circles;
 
- SDI_Sentence* sentence = new SDI_Sentence;
 
  QVector<SDI_Sentence*> sentences;
 
  u1 count = 0;
  for(QPair<QPair<u4, u4>, QPair<u4, u4>> se : sentence_start_and_ends)
  {
+  SDI_Sentence* sentence = new SDI_Sentence;
+
   ++count;
 
   r8 top_letter_height = default_letter_height + 4; // allow and extra 4 pts on top
@@ -174,17 +175,17 @@ int main(int argc, char *argv[])
  {
   ++count;
   QString points;
-  if(count == 3)
-  {
+//  if(count == 3)
+//  {
    sentence->svg_coordinates_string(points);
    circles += R"_(
-              <g id="south-move-text-group" transform="translate(0, 0)">
-   <a class='sentence-start_base sentence-start_display-select' id='discourse-s0'>
-    <polygon points="%1" />
+              <g id="sentence-%1" transform="translate(0, 0)">
+   <a class='sentence-start_base sentence-start_display-select' id='discourse-s%1'>
+    <polygon points="%2" />
    </a>
     </g>
-     )_"_qt.arg(points);
-  }
+     )_"_qt.arg(count).arg(points);
+//  }
  }
 
 // r8 x1 = (double)  / rescale;
