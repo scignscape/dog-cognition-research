@@ -16,7 +16,7 @@ USING_KANS(TextIO)
 #include "json/qh-json-file-reader.h"
 #include "json/pseudo-jpath.h"
 
-#include "sdi/sdi-sentence.h"
+#include "sdi/sdi-block-element.h"
 
 
 #include <QJsonDocument>
@@ -25,6 +25,7 @@ USING_KANS(TextIO)
 #include <QJsonObject>
 
 USING_KANS(RdSC)
+
 
 u2 pt_to_px(r8 pt)
 {
@@ -105,17 +106,19 @@ int main(int argc, char *argv[])
 
  static u4 rescale = 0x10000;
 
- QString circles;
+ QString sdi_block_elements;
 
 
- QVector<SDI_Sentence*> sentences;
+ QVector<SDI_Block_Element*> sentences;
 
- u1 count = 0;
+ u2 paragraph_id = 1;
+ u2 count = 0;
  for(QPair<QPair<u4, u4>, QPair<u4, u4>> se : sentence_start_and_ends)
  {
-  SDI_Sentence* sentence = new SDI_Sentence;
-
   ++count;
+
+  SDI_Block_Element* sentence = new SDI_Block_Element(paragraph_id, count);
+
 
   r8 top_letter_height = default_letter_height + 4; // allow and extra 4 pts on top
   r8 bottom_letter_height = default_letter_height;
@@ -169,16 +172,16 @@ int main(int argc, char *argv[])
 //   u2 startline_y_top = end_y_topline - 3;
 //   u2 startline_y = end_y_baseline;
 
- count = 0;
+// count = 0;
 
- for(SDI_Sentence* sentence : sentences)
+ for(SDI_Block_Element* sentence : sentences)
  {
-  ++count;
+//  ++count;
   QString points;
 //  if(count == 3)
 //  {
    sentence->svg_coordinates_string(points);
-   circles += R"_(
+   sdi_block_elements += R"_(
               <g id="sentence-%1" transform="translate(0, 0)">
    <a class='sentence-start_base sentence-start_display-select' id='discourse-s%1'>
     <polygon points="%2" />
@@ -205,39 +208,18 @@ int main(int argc, char *argv[])
 
  image = pdfc.pixmap().toImage();
 
+ QString page_file = folder + "/t1.png";
 
+ image.save(page_file);
 
- image.save(folder + "/t1.png");
+ QString svg = load_file(folder + "/template.svg");
 
- QString svg = R"_(
-<svg width="%1" height="%2" xmlns="http://www.w3.org/2000/svg"
-  xmlns:xhtml="http://www.w3.org/1999/xhtml"
-  xmlns:xlink="http://www.w3.org/1999/xlink">
- <defs>
+ svg.replace("%WIDTH%", QString::number(image.width()));
+ svg.replace("%HEIGHT%", QString::number(image.height()));
+ svg.replace("%PAGE%", page_file);
 
-  <linearGradient id="sentence-start-gradient" gradientTransform="rotate(299)">
-   <stop offset="0%" stop-color="rgb(127, 29, 43)" />
-   <stop offset="35%" stop-color="white" />
-   <stop offset="100%" stop-color="white" />
-  </linearGradient>
+ svg.replace("%BLOCK-ELEMENTS%", sdi_block_elements);
 
-  <style>
-   .sentence-start_base {fill:url(#sentence-start-gradient);
-     fill-opacity:0.3;stroke-opacity:0.5;
-     stroke:url(#sentence-start-gradient); stroke-width:1;}
-
-   .sentence-start_display-select {}
-
-   .sentence-start_base:hover  { fill:rgb(250,130,130) }
-  </style>
-
- </defs>
-
- <image xlink:href="t1.png"  width="%1" height="%2" />
- %3
-</svg>
-)_"_qt.arg(image.width()).arg(image.height()).arg(circles)
-  ;
 
  save_file(folder + "/t1.svg", svg);
 
@@ -245,6 +227,31 @@ int main(int argc, char *argv[])
  return 0;
 }
 
+
+//QString svg = R"_(
+//<svg width="%1" height="%2" xmlns="http://www.w3.org/2000/svg"
+// xmlns:xhtml="http://www.w3.org/1999/xhtml"
+// xmlns:xlink="http://www.w3.org/1999/xlink">
+//<defs>
+
+// <style>
+//  .sentence-start_base {fill:none;
+//    fill-opacity:0.3;stroke-opacity:0.5;
+//    stroke:none; stroke-width:1;}
+
+//  .sentence-start_display-select {}
+
+//  .sentence-start_base:hover { fill:rgb(250,130,130);
+//     stroke: rgb(250,130,130); }
+// </style>
+
+//</defs>
+
+//<image xlink:href="t1.png"  width="%1" height="%2" />
+//%3
+//</svg>
+//)_"_qt.arg(image.width()).arg(image.height()).arg(circles)
+// ;
 
 
 int main1()

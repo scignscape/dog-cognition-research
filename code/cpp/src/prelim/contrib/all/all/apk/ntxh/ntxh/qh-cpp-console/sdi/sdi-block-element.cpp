@@ -6,10 +6,11 @@
 
 
 
-#include "sdi-sentence.h"
+#include "sdi-block-element.h"
 
 
-SDI_Sentence::SDI_Sentence()
+SDI_Block_Element::SDI_Block_Element(u2 paragraph_id, u2 sentence_id)
+  :  paragraph_id_(paragraph_id), sentence_id_(sentence_id)
 {
 
 }
@@ -23,7 +24,7 @@ r4 pt_to_px(r8 pt)
 
 }
 
-void SDI_Sentence::svg_coordinates_string(QString& result)
+void SDI_Block_Element::svg_coordinates_string(QString& result)
 {
  if(svg_coordinates_.isEmpty())
    return;
@@ -36,7 +37,7 @@ void SDI_Sentence::svg_coordinates_string(QString& result)
 }
 
 
-void SDI_Sentence::init_coordinates(QPair<QPair<u4, u4>, QPair<u4, u4>>& start_and_end,
+void SDI_Block_Element::init_coordinates(QPair<QPair<u4, u4>, QPair<u4, u4>>& start_and_end,
   r8 page_height, r8 right_margin, r8 left_margin,
   r8 top_letter_height, r8 bottom_letter_height,
   r8 line_spacing_factor, r8 first_line_height_adjustment)
@@ -96,10 +97,13 @@ void SDI_Sentence::init_coordinates(QPair<QPair<u4, u4>, QPair<u4, u4>>& start_a
  {
   // //  here we only need four points ...
 
-  svg_coordinates_ = {{start_x, start_y_baseline},
-    {start_x, start_y_topline},
-    {end_x, qMax(start_y_topline, end_y_topline)},
-    {end_x, qMin(start_y_baseline, end_y_baseline)}};
+  r4 top_y = qMin(start_y_topline, end_y_topline);
+  r4 bottom_y = qMax(start_y_baseline, end_y_baseline);
+
+
+  svg_coordinates_ = {{start_x, bottom_y},
+    {start_x, top_y}, {end_x, top_y},
+    {end_x, bottom_y}};
  }
  else
  {

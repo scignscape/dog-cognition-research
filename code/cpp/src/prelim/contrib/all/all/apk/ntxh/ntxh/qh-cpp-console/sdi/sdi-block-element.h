@@ -5,8 +5,8 @@
 //           http://www.boost.org/LICENSE_1_0.txt)
 
 
-#ifndef SDI_SENTENCE__H
-#define SDI_SENTENCE__H
+#ifndef SDI_BLOCK_ELEMENT__H
+#define SDI_BLOCK_ELEMENT__H
 
 #include <QString>
 #include <QPointF>
@@ -17,16 +17,27 @@
 #include "global-types.h"
 
 
-class SDI_Sentence
+class SDI_Block_Element
 {
  QString text_;
 
  QVector<QPointF> svg_coordinates_;
  u2 number_of_lines_;
 
+ // //  if this is a sentence, paragraph_id_
+  //    will hold the paragraph to which
+  //    it belongs.  For a paragraph,
+  //    sentence_id_ will be 0.
+ u2 paragraph_id_;
+ u2 sentence_id_;
+
+
 public:
 
- SDI_Sentence();
+ SDI_Block_Element(u2 paragraph_id, u2 sentence_id = 0);
+
+ ACCESSORS(u2 ,sentence_id)
+ ACCESSORS(u2 ,paragraph_id)
 
  void init_coordinates(QPair<QPair<u4, u4>, QPair<u4, u4>>& start_and_end,
    r8 page_height, r8 right_margin, r8 left_margin,
@@ -37,4 +48,5 @@ public:
 
 };
 
-#endif
+#endif // SDI_BLOCK_ELEMENT__H
+

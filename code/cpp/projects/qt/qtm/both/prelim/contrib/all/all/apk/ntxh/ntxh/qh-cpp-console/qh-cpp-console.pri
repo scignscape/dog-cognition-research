@@ -49,7 +49,7 @@ HEADERS += \
   $$SRC_DIR/pdf-viewer/pdf-document-state.h \
   $$SRC_DIR/json/qh-json-file-reader.h \
   $$SRC_DIR/json/pseudo-jpath.h \
-  $$SRC_DIR/sdi/sdi-sentence.h \
+  $$SRC_DIR/sdi/sdi-block-element.h \
 
 
 
@@ -62,12 +62,16 @@ SOURCES += \
   $$SRC_DIR/pdf-viewer/pdf-document-state.cpp \
   $$SRC_DIR/json/qh-json-file-reader.cpp \
   $$SRC_DIR/json/pseudo-jpath.cpp \
-  $$SRC_DIR/sdi/sdi-sentence.cpp \
+  $$SRC_DIR/sdi/sdi-block-element.cpp \
+
 
 
 LIBS += -L$$TARGETSDIR -lqh-cpp   -lqh-cpp-parser
 
 LIBS += -L$$POPPLER_LIB_DIR  -lpoppler -lpoppler-qt5
+
+
+
 
 
 message(choice: $$CPP_ROOT_DIR/targets/$$CHOICE_CODE/$$PROJECT_SET--$$PROJECT_GROUP--$$PROJECT_NAME)
