@@ -71,6 +71,8 @@ LIBS += -L$$TARGETSDIR -lqh-cpp   -lqh-cpp-parser
 LIBS += -L$$POPPLER_LIB_DIR  -lpoppler -lpoppler-qt5
 
 
+LIBS += -rdynamic -ldl
+
 
 
 

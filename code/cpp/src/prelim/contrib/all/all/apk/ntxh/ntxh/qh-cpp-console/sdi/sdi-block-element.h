@@ -16,6 +16,8 @@
 
 #include "global-types.h"
 
+#include <QJsonObject>
+
 
 class SDI_Block_Element
 {
@@ -31,10 +33,34 @@ class SDI_Block_Element
  u2 paragraph_id_;
  u2 sentence_id_;
 
+ u4 element_id_;
+
+ // //  either the number of sentences in a
+  //    paragraph or the count of a sentence
+  //    in its containing paragraph
+ u2 sentence_count_;
+
+ u2 start_page_;
+ u2 end_page_;
+ u2 count_in_page_;
+
+ struct Element_GP2S_Data {
+   u4 global_count_at_last;
+   u2 page_count_at_last;
+   u2 paragraph_count_at_last;
+   u2 sentence_count_at_last;
+
+   u4 global_count_at_end;
+   u2 page_count_at_end;
+   u2 paragraph_count_at_end;
+   u2 sentence_count_at_end;
+ };
+
+ Element_GP2S_Data element_data_;
 
 public:
 
- SDI_Block_Element(u2 paragraph_id, u2 sentence_id = 0);
+ SDI_Block_Element(u2 paragraph_id = 0, u2 sentence_id = 0);
 
  ACCESSORS(u2 ,sentence_id)
  ACCESSORS(u2 ,paragraph_id)
@@ -45,6 +71,9 @@ public:
    r8 line_spacing_factor, r8 first_line_height_adjustment);
 
  void svg_coordinates_string(QString& result);
+ void read_json(QJsonObject qjo);
+ void read_json_start_object(QString kind, QJsonObject qjo);
+ void read_json_end_object(QString kind, QJsonObject qjo);
 
 };
 

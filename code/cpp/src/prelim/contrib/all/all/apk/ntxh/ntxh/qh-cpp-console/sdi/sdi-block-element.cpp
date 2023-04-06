@@ -8,9 +8,13 @@
 
 #include "sdi-block-element.h"
 
+#include <QJsonArray>
+#include <QJsonValue>
 
 SDI_Block_Element::SDI_Block_Element(u2 paragraph_id, u2 sentence_id)
-  :  paragraph_id_(paragraph_id), sentence_id_(sentence_id)
+  :  paragraph_id_(paragraph_id), sentence_id_(sentence_id),
+     sentence_count_(0), start_page_(0), end_page_(0), count_in_page_(0),
+     element_data_({0,0,0,0,0,0,0,0})
 {
 
 }
@@ -23,6 +27,51 @@ r4 pt_to_px(r8 pt)
 }
 
 }
+
+void SDI_Block_Element::read_json(QJsonObject qjo)
+{
+
+
+}
+
+void SDI_Block_Element::read_json_start_object(QString kind, QJsonObject qjo)
+{
+ QJsonArray s_coords = qjo.value("start").toArray();
+ u4 id = qjo.value("id").toInt();
+
+ if(kind == "paragraph")
+   paragraph_id_ = id;
+ else if(kind == "sentence")
+ {
+  sentence_id_ = id;
+  paragraph_id_ = qjo.value("par").toInt();
+  sentence_count_ = qjo.value("pac").toInt();
+
+  start_page_ = qjo.value("pg").toInt();
+  count_in_page_ = qjo.value("pgc").toInt();
+
+  QJsonArray qja = qjo.value("gp2s").toArray();
+
+  element_data_.global_count_at_last = qja.at(0).toInt();
+  element_data_.page_count_at_last = qja.at(1).toInt();
+  element_data_.paragraph_count_at_last = qja.at(2).toInt();
+  element_data_.sentence_count_at_last = qja.at(3).toInt();
+ }
+
+}
+
+void SDI_Block_Element::read_json_end_object(QString kind, QJsonObject qjo)
+{
+ QJsonArray e_coords = qjo.value("end").toArray();
+
+ QJsonArray qja = qjo.value("gp2s").toArray();
+
+ element_data_.global_count_at_end = qja.at(0).toInt();
+ element_data_.page_count_at_end = qja.at(1).toInt();
+ element_data_.paragraph_count_at_end = qja.at(2).toInt();
+ element_data_.sentence_count_at_end = qja.at(3).toInt();
+}
+
 
 void SDI_Block_Element::svg_coordinates_string(QString& result)
 {

@@ -27,10 +27,14 @@ USING_KANS(TextIO)
 USING_KANS(RdSC)
 
 
+#include "dlfcn.h"
+
+
 u2 pt_to_px(r8 pt)
 {
  return pt * (96./72);
 }
+
 
 int main(int argc, char *argv[])
 {
@@ -45,6 +49,8 @@ int main(int argc, char *argv[])
 
  QJsonDocument jsond;
  qjfr.json_document(jsond, "nj.json");
+
+
 
  Pseudo_JPath jp(jsond);
  QString pw = jp.evaluate("$:page-size>pdfpagewidth;").value<QString>();
@@ -61,25 +67,47 @@ int main(int argc, char *argv[])
  r8 default_letter_height = dlh.toDouble();
 
 
+ QVector<SDI_Block_Element*> sentences;
 
 
- QJsonArray sentences_array = jp.evaluate("$:sentences;").value<QJsonArray>();
+ QJsonArray elements_array = jp.evaluate("$:elements;").value<QJsonArray>();
 // Pseudo_JPath jpa((QJsonDocument(sentences_array)));
 // jpa.evaluate("$|0");
 
 
- QVector<QPair<QPair<u4, u4>, QPair<u4, u4>>> sentence_start_and_ends;
+ QVector<QPair<QPair<u4, u4>, QPair<u4, u4>>> element_start_and_ends;
 
- for(QJsonValue v : sentences_array)
+ for(QJsonValue v : elements_array)
  {
   if(!v.isObject())
     continue;
 
   QJsonObject o = v.toObject();
+  //u4 id = o.value("id").toInt();
+  auto it = o.find("isa");
+  if(it == o.end())
+  {
+   it = o.find("end-of");
+   if(it == o.end())
+     // any other options?
+     continue;
+   QString end_of = it.value().toString();
+   //sbe->read_json_start_object(kind, o);
+
+  }
+  else
+  {
+   QString kind = it.value().toString();
+   SDI_Block_Element* sbe = new SDI_Block_Element();
+   sbe->read_json_start_object(kind, o);
+
+
+  }
+
   QJsonArray a_s = o.value("start").toArray();
   QJsonArray a_e = o.value("end").toArray();
 
-  sentence_start_and_ends.push_back({{a_s[0].toInt(), a_s[1].toInt()},
+  element_start_and_ends.push_back({{a_s[0].toInt(), a_s[1].toInt()},
     {a_e[0].toInt(), a_e[1].toInt()}});
 //  v.toObject(
 //  Pseudo_JPath jpa((QJsonDocument(v.toObject())));
@@ -109,11 +137,10 @@ int main(int argc, char *argv[])
  QString sdi_block_elements;
 
 
- QVector<SDI_Block_Element*> sentences;
 
  u2 paragraph_id = 1;
  u2 count = 0;
- for(QPair<QPair<u4, u4>, QPair<u4, u4>> se : sentence_start_and_ends)
+ for(QPair<QPair<u4, u4>, QPair<u4, u4>> se : element_start_and_ends)
  {
   ++count;
 
@@ -262,3 +289,65 @@ int main1()
  return 0;
 
 }
+
+#ifdef HIDE
+
+
+class test_test
+{
+ r4 val;
+
+public:
+
+ test_test() : val(111.111) {};
+
+ void debug(u2 x);
+
+};
+
+void test_test::debug(u2 x)
+{
+ qDebug() << (x + val);
+}
+
+
+void tdebug()
+{
+ qDebug() << 44;
+
+}
+
+
+int main(int argc, char *argv[])
+{
+ test_test tt;
+
+ tt.debug(2);
+
+ std::string ss =  typeid(&test_test::debug).name();
+
+ qDebug() << QString::fromStdString(ss);
+
+ QString fn = QString::fromStdString(ss).mid(1);
+ fn.prepend("_ZN");
+
+ void *hndl = dlopen (NULL, RTLD_NOW);
+
+ //auto ty = typeid(tdebug).;
+ std::string ss1 =  typeid(tdebug).name();
+
+ void* fptr = dlsym (hndl, fn.toStdString().c_str());
+ typedef void (test_test::*ttt)(u2);
+
+ union ttt_cast { void* pv; ttt fn; };
+ ttt_cast tc;
+ tc.pv = dlsym (hndl, "_ZN9test_test5debugEt");
+
+ ttt tfn = tc.fn;
+
+ (tt.*tfn)(13);
+
+ return 0;
+}
+
+#endif
