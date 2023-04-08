@@ -8,13 +8,16 @@
 
 #include "sdi-block-element.h"
 
+#include "sdi-block-element-collection.h"
+
 #include <QJsonArray>
 #include <QJsonValue>
 
 SDI_Block_Element::SDI_Block_Element(u2 paragraph_id, u2 sentence_id)
   :  paragraph_id_(paragraph_id), sentence_id_(sentence_id),
      sentence_count_(0), start_page_(0), end_page_(0), count_in_page_(0),
-     element_data_({0,0,0,0,0,0,0,0})
+     element_data_({0,0,0,0,0,0,0,0}), start_and_end_({{0,0},{0,0}})
+     //count_in_paragraph_(0)
 {
 
 }
@@ -28,41 +31,52 @@ r4 pt_to_px(r8 pt)
 
 }
 
-void SDI_Block_Element::read_json(QJsonObject qjo)
+void SDI_Block_Element::read_json(SDI_Block_Element_Collection& element_collection, QJsonObject qjo)
 {
 
 
 }
 
-void SDI_Block_Element::read_json_start_object(QString kind, QJsonObject qjo)
+void SDI_Block_Element::read_json_start_object(QString kind,
+  SDI_Block_Element_Collection& element_collection, QJsonObject qjo)
 {
  QJsonArray s_coords = qjo.value("start").toArray();
+
+ start_and_end_.first = {s_coords[0].toInt(), s_coords[1].toInt()};
+
  u4 id = qjo.value("id").toInt();
 
  if(kind == "paragraph")
-   paragraph_id_ = id;
+ {
+  element_collection.paragraphs().push_back(this);
+  paragraph_id_ = id;
+ }
  else if(kind == "sentence")
  {
+  element_collection.sentences().push_back(this);
   sentence_id_ = id;
   paragraph_id_ = qjo.value("par").toInt();
   sentence_count_ = qjo.value("pac").toInt();
-
-  start_page_ = qjo.value("pg").toInt();
-  count_in_page_ = qjo.value("pgc").toInt();
-
-  QJsonArray qja = qjo.value("gp2s").toArray();
-
-  element_data_.global_count_at_last = qja.at(0).toInt();
-  element_data_.page_count_at_last = qja.at(1).toInt();
-  element_data_.paragraph_count_at_last = qja.at(2).toInt();
-  element_data_.sentence_count_at_last = qja.at(3).toInt();
  }
+
+ start_page_ = qjo.value("pg").toInt();
+ count_in_page_ = qjo.value("pgc").toInt();
+
+ QJsonArray qja = qjo.value("gp2s").toArray();
+
+ element_data_.global_count_at_last = qja.at(0).toInt();
+ element_data_.page_count_at_last = qja.at(1).toInt();
+ element_data_.paragraph_count_at_last = qja.at(2).toInt();
+ element_data_.sentence_count_at_last = qja.at(3).toInt();
 
 }
 
-void SDI_Block_Element::read_json_end_object(QString kind, QJsonObject qjo)
+void SDI_Block_Element::read_json_end_object(QJsonObject qjo)
 {
  QJsonArray e_coords = qjo.value("end").toArray();
+
+ start_and_end_.second = {e_coords[0].toInt(), e_coords[1].toInt()};
+
 
  QJsonArray qja = qjo.value("gp2s").toArray();
 
@@ -70,6 +84,8 @@ void SDI_Block_Element::read_json_end_object(QString kind, QJsonObject qjo)
  element_data_.page_count_at_end = qja.at(1).toInt();
  element_data_.paragraph_count_at_end = qja.at(2).toInt();
  element_data_.sentence_count_at_end = qja.at(3).toInt();
+
+
 }
 
 
@@ -85,22 +101,37 @@ void SDI_Block_Element::svg_coordinates_string(QString& result)
  result.chop(1); // trailing space
 }
 
+u2 SDI_Block_Element::get_sentence_count_in_paragraph()
+{
+ if(sentence_id_)
+   return sentence_count_;
 
-void SDI_Block_Element::init_coordinates(QPair<QPair<u4, u4>, QPair<u4, u4>>& start_and_end,
+ return 0;
+}
+
+
+void SDI_Block_Element::init_coordinates(
   r8 page_height, r8 right_margin, r8 left_margin,
   r8 top_letter_height, r8 bottom_letter_height,
-  r8 line_spacing_factor, r8 first_line_height_adjustment)
+  r8 line_spacing_factor, r8 default_letter_height)
 {
+ r8 first_line_height_adjustment = 0;
+
+ // // a sentence
+ if(get_sentence_count_in_paragraph() == 1)
+   first_line_height_adjustment = default_letter_height;
+
+
  // //  scaled points to "big" points
  static u4 rescale = 0x10000;
 
- r8 x1 = (double) start_and_end.first.first / rescale;
- r8 y1 = (double) start_and_end.first.second / rescale;
+ r8 x1 = (double) start_and_end_.first.first / rescale;
+ r8 y1 = (double) start_and_end_.first.second / rescale;
 
  y1 -= first_line_height_adjustment;
 
- r8 x2 = (double) start_and_end.second.first / rescale;
- r8 y2 = (double) start_and_end.second.second / rescale;
+ r8 x2 = (double) start_and_end_.second.first / rescale;
+ r8 y2 = (double) start_and_end_.second.second / rescale;
 
 // if(start_and_end.first.second == start_and_end.second.second)
 // {

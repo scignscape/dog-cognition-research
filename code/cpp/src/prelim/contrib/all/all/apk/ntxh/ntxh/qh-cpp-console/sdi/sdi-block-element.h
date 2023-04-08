@@ -18,10 +18,13 @@
 
 #include <QJsonObject>
 
+class SDI_Block_Element_Collection;
 
 class SDI_Block_Element
 {
  QString text_;
+
+ QPair<QPair<u4, u4>, QPair<u4, u4>> start_and_end_;
 
  QVector<QPointF> svg_coordinates_;
  u2 number_of_lines_;
@@ -44,6 +47,8 @@ class SDI_Block_Element
  u2 end_page_;
  u2 count_in_page_;
 
+// u2 count_in_paragraph_;
+
  struct Element_GP2S_Data {
    u4 global_count_at_last;
    u2 page_count_at_last;
@@ -65,16 +70,19 @@ public:
  ACCESSORS(u2 ,sentence_id)
  ACCESSORS(u2 ,paragraph_id)
 
- void init_coordinates(QPair<QPair<u4, u4>, QPair<u4, u4>>& start_and_end,
-   r8 page_height, r8 right_margin, r8 left_margin,
+ //QPair<QPair<u4, u4>, QPair<u4, u4>>& start_and_end,
+ void init_coordinates(r8 page_height, r8 right_margin, r8 left_margin,
    r8 top_letter_height, r8 bottom_letter_height,
-   r8 line_spacing_factor, r8 first_line_height_adjustment);
+   r8 line_spacing_factor, r8 default_letter_height);
 
  void svg_coordinates_string(QString& result);
- void read_json(QJsonObject qjo);
- void read_json_start_object(QString kind, QJsonObject qjo);
- void read_json_end_object(QString kind, QJsonObject qjo);
 
+ void read_json(SDI_Block_Element_Collection& element_collection, QJsonObject qjo);
+
+ void read_json_start_object(QString kind, SDI_Block_Element_Collection& element_collection, QJsonObject qjo);
+ void read_json_end_object(QJsonObject qjo);
+
+ u2 get_sentence_count_in_paragraph();
 };
 
 #endif // SDI_BLOCK_ELEMENT__H

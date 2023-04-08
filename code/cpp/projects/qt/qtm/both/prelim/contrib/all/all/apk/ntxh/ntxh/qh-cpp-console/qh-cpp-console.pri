@@ -50,6 +50,7 @@ HEADERS += \
   $$SRC_DIR/json/qh-json-file-reader.h \
   $$SRC_DIR/json/pseudo-jpath.h \
   $$SRC_DIR/sdi/sdi-block-element.h \
+  $$SRC_DIR/sdi/sdi-block-element-collection.h \
 
 
 
@@ -63,6 +64,7 @@ SOURCES += \
   $$SRC_DIR/json/qh-json-file-reader.cpp \
   $$SRC_DIR/json/pseudo-jpath.cpp \
   $$SRC_DIR/sdi/sdi-block-element.cpp \
+  $$SRC_DIR/sdi/sdi-block-element-collection.cpp \
 
 
 
