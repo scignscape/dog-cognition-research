@@ -5,14 +5,14 @@
 //           http://www.boost.org/LICENSE_1_0.txt)
 
 
-#ifndef CHASM_TR_NODE__H
-#define CHASM_TR_NODE__H
+#ifndef CHTR_NODE__H
+#define CHTR_NODE__H
 
 #include "relae-graph/relae-node-ptr.h"
 
-#include "kernel/chasm-tr-dominion.h"
+#include "kernel/chtr-dominion.h"
 
-#include "kernel/frame/chasm-tr-frame.h"
+#include "kernel/frame/chtr-frame.h"
 
 #include "phaong/phaong.h"
 #include "phaong/phaong-types.h"
@@ -22,10 +22,10 @@
 
 #include "aqns.h"
 
-AQNS_(ChasmTR)
+AQNS_(Chasm_TR)
 
 
-class Chasm_TR_Node : public node_ptr<Chasm_TR_Dominion>
+class ChTR_Node : public node_ptr<ChTR_Dominion>
 {
 public:
  #define DOMINION_TYPE DOMINION_NODE_CONSTRUCTOR
@@ -34,6 +34,6 @@ public:
 
 };
 
-_AQNS(ChasmTR)
+_AQNS(Chasm_TR)
 
 #endif

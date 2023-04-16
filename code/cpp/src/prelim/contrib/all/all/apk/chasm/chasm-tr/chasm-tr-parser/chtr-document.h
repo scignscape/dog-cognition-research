@@ -5,12 +5,12 @@
 //           http://www.boost.org/LICENSE_1_0.txt)
 
 
-#ifndef CHASM_TR_DOCUMENT__H
-#define CHASM_TR_DOCUMENT__H
+#ifndef CHTR_DOCUMENT__H
+#define CHTR_DOCUMENT__H
 
 #include "relae-graph/relae-node-ptr.h"
 
-#include "kernel/chasm-tr-dominion.h"
+#include "kernel/chtr-dominion.h"
 
 #include "accessors.h"
 
@@ -19,24 +19,24 @@
 #include <QFile>
 #include <QTextStream>
 
-#include "kernel/graph/chasm-tr-graph.h"
+#include "kernel/graph/chtr-graph.h"
 
-AQNS_(ChasmTR)
-
-
-class Chasm_TR_Parser;
-class Chasm_TR_Grammar;
-class Chasm_TR_Graph_Build;
-//?class Chasm_TR_Word_Entry_List;
-class Chasm_TR_Graph;
+AQNS_(Chasm_TR)
 
 
-class Chasm_TR_Document
+class ChTR_Parser;
+class ChTR_Grammar;
+class ChTR_Graph_Build;
+//?class ChTR_Word_Entry_List;
+class ChTR_Graph;
+
+
+class ChTR_Document
 {
- Chasm_TR_Graph* graph_;
- Chasm_TR_Parser* parser_;
- Chasm_TR_Graph_Build* graph_build_;
- Chasm_TR_Grammar* grammar_;
+ ChTR_Graph* graph_;
+ ChTR_Parser* parser_;
+ ChTR_Graph_Build* graph_build_;
+ ChTR_Grammar* grammar_;
 
  QString local_path_;
  QString raw_text_;
@@ -51,35 +51,35 @@ public:
  ACCESSORS(QString ,local_path)
  ACCESSORS(QString ,raw_text)
  ACCESSORS(QString ,local_directory)
- ACCESSORS(Chasm_TR_Graph* ,graph)
- ACCESSORS__GET(Chasm_TR_Grammar* ,grammar)
+ ACCESSORS(ChTR_Graph* ,graph)
+ ACCESSORS__GET(ChTR_Grammar* ,grammar)
 
- ACCESSORS(Chasm_TR_Graph_Build* ,graph_build)
+ ACCESSORS(ChTR_Graph_Build* ,graph_build)
 
- Chasm_TR_Document(QString path);
+ ChTR_Document(QString path);
 
- ~Chasm_TR_Document();
+ ~ChTR_Document();
 
- QVector<Chasm_TR_Graph::hypernode_type*>& top_level_hypernodes();
+ QVector<ChTR_Graph::hypernode_type*>& top_level_hypernodes();
 
  void load_file(QString path);
  void report_graph(QString path);
 
- QString Chasm_TR_path_handlers();
+ QString ChTR_path_handlers();
 
  void resolve_report_path(QString& path);
 
  void write_report(QString path);
 
- void set_grammar(Chasm_TR_Grammar* grammar = nullptr);
+ void set_grammar(ChTR_Grammar* grammar = nullptr);
 
  void parse(int start_position = 0, int end_position = -1);
 
  void surround(QString divider, QString text);
 };
 
-_AQNS(ChasmTR)
+_AQNS(Chasm_TR)
 
 
-#endif // CHASM_TR_DOCUMENT__H
+#endif // CHTR_DOCUMENT__H
 

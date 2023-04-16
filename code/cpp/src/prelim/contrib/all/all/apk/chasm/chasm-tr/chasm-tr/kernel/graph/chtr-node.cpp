@@ -5,12 +5,7 @@
 //           http://www.boost.org/LICENSE_1_0.txt)
 
 
-#include "chasm-tr-parser.h"
+#include "chtr-node.h"
 
-USING_AQNS(ChasmTR)
-
-Chasm_TR_Parser::Chasm_TR_Parser(caon_ptr<Chasm_TR_Graph> g)
- : Relae_Parser<Chasm_TR_Galaxy>(g)
-{
-}
+USING_AQNS(Chasm_TR)
 

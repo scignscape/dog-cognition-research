@@ -5,23 +5,23 @@
 //           http://www.boost.org/LICENSE_1_0.txt)
 
 
-#ifndef CHASM_TR_PARSE_CONTEXT__H
-#define CHASM_TR_PARSE_CONTEXT__H
+#ifndef CHTR_PARSE_CONTEXT__H
+#define CHTR_PARSE_CONTEXT__H
 
 #include "relae-graph/relae-parser.h"
 
 #include "flags.h"
 
 #include "aqns.h"
-AQNS_(ChasmTR)
+AQNS_(Chasm_TR)
 
 
-class Chasm_TR_Graph;
-class Chasm_TR_Node;
+class ChTR_Graph;
+class ChTR_Node;
 
-class Chasm_TR_Parse_Context
+class ChTR_Parse_Context
 {
- typedef Chasm_TR_Node tNode;
+ typedef ChTR_Node tNode;
 
 public:
  flags_(1)
@@ -31,10 +31,10 @@ public:
   flag_(4, accessors)
  _flags_
 
- Chasm_TR_Parse_Context();
+ ChTR_Parse_Context();
 
 };
 
-_AQNS(ChasmTR)
+_AQNS(Chasm_TR)
 
 #endif

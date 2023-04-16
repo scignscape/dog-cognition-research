@@ -5,28 +5,28 @@
 //           http://www.boost.org/LICENSE_1_0.txt)
 
 
-#include "chasm-tr-frame.h"
+#include "chtr-frame.h"
 
-#include "kernel/graph/chasm-tr-node.h"
+#include "kernel/graph/chtr-node.h"
 
 #include "aqns.h"
 
 #include <QDebug>
 
 
-USING_AQNS(ChasmTR)
+USING_AQNS(Chasm_TR)
 
-Chasm_TR_Frame::Chasm_TR_Frame()
- : node_frame<Chasm_TR_Dominion>()
+ChTR_Frame::ChTR_Frame()
+ : node_frame<ChTR_Dominion>()
 {
 
 
 }
 
-Chasm_TR_Frame& Chasm_TR_Frame::instance()
+ChTR_Frame& ChTR_Frame::instance()
 {
- static Chasm_TR_Frame* the_instance = nullptr;
+ static ChTR_Frame* the_instance = nullptr;
  if(!the_instance)
-  the_instance = new Chasm_TR_Frame;
+  the_instance = new ChTR_Frame;
  return *the_instance;
 }

@@ -5,19 +5,19 @@
 //           http://www.boost.org/LICENSE_1_0.txt)
 
 
-#ifndef CHASM_TR_PARSER__H
-#define CHASM_TR_PARSER__H
+#ifndef CHTR_PARSER__H
+#define CHTR_PARSER__H
 
 #include "relae-graph/relae-parser.h"
 
-#include "chasm-tr/kernel/chasm-tr-dominion.h"
+#include "chasm-tr/kernel/chtr-dominion.h"
 
 #include "aqns.h"
-AQNS_(ChasmTR)
+AQNS_(Chasm_TR)
 
-class Chasm_TR_Graph;
+class ChTR_Graph;
 
-class Chasm_TR_Parser : public Relae_Parser<Chasm_TR_Galaxy>
+class ChTR_Parser : public Relae_Parser<ChTR_Galaxy>
 {
  QString raw_text_;
 
@@ -25,11 +25,11 @@ public:
 
  ACCESSORS(QString ,raw_text)
 
- Chasm_TR_Parser(caon_ptr<Chasm_TR_Graph> g);
+ ChTR_Parser(caon_ptr<ChTR_Graph> g);
 
 };
 
-_AQNS(ChasmTR)
+_AQNS(Chasm_TR)
 
 
 #endif

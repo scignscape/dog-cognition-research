@@ -5,26 +5,26 @@
 //           http://www.boost.org/LICENSE_1_0.txt)
 
 
-#include "chasm-tr-grammar.h"
+#include "chtr-grammar.h"
 
-#include "chasm-tr-parse-context.h"
+#include "chtr-parse-context.h"
 
-#include "chasm-tr-graph-build.h"
+#include "chtr-graph-build.h"
 
-#include "chasm-tr-parser.h"
+#include "chtr-parser.h"
 
 #include "relae-graph/relae-parser.templates.h"
 
 #include <QDebug>
 
 
-USING_AQNS(ChasmTR)
+USING_AQNS(Chasm_TR)
 
-Chasm_TR_Grammar::Chasm_TR_Grammar()
+ChTR_Grammar::ChTR_Grammar()
 {
 }
 
-void Chasm_TR_Grammar::init(Chasm_TR_Parser& p, Chasm_TR_Graph& g, Chasm_TR_Graph_Build& graph_build)
+void ChTR_Grammar::init(ChTR_Parser& p, ChTR_Graph& g, ChTR_Graph_Build& graph_build)
 {
  // //  Check for package privates...?
  pre_rule( "script-word", "(?:[^{}()\\[\\]\\s`;,:]|(?:\\w::?\\w))+" );
@@ -53,7 +53,7 @@ void Chasm_TR_Grammar::init(Chasm_TR_Parser& p, Chasm_TR_Graph& g, Chasm_TR_Grap
 
  activate(report_context);
 
- Chasm_TR_Parse_Context& parse_context = graph_build.parse_context();
+ ChTR_Parse_Context& parse_context = graph_build.parse_context();
 
  add_rule(report_context,
    "qj-leave",

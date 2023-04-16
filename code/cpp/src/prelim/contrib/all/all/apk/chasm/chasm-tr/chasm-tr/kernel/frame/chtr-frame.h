@@ -5,29 +5,29 @@
 //           http://www.boost.org/LICENSE_1_0.txt)
 
 
-#ifndef CHASM_TR_FRAME__H
-#define CHASM_TR_FRAME__H
+#ifndef CHTR_FRAME__H
+#define CHTR_FRAME__H
 
 
 #include "relae-graph/relae-node-ptr.h"
 
-#include "kernel/chasm-tr-dominion.h"
+#include "kernel/chtr-dominion.h"
 
 #include "aqns.h"
 
-AQNS_(ChasmTR)
+AQNS_(Chasm_TR)
 
-class Chasm_TR_Frame : public node_frame<Chasm_TR_Dominion>
+class ChTR_Frame : public node_frame<ChTR_Dominion>
 {
- Chasm_TR_Frame();
+ ChTR_Frame();
  // SY_Dominion::Connectors N_A;
  public:
 
- static Chasm_TR_Frame& instance();
+ static ChTR_Frame& instance();
 
 };
 
 
-_AQNS(ChasmTR)
+_AQNS(Chasm_TR)
 
 #endif

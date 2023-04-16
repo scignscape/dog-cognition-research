@@ -5,14 +5,14 @@
 //           http://www.boost.org/LICENSE_1_0.txt)
 
 
-#include "chasm-tr-document.h"
+#include "chtr-document.h"
 
 #include "relae-graph/relae-parser.templates.h"
 
-#include "kernel/graph/chasm-tr-graph.h"
-#include "grammar/chasm-tr-grammar.h"
-#include "grammar/chasm-tr-parser.h"
-#include "grammar/chasm-tr-graph-build.h"
+#include "kernel/graph/chtr-graph.h"
+#include "grammar/chtr-grammar.h"
+#include "grammar/chtr-parser.h"
+#include "grammar/chtr-graph-build.h"
 
 #include <QFileInfo>
 #include <QDir>
@@ -20,14 +20,14 @@
 USING_KANS(Qh)
 
 
-Chasm_TR_Document::Chasm_TR_Document(QString path)
+ChTR_Document::ChTR_Document(QString path)
  : graph_(nullptr), grammar_(nullptr)
 {
  if(!path.isEmpty())
    load_file(path);
 }
 
-void Chasm_TR_Document::surround(QString divider, QString text)
+void ChTR_Document::surround(QString divider, QString text)
 {
  int index = text.indexOf(divider);
  if(index == -1)
@@ -48,15 +48,15 @@ void Chasm_TR_Document::surround(QString divider, QString text)
 }
 
 
-QVector<Chasm_TR_Graph::hypernode_type*>& Chasm_TR_Document::top_level_hypernodes()
+QVector<ChTR_Graph::hypernode_type*>& ChTR_Document::top_level_hypernodes()
 {
- static QVector<Chasm_TR_Graph::hypernode_type*> static_default;
+ static QVector<ChTR_Graph::hypernode_type*> static_default;
  if(graph_build_)
    return graph_build_->top_level_hypernodes();
  return static_default;
 }
 
-void Chasm_TR_Document::load_file(QString path)
+void ChTR_Document::load_file(QString path)
 {
  QFile file(path);
  if(file.open(QFile::ReadOnly | QIODevice::Text))
@@ -69,7 +69,7 @@ void Chasm_TR_Document::load_file(QString path)
 }
 
 
-void Chasm_TR_Document::resolve_report_path(QString& path)
+void ChTR_Document::resolve_report_path(QString& path)
 {
  if(path.startsWith('.'))
  {
@@ -85,7 +85,7 @@ void Chasm_TR_Document::resolve_report_path(QString& path)
  }
 }
 
-void Chasm_TR_Document::report_graph(QString path)
+void ChTR_Document::report_graph(QString path)
 {
  resolve_report_path(path);
  QFile file(path);
@@ -95,31 +95,31 @@ void Chasm_TR_Document::report_graph(QString path)
  }
 }
 
-void Chasm_TR_Document::set_grammar(Chasm_TR_Grammar* grammar)
+void ChTR_Document::set_grammar(ChTR_Grammar* grammar)
 {
  if(grammar)
   grammar_ = grammar;
  else
-  grammar_ = new Chasm_TR_Grammar();
+  grammar_ = new ChTR_Grammar();
 }
 
-void Chasm_TR_Document::parse(int start_position, int end_position)
+void ChTR_Document::parse(int start_position, int end_position)
 {
- graph_ = new Chasm_TR_Graph();
- parser_ = new Chasm_TR_Parser(graph_);
+ graph_ = new ChTR_Graph();
+ parser_ = new ChTR_Parser(graph_);
  parser_->set_raw_text(raw_text_);
 
- graph_build_ = new Chasm_TR_Graph_Build(this, *parser_, *graph_);
+ graph_build_ = new ChTR_Graph_Build(this, *parser_, *graph_);
  graph_build_->init();
 
- grammar_ = new Chasm_TR_Grammar;
+ grammar_ = new ChTR_Grammar;
 
  grammar_->init(*parser_, *graph_, *graph_build_);
 
  grammar_->compile(*parser_, *graph_, raw_text_, start_position);
 }
 
-Chasm_TR_Document::~Chasm_TR_Document()
+ChTR_Document::~ChTR_Document()
 {
 
 }

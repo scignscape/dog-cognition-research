@@ -5,7 +5,7 @@
 #           http://www.boost.org/LICENSE_1_0.txt)
 
 
-PROJECT_NAME = chasm-tr
+PROJECT_NAME = chtr
 
 include(../build-group.pri)
 
@@ -41,19 +41,19 @@ SOURCES += \
 
 
 HEADERS += \
-  $$SRC_DIR/kernel/chasm-tr-dominion.h \
-  $$SRC_DIR/kernel/frame/chasm-tr-frame.h \
-  $$SRC_DIR/kernel/query/chasm-tr-query.h \
-  $$SRC_DIR/kernel/graph/chasm-tr-node.h \
-  $$SRC_DIR/kernel/graph/chasm-tr-graph.h \
+  $$SRC_DIR/kernel/chtr-dominion.h \
+  $$SRC_DIR/kernel/frame/chtr-frame.h \
+  $$SRC_DIR/kernel/query/chtr-query.h \
+  $$SRC_DIR/kernel/graph/chtr-node.h \
+  $$SRC_DIR/kernel/graph/chtr-graph.h \
 
 
 SOURCES += \
-  $$SRC_DIR/kernel/chasm-tr-dominion.cpp \
-  $$SRC_DIR/kernel/frame/chasm-tr-frame.cpp \
-  $$SRC_DIR/kernel/query/chasm-tr-query.cpp \
-  $$SRC_DIR/kernel/graph/chasm-tr-node.cpp \
-  $$SRC_DIR/kernel/graph/chasm-tr-graph.cpp \
+  $$SRC_DIR/kernel/chtr-dominion.cpp \
+  $$SRC_DIR/kernel/frame/chtr-frame.cpp \
+  $$SRC_DIR/kernel/query/chtr-query.cpp \
+  $$SRC_DIR/kernel/graph/chtr-node.cpp \
+  $$SRC_DIR/kernel/graph/chtr-graph.cpp \
 
 
 

@@ -5,30 +5,30 @@
 //           http://www.boost.org/LICENSE_1_0.txt)
 
 
-#ifndef CHASM_TR_QUERY__H
-#define CHASM_TR_QUERY__H
+#ifndef CHTR_QUERY__H
+#define CHTR_QUERY__H
 
-#include "kernel/chasm-tr-dominion.h"
+#include "kernel/chtr-dominion.h"
 
 #include "relae-graph/relae-node-ptr.h"
 
 #include "aqns.h"
 
-AQNS_(ChasmTR)
+AQNS_(Chasm_TR)
 
-class Chasm_TR_Query : public node_query<Chasm_TR_Dominion>
+class ChTR_Query : public node_query<ChTR_Dominion>
 {
- Chasm_TR_Query();
+ ChTR_Query();
 
 public:
   #define DOMINION_CONNECTOR(name, label) \
-   Chasm_TR_Connectors name;
+   ChTR_Connectors name;
   #include "kernel/dominion/connectors.h"
   #undef DOMINION_CONNECTOR
 
- static const Chasm_TR_Query& instance();
+ static const ChTR_Query& instance();
 };
 
-_AQNS(ChasmTR)
+_AQNS(Chasm_TR)
 
 #endif

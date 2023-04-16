@@ -5,18 +5,18 @@
 //           http://www.boost.org/LICENSE_1_0.txt)
 
 
-#include "chasm-tr-query.h"
+#include "chtr-query.h"
 
 #include "aqns.h"
 
 
-USING_AQNS(ChasmTR)
+USING_AQNS(Chasm_TR)
 
 
-Chasm_TR_Query::Chasm_TR_Query()
- : node_query<Chasm_TR_Dominion>()
+ChTR_Query::ChTR_Query()
+ : node_query<ChTR_Dominion>()
   #define DOMINION_CONNECTOR(name, label) \
-    ,name(Chasm_TR_Connectors(Chasm_TR_Connectors_Case_Labels::name, label))
+    ,name(ChTR_Connectors(ChTR_Connectors_Case_Labels::name, label))
   #include "kernel/dominion/connectors.h"
   #undef DOMINION_CONNECTOR
 {
@@ -28,10 +28,10 @@ Chasm_TR_Query::Chasm_TR_Query()
  #undef DOMINION_CONNECTOR
 }
 
-const Chasm_TR_Query& Chasm_TR_Query::instance()
+const ChTR_Query& ChTR_Query::instance()
 {
- static Chasm_TR_Query* the_instance = nullptr;
+ static ChTR_Query* the_instance = nullptr;
  if(!the_instance)
-  the_instance = new Chasm_TR_Query;
+  the_instance = new ChTR_Query;
  return *the_instance;
 }

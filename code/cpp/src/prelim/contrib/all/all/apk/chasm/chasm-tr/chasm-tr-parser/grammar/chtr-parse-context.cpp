@@ -5,7 +5,15 @@
 //           http://www.boost.org/LICENSE_1_0.txt)
 
 
-#include "chasm-tr-node.h"
+#include "chtr-parse-context.h"
 
-USING_AQNS(ChasmTR)
+
+USING_AQNS(Chasm_TR)
+
+
+ChTR_Parse_Context::ChTR_Parse_Context(): Flags(0)
+{
+
+}
+
 

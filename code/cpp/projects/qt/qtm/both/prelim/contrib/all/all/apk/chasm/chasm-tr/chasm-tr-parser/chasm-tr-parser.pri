@@ -33,22 +33,22 @@ DEFINES += USE_AQNS
 
 
 HEADERS += \
-  $$SRC_DIR/grammar/chasm-tr-graph-build.h \
-  $$SRC_DIR/grammar/chasm-tr-grammar.h \
-  $$SRC_DIR/grammar/chasm-tr-parse-context.h \
-  $$SRC_DIR/grammar/chasm-tr-parser.h \
-  $$SRC_DIR/chasm-tr-source-file.h \
-  $$SRC_DIR/chasm-tr-document.h \
+  $$SRC_DIR/grammar/chtr-graph-build.h \
+  $$SRC_DIR/grammar/chtr-grammar.h \
+  $$SRC_DIR/grammar/chtr-parse-context.h \
+  $$SRC_DIR/grammar/chtr-parser.h \
+  $$SRC_DIR/chtr-source-file.h \
+  $$SRC_DIR/chtr-document.h \
 
 
 
 SOURCES += \
-  $$SRC_DIR/grammar/chasm-tr-graph-build.cpp \
-  $$SRC_DIR/grammar/chasm-tr-grammar.cpp \
-  $$SRC_DIR/grammar/chasm-tr-parse-context.cpp \
-  $$SRC_DIR/grammar/chasm-tr-parser.cpp \
-  $$SRC_DIR/chasm-tr-source-file.cpp \
-  $$SRC_DIR/chasm-tr-document.cpp \
+  $$SRC_DIR/grammar/chtr-graph-build.cpp \
+  $$SRC_DIR/grammar/chtr-grammar.cpp \
+  $$SRC_DIR/grammar/chtr-parse-context.cpp \
+  $$SRC_DIR/grammar/chtr-parser.cpp \
+  $$SRC_DIR/chtr-source-file.cpp \
+  $$SRC_DIR/chtr-document.cpp \
 
 
 

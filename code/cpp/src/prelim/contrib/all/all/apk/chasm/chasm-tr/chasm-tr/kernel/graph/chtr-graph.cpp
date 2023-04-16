@@ -5,14 +5,14 @@
 //           http://www.boost.org/LICENSE_1_0.txt)
 
 
-#include "chasm-tr-graph.h"
+#include "chtr-graph.h"
 
 #include "aqns.h"
 
-USING_AQNS(ChasmTR)
+USING_AQNS(Chasm_TR)
 
 
-Chasm_TR_Graph::Chasm_TR_Graph(Chasm_TR_Node* root_node)
+ChTR_Graph::ChTR_Graph(ChTR_Node* root_node)
   :  root_node_(root_node)
 {
  set_user_data(&hypernodes_);
@@ -24,26 +24,26 @@ Chasm_TR_Graph::Chasm_TR_Graph(Chasm_TR_Node* root_node)
 }
 
 // // here offset dfaults to -1 ...
-void Chasm_TR_Graph::add_structure_type(QString name, unsigned int l,
+void ChTR_Graph::add_structure_type(QString name, unsigned int l,
   signed int offset)
 {
  types_[name] = {l, {offset, -1}};
 }
 
-void Chasm_TR_Graph::add_array_type(QString name, unsigned int l,
+void ChTR_Graph::add_array_type(QString name, unsigned int l,
   unsigned int csize, signed int offset)
 {
  types_[name] = {-l, {offset, csize}};
 }
 
 // // here offset defaults to 0 ...
-void Chasm_TR_Graph::add_fixed_array_type(QString name, unsigned int l,
+void ChTR_Graph::add_fixed_array_type(QString name, unsigned int l,
   signed int offset)
 {
  types_[name] = {l, {offset, -1}};
 }
 
-void Chasm_TR_Graph::update_current_field_index(QString type_name,
+void ChTR_Graph::update_current_field_index(QString type_name,
   QString field_name, int& upd)
 {
  auto it = field_indices_.find({type_name, field_name});
@@ -55,7 +55,7 @@ void Chasm_TR_Graph::update_current_field_index(QString type_name,
 }
 
 
-void Chasm_TR_Graph::add_read_token(hypernode_type* hn, QString type_name,
+void ChTR_Graph::add_read_token(hypernode_type* hn, QString type_name,
   QString field_name, QPair<QString, void*> val)
 {
  auto it = field_indices_.find({type_name, field_name});
@@ -66,13 +66,13 @@ void Chasm_TR_Graph::add_read_token(hypernode_type* hn, QString type_name,
  }
 }
 
-void Chasm_TR_Graph::array_append(hypernode_type* hn, hypernode_type* nhn)
+void ChTR_Graph::array_append(hypernode_type* hn, hypernode_type* nhn)
 {
  append_af(hn, {"", nhn}, {"proxy", nullptr});
 }
 
 
-void Chasm_TR_Graph::add_read_token(hypernode_type* hn, QString type_name,
+void ChTR_Graph::add_read_token(hypernode_type* hn, QString type_name,
   int field_index, QPair<QString, void*> val, QString field_name)
 {
  auto it = types_.find(type_name);
@@ -96,12 +96,12 @@ void Chasm_TR_Graph::add_read_token(hypernode_type* hn, QString type_name,
  }
 }
 
-void Chasm_TR_Graph::add_type_field_index(QString type_name, QString field_name, int code)
+void ChTR_Graph::add_type_field_index(QString type_name, QString field_name, int code)
 {
  field_indices_.insert({type_name, field_name}, code);
 }
 
-Chasm_TR_Graph::hypernode_type* Chasm_TR_Graph::new_hypernode_by_type_name(QString ty)
+ChTR_Graph::hypernode_type* ChTR_Graph::new_hypernode_by_type_name(QString ty)
 {
  auto it = types_.find(ty);
  if(it == types_.end())

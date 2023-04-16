@@ -5,15 +5,14 @@
 //           http://www.boost.org/LICENSE_1_0.txt)
 
 
-#include "chasm-tr-source-file.h"
+#include "chtr-dominion.h"
 
+#include "graph/chtr-node.h"
 
-USING_AQNS(ChasmTR)
+#define DOMINION_NODE_NAMESPACE KA::Qh
+#define DOMINION_TYPE DOMINION_RETRIEVE_TYPE_CODE
+#include "dominion/types.h"
+#undef DOMINION_TYPE
+#undef DOMINION_NODE_NAMESPACE
 
-
-Chasm_TR_Source_File::Chasm_TR_Source_File(QString path)
-  :  path_(path)
-{
-
-}
 
