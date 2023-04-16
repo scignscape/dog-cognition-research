@@ -1,0 +1,109 @@
+
+//           Copyright Nathaniel Christen 2020.
+//  Distributed under the Boost Software License, Version 1.0.
+//     (See accompanying file LICENSE_1_0.txt or copy at
+//           http://www.boost.org/LICENSE_1_0.txt)
+
+
+#ifndef CHASM_TR_DOMINION__H
+#define CHASM_TR_DOMINION__H
+
+
+#include "relae-graph/relae-node-ptr.h"
+#include "relae-graph/relae-caon-ptr.h"
+
+
+#define DOMINION_HIDE_NO_NAMESPACE
+#define DOMINION_TYPE DOMINION_TYPE_DECLARE
+#include "dominion/types.h"
+#undef DOMINION_TYPE
+#undef DOMINION_HIDE_NO_NAMESPACE
+
+#include "aqns.h"
+
+AQNS_(ChasmTR)
+
+struct Chasm_TR_Galaxy;
+class Chasm_TR_Node;
+class Chasm_TR_Connectors;
+class Chasm_TR_Connection;
+class Chasm_TR_Annotated_Connectors;
+class Chasm_TR_Frame;
+class Chasm_TR_Document;
+class Chasm_TR_Graph;
+class Chasm_TR_Root;
+class Chasm_TR_Token;
+
+struct Chasm_TR_Dominion
+{
+ typedef Chasm_TR_Galaxy Galaxy_type;
+ typedef Chasm_TR_Node Node_type;
+ typedef Chasm_TR_Frame Frame_type;
+ typedef Chasm_TR_Connectors Connectors_type;
+ typedef Chasm_TR_Connection Connection_type;
+ typedef Chasm_TR_Annotated_Connectors Annotated_Connectors_type;
+ typedef Chasm_TR_Document Document_type;
+ typedef Chasm_TR_Graph Graph_type;
+ typedef Chasm_TR_Root Root_type;
+
+ enum class Type_Codes { N_A,
+  #define DOMINION_TYPE DOMINION_TYPE_ENUM
+  #include "dominion/types.h"
+  #undef DOMINION_TYPE
+ };
+
+ template<typename T>
+ Type_Codes get_type_code()
+ {
+  return (Type_Codes) 0;
+ }
+
+};
+
+
+
+struct Chasm_TR_Galaxy : Node_Ptr_Default_Galaxy<Chasm_TR_Dominion>
+{
+ typedef Chasm_TR_Token Chasm_TR_Token_type;
+
+};
+
+enum class Chasm_TR_Connectors_Case_Labels
+{
+ #define DOMINION_CONNECTOR(name, label) \
+  name,
+ #include "kernel/dominion/connectors.h"
+ #undef DOMINION_CONNECTOR
+};
+
+struct Chasm_TR_Connectors : node_connectors<Chasm_TR_Dominion>
+{
+  Chasm_TR_Connectors(Chasm_TR_Connectors_Case_Labels cl = Chasm_TR_Connectors_Case_Labels::N_A,
+    QString label = QString())
+   : node_connectors<Chasm_TR_Dominion>(label), case_label(cl),
+     priority(0), order(0){}
+  Chasm_TR_Connectors_Case_Labels case_label;
+  int priority;
+  int order;
+  bool operator<(const Chasm_TR_Connectors& rhs) const
+  {
+   return order < rhs.order;
+  }
+  operator bool() const
+  {
+   return order > 0;
+  }
+};
+
+struct Chasm_TR_Annotated_Connectors :
+  node_annotated_connectors<Chasm_TR_Dominion>
+{
+ Chasm_TR_Annotated_Connectors(const Chasm_TR_Connectors& conn,
+   caon_ptr<Chasm_TR_Connection> cion)
+   : node_annotated_connectors<Chasm_TR_Dominion>{conn, cion} {}
+
+};
+
+_AQNS(ChasmTR)
+
+#endif

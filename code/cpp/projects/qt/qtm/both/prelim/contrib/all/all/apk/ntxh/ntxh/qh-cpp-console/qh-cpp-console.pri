@@ -24,7 +24,6 @@ exists($$ROOT_DIR/../preferred/sysr.pri): include($$ROOT_DIR/../preferred/sysr.p
 exists($$ROOT_DIR/../preferred/sysr-c.pri): include($$ROOT_DIR/../preferred/sysr-c.pri)
 exists($$ROOT_DIR/../preferred/compiler.pri): include($$ROOT_DIR/../preferred/compiler.pri)
 
-CONFIG += c++17
 
 
 INCLUDEPATH += $$SRC_DIR $$SRC_GROUP_DIR $$SRC_ROOT_DIR
@@ -44,13 +43,13 @@ DEFINES += ROOT_FOLDER=\\\"$$ROOT_DIR\\\"
 
 
 HEADERS += \
-  $$SRC_DIR/pdf-viewer/pdf-document-controller.h \
-  $$SRC_DIR/pdf-viewer/pdf-document-info.h \
-  $$SRC_DIR/pdf-viewer/pdf-document-state.h \
-  $$SRC_DIR/json/qh-json-file-reader.h \
-  $$SRC_DIR/json/pseudo-jpath.h \
-  $$SRC_DIR/sdi/sdi-block-element.h \
-  $$SRC_DIR/sdi/sdi-block-element-collection.h \
+#  $$SRC_DIR/pdf-viewer/pdf-document-controller.h \
+#  $$SRC_DIR/pdf-viewer/pdf-document-info.h \
+#  $$SRC_DIR/pdf-viewer/pdf-document-state.h \
+#  $$SRC_DIR/json/qh-json-file-reader.h \
+#  $$SRC_DIR/json/pseudo-jpath.h \
+#  $$SRC_DIR/sdi/sdi-block-element.h \
+#  $$SRC_DIR/sdi/sdi-block-element-collection.h \
 
 
 
@@ -58,22 +57,22 @@ HEADERS += \
 
 SOURCES += \
   $$SRC_DIR/main.cpp \
-  $$SRC_DIR/pdf-viewer/pdf-document-controller.cpp \
-  $$SRC_DIR/pdf-viewer/pdf-document-info.cpp \
-  $$SRC_DIR/pdf-viewer/pdf-document-state.cpp \
-  $$SRC_DIR/json/qh-json-file-reader.cpp \
-  $$SRC_DIR/json/pseudo-jpath.cpp \
-  $$SRC_DIR/sdi/sdi-block-element.cpp \
-  $$SRC_DIR/sdi/sdi-block-element-collection.cpp \
 
 
 
-LIBS += -L$$TARGETSDIR -lqh-cpp   -lqh-cpp-parser
+# $$SRC_DIR/pdf-viewer/pdf-document-controller.cpp \
+#  $$SRC_DIR/pdf-viewer/pdf-document-info.cpp \
+#  $$SRC_DIR/pdf-viewer/pdf-document-state.cpp \
+#  $$SRC_DIR/json/qh-json-file-reader.cpp \
+#  $$SRC_DIR/json/pseudo-jpath.cpp \
+#  $$SRC_DIR/sdi/sdi-block-element.cpp \
+#  $$SRC_DIR/sdi/sdi-block-element-collection.cpp \
 
-LIBS += -L$$POPPLER_LIB_DIR  -lpoppler -lpoppler-qt5
 
 
-LIBS += -rdynamic -ldl
+#LIBS += -L$$TARGETSDIR -lqh-cpp   -lqh-cpp-parser
+#LIBS += -L$$POPPLER_LIB_DIR  -lpoppler -lpoppler-qt5
+#LIBS += -rdynamic -ldl
 
 
 

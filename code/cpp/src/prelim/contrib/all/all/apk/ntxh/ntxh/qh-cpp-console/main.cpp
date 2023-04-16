@@ -31,6 +31,44 @@ USING_KANS(RdSC)
 
 #include "dlfcn.h"
 
+//#include <QXmlStreamReader>
+
+
+/*
+
+<! <x>[retval] <\ [proc](pr)  [lambda](<*>[retval] <\ [proc](add) [lambda](5 7) ) !>
+
+.,
+load-pst $ /test ;.
+,.
+
+,x int
+
+.<x>[r] [p](pr)  [l](<*>[r] [p](add) [l](5 7) )
+
+.[p](unless) [l]($1 $2) = .[p](if) [l](<*>[r] [l](;1) ;2)
+
+
+[p] = %
+[r] = @
+[l] = \
+[m] = &
+[s] =
+[e] =
+[c] = @.
+
+.<x>@ %(pr) \(<*>@ %(add) \(5 7) )
+
+
+.&(unless) \($1 $2) = .%(if) \(<*>@ \(;1) ;2)
+
+
+.<x>@. %(test) \+(this)
+
+
+.<x>[c]
+
+ */
 
 u2 pt_to_px(r8 pt)
 {
@@ -148,7 +186,9 @@ int main(int argc, char *argv[])
 //  }
  }
 
- QString path = folder + "/tex/out/nj.pdf";
+ QString base_title = "multi-media";
+
+ QString path = "%1/tex/out/%2.pdf"_qt.arg(folder).arg(base_title);
  pdfc.load_document(path);
 
  QImage image(1, 1, QImage::Format_RGB32);
@@ -158,7 +198,7 @@ int main(int argc, char *argv[])
 
  image = pdfc.pixmap().toImage();
 
- QString page_file = folder + "/t1.png";
+ QString page_file = "%1/%2.png"_qt.arg(folder).arg(base_title);
 
  image.save(page_file);
 
@@ -169,7 +209,7 @@ int main(int argc, char *argv[])
  svg.replace("%PAGE%", page_file);
  svg.replace("%BLOCK-ELEMENTS%", sdi_block_elements);
 
- save_file(folder + "/t1.svg", svg);
+ save_file("%1/%2.svg"_qt.arg(folder).arg(base_title), svg);
 
  return 0;
 }

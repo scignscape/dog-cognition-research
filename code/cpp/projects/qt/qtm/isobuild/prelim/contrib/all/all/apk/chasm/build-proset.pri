@@ -5,4 +5,6 @@
 #           http://www.boost.org/LICENSE_1_0.txt)
 
 
-include(../build-proset.pri)
+PROJECT_SET = chasm
+
+include(../build-kernel.pri)
