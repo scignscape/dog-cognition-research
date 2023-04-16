@@ -5,8 +5,8 @@
 //           http://www.boost.org/LICENSE_1_0.txt)
 
 
-#ifndef CHASM_TR_GRAPH__H
-#define CHASM_TR_GRAPH__H
+#ifndef CHTR_GRAPH__H
+#define CHTR_GRAPH__H
 
 
 #include <QTextStream>
