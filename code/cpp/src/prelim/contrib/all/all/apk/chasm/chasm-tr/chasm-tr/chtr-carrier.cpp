@@ -1,4 +1,5 @@
 
+
 //           Copyright Nathaniel Christen 2020.
 //  Distributed under the Boost Software License, Version 1.0.
 //     (See accompanying file LICENSE_1_0.txt or copy at
@@ -6,12 +7,16 @@
 
 
 
-#ifndef SOURCE_CHAR_TOKEN__H
-#define SOURCE_CHAR_TOKEN__H
+#include "chtr-carrier.h"
 
 
+USING_AQNS(Chasm_TR)
 
 
+ChTR_Carrier::ChTR_Carrier(QString symbol)
+  :  symbol_(symbol)
+{
 
-#endif
+}
+
 

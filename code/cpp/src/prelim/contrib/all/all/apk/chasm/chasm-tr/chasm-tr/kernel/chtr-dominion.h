@@ -48,7 +48,7 @@ struct ChTR_Dominion
 
  enum class Type_Codes { N_A,
   #define DOMINION_TYPE DOMINION_TYPE_ENUM
-  #include "dominion/types.h"
+  #include "kernel/dominion/types.h"
   #undef DOMINION_TYPE
  };
 

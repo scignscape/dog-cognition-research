@@ -32,11 +32,33 @@ DEFINES += USE_AQNS
 
 
 HEADERS += \
-  $$SRC_DIR/source-char-token.h \
+  $$SRC_DIR/kernel/dominion/types.h \
+  $$SRC_DIR/chtr-channel-object.h \
+  $$SRC_DIR/chtr-channel-package.h \
+  $$SRC_DIR/chtr-source-token.h \
+  $$SRC_DIR/chtr-carrier.h \
+  $$SRC_DIR/chtr-code-statement.h \
+  $$SRC_DIR/chvm/chvm-code-generator.h \
+  $$SRC_DIR/chvm/chvm-code-block.h \
+  $$SRC_DIR/chvm/chvm-code-statement.h \
+  $$SRC_DIR/chvm/chvm-procedure.h \
+
 
 
 SOURCES += \
-  $$SRC_DIR/source-char-token.cpp \
+  $$SRC_DIR/chtr-channel-object.cpp \
+  $$SRC_DIR/chtr-channel-package.cpp \
+  $$SRC_DIR/chtr-source-token.cpp \
+  $$SRC_DIR/chtr-carrier.cpp \
+  $$SRC_DIR/chtr-code-statement.cpp \
+  $$SRC_DIR/chvm/chvm-code-generator.cpp \
+  $$SRC_DIR/chvm/chvm-code-block.cpp \
+  $$SRC_DIR/chvm/chvm-code-statement.cpp \
+  $$SRC_DIR/chvm/chvm-procedure.cpp \
+
+
+
+
 
 
 

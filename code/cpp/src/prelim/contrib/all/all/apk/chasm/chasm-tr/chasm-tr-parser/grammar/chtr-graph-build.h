@@ -34,6 +34,11 @@ class ChTR_Frame;
 class ChTR_Source_Type;
 class ChTR_Source_File;
 
+class ChTR_Channel_Package;
+class ChTR_Channel_Object;
+class ChTR_Code_Statement;
+
+
 class ChTR_Graph_Build
 {
 
@@ -77,6 +82,12 @@ private:
 
  ChTR_Source_File* current_source_file_;
 
+ ChTR_Channel_Package* current_channel_package_;
+ ChTR_Channel_Object* current_channel_object_;
+ ChTR_Code_Statement* current_code_statement_;
+
+ ChTR_Node* current_statement_level_node_;
+
 public:
 
  ChTR_Graph_Build(ChTR_Document* d, ChTR_Parser& p, ChTR_Graph& g);
@@ -86,6 +97,14 @@ public:
 
 
  void init();
+
+ void enter_statement_body();
+
+ void enter_channel_body();
+ void leave_channel_body();
+
+ void read_channel_string(QString channel_string);
+ void read_carrier_string(QString carrier_string);
 
 
 };

@@ -17,7 +17,8 @@
 #include <QFileInfo>
 #include <QDir>
 
-USING_KANS(Qh)
+
+USING_AQNS(Chasm_TR)
 
 
 ChTR_Document::ChTR_Document(QString path)

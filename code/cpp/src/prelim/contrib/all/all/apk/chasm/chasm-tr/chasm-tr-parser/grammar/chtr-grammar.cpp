@@ -42,8 +42,8 @@ void ChTR_Grammar::init(ChTR_Parser& p, ChTR_Graph& g, ChTR_Graph_Build& graph_b
  pre_rule( "non-parens", "[^)]*" );
 
 
- Context report_context = add_context("report-context");
- track_context({&report_context});
+ Context source_context = add_context("source-context");
+ track_context({&source_context});
 
 // Context group_context = add_context("group-context");
 // track_context({&group_context});
@@ -51,18 +51,10 @@ void ChTR_Grammar::init(ChTR_Parser& p, ChTR_Graph& g, ChTR_Graph_Build& graph_b
 // Context read_context = add_context("read-context",
 //   {sample_context, group_context});
 
- activate(report_context);
+ activate(source_context);
 
  ChTR_Parse_Context& parse_context = graph_build.parse_context();
 
- add_rule(report_context,
-   "qj-leave",
-   "@lv .spaces. (?<line-number> \\d+ ) .spaces-optional. : .spaces."
-     "Qj  .spaces-optional. \\( (?<context-name> .non-parens. ) \\) ",
-   [&]
- {
-  graph_build.leave_qj_context(p.matched("line-number").toUShort(), p.matched("context-name"));
- });
 
 
 // add_rule(report_context,
@@ -74,32 +66,51 @@ void ChTR_Grammar::init(ChTR_Parser& p, ChTR_Graph& g, ChTR_Graph_Build& graph_b
 //  graph_build.enter_qj_context(p.matched("line-number").toUShort(), p.matched("context-name"));
 // });
 
- add_rule(report_context,
-   "qj-enter",
-   "@at .spaces. (?<line-number> \\d+ ) .spaces-optional. : .spaces. "
-     "Qj .spaces-optional. \\( (?<context-name> .non-parens. ) \\) ",
-   [&]
+ add_rule(source_context,
+   "statement-entry",
+   "\\. (?!\\s)"
+   ,[&]
  {
-  graph_build.enter_qj_context(p.matched("line-number").toUShort(), p.matched("context-name"));
+  graph_build.enter_statement_body();
  });
 
- add_rule(flags_all_(parse_context ,enum_def), report_context,
-   "enum-def",
-   "enum_macro\\( (?<label> \\w+ ) , (?<value> .non-parens.) \\)",
-   [&]
+
+
+ add_rule(source_context,
+   "channel-declaration",
+   "\\[ (?<channel-string> [^\\]]+ )"
+   ,[&]
  {
-  graph_build.note_enum_def(p.matched("label"), p.matched("value"));
+  graph_build.read_channel_string(p.matched("channel-string"));
  });
 
- add_rule(report_context,
-   "line-number",
-   "@ln .spaces. (?<line-number> \\d+ ) .spaces-optional. : .spaces. ",
-   [&]
- {
-  graph_build.hold_line_number(p.matched("line-number").toUShort());
- });
 
- add_rule(report_context,
+ add_rule(flags_all_(parse_context ,active_channel), source_context,
+   "enter-channel-body",
+   " \\( "          // (?<enum-type> \\w+) , (?<base-type> \\w+) )",
+   ,[&]
+  {
+   graph_build.enter_channel_body();
+  });
+
+ add_rule(flags_all_(parse_context ,open_channel_body), source_context,
+   "read-carrier-string",
+   " [^)\\s]+ "          // (?<enum-type> \\w+) , (?<base-type> \\w+) )",
+   ,[&]
+  {
+   graph_build.read_carrier_string(p.match_text());
+  });
+
+ add_rule(flags_all_(parse_context ,open_channel_body), source_context,
+   "leave-channel-body",
+   " \\) "          // (?<enum-type> \\w+) , (?<base-type> \\w+) )",
+   ,[&]
+  {
+   graph_build.leave_channel_body();
+  });
+
+
+ add_rule(source_context,
    "skip",
    ".",
    [&]
@@ -110,13 +121,13 @@ void ChTR_Grammar::init(ChTR_Parser& p, ChTR_Graph& g, ChTR_Graph_Build& graph_b
 
 
 
- add_rule(flags_all_(parse_context ,enum_def), report_context,
-   "enum-ops",
-   " ENUM_FLAGS_OP_MACROS \\( (?<enum-type> \\w+) , (?<base-type> \\w+) )",
-   [&]
- {
+// add_rule(flags_all_(parse_context ,enum_def), report_context,
+//   "enum-ops",
+//   " ENUM_FLAGS_OP_MACROS \\( (?<enum-type> \\w+) , (?<base-type> \\w+) )",
+//   [&]
+// {
 
- });
+// });
 
 }
 

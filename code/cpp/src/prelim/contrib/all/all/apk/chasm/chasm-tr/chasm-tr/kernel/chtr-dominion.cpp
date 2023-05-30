@@ -7,9 +7,11 @@
 
 #include "chtr-dominion.h"
 
+#include "aqns.h"
+
 #include "graph/chtr-node.h"
 
-#define DOMINION_NODE_NAMESPACE KA::Qh
+#define DOMINION_NODE_NAMESPACE Aq::Chasm_TR
 #define DOMINION_TYPE DOMINION_RETRIEVE_TYPE_CODE
 #include "dominion/types.h"
 #undef DOMINION_TYPE

@@ -10,7 +10,7 @@
 
 #include "relae-graph/relae-parser.h"
 
-#include "chtr/kernel/chtr-dominion.h"
+#include "chasm-tr/kernel/chtr-dominion.h"
 
 #include "aqns.h"
 AQNS_(Chasm_TR)

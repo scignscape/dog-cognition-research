@@ -22,15 +22,24 @@
 
 #include "aqns.h"
 
+
 AQNS_(Chasm_TR)
+
+class ChTR_Channel_Object;
 
 
 class ChTR_Node : public node_ptr<ChTR_Dominion>
 {
 public:
  #define DOMINION_TYPE DOMINION_NODE_CONSTRUCTOR
+//? #define DOMINION_HIDE_NO_NAMESPACE
+ #define DOMINION_INNER_NAMESPACE Chasm_TR
+
  #include "kernel/dominion/types.h"
+
  #undef DOMINION_TYPE
+// #undef DOMINION_HIDE_NO_NAMESPACE
+ #undef DOMINION_INNER_NAMESPACE
 
 };
 

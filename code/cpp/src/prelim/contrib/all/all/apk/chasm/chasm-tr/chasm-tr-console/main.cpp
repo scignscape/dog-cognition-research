@@ -40,9 +40,26 @@ load-pst $ /test ;.
 
  */
 
+#include "chasm-tr-parser/chtr-document.h"
 
+#include "chasm-tr/chvm/chvm-code-generator.h"
+
+USING_AQNS(Chasm_TR)
+
+//#include "ch
 
 int main(int argc, char *argv[])
 {
+
+ ChTR_Document chrd(ROOT_FOLDER "/../chtr/t1/t1.cr");
+
+ chrd.parse();
+
+ ChVM_Code_Generator ccg(chrd.graph());
+
+ QString chvm;
+ ccg.graph_to_chvm(chvm);
+
+ //?chrd.graph_to_chvm();
 
 }

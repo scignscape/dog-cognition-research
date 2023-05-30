@@ -5,8 +5,7 @@
 //           http://www.boost.org/LICENSE_1_0.txt)
 
 
-#define DOMINION_NODE_TYPE Qh_CPP_Node
-
+#define DOMINION_NODE_TYPE ChTR_Node
 
 #ifndef DOMINION_HIDE_NO_NAMESPACE
 // // No namespace
@@ -18,18 +17,28 @@ DOMINION_TYPE(qstring, QString, QStr)
 DOMINION_TYPE(phhn, phaong<pg_t>::Hypernode, Phaong_Hypernode)
 #endif
 
+//?#include "relae-graph/dominion-macros.h"
+
+#define DOMINION_OUTER_NAMESPACE Aq
+
+
+
+//#define DOMINION_INNER_NAMESPACE Qh
+//#include "relae-graph/dominion-macros.h"
+//DOMINION_TYPE(qh_root, Qh_Root, Qh_Root)
+//DOMINION_TYPE(qh_token, Qh_Token, Qh_Token)
+//DOMINION_TYPE(qh_node_base, Qh_Node_Base, Qh_Node_Base)
+
+//?#undef DOMINION_INNER_NAMESPACE
+
+#define DOMINION_INNER_NAMESPACE Chasm_TR
 #include "relae-graph/dominion-macros.h"
 
-#define DOMINION_OUTER_NAMESPACE KA
+DOMINION_TYPE(channel_object, ChTR_Channel_Object, Channel_Object)
+DOMINION_TYPE(source_file, ChTR_Source_File, Source_File)
+DOMINION_TYPE(code_statement, ChTR_Code_Statement, Code_Statement)
 
 
-#define DOMINION_INNER_NAMESPACE Qh
-#include "relae-graph/dominion-macros.h"
-DOMINION_TYPE(qh_root, Qh_Root, Qh_Root)
-DOMINION_TYPE(qh_token, Qh_Token, Qh_Token)
-DOMINION_TYPE(qh_node_base, Qh_Node_Base, Qh_Node_Base)
-
-#undef DOMINION_INNER_NAMESPACE
 
 //#define DOMINION_INNER_NAMESPACE GBuild
 //#include "relae-graph/dominion-macros.h"

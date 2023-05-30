@@ -11,6 +11,8 @@
  type
 #endif
 
+//#define DOMINION_OUTER_NAMESPACE Aq
+
 
 #if defined(DOMINION_OUTER_NAMESPACE)
  #ifdef DOMINION_INNER_NAMESPACE

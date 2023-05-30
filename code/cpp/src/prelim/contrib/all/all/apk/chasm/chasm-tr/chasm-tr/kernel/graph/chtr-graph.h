@@ -43,9 +43,11 @@ private:
 
 public:
 
- ACCESSORS__CONST_RGET(QVector<hypernode_type*> ,hypernodes)
-
  ChTR_Graph(ChTR_Node* root_node = nullptr);
+
+
+ ACCESSORS__CONST_RGET(QVector<hypernode_type*> ,hypernodes)
+ ACCESSORS(ChTR_Node* ,root_node)
 
 
  hypernode_type* new_hypernode_by_type_name(QString ty);

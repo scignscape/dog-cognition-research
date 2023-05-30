@@ -9,6 +9,8 @@ PROJECT_NAME = chasm-console
 
 include(../build-group.pri)
 
+TEMPLATE = app
+
 QT -= gui
 
 exists($$ROOT_DIR/../preferred/sysr.pri): include($$ROOT_DIR/../preferred/sysr.pri)
@@ -24,10 +26,17 @@ INCLUDEPATH += $$RELAE_GRAPH_SRC_GROUP_DIR
 INCLUDEPATH += $$PHAON_GRAPH_SRC_GROUP_DIR
 
 
+INCLUDEPATH += $$SRC_GROUP_DIR/chasm-tr
+
 
 CONFIG += no_keywords
 
 DEFINES += USE_KANS
+DEFINES += USE_AQNS
+
+DEFINES += ROOT_FOLDER=\\\"$$ROOT_DIR\\\"
+
+
 
 
 HEADERS += \
@@ -35,6 +44,9 @@ HEADERS += \
 
 SOURCES += \
   $$SRC_DIR/main.cpp \
+
+
+LIBS += -L$$TARGETSDIR -lchasm-tr  -lchasm-tr-parser
 
 
 message(choice: $$CPP_ROOT_DIR/targets/$$CHOICE_CODE/$$PROJECT_SET--$$PROJECT_GROUP--$$PROJECT_NAME)

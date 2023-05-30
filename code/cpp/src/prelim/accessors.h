@@ -154,6 +154,27 @@ ACCESSORS__GET(type, name)
 #endif
 
 
+
+
+#ifndef ACCESSORS__SET_FNP__STATIC
+#define ACCESSORS__SET_FNP__STATIC(ret, type, name) \
+ static void set_##name(ret (*_arg_) (type)) { name##_ = _arg_; }
+#endif
+
+#ifndef ACCESSORS__GET_FNP__STATIC
+#define ACCESSORS__GET_FNP__STATIC(ret, type, name) \
+ static ret (*get_##name())(type) { return name##_; }
+#endif
+
+
+
+#ifndef ACCESSORS__FNP__STATIC
+#define ACCESSORS__FNP__STATIC(ret, type, name) \
+ ACCESSORS__SET_FNP__STATIC(ret, type, name) \
+ ACCESSORS__GET_FNP__STATIC(ret, type, name)
+#endif
+
+
 #ifndef ACCESSORS_set
 #define ACCESSORS_set(type, name) \
  void set_##name(type _arg_) { name##_ = _arg_; }

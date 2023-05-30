@@ -25,10 +25,10 @@ class ChTR_Parse_Context
 
 public:
  flags_(1)
-  flag_(1, enum_def)
-  flag_(2, enum_ops)
-  flag_(3, enum_str)
-  flag_(4, accessors)
+  flag_(1, open_channel_declaration)
+  flag_(2, active_channel)
+  flag_(3, open_channel_body)
+  flag_(4, awaiting_statement_body)
  _flags_
 
  ChTR_Parse_Context();

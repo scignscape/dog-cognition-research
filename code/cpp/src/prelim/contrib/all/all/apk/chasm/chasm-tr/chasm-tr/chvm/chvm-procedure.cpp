@@ -7,6 +7,15 @@
 
 
 
-#include "source-char-token.h"
+#include "chvm-procedure.h"
+
+
+USING_AQNS(Chasm_TR)
+
+
+ChVM_Procedure::ChVM_Procedure()
+{
+
+}
 
 
