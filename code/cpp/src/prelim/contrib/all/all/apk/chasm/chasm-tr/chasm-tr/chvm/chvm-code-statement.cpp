@@ -19,4 +19,8 @@ ChVM_Code_Statement::ChVM_Code_Statement()
 
 }
 
+QString ChVM_Code_Statement::lines_to_chvm()
+{
+ return code_lines_.toList().join("");
+}
 

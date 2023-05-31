@@ -23,11 +23,47 @@
 
 #include "global-types.h"
 
+#include "flags.h"
+
 AQNS_(Chasm_TR)
 
 
 class ChTR_Carrier
 {
+ public:
+
+  struct Literal_Info
+  {
+   flags_(2)
+    bool known_symbol:1;
+    bool signed_as_positive:1;
+    bool signed_as_negative:1;
+    bool unsigned_decimal:1;
+    bool signed_decimal:1;
+    bool unsigned_integer:1;
+    bool qstring:1;
+    bool xstring:1;
+    bool keyword:1;
+    bool base_10:1;
+    bool base_8:1;
+    bool base_16:1;
+    bool base_32:1;
+    bool base_64:1;
+    bool base_2:1;
+   _flags
+
+   Literal_Info() : Flags(0) {}
+
+   bool tbd() { return Flags == 0; }
+
+   inline bool note_base_10();
+   inline bool note_base_2();
+   inline bool note_base_8();
+   inline bool note_base_16();
+
+  };
+
+  Literal_Info literal_info;
 
 private:
 
@@ -40,6 +76,9 @@ public:
 
  ACCESSORS(QString ,symbol)
 
+ void check_literal();
+ bool parse_literal_info();
+ bool check_number_form(QStringView qsv);
 
 };
 

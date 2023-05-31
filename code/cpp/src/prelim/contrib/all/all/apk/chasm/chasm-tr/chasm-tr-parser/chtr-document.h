@@ -60,6 +60,8 @@ public:
 
  ~ChTR_Document();
 
+ void save_file(QString path_or_extension, QString contents);
+
  QVector<ChTR_Graph::hypernode_type*>& top_level_hypernodes();
 
  void load_file(QString path);

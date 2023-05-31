@@ -47,6 +47,9 @@ public:
 
  ACCESSORS(QString ,channel_kind)
 
+ ACCESSORS__CONST_RGET(QVector<ChTR_Carrier*> ,carriers)
+
+
  void add_carrier(QString carrier_string);
 
 

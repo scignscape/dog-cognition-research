@@ -17,13 +17,13 @@
 
 AQNS_(Chasm_TR)
 
-class ChTR_Frame : public node_frame<ChTR_Dominion>
+class ChTR_Relae_Frame : public node_frame<ChTR_Dominion>
 {
- ChTR_Frame();
+ ChTR_Relae_Frame();
  // SY_Dominion::Connectors N_A;
  public:
 
- static ChTR_Frame& instance();
+ static ChTR_Relae_Frame& instance();
 
 };
 

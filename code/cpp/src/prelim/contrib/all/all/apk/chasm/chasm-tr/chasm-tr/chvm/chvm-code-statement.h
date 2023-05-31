@@ -43,6 +43,12 @@ public:
  ACCESSORS(QString ,anchor)
  ACCESSORS(ChTR_Channel_Package* ,channel_package)
 
+ void add_code_line(QString line)
+ {
+  code_lines_.push_back(line);
+ }
+
+ QString lines_to_chvm();
 
 };
 

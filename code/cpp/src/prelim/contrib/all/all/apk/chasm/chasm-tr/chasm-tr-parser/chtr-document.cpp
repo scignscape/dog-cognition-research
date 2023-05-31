@@ -18,6 +18,8 @@
 #include <QDir>
 
 
+#include "textio.h"
+
 USING_AQNS(Chasm_TR)
 
 
@@ -67,6 +69,13 @@ void ChTR_Document::load_file(QString path)
   QFileInfo qfi(local_path_);
   local_directory_ = qfi.absoluteDir().absolutePath();
  }
+}
+
+
+void ChTR_Document::save_file(QString path_or_extension, QString contents)
+{
+ resolve_report_path(path_or_extension);
+ KA::TextIO::save_file(path_or_extension, contents);
 }
 
 

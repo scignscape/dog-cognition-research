@@ -28,7 +28,7 @@ class ChTR_Node;
 class ChTR_Connectors;
 class ChTR_Connection;
 class ChTR_Annotated_Connectors;
-class ChTR_Frame;
+class ChTR_Relae_Frame;
 class ChTR_Document;
 class ChTR_Graph;
 class ChTR_Root;
@@ -38,7 +38,7 @@ struct ChTR_Dominion
 {
  typedef ChTR_Galaxy Galaxy_type;
  typedef ChTR_Node Node_type;
- typedef ChTR_Frame Frame_type;
+ typedef ChTR_Relae_Frame Frame_type;
  typedef ChTR_Connectors Connectors_type;
  typedef ChTR_Connection Connection_type;
  typedef ChTR_Annotated_Connectors Annotated_Connectors_type;

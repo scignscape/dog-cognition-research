@@ -60,6 +60,10 @@ int main(int argc, char *argv[])
  QString chvm;
  ccg.graph_to_chvm(chvm);
 
+ chrd.save_file("..chvm", chvm);
+
+ return 0;
+
  //?chrd.graph_to_chvm();
 
 }

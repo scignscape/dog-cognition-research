@@ -16,17 +16,17 @@
 
 USING_AQNS(Chasm_TR)
 
-ChTR_Frame::ChTR_Frame()
+ChTR_Relae_Frame::ChTR_Relae_Frame()
  : node_frame<ChTR_Dominion>()
 {
 
 
 }
 
-ChTR_Frame& ChTR_Frame::instance()
+ChTR_Relae_Frame& ChTR_Relae_Frame::instance()
 {
- static ChTR_Frame* the_instance = nullptr;
+ static ChTR_Relae_Frame* the_instance = nullptr;
  if(!the_instance)
-  the_instance = new ChTR_Frame;
+  the_instance = new ChTR_Relae_Frame;
  return *the_instance;
 }

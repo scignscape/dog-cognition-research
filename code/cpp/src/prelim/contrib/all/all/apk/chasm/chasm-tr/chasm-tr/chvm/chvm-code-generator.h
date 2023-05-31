@@ -23,6 +23,10 @@
 
 #include "global-types.h"
 
+#include "generators/chvm-code-statement-generator.h"
+
+#include "relae-graph/relae-caon-ptr.h"
+
 AQNS_(Chasm_TR)
 
 class ChTR_Channel_Package;
@@ -32,11 +36,16 @@ class ChVM_Procedure;
 
 class ChTR_Graph;
 
+class ChTR_Relae_Query;
+
 class ChVM_Code_Generator
 {
  QVector<ChVM_Procedure*> procedures_;
 
  ChTR_Graph* ir_graph_;
+
+ const ChTR_Relae_Query& qry_;
+
 
 public:
 
@@ -45,6 +54,7 @@ public:
 
  void graph_to_chvm(QString& chvm);
 
+ ChVM_Code_Statement_Generator statement_generator(caon_ptr<ChTR_Code_Statement> ccs);
 
 };
 

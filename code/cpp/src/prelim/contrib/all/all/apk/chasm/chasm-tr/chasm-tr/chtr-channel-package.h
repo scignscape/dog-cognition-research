@@ -23,6 +23,8 @@
 
 #include "global-types.h"
 
+#include "chtr-channel-object.h"
+
 AQNS_(Chasm_TR)
 
 
@@ -53,6 +55,31 @@ public:
  //ACCESSORS(QString ,channel_kind)
 
  void add_channel_object(ChTR_Channel_Object* cco);
+
+ void get_channel_objects(QVector<ChTR_Channel_Object*>& result)
+ {
+  result.resize(channel_objects_.size());
+  std::transform(channel_objects_.begin(), channel_objects_.end(),
+    result.begin(), channel_object_decoder_);
+ }
+
+ //template<typename FN_Type>
+ // QVector<FN_Type>
+ typedef void (*callback_type)(ChTR_Channel_Object&);
+
+ void all_channel_objects(std::map<QString, std::function<void (ChTR_Channel_Object&)>> fns)
+ {
+  QVector<ChTR_Channel_Object*> ccos;
+  get_channel_objects(ccos);
+  for(ChTR_Channel_Object* cco : ccos)
+  {
+   auto it = fns.find(cco->channel_kind());
+   if(it != fns.end())
+   {
+    it->second(*cco);
+   }
+  }
+ }
 
 
 };

@@ -29,7 +29,9 @@ class ChTR_Node;
 class ChTR_Document;
 class ChTR_Parser;
 class ChTR_Graph;
-class ChTR_Frame;
+class ChTR_Relae_Frame;
+class ChTR_Relae_Query;
+
 
 class ChTR_Source_Type;
 class ChTR_Source_File;
@@ -37,6 +39,8 @@ class ChTR_Source_File;
 class ChTR_Channel_Package;
 class ChTR_Channel_Object;
 class ChTR_Code_Statement;
+
+
 
 
 class ChTR_Graph_Build
@@ -70,7 +74,8 @@ private:
  ChTR_Parser& parser_;
  ChTR_Graph& graph_;
 
- ChTR_Frame& fr_;
+ ChTR_Relae_Frame& fr_;
+ const ChTR_Relae_Query& qry_;
 
 
  QVector<hypernode_type*> top_level_hypernodes_;

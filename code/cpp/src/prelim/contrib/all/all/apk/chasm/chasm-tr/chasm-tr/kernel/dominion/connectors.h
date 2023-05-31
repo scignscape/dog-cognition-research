@@ -7,4 +7,4 @@
 
 DOMINION_CONNECTOR(N_A, "No Connection")
 DOMINION_CONNECTOR(Generic, "generic")
-DOMINION_CONNECTOR(RELAE, "relae")
+DOMINION_CONNECTOR(Root_Sequence, "root-sequence")

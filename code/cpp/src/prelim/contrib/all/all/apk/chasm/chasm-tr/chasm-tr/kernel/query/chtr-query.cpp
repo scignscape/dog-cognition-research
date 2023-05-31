@@ -13,7 +13,7 @@
 USING_AQNS(Chasm_TR)
 
 
-ChTR_Query::ChTR_Query()
+ChTR_Relae_Query::ChTR_Relae_Query()
  : node_query<ChTR_Dominion>()
   #define DOMINION_CONNECTOR(name, label) \
     ,name(ChTR_Connectors(ChTR_Connectors_Case_Labels::name, label))
@@ -28,10 +28,10 @@ ChTR_Query::ChTR_Query()
  #undef DOMINION_CONNECTOR
 }
 
-const ChTR_Query& ChTR_Query::instance()
+const ChTR_Relae_Query& ChTR_Relae_Query::instance()
 {
- static ChTR_Query* the_instance = nullptr;
+ static ChTR_Relae_Query* the_instance = nullptr;
  if(!the_instance)
-  the_instance = new ChTR_Query;
+  the_instance = new ChTR_Relae_Query;
  return *the_instance;
 }
