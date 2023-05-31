@@ -82,7 +82,11 @@ public:
  bool parse_literal_info();
  bool check_number_form(QStringView qsv);
 
- QString literal_info_string();
+ QString trimmed_symbol();
+
+
+ QPair<QString, QString> literal_info_string();
+ QString composite_symbol();
 
 };
 

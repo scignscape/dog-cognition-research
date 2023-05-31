@@ -40,30 +40,48 @@ void ChVM_Code_Statement_Generator::graph_to_chvm(ChVM_Code_Statement& cvcs)
 {
  ChTR_Channel_Package* ccp = ccs_.channel_package();
 
- auto lambda_channel = [this, &cvcs](ChTR_Channel_Object& cco)
+ QString ln = " .; statement";
+
+ auto dissolve = [this, &ln, &cvcs]()
+ {
+  statement_line(&ln);
+  cvcs.add_code_line(ln);
+ };
+
+ dissolve();
+
+ auto lambda_channel = [this, dissolve, &ln](ChTR_Channel_Object& cco)
  {  
-  QString ln = enter_channel("lambda");
-
-  auto dissolve = [this, &ln, &cvcs]()
-  {
-   statement_line(&ln);
-   cvcs.add_code_line(ln);
-  };
-
+  ln = enter_channel("lambda");
   dissolve();
 
   for(ChTR_Carrier* car : cco.carriers())
   {
    car->check_literal();
-   ln = car->symbol();
+   QPair<QString, QString> lit = car->literal_info_string();
+   if(car->literal_info.flags.known_symbol)
+     ln = "load-symbol $ %1 %2"_qt.arg(lit.first).arg(lit.second);
+   else
+     ln = "load-symbol-%1 $ %2"_qt.arg(lit.first).arg(lit.second);
    dissolve();
   }
 
  };
 
- auto proc_channel = [this](ChTR_Channel_Object& cco)
+ auto proc_channel = [this, &ln, dissolve](ChTR_Channel_Object& cco)
  {
-  qDebug() << cco.channel_kind();
+  ln = enter_channel("proc");
+  dissolve();
+
+  QString pn = cco.get_proc_name();
+
+  if(pn.isEmpty())
+  {
+   // what here?
+  }
+
+  ln = "load-proc-name $ %1"_qt.arg(pn);
+  dissolve();
  };
 
 
@@ -71,6 +89,10 @@ void ChVM_Code_Statement_Generator::graph_to_chvm(ChVM_Code_Statement& cvcs)
    {"l", lambda_channel},
    {"p", proc_channel},
   });
+
+
+ ln = "proceed-statement-eval";
+ dissolve();
 
 // QVector<ChTR_Channel_Object*> ccos;
 // ccp->get_channel_objects(ccos);

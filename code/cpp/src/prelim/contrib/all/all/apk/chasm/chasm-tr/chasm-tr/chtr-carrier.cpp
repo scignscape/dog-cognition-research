@@ -22,21 +22,29 @@ ChTR_Carrier::ChTR_Carrier(QString symbol)
 }
 
 
+QString ChTR_Carrier::composite_symbol()
+{
+ if(namespace_.isEmpty())
+   return symbol_;
+ return "%1:\\%2"_qt.arg(namespace_).arg(symbol_);
+}
+
+
 void ChTR_Carrier::check_literal()
 {
  if(literal_info.tbd())
    parse_literal_info();
 
- QString lit = literal_info_string();
+ QPair<QString, QString> lit = literal_info_string();
 
  qDebug() << "lit = " << lit;
 }
 
-QString ChTR_Carrier::literal_info_string()
+QPair<QString, QString> ChTR_Carrier::literal_info_string()
 {
  if(literal_info.flags.known_symbol)
-   return ".%1 %2"_qt.arg(namespace_.isEmpty()? "g" : namespace_)
-     .arg(symbol_);
+   return {".%1"_qt.arg(namespace_.isEmpty()? "v;" : namespace_),
+     symbol_};
 
  QString result;
  if(literal_info.flags.signed_as_negative)
@@ -49,35 +57,42 @@ QString ChTR_Carrier::literal_info_string()
  if(literal_info.flags.unsigned_decimal)
    result += "d";
  else if(literal_info.flags.signed_decimal)
-   result += "s";
+   return {result + "s", trimmed_symbol()};
 
  if(literal_info.flags.base_10)
-   return result + QString::number(10);
+   return {result + QString::number(10), trimmed_symbol()};
  if(literal_info.flags.base_16)
-   return result + QString::number(16);
+   return {result + QString::number(16), trimmed_symbol()};
  if(literal_info.flags.base_2)
-   return result + QString::number(2);
+   return {result + QString::number(2), trimmed_symbol()};
  if(literal_info.flags.base_8)
-   return result + QString::number(8);
+   return {result + QString::number(8), trimmed_symbol()};
 
  if(literal_info.flags.base_32)
  {
   if(result.isEmpty())
-    return "b32";
-  return result + QString::number(32);
+    return {"b32", trimmed_symbol()};
+  return {result + QString::number(32), trimmed_symbol()};
  }
 
  if(literal_info.flags.base_64)
  {
   if(result.isEmpty())
-    return "b64";
-  return result + QString::number(64);
+    return {"b64", trimmed_symbol()};
+  return {result + QString::number(64), trimmed_symbol()};
  }
 
  if(result.isEmpty())
-   return "??";
+   return {"??", symbol_};
 
- return result;
+ return {result, symbol_};
+}
+
+QString ChTR_Carrier::trimmed_symbol()
+{
+ if(namespace_.startsWith('\\'))
+   return symbol_.mid(namespace_.midRef(1).toInt());
+ return symbol_;
 }
 
 
@@ -154,13 +169,11 @@ bool ChTR_Carrier::parse_literal_info()
   if(indx == -1)
   {
    if(start == 0)
-   {
-    if(symbol_[0] == '.')
-      return literal_info.flags.unsigned_decimal = true;
-    return check_number_form(symbol_);
-   }
+     return check_number_form(symbol_);
+
    // // if start is non-zero here then we've seen a + or -
-   return check_number_form(symbol_.midRef(1));
+   namespace_ = QString::number(start).prepend('\\');
+   return check_number_form(symbol_.midRef(start));
   }
   //if(ind == )
 
@@ -178,6 +191,7 @@ bool ChTR_Carrier::parse_literal_info()
   if(start == 0) // //  this would be .xxx.
     return literal_info.flags.known_symbol = true;
 
+  namespace_ = QString::number(start).prepend('\\');
   return literal_info.flags.signed_decimal = true;
  }
 

@@ -52,6 +52,8 @@ public:
 
  void add_carrier(QString carrier_string);
 
+ QString get_proc_name();
+
 
 
 };
