@@ -9,6 +9,8 @@
 
 #include "chtr-carrier.h"
 
+#include <QDebug>
+
 
 USING_AQNS(Chasm_TR)
 
@@ -24,6 +26,58 @@ void ChTR_Carrier::check_literal()
 {
  if(literal_info.tbd())
    parse_literal_info();
+
+ QString lit = literal_info_string();
+
+ qDebug() << "lit = " << lit;
+}
+
+QString ChTR_Carrier::literal_info_string()
+{
+ if(literal_info.flags.known_symbol)
+   return ".%1 %2"_qt.arg(namespace_.isEmpty()? "g" : namespace_)
+     .arg(symbol_);
+
+ QString result;
+ if(literal_info.flags.signed_as_negative)
+   result = "n";
+ else if(literal_info.flags.signed_as_positive)
+   result = "p";
+ else if(literal_info.flags.unsigned_integer)
+   result = "u";
+
+ if(literal_info.flags.unsigned_decimal)
+   result += "d";
+ else if(literal_info.flags.signed_decimal)
+   result += "s";
+
+ if(literal_info.flags.base_10)
+   return result + QString::number(10);
+ if(literal_info.flags.base_16)
+   return result + QString::number(16);
+ if(literal_info.flags.base_2)
+   return result + QString::number(2);
+ if(literal_info.flags.base_8)
+   return result + QString::number(8);
+
+ if(literal_info.flags.base_32)
+ {
+  if(result.isEmpty())
+    return "b32";
+  return result + QString::number(32);
+ }
+
+ if(literal_info.flags.base_64)
+ {
+  if(result.isEmpty())
+    return "b64";
+  return result + QString::number(64);
+ }
+
+ if(result.isEmpty())
+   return "??";
+
+ return result;
 }
 
 
@@ -44,6 +98,20 @@ bool ChTR_Carrier::check_number_form(QStringView qsv)
     return literal_info.note_base_16();
   if(c1.isDigit())
     return literal_info.note_base_8();
+
+  if(qsv.size() == 2)
+  {
+   // //  anything special here?
+   return false;
+  }
+  if(qsv[2] == ':')
+  {
+   if(c1 == 's')
+     return literal_info.flags.base_64 = true;
+   if(c1 == 'z')
+     return literal_info.flags.base_32 = true;
+  }
+  return false;
  }
  return literal_info.note_base_10();
 }
@@ -82,8 +150,8 @@ bool ChTR_Carrier::parse_literal_info()
  QChar qc = symbol_.at(start);
  if(qc.isDigit())
  {
-  s4 ind = symbol_.indexOf('.', start);
-  if(ind == -1)
+  s4 indx = symbol_.indexOf('.', start);
+  if(indx == -1)
   {
    if(start == 0)
    {
@@ -97,5 +165,28 @@ bool ChTR_Carrier::parse_literal_info()
   //if(ind == )
 
  }
+
+ if(starts_and_not_ends('.'))
+ {
+  if(symbol_.at(1).isDigit())
+    return literal_info.flags.unsigned_decimal = true;
+  return literal_info.flags.known_symbol = true;
+ }
+
+ if(qc == '.')
+ {
+  if(start == 0) // //  this would be .xxx.
+    return literal_info.flags.known_symbol = true;
+
+  return literal_info.flags.signed_decimal = true;
+ }
+
+ literal_info.flags.known_symbol = true;
+
+ if(start == 1) // // undo the flags, now spurious
+   return literal_info.flags.signed_as_negative =
+     literal_info.flags.signed_as_positive = false;
+
+ return false;
 }
 

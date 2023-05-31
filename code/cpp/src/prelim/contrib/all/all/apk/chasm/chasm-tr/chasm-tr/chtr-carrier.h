@@ -69,6 +69,8 @@ private:
 
  QString symbol_;
 
+ QString namespace_;
+
 public:
 
 
@@ -79,6 +81,8 @@ public:
  void check_literal();
  bool parse_literal_info();
  bool check_number_form(QStringView qsv);
+
+ QString literal_info_string();
 
 };
 

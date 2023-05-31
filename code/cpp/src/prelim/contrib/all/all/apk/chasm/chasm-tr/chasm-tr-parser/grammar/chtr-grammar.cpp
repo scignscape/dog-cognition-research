@@ -66,6 +66,15 @@ void ChTR_Grammar::init(ChTR_Parser& p, ChTR_Graph& g, ChTR_Graph_Build& graph_b
 //  graph_build.enter_qj_context(p.matched("line-number").toUShort(), p.matched("context-name"));
 // });
 
+ add_rule(flags_all_(parse_context ,open_channel_body), source_context,
+   "read-carrier-string",
+   " [^)\\s]+ "          // (?<enum-type> \\w+) , (?<base-type> \\w+) )",
+   ,[&]
+  {
+   graph_build.read_carrier_string(p.match_text());
+  });
+
+
  add_rule(source_context,
    "statement-entry",
    "\\. (?!\\s)"
@@ -93,13 +102,6 @@ void ChTR_Grammar::init(ChTR_Parser& p, ChTR_Graph& g, ChTR_Graph_Build& graph_b
    graph_build.enter_channel_body();
   });
 
- add_rule(flags_all_(parse_context ,open_channel_body), source_context,
-   "read-carrier-string",
-   " [^)\\s]+ "          // (?<enum-type> \\w+) , (?<base-type> \\w+) )",
-   ,[&]
-  {
-   graph_build.read_carrier_string(p.match_text());
-  });
 
  add_rule(flags_all_(parse_context ,open_channel_body), source_context,
    "leave-channel-body",
