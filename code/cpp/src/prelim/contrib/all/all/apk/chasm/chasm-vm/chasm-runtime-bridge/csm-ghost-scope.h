@@ -15,7 +15,7 @@
 
 #include <QDebug>
 
-#include "chasm/chasm-carrier.h"
+#include "chasm-lib/chasm/chasm-carrier.h"
 
 
 #include "accessors.h"

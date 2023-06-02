@@ -43,6 +43,8 @@ load-pst $ /test ;.
 #include "chasm-tr-parser/chtr-document.h"
 
 #include "chasm-tr/chvm/chvm-code-generator.h"
+#include "chasm-tr/chvm/eval/channel-package-runner.h"
+
 
 USING_AQNS(Chasm_TR)
 
@@ -61,6 +63,9 @@ int main(int argc, char *argv[])
  ccg.graph_to_chvm(chvm);
 
  chrd.save_file("..chvm", chvm);
+
+ ChVM_Channel_Package_Runner ccr();
+
 
  return 0;
 

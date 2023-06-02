@@ -44,6 +44,7 @@ HEADERS += \
   $$SRC_DIR/chvm/chvm-code-statement.h \
   $$SRC_DIR/chvm/chvm-procedure.h \
   $$SRC_DIR/chvm/generators/chvm-code-statement-generator.h \
+  $$SRC_DIR/eval/chvm-code-runner.h \
 
 
 
@@ -59,8 +60,7 @@ SOURCES += \
   $$SRC_DIR/chvm/chvm-procedure.cpp \
   $$SRC_DIR/chvm/generators/chvm-code-statement-generator.cpp \
   $$SRC_DIR/chvm/generators/chvm-code-statement-generator.generic.cpp \
-
-
+  $$SRC_DIR/eval/chvm-code-runner.cpp \
 
 
 

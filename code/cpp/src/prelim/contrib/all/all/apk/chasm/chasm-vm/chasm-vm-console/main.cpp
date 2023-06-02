@@ -11,7 +11,7 @@
 USING_KANS(TextIO)
 
 
-#include "chasm/chasm-runtime.h"
+#include "chasm-lib/chasm/chasm-runtime.h"
 //#include "chasm-lib/chasm/chasm-call-package.h"
 
 #include "chasm-vm/chasm-vm.h"
@@ -38,7 +38,7 @@ int main(int argc, char *argv[])
 
  Chasm_VM csm(&crb);
  csm.gen_source_proc_name();
- csm.load_program(DEMO_CSM_FOLDER "/demo/t1.csm");
+ csm.load_program(DEMO_CVM_FOLDER "/t1/t1.cvm");
  csm.run_current_source_proc_name();
 }
 

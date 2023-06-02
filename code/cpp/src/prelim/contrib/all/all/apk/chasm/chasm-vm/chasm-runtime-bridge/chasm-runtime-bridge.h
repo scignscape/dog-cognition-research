@@ -17,7 +17,9 @@
 
 #include <QDebug>
 
-#include "chasm/chasm-carrier.h"
+//?#include "chasm/chasm-carrier.h"
+
+//?#include "chasm-tr/chasm-tr/chtr-carrier.h"
 
 #include "accessors.h"
 #include "flags.h"
@@ -25,7 +27,8 @@
 #include "global-types.h"
 #include "kans.h"
 
-#include "chasm/chasm-runtime.h"
+#include "chasm-lib/chasm/chasm-runtime.h"
+#include "chasm-lib/chasm/chasm-carrier.h"
 
 //#define register_s0(proc ,code) register_procedure_s0(#proc, (void(*)()) &proc, #code)
 //#define register_s1(proc ,code) register_procedure_s1(#proc, (void(_min_::*)()) &proc, #code)

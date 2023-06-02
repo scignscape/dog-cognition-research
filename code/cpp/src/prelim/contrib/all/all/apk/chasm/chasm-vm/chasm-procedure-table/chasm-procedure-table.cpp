@@ -7,8 +7,8 @@
 
 #include "chasm-procedure-table.h"
 
-#include "chasm/chasm-runtime.h"
-#include "chasm/chasm-call-package.h"
+#include "chasm-lib/chasm/chasm-runtime.h"
+#include "chasm-lib/chasm/chasm-call-package.h"
 
 
 #include <QString>

@@ -7,9 +7,9 @@
 
 #include "chasm-runtime-eval.h"
 
-#include "chasm/chasm-runtime.h"
-#include "chasm/chasm-call-package.h"
-#include "chasm/types/chasm-type-object.h"
+#include "chasm-lib/chasm/chasm-runtime.h"
+#include "chasm-lib/chasm/chasm-call-package.h"
+#include "chasm-lib/chasm/types/chasm-type-object.h"
 
 #include "chasm-procedure-table/chasm-procedure-table.h"
 

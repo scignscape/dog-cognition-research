@@ -7,8 +7,8 @@
 
 #include "chasm-runtime-bridge.h"
 
-#include "chasm/chasm-runtime.h"
-#include "chasm/chasm-call-package.h"
+#include "chasm-lib/chasm/chasm-runtime.h"
+#include "chasm-lib/chasm/chasm-call-package.h"
 
 #include "chasm-procedure-table/chasm-procedure-table.h"
 
