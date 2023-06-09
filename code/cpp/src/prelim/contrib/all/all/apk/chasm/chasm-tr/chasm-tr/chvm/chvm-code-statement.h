@@ -48,6 +48,12 @@ public:
   code_lines_.push_back(line);
  }
 
+ void add_blank_line(u1 count = 1)
+ {
+  for(u1 i = 0; i < count; ++i)
+    code_lines_.push_back("\n");
+ }
+
  QString lines_to_chvm();
 
 };

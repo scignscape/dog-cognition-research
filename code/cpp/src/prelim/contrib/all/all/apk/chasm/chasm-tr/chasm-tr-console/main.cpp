@@ -43,14 +43,59 @@ load-pst $ /test ;.
 #include "chasm-tr-parser/chtr-document.h"
 
 #include "chasm-tr/chvm/chvm-code-generator.h"
-#include "chasm-tr/chvm/eval/channel-package-runner.h"
+//?#include "chasm-tr/chvm/eval/channel-package-runner.h"
 
 
 USING_AQNS(Chasm_TR)
 
 //#include "ch
 
+
+
+
+#include "chasm-lib/chasm/chasm-runtime.h"
+//#include "chasm-lib/chasm/chasm-call-package.h"
+
+#include "chasm-vm/chasm-vm.h"
+#include "chasm-runtime-bridge/chasm-runtime-bridge.h"
+#include "chasm-procedure-table/chasm-procedure-table.h"
+
+
+
+
+void testqvar(QVariant arg1, r8 arg2, u2 arg3)
+{
+ qDebug() << "arg1 = " << arg1;
+ qDebug() << "arg2 = " << arg2;
+ qDebug() << "arg3 = " << arg3;
+}
+
+void prn(u1 arg1)
+{
+ qDebug() << "arg1 = " << arg1;
+}
+
+
 int main(int argc, char *argv[])
+{
+ Chasm_Runtime csr;
+ Chasm_Runtime_Bridge crb(&csr);
+ Chasm_Procedure_Table cpt(&csr);
+ crb.set_proctable(&cpt);
+
+ cpt.register_s0(testqvar, @300762);
+ cpt.register_s0(prn, @1001);
+
+ Chasm_VM csm(&crb);
+ csm.gen_source_proc_name();
+//? csm.load_program(DEMO_CVM_FOLDER "/t1/t1.cvm");
+ csm.load_program(DEMO_CVM_FOLDER "/t1/t1.cr.chvm");
+ csm.run_current_source_proc_name();
+}
+
+
+
+int main1(int argc, char *argv[])
 {
 
  ChTR_Document chrd(ROOT_FOLDER "/../chtr/t1/t1.cr");
@@ -64,7 +109,7 @@ int main(int argc, char *argv[])
 
  chrd.save_file("..chvm", chvm);
 
- ChVM_Channel_Package_Runner ccr();
+//? ChVM_Channel_Package_Runner ccr();
 
 
  return 0;

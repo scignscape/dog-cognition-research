@@ -56,6 +56,17 @@ void Chasm_Runtime_Bridge::clear_current_ghost_scope()
    current_ghost_scope_->clear_all();
 }
 
+void Chasm_Runtime_Bridge::run_proc_eval()
+{
+ run_eval(held_procname_);
+}
+
+void Chasm_Runtime_Bridge::load_proc_name(QString name)
+{
+ held_procname_ = name;
+}
+
+
 void Chasm_Runtime_Bridge::run_eval(QString proc_name)
 {
  {
@@ -104,6 +115,80 @@ void Chasm_Runtime_Bridge::check_ghost(const Chasm_Carrier& cc)
 {
  if(current_ghost_scope_)
    current_ghost_scope_->add_carrier(cc);
+}
+
+
+void Chasm_Runtime_Bridge::load_symbol_u_(QString literal, u1 radix)
+{
+ current_loaded_raw_value_ = literal.toULongLong(nullptr, radix);
+ if(!current_type_object_)
+   infer_signed_type();
+
+}
+
+void Chasm_Runtime_Bridge::load_symbol_s_(QString literal, u1 radix)
+{
+ current_loaded_raw_value_ = literal.toInt(nullptr, radix);
+ if(!current_type_object_)
+   infer_signed_type();
+}
+
+
+// // unsigned, base 10
+void Chasm_Runtime_Bridge::load_symbol_u10(QString literal)
+{
+ load_symbol_u_(literal, 10);
+}
+
+// // unsigned, base 2
+void Chasm_Runtime_Bridge::load_symbol_u2(QString literal)
+{
+ load_symbol_u_(literal, 2);
+}
+
+// // unsigned, base 8
+void Chasm_Runtime_Bridge::load_symbol_u8(QString literal)
+{
+ load_symbol_u_(literal, 8);
+}
+
+// // unsigned, base 16
+void Chasm_Runtime_Bridge::load_symbol_u16(QString literal)
+{
+ load_symbol_u_(literal, 16);
+}
+
+
+
+// // signed, base 10
+void Chasm_Runtime_Bridge::load_symbol_s10(QString literal)
+{
+ load_symbol_s_(literal, 10);
+}
+
+// // signed, base 2
+void Chasm_Runtime_Bridge::load_symbol_s2(QString literal)
+{
+ load_symbol_s_(literal, 2);
+}
+
+
+// // signed, base 8
+void Chasm_Runtime_Bridge::load_symbol_s8(QString literal)
+{
+ load_symbol_s_(literal, 8);
+}
+
+// // signed, base 16
+void Chasm_Runtime_Bridge::load_symbol_s16(QString literal)
+{
+ load_symbol_s_(literal, 16);
+}
+
+
+void Chasm_Runtime_Bridge::gen_carrier_lsr()
+{
+ gen_carrier_tvr({}); //?
 }
 
 void Chasm_Runtime_Bridge::gen_carrier_tvr(QString rep)

@@ -40,18 +40,45 @@ void ChVM_Code_Statement_Generator::graph_to_chvm(ChVM_Code_Statement& cvcs)
 {
  ChTR_Channel_Package* ccp = ccs_.channel_package();
 
- QString ln = " .; statement";
-
- auto dissolve = [this, &ln, &cvcs]()
+ auto blank = [&cvcs]()
  {
-  statement_line(&ln);
-  cvcs.add_code_line(ln);
+  cvcs.add_blank_line();
  };
 
- dissolve();
+ blank();
 
- auto lambda_channel = [this, dissolve, &ln](ChTR_Channel_Object& cco)
- {  
+ QString ln = " .; statement";
+
+ auto dissolve = [this, &ln, &cvcs](QVector<QString> new_lns = {})
+ {
+  if(new_lns.isEmpty())
+  {
+   statement_line(&ln);
+   cvcs.add_code_line(ln);
+  }
+  else
+  {
+   for(QString new_ln : new_lns)
+   {
+    statement_line(&new_ln);
+    cvcs.add_code_line(new_ln);
+   }
+  }
+ };
+
+ dissolve(); 
+ blank();
+
+ dissolve({"init_new_ghost_scope", "push_carrier_deque"});
+ blank();
+
+ dissolve({"new_call_package"});
+
+
+ auto lambda_channel = [this, dissolve, blank, &ln](ChTR_Channel_Object& cco)
+ {
+  blank();
+
   ln = enter_channel("lambda");
   dissolve();
 
@@ -59,17 +86,29 @@ void ChVM_Code_Statement_Generator::graph_to_chvm(ChVM_Code_Statement& cvcs)
   {
    car->check_literal();
    QPair<QString, QString> lit = car->literal_info_string();
+
+   // type pointer ...
+
    if(car->literal_info.flags.known_symbol)
-     ln = "load-symbol $ %1 %2"_qt.arg(lit.first).arg(lit.second);
+    ln = "load_symbol $ %1 %2"_qt.arg(lit.first).arg(lit.second);
    else
-     ln = "load-symbol-%1 $ %2"_qt.arg(lit.first).arg(lit.second);
+    ln = "load_symbol_%1 $ %2"_qt.arg(lit.first).arg(lit.second);
    dissolve();
+
+
+   //if(type_pointer)
+   dissolve({"gen_carrier_lsr"});
+
   }
+
+  blank();
+  dissolve({"add_carriers"});
 
  };
 
- auto proc_channel = [this, &ln, dissolve](ChTR_Channel_Object& cco)
+ auto proc_channel = [this, &ln, dissolve, blank](ChTR_Channel_Object& cco)
  {
+  blank();
   ln = enter_channel("proc");
   dissolve();
 
@@ -80,7 +119,7 @@ void ChVM_Code_Statement_Generator::graph_to_chvm(ChVM_Code_Statement& cvcs)
    // what here?
   }
 
-  ln = "load-proc-name $ %1"_qt.arg(pn);
+  ln = "load_proc_name $ %1"_qt.arg(pn);
   dissolve();
  };
 
@@ -91,8 +130,12 @@ void ChVM_Code_Statement_Generator::graph_to_chvm(ChVM_Code_Statement& cvcs)
   });
 
 
- ln = "proceed-statement-eval";
- dissolve();
+// ln = "run_proc_eval";
+ blank();
+ dissolve({"run_proc_eval"});
+ blank();
+ dissolve({"reset_carrier_deque", "clear_current_ghost_scope"});
+ blank();
 
 // QVector<ChTR_Channel_Object*> ccos;
 // ccp->get_channel_objects(ccos);

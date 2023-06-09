@@ -157,6 +157,10 @@ void Chasm_VM::read_line(QString inst)
   { "reset_carrier_deque", &Chasm_Runtime_Bridge::reset_carrier_deque },
   { "init_new_ghost_scope", &Chasm_Runtime_Bridge::init_new_ghost_scope },
   { "clear_current_ghost_scope", &Chasm_Runtime_Bridge::clear_current_ghost_scope },
+
+  { "gen_carrier_lsr", &Chasm_Runtime_Bridge::gen_carrier_lsr},
+  { "run_proc_eval", &Chasm_Runtime_Bridge::run_proc_eval },
+
  }};
 
  auto it = static_map.find(inst);
@@ -172,6 +176,7 @@ void Chasm_VM::read_line(QString inst, QString arg)
   { "add_new_channel", &Chasm_Runtime_Bridge::add_new_channel },
   { "gen_carrier_tvr", &Chasm_Runtime_Bridge::gen_carrier_tvr },
   { "run_eval", &Chasm_Runtime_Bridge::run_eval },
+  { "load_proc_name", &Chasm_Runtime_Bridge::load_proc_name },
  }};
 
  auto it = static_map.find(inst);

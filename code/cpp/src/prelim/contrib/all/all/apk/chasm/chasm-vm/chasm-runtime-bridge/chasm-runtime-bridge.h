@@ -72,6 +72,46 @@ class Chasm_Runtime_Bridge
 
  Chasm_Procedure_Table* proctable_;
 
+ void infer_unsigned_type()
+ {
+  // // find least type for the number
+  if(current_loaded_raw_value_ <= 0xFF)
+    load_type_u1();
+  else if(current_loaded_raw_value_ <= 0xFFFF)
+    load_type_u2();
+  else if(current_loaded_raw_value_ <= 0xFFFFFFFF)
+    load_type_u4();
+  else
+    load_type_n8();
+ }
+
+ void infer_signed_type()
+ {
+  // //  must load type explicitly for signed integers greater than 4 bytes
+  s4 rv = current_loaded_raw_value_;
+  if(rv < 0)
+  {
+   rv = -rv;
+   if(rv <= 0x80)
+     load_type_u1();
+   else if(rv <= 0x8000)
+     load_type_u2();
+   else
+     load_type_u4();
+  }
+  else if(rv <= 0x7F)
+    load_type_u1();
+  else if(rv <= 0x7FFF)
+    load_type_u2();
+  else
+    load_type_u4();
+ }
+
+
+ void load_symbol_u_(QString literal, u1 radix);
+ void load_symbol_s_(QString literal, u1 radix);
+
+ QString held_procname_;
 
 public:
 
@@ -108,6 +148,23 @@ public:
  void gen_carrier();
  void gen_carrier(void* pv);
  void gen_carrier_tvr(QString rep);
+ void gen_carrier_lsr();
+
+
+ void load_proc_name(QString name);
+
+ void load_symbol_u10(QString literal);
+ void load_symbol_s10(QString literal);
+ void load_symbol_u8(QString literal);
+ void load_symbol_s8(QString literal);
+ void load_symbol_u2(QString literal);
+ void load_symbol_s2(QString literal);
+ void load_symbol_u16(QString literal);
+ void load_symbol_s16(QString literal);
+ void load_symbol_u32(QString literal);
+ void load_symbol_s32(QString literal);
+
+ void run_proc_eval();
 
  void reset_loaded_raw_value();
  void reset_type_object();

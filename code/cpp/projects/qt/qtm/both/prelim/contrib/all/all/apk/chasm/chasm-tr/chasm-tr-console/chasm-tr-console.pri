@@ -28,6 +28,9 @@ INCLUDEPATH += $$PHAON_GRAPH_SRC_GROUP_DIR
 
 INCLUDEPATH += $$SRC_GROUP_DIR/chasm-tr
 
+INCLUDEPATH += $$SRC_PROSET_DIR/chasm-vm
+INCLUDEPATH += $$SRC_PROSET_DIR/chasm-lib
+
 
 CONFIG += no_keywords
 
@@ -35,8 +38,7 @@ DEFINES += USE_KANS
 DEFINES += USE_AQNS
 
 DEFINES += ROOT_FOLDER=\\\"$$ROOT_DIR\\\"
-
-
+DEFINES += DEMO_CVM_FOLDER=\\\"$$ROOT_DIR/../chtr\\\"
 
 
 HEADERS += \
@@ -47,6 +49,14 @@ SOURCES += \
 
 
 LIBS += -L$$TARGETSDIR -lchasm-tr  -lchasm-tr-parser
+
+
+LIBS += -L$$TARGETSDIR -lchasm-lib \
+  -lchasm-vm -lchasm-runtime-bridge -lchasm-procedure-table \
+  -lchasm-lib-X1 -lchasm-lib-X2 \
+  -lchasm-lib-33 -lchasm-lib-43
+
+
 
 
 message(choice: $$CPP_ROOT_DIR/targets/$$CHOICE_CODE/$$PROJECT_SET--$$PROJECT_GROUP--$$PROJECT_NAME)

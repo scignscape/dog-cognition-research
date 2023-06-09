@@ -38,18 +38,18 @@ QString ChVM_Code_Statement_Generator::statement_line(QString ln)
 
 QString ChVM_Code_Statement_Generator::load_symbol(QString symbol_string)
 {
- static QString line = "load-symbol $ %1";
+ static QString line = "load_symbol $ %1";
  return line.arg(symbol_string);
 }
 
 QString ChVM_Code_Statement_Generator::enter_channel(QString channel_kind)
 {
- static QString line = "enter-channel $ %1";
+ static QString line = "add_new_channel $ %1";
  return line.arg(channel_kind);
 }
 
 QString ChVM_Code_Statement_Generator::enter_carrier()
 {
- static QString line = "enter-carrier";
+ static QString line = "gen_carrier_tvr";
  return line;
 }
