@@ -430,21 +430,22 @@ Chasm_Carrier Chasm_Runtime::gen_carrier(Chasm_Typed_Value_Representation& tvr)
   return gen_carrier<QVariant>(&r);
  }
 
+
  if(cto->name() == "u1")
  {
-  u1 arg = tvr.rep.toUInt();
+  u1 arg = tvr.read_u4();
   return gen_carrier<u1>(&arg);
  }
 
  if(cto->name() == "u2")
  {
-  u2 arg = tvr.rep.toUInt();
+  u2 arg = tvr.read_u4();
   return gen_carrier<u2>(&arg);
  }
 
  if(cto->name() == "u4")
  {
-  u4 arg = tvr.rep.toUInt();
+  u4 arg = tvr.read_u4();
   return gen_carrier<u4>(&arg);
  }
 
@@ -456,7 +457,7 @@ Chasm_Carrier Chasm_Runtime::gen_carrier(Chasm_Typed_Value_Representation& tvr)
 
  if(cto->name() == "n8")
  {
-  n8 arg = tvr.rep.toULongLong();
+  n8 arg = tvr.read_n8();
   return gen_carrier<n8>(&arg);
  }
 

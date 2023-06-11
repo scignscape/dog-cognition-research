@@ -122,7 +122,7 @@ void Chasm_Runtime_Bridge::load_symbol_u_(QString literal, u1 radix)
 {
  current_loaded_raw_value_ = literal.toULongLong(nullptr, radix);
  if(!current_type_object_)
-   infer_signed_type();
+   infer_unsigned_type();
 
 }
 
@@ -158,6 +158,11 @@ void Chasm_Runtime_Bridge::load_symbol_u16(QString literal)
  load_symbol_u_(literal, 16);
 }
 
+// // unsigned, base 32
+void Chasm_Runtime_Bridge::load_symbol_u32(QString literal)
+{
+ load_symbol_u_(literal, 32);
+}
 
 
 // // signed, base 10
@@ -183,6 +188,12 @@ void Chasm_Runtime_Bridge::load_symbol_s8(QString literal)
 void Chasm_Runtime_Bridge::load_symbol_s16(QString literal)
 {
  load_symbol_s_(literal, 16);
+}
+
+// // unsigned, base 32
+void Chasm_Runtime_Bridge::load_symbol_s32(QString literal)
+{
+ load_symbol_s_(literal, 32);
 }
 
 

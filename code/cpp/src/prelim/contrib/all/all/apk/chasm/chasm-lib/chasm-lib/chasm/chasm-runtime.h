@@ -50,6 +50,21 @@ struct Chasm_Typed_Value_Representation
  Chasm_Type_Object* type_object;
  n8 raw_value;
  QString rep;
+
+ u4 read_u4()
+ {
+  if(rep.isEmpty())
+    return raw_value;
+  return rep.toUInt();
+ }
+
+ n8 read_n8()
+ {
+  if(rep.isEmpty())
+    return raw_value;
+  return rep.toULongLong();
+ }
+
 };
 
 struct Chasm_Function_Code

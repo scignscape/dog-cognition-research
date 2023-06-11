@@ -177,6 +177,18 @@ void Chasm_VM::read_line(QString inst, QString arg)
   { "gen_carrier_tvr", &Chasm_Runtime_Bridge::gen_carrier_tvr },
   { "run_eval", &Chasm_Runtime_Bridge::run_eval },
   { "load_proc_name", &Chasm_Runtime_Bridge::load_proc_name },
+  { "load_symbol_u10", &Chasm_Runtime_Bridge::load_symbol_u10 },
+  { "load_symbol_u2", &Chasm_Runtime_Bridge::load_symbol_u2 },
+  { "load_symbol_u8", &Chasm_Runtime_Bridge::load_symbol_u8 },
+  { "load_symbol_u16", &Chasm_Runtime_Bridge::load_symbol_u16 },
+  { "load_symbol_u32", &Chasm_Runtime_Bridge::load_symbol_u32 },
+  { "load_symbol_s10", &Chasm_Runtime_Bridge::load_symbol_s10 },
+  { "load_symbol_s2", &Chasm_Runtime_Bridge::load_symbol_s2 },
+  { "load_symbol_s8", &Chasm_Runtime_Bridge::load_symbol_s8 },
+  { "load_symbol_s16", &Chasm_Runtime_Bridge::load_symbol_s16 },
+  { "load_symbol_s32", &Chasm_Runtime_Bridge::load_symbol_s32 },
+
+
  }};
 
  auto it = static_map.find(inst);
