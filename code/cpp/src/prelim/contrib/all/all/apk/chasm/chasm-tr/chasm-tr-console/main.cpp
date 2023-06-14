@@ -1,4 +1,22 @@
 
+
+#ifdef USE_OpenCV
+
+#include <opencv2/opencv.hpp>
+#include <opencv2/core/core.hpp>
+#include <opencv2/highgui/highgui.hpp>
+
+#include <opencv2/xfeatures2d/nonfree.hpp>
+
+#include "opencv2/features2d/features2d.hpp"
+#include "opencv2/xfeatures2d.hpp"
+
+#endif
+
+
+
+
+
 #include "textio.h"
 
 USING_KANS(TextIO)
@@ -63,6 +81,7 @@ USING_AQNS(Chasm_TR)
 
 
 
+
 void testqvar(QVariant arg1, r8 arg2, u2 arg3)
 {
  qDebug() << "arg1 = " << arg1;
@@ -75,6 +94,15 @@ void prn(u1 arg1)
  qDebug() << "arg1 = " << arg1;
 }
 
+void prs(QString arg1)
+{
+ qDebug() << "arg1 = " << arg1;
+}
+
+// //   u1 = 1  u2 = 2  QString = 3
+ //     u4 = 4  QByteArray = 5
+ //     r8 = 6  QVariant = 7
+ //     n8 = 8  ? = 9
 
 int main(int argc, char *argv[])
 {
@@ -85,6 +113,7 @@ int main(int argc, char *argv[])
 
  cpt.register_s0(testqvar, @300762);
  cpt.register_s0(prn, @1001);
+ cpt.register_s0(prs, @1003);
 
  Chasm_VM csm(&crb);
  csm.gen_source_proc_name();

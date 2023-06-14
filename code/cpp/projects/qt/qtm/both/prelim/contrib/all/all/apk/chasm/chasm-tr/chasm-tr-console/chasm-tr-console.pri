@@ -11,14 +11,58 @@ include(../build-group.pri)
 
 TEMPLATE = app
 
-QT -= gui
 
 exists($$ROOT_DIR/../preferred/sysr.pri): include($$ROOT_DIR/../preferred/sysr.pri)
 exists($$ROOT_DIR/../preferred/sysr-c.pri): include($$ROOT_DIR/../preferred/sysr-c.pri)
 exists($$ROOT_DIR/../preferred/compiler.pri): include($$ROOT_DIR/../preferred/compiler.pri)
 
+
+
 CONFIG += c++17
 
+##?
+FEATURE_OpenCV = USE_OpenCV
+
+# ### For OpenCV
+defined(FEATURE_OpenCV ,var) {
+ message(Using OpenCV)
+
+ DEFINES += USE_OpenCV
+ exists($$ROOT_DIR/../preferred/opencv.pri): include($$ROOT_DIR/../preferred/opencv.pri)
+ INCLUDEPATH += $$OPENCV_INCLUDE_DIR
+
+ QT += widgets
+
+ LIBS += -L$$OPENCV_LIB_DIR -lopencv_core  -lopencv_imgproc  -lopencv_imgcodecs
+
+ LIBS += -L$$OPENCV_LIB_DIR  -lopencv_xfeatures2d  \
+   -lopencv_features2d
+
+
+ HEADERS += \
+  $$SRC_DIR/stats/feature-classifier-transform.h \
+  $$SRC_DIR/stats/slic/slic.h \
+  $$SRC_DIR/stats/slico/slico.h \
+  $$SRC_DIR/stats/stat-test-image.h \
+  $$SRC_DIR/stats/test-stat-assessment.h
+
+ SOURCES += \
+  $$SRC_DIR/stats/feature-classifier-transform.cpp \
+  $$SRC_DIR/stats/slic/slic.cpp \
+  \# $$SRC_DIR/stats/slico/slic-demo.cpp \
+  $$SRC_DIR/stats/slico/slico.cpp \
+  $$SRC_DIR/stats/stat-test-image.cpp \
+  $$SRC_DIR/stats/test-stat-assessment.cpp \
+  $$SRC_DIR/stats/test-stat-assessment.demo-test.cpp
+
+###
+
+}
+
+
+
+###
+#?defined(USE_OpenCV)
 
 INCLUDEPATH += $$SRC_DIR $$SRC_GROUP_DIR $$SRC_ROOT_DIR
 
@@ -39,10 +83,6 @@ DEFINES += USE_AQNS
 
 DEFINES += ROOT_FOLDER=\\\"$$ROOT_DIR\\\"
 DEFINES += DEMO_CVM_FOLDER=\\\"$$ROOT_DIR/../chtr\\\"
-
-
-HEADERS += \
-
 
 SOURCES += \
   $$SRC_DIR/main.cpp \

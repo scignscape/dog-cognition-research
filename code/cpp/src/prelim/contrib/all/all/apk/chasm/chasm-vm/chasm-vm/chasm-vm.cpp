@@ -188,6 +188,7 @@ void Chasm_VM::read_line(QString inst, QString arg)
   { "load_symbol_s16", &Chasm_Runtime_Bridge::load_symbol_s16 },
   { "load_symbol_s32", &Chasm_Runtime_Bridge::load_symbol_s32 },
 
+  { "load_string_literal", &Chasm_Runtime_Bridge::load_string_literal },
 
  }};
 

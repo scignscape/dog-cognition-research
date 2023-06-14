@@ -151,6 +151,8 @@ public:
  void gen_carrier_lsr();
 
 
+ void load_string_literal(QString literal);
+
  void load_proc_name(QString name);
 
  void load_symbol_u10(QString literal);

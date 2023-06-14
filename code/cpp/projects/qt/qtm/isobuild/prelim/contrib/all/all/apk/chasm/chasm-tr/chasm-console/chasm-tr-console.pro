@@ -10,3 +10,4 @@ PROJECT_NAME = chasm-tr-console
 include(../build-group.pri)
 
 include(../../../../../../../../../both/$$PROJECT_AREA/contrib/$$PROJECT_CONTRIBUTOR/$$PROJECT_CONTRIBUTION/$$PROJECT_KERNEL/$$PROJECT_SET/$$PROJECT_GROUP/$$PROJECT_NAME/$${PROJECT_NAME}.pri)
+

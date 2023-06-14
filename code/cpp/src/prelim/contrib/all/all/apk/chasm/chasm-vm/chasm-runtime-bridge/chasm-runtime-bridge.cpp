@@ -210,6 +210,16 @@ void Chasm_Runtime_Bridge::gen_carrier_tvr(QString rep)
  current_carrier_deque_->push_back(cc);
 }
 
+
+void Chasm_Runtime_Bridge::load_string_literal(QString literal)
+{
+ load_type_QString();
+ Chasm_Carrier cc = csr_->gen_carrier<QString>(&literal);
+ check_claims(cc);
+ current_carrier_deque_->push_back(cc);
+}
+
+
 void Chasm_Runtime_Bridge::reset_loaded_raw_value()
 {
  current_loaded_raw_value_ = 0;
