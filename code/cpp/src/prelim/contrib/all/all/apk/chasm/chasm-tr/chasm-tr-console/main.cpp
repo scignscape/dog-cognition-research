@@ -79,7 +79,7 @@ USING_AQNS(Chasm_TR)
 #include "chasm-procedure-table/chasm-procedure-table.h"
 
 
-
+#include "stats/slico/slico.h"
 
 
 void testqvar(QVariant arg1, r8 arg2, u2 arg3)
@@ -99,6 +99,14 @@ void prs(QString arg1)
  qDebug() << "arg1 = " << arg1;
 }
 
+void demo_opencv(QString arg1)
+{
+ qDebug() << "arg1: = " << arg1;
+
+}
+
+
+
 // //   u1 = 1  u2 = 2  QString = 3
  //     u4 = 4  QByteArray = 5
  //     r8 = 6  QVariant = 7
@@ -114,6 +122,9 @@ int main(int argc, char *argv[])
  cpt.register_s0(testqvar, @300762);
  cpt.register_s0(prn, @1001);
  cpt.register_s0(prs, @1003);
+
+ cpt.register_s0(demo_opencv, @1003);
+
 
  Chasm_VM csm(&crb);
  csm.gen_source_proc_name();
