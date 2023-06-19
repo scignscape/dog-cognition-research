@@ -39,6 +39,7 @@ class QGridLayout;
 class QMediaPlayer;
 class QProcess;
 class QTcpServer;
+class QGridLayout;
 
 class ScignStage_Clickable_Label;
 
@@ -77,6 +78,10 @@ class Case_Map_Entry_Dialog : public QDialog
  QVBoxLayout* location_group_box_right_layout_;
 
  QVBoxLayout* children_group_box_layout_;
+ QFormLayout* children_group_box_layout_top_;
+ QGridLayout* children_grid_layout_;
+
+ QComboBox* cb_number_of_children_;
 
  QLineEdit* le_county_;
  QLineEdit* le_city_;
@@ -89,6 +94,9 @@ class Case_Map_Entry_Dialog : public QDialog
  QLineEdit* le_email_;
 
  //QLabel* sentence_label_;
+
+ void add_children_line();
+
 
 public:
 

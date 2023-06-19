@@ -64,6 +64,8 @@
 
 #include <QComboBox>
 
+#include "global-types.h"
+
 
 Case_Map_Entry_Dialog::Case_Map_Entry_Dialog(QWidget* parent)
   : QDialog(parent)
@@ -154,34 +156,74 @@ Case_Map_Entry_Dialog::Case_Map_Entry_Dialog(QWidget* parent)
  
 
  entry_layout_->addWidget(location_group_box_);
+
+
+
+ children_group_box_layout_top_ = new QFormLayout; //(children_group_box_)
+
+ cb_number_of_children_ = new QComboBox(this);
+ cb_number_of_children_->addItems({QString::number(1),
+   QString::number(2), QString::number(3), QString::number(4),
+   QString::number(5), QString::number(6), QString::number(7),
+   QString::number(8) });
+
+ children_group_box_layout_top_->addRow("Number of Children: ",  cb_number_of_children_);
+
+ children_group_box_layout_->addLayout(children_group_box_layout_top_);
+
+ children_grid_layout_ = new QGridLayout;
+
+ children_grid_layout_->addWidget(new QLabel("Child's Name:", this), 0, 0);
+ children_grid_layout_->addWidget(new QLabel("Birth Year:", this), 0, 1);
+
+ connect(cb_number_of_children_,  QOverload<int>::of(&QComboBox::currentIndexChanged),
+   [this](int which)
+ {
+  if(which < 0)
+    return;
+  u1 count = which + 1;
+  u1 rc = children_grid_layout_->rowCount() - 1;
+  if(count == rc)
+    return;
+  if(count < rc)
+  {
+   // // erase lines?
+   QMessageBox::StandardButton sb = QMessageBox::question(this, "Reduce number of lines?",
+     "Do you want to delete the extra %1 lines?"_qt.arg(rc - count));
+
+   if(sb == QMessageBox::Yes)
+   {
+    QVector<QWidget*> to_be_removed;
+    for(u1 c = count; c < rc; ++c)
+    {
+     to_be_removed << children_grid_layout_->itemAtPosition(c + 1, 0)->widget();
+     to_be_removed << children_grid_layout_->itemAtPosition(c + 1, 1)->widget();
+    }
+
+    for(QWidget* w : to_be_removed)
+    {
+     children_grid_layout_->removeWidget(w);
+     w->hide();
+     w->deleteLater();
+    }
+//    children_grid_layout_->removeItem(children_grid_layout_->itemAtPosition(rrc - 1, 0));
+
+
+    //qDebug() << "erase!";
+   }
+  }
+  else
+  {
+  while(rc++ < count)
+    add_children_line();
+  }
+
+ });
+
+
+ children_group_box_layout_->addLayout(children_grid_layout_);
+
  entry_layout_->addWidget(children_group_box_);
-
- QHBoxLayout* pics = new QHBoxLayout;
- pics->addWidget(new QLabel("2"));
-
- QPushButton* pics_btn = new QPushButton("show");
- pics_btn->setMaximumWidth(37);
-
- pics_btn->setMaximumHeight(20);
- pics->addWidget(pics_btn);
-
- QPushButton* add_btn = new QPushButton("add");
- add_btn->setMaximumWidth(37);
- add_btn->setMaximumHeight(20);
- pics->addWidget(add_btn);
-
- pics->addStretch();
-
- QPushButton* folder_btn = new QPushButton("folder:");
- folder_btn->setMaximumWidth(47);
- folder_btn->setMaximumHeight(20);
-
- QLabel* folder_label = new QLabel("/home/demo");
-
- pics->addWidget(folder_btn);
- pics->addWidget(folder_label);
- pics->addStretch();
-
 
  main_layout_->addLayout(entry_layout_);
 
@@ -192,6 +234,55 @@ Case_Map_Entry_Dialog::Case_Map_Entry_Dialog(QWidget* parent)
  setWindowTitle("Sighting Dialog");
 
 }
+
+
+void Case_Map_Entry_Dialog::add_children_line()
+{
+ u1 rc = children_grid_layout_->rowCount();
+
+ QLineEdit* cn = new QLineEdit(this);
+ QComboBox* cy = new QComboBox(this);
+
+ for(u2 y = 2010; y <= 2023; ++y)
+ {
+  cy->addItem(QString::number(y));
+ }
+
+ children_grid_layout_->addWidget(cn, rc, 0);
+ children_grid_layout_->addWidget(cy, rc, 1);
+
+}
+
+
+
+
+//QHBoxLayout* pics = new QHBoxLayout;
+//pics->addWidget(new QLabel("2"));
+
+//QPushButton* pics_btn = new QPushButton("show");
+//pics_btn->setMaximumWidth(37);
+
+//pics_btn->setMaximumHeight(20);
+//pics->addWidget(pics_btn);
+
+//QPushButton* add_btn = new QPushButton("add");
+//add_btn->setMaximumWidth(37);
+//add_btn->setMaximumHeight(20);
+//pics->addWidget(add_btn);
+
+//pics->addStretch();
+
+//QPushButton* folder_btn = new QPushButton("folder:");
+//folder_btn->setMaximumWidth(47);
+//folder_btn->setMaximumHeight(20);
+
+//QLabel* folder_label = new QLabel("/home/demo");
+
+//pics->addWidget(folder_btn);
+//pics->addWidget(folder_label);
+//pics->addStretch();
+
+
 
 //top_buttons_layout_ = new QHBoxLayout;
 
