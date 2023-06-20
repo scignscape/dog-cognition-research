@@ -21,6 +21,8 @@
 
 #include <functional>
 
+#include <QGeoLocation>
+
 class QDialogButtonBox;
 class QLabel;
 class QLineEdit;
@@ -59,8 +61,10 @@ class Case_Map_Entry_Dialog : public QDialog
  QPushButton* button_cancel_;
  QPushButton* button_proceed_;
 
+ QPushButton* button_do_map_;
 
- //?QHBoxLayout* middle_layout_;
+ QHBoxLayout* bottom_layout_;
+
  QVBoxLayout* main_layout_;
 
  QVBoxLayout* entry_layout_;
@@ -85,7 +89,7 @@ class Case_Map_Entry_Dialog : public QDialog
 
  QLineEdit* le_county_;
  QLineEdit* le_city_;
- QLineEdit* le_state_;
+ QComboBox* cb_state_or_province_;
 
 
  QLineEdit* le_first_name_;
@@ -110,6 +114,8 @@ Q_SIGNALS:
  void canceled(QDialog*);
  void accepted(QDialog*);
  void take_screenshot_requested();
+
+ void location_marker_requested(QGeoLocation loc);
 
 public Q_SLOTS:
 

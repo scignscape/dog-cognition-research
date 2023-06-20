@@ -24,6 +24,9 @@
 
 #include "case-map/case-map-entry-dialog.h"
 
+#include <QDebug>
+#include <QGeoCoordinate>
+
 
 Lanternfly_Frame::Lanternfly_Frame(Lanternfly_Main_Window* mw) : QFrame(mw)
 {
@@ -33,7 +36,7 @@ Lanternfly_Frame::Lanternfly_Frame(Lanternfly_Main_Window* mw) : QFrame(mw)
  view_ = new MapGraphicsView;
 
  QObject::connect(view_, &MapGraphicsView::preview_dialogs_requested,
-    [](QString which)
+    [this](QString which)
  {
   QDialog* dlg = nullptr;
 
@@ -41,7 +44,7 @@ Lanternfly_Frame::Lanternfly_Frame(Lanternfly_Main_Window* mw) : QFrame(mw)
 
 #define TEMP_MACRO(x) \
    { #x, [](QDialog*& result) \
-     {result = new x;} }, \
+     {result = new x();} }, \
 
    TEMP_MACRO(Lanternfly_Sighting_Dialog)
    TEMP_MACRO(Lanternfly_Configuration_Dialog)
@@ -57,7 +60,11 @@ Lanternfly_Frame::Lanternfly_Frame(Lanternfly_Main_Window* mw) : QFrame(mw)
   {
    (*it)(dlg);
    if(dlg)
-     dlg->show();
+   {
+    connect(dlg, SIGNAL(location_marker_requested(QGeoLocation)), //this,
+      SLOT(handle_location_marker_request(QGeoLocation)));
+    dlg->show();
+   }
   }
  });
 
@@ -100,6 +107,12 @@ Lanternfly_Frame::Lanternfly_Frame(Lanternfly_Main_Window* mw) : QFrame(mw)
  main_layout_->addWidget(coords_line_edit_);
 
  setLayout(main_layout_);
+}
+
+void Lanternfly_Frame::handle_location_marker_request(QGeoLocation loc)
+{
+ qDebug() << loc.coordinate().latitude();
+ qDebug() << loc.coordinate().longitude();
 }
 
 void Lanternfly_Frame::adopt_location(QString name)

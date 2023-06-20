@@ -55,6 +55,33 @@ HEADERS += \
   $$SRC_DIR/lanternfly-data-set.h \
   $$SRC_DIR/case-map/case-map-entry-dialog.h \
 
+HEADERS += \
+  $$SRC_DIR/case-map/case-map-gis-service.h
+
+
+HEADERS += \
+  $$SRC_DIR/case-map/csv/contentiterator.h \
+  $$SRC_DIR/case-map/csv/filechecker.h \
+  $$SRC_DIR/case-map/csv/symbols.h \
+  $$SRC_DIR/case-map/csv/qtcsv/abstractdata.h \
+  $$SRC_DIR/case-map/csv/qtcsv/qtcsv_global.h \
+  $$SRC_DIR/case-map/csv/qtcsv/reader.h \
+  $$SRC_DIR/case-map/csv/qtcsv/stringdata.h \
+  $$SRC_DIR/case-map/csv/qtcsv/variantdata.h \
+  $$SRC_DIR/case-map/csv/qtcsv/writer.h \
+
+
+SOURCES += \
+  $$SRC_DIR/case-map/csv/contentiterator.cpp \
+  $$SRC_DIR/case-map/csv/reader.cpp \
+  $$SRC_DIR/case-map/csv/variantdata.cpp \
+  $$SRC_DIR/case-map/csv/writer.cpp \
+  $$SRC_DIR/case-map/csv/stringdata.cpp \
+
+SOURCES += \
+  $$SRC_DIR/case-map/case-map-gis-service.cpp
+
+
 
 SOURCES += \
   $$SRC_DIR/lanternfly/lanternfly-frame.cpp \

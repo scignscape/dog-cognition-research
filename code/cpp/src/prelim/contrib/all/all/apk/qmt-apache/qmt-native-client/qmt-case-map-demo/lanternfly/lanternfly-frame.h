@@ -25,10 +25,14 @@ class QMT_Client_Context_Menu_Handler;
 class QMT_Client_Location_Focus;
 class QMT_Client_Data_Set;
 
+#include <QGeoLocation>
+
 class Lanternfly_Main_Window;
 
 class Lanternfly_Frame : public QFrame
 {
+ Q_OBJECT
+
  QVBoxLayout* main_layout_;
 
  MapGraphicsScene* scene_;
@@ -55,10 +59,15 @@ public:
 
  void adopt_location(QString name);
 
+
  MapGraphicsScene* scene()
  {
   return scene_;
  }
+
+public Q_SLOTS:
+ void handle_location_marker_request(QGeoLocation loc);
+
 
 };
 

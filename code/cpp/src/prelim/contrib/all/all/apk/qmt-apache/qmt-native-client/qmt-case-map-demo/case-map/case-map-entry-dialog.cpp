@@ -64,8 +64,11 @@
 
 #include <QComboBox>
 
+#include <QGeoCoordinate>
+
 #include "global-types.h"
 
+#include "case-map-gis-service.h"
 
 Case_Map_Entry_Dialog::Case_Map_Entry_Dialog(QWidget* parent)
   : QDialog(parent)
@@ -119,11 +122,44 @@ Case_Map_Entry_Dialog::Case_Map_Entry_Dialog(QWidget* parent)
 
  le_county_ = new QLineEdit(this);
  le_city_ = new QLineEdit(this);
- le_state_ = new QLineEdit(this);
+ cb_state_or_province_ = new QComboBox(this);
 
- location_group_box_left_layout_->addRow("City", le_city_);
- location_group_box_left_layout_->addRow("State", le_state_);
+ //828 279 6735  arlene
+ // //  locations checked via https://simplemaps.com/data/us-cities
+
+ cb_state_or_province_->addItems({
+"(choose one ...)",
+"N/A (international)",
+"AB (Alberta)", "AL (Alabama)", "AK (Alaska)", "AR (Arkansas)", "AZ (Arizona)",
+"BC (British Columbia)", "CA (California)", "CO (Colorado)",
+"CT (Connecticut)", "DC (District of Columbia)", "DE (Delaware)",
+"FL (Florida)", "GA (Georgia)", "HI (Hawaii)",
+"IA (Iowa)", "ID (Idaho)", "IN (Indiana)", "IL (Illinois)",
+"KS (Kansas)", "KY (Kentucky)",
+"LA (Louisiana)", "LB (Labrador)", "MA (Massachusetts)", "MB (Manitoba)",
+"MD (Maryland)", "ME (Maine)",
+"MI (Michigan)", "MN (Minnesota)", "MO (Missouri)",
+"MS (Mississippi)", "MT (Montana)", "NB (New Brunswick)",
+"NC (North Carolina)", "ND (North Dakota)",
+"NE (Nebraska)", "NF (Newfoundland)", "NH (New Hampshire)",
+"NJ (New Jersey)", "NM (New Mexico)", "NS (Nova Scotia)", "NU (Nunavut)",
+"NV (Nevada)", "NW (North West Territories)", "NY (New York)",
+"OH (Ohio)", "OK (Oklahoma)", "ON (Ontario)", "OR (Oregon)", "PA (Pennsylvania)",
+"PE (Prince Edward Island)", "PR (Puerto Rico)", "QC (Quebec)",
+"RI (Rhode Island)", "SC (South Carolina)", "SD (South Dakota)",
+"SK (Saskatchewen)", "TN (Tennessee)", "TX (Texas)",
+"US (other US territory)", "UT (Utah)",
+"VA (Virginia)", "VT (Vermont)", "WA (Washington)",
+"WI (Wisconsin)", "WV (West Virginia)", "WY (Wyoming)",
+"YU (Yukon)"
+});
+
+ cb_state_or_province_->setMaxVisibleItems(12);
+ cb_state_or_province_->setStyleSheet("combobox-popup: 0;");
+
  location_group_box_left_layout_->addRow("County", le_county_);
+ location_group_box_left_layout_->addRow("City", le_city_);
+ location_group_box_left_layout_->addRow("State/Territory\nor Province", cb_state_or_province_);
 
  location_group_box_layout_->addLayout(location_group_box_left_layout_);
 
@@ -227,11 +263,46 @@ Case_Map_Entry_Dialog::Case_Map_Entry_Dialog(QWidget* parent)
 
  main_layout_->addLayout(entry_layout_);
 
- main_layout_->addWidget(button_box_);
+ button_do_map_ = new QPushButton("Map", this);
+
+ connect(button_do_map_, &QPushButton::clicked, [this]()
+ {
+  QString city = le_city_->text();
+  QString state = cb_state_or_province_->currentText();
+  //if(state == "N/A")
+
+  QRegularExpression rx("^(\\w\\w)\\s+\\(");
+  QRegularExpressionMatch rxm = rx.match(state);
+  if(!rxm.hasMatch())
+    return;
+  state = rxm.captured(1);
+
+  qDebug() << "state = " << state;
+
+  Case_Map_GIS_Service cmgs("osm");
+
+  QPair<r8, r8> latlon = cmgs.get_city_latitude_and_longitude(city, state);
+
+  qDebug() << "latlon = " << latlon;
+
+  QGeoLocation loc;
+  loc.setCoordinate(QGeoCoordinate(latlon.first, latlon.second));
+  Q_EMIT(location_marker_requested(loc));
+
+ });
+
+ bottom_layout_ = new QHBoxLayout;
+
+ bottom_layout_->addWidget(button_do_map_);
+ bottom_layout_->addStretch();
+ bottom_layout_->addWidget(button_box_);
+
+ main_layout_->addLayout(bottom_layout_);
+
 
  setLayout(main_layout_);
 
- setWindowTitle("Sighting Dialog");
+ setWindowTitle("Entry Dialog");
 
 }
 
