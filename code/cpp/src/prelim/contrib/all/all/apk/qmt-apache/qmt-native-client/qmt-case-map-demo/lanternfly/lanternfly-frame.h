@@ -45,6 +45,7 @@ class Lanternfly_Frame : public QFrame
  QMT_Client_Location_Focus* qmt_client_location_focus_;
  QMT_Client_Data_Set* qmt_client_data_set_;
 
+
 public:
 
  Lanternfly_Frame(Lanternfly_Main_Window* mw);

@@ -82,14 +82,14 @@ private Q_SLOTS:
 
 
 private:
-    void setMGObj(MapGraphicsObject *);
+    void setMGObj(MapGraphicsObject*);
 
     void convertSceneMouseEventCoordinates(QGraphicsSceneMouseEvent * event);
     void unconvertSceneMouseEventCoorindates(QGraphicsSceneMouseEvent * event);
-    QHash<QGraphicsSceneMouseEvent *, QPointF> _unconvertedSceneMouseCoordinates;
+    QHash<QGraphicsSceneMouseEvent*, QPointF> _unconvertedSceneMouseCoordinates;
 
     QPointer<MapGraphicsObject> _mgObj;
-    PrivateQGraphicsInfoSource * _infoSource;
+    PrivateQGraphicsInfoSource* _infoSource;
     
 };
 

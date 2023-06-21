@@ -106,6 +106,14 @@ HEADERS += \
 
 
 HEADERS += \
+  $$SRC_DIR/qmt-gis/qmt-geospatial-marker.h \
+
+
+SOURCES += \
+  $$SRC_DIR/qmt-gis/qmt-geospatial-marker.cpp \
+
+
+HEADERS += \
   $$SRC_PROSET_DIR/qmt/qmt-resource-info.h
 
 

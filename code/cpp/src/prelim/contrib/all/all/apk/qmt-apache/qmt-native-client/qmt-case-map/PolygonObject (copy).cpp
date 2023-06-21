@@ -6,15 +6,8 @@
 #include <QtDebug>
 #include <QKeyEvent>
 
-#include "MapTileSource.h"
-#include "MapGraphicsView.h"
-
-#include "qmt-gis/qmt-geospatial-marker.h"
-
-
 PolygonObject::PolygonObject(MapGraphicsView* containing_view, QPolygonF geoPoly, QColor fillColor, QObject *parent) :
-    MapGraphicsObject(containing_view, parent), _geoPoly(geoPoly), _fillColor(fillColor),
-    ref_marker_(nullptr)
+    MapGraphicsObject(containing_view, parent), _geoPoly(geoPoly), _fillColor(fillColor)
 {
     this->setFlag(MapGraphicsObject::ObjectIsMovable);
     this->setFlag(MapGraphicsObject::ObjectIsSelectable,false);
@@ -33,12 +26,6 @@ PolygonObject::~PolygonObject()
         this->destroyAddVertexCircle(circle);
     _addVertexCircles.clear();
 }
-
-void PolygonObject::init_ref_marker(const QPolygonF& qpf)
-{
- ref_marker_ = new QMT_Geospatial_Marker(qpf);
-}
-
 
 //pure-virtual from MapGraphicsObject
 QRectF PolygonObject::boundingRect() const
@@ -65,184 +52,238 @@ bool PolygonObject::contains(const QPointF &geoPos) const
 //pure-virtual from MapGraphicsObject
 void PolygonObject::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
- Q_UNUSED(option)
- Q_UNUSED(widget)
-
- //?qDebug() << "polygon " << index_code_ << "painting";
-
- if(ref_marker_)
+    Q_UNUSED(option)
+    Q_UNUSED(widget)
+qDebug() << "polygon " << index_code_ << "painting";
+ if(sup.reref_)
  {
-  QPolygonF qpf = ref_marker_->outline();
-  static r8 scale_factor = .000125;
-  QTransform trans;
-  trans = trans.fromTranslate(longitude(), latitude()).scale(scale_factor, scale_factor);
-
-
-  QPointF base {longitude(), latitude()};
-
- // QPointF base_pixels = //tileSource
-
-    QPolygonF qpf1;
-  //  qpf1 << QPointF(longitude(), latitude());
-
-
-    QSharedPointer<MapTileSource> tileSource = containing_view_->tileSource();  //_infoSource->tileSource();
-    if (tileSource.isNull())
-    {
-        qWarning() << this << "can't do bounding box conversion, null tile source.";
-    }
-    else
-    {
-     int zoom_level = containing_view_->zoomLevel();
-     QPointF base_pixels = tileSource->ll2qgs(base, zoom_level); //tileSource
-
-     QPointF pixels_1 = base_pixels - QPointF {12, 12};
-     QPointF pixels_2 = base_pixels - QPointF {0, 24};
-     QPointF pixels_3 = base_pixels - QPointF {-12, 12};
-
-     QPointF ll_1 = tileSource->qgs2ll(pixels_1, zoom_level);
-     QPointF ll_2 = tileSource->qgs2ll(pixels_2, zoom_level);
-     QPointF ll_3 = tileSource->qgs2ll(pixels_3, zoom_level);;
-
-//?     qpf1 << base << ll_1 << ll_2 << ll_3;
-
-//     static r8 scale_factor = .1;
-     QTransform trans;
-     trans = trans.scale(ref_marker_->scale(), ref_marker_->scale());
-
-     QPolygonF qpf2 = trans.map(ref_marker_->outline());
-
-     qDebug() << "qpf2 = " << qpf2;
-
-     QTransform trans1;
-     trans1 = trans1.translate(longitude(), latitude());
-
-     for(QPointF point : qpf2)
-     {
-      qDebug() << "point = " << point;
-
-      QPointF p1 = base_pixels - point;
-      qDebug() << "p1 = " << p1;
-
-      qpf1 << tileSource->qgs2ll(p1, zoom_level);
-     }
-
-
-
-//     QPointF topLeft = tileSource->ll2qgs(latLonRect.topLeft(),zoomLevel);
-//     QPointF bottomRight = tileSource->ll2qgs(latLonRect.bottomRight(),zoomLevel);
-
-    }
-
-
-
-
-//  QPolygonF qpf1;
-//  qpf1 << QPointF(longitude(), latitude());
-//  qpf1 << QPointF(longitude() - 0.001, latitude() - 0.001);
-//  qpf1 << QPointF(longitude(), latitude() - 0.002);
-//  qpf1 << QPointF(longitude() + 0.001, latitude() - 0.001);
-
-  _geoPoly = qpf1;
-
-//?  _geoPoly= trans.map(qpf);
+  CircleObject* co = (CircleObject*) sup.reref_;
+  co->paint(painter, option, widget);
+  return;
  }
 
- painter->setRenderHint(QPainter::Antialiasing,true);
-
- QPolygonF enuPoly;
-
- Position latLonCenterPos(_geoPoly.boundingRect().center(),0);
- foreach(QPointF latLon, _geoPoly)
- {
-  Position latLonPos(latLon,0.0);
-  QPointF enu = Conversions::lla2enu(latLonPos,latLonCenterPos).toPointF();
-  enuPoly << enu;
- }
-
- painter->setBrush(_fillColor);
- painter->drawPolygon(enuPoly);
-
-//?
- if(ref_marker_)
- //if(false)
- {
-  // //  anything here?
- }
- else
- {
-  //Populate edit and add-vertex handles if necessary.
-  //Is there a better place to do this? Most likely, yes.
-  if (_editCircles.isEmpty())
+#ifdef HIDE
+  if(sup.ref_)
   {
-   //Create objects to edit the polygon!
-   for (int i = 0; i < _geoPoly.size(); i++)
+   QPolygonF* pf = (QPolygonF*) sup.ref_;
+   painter->setRenderHint(QPainter::Antialiasing,true);
+   painter->setBrush(_fillColor);
+
+
+   QTransform trans1;
+   trans1 = trans1.fromTranslate(longitude(), latitude());
+   QPolygonF qpf = trans1.map(*pf);
+
+   painter->drawPolygon(qpf);
+
+   if(sup.outline_code_ & 64)
    {
-    //Edit circles - to change the shape
-    CircleObject* circle = this->constructEditCircle();
-    circle->setPos(_geoPoly.at(i));
-    _editCircles.append(circle);
-
-    QPointF current = _geoPoly.at(i);
-    QPointF next = _geoPoly.at((i+1) % _geoPoly.size());
-    QPointF avg((current.x() + next.x())/2.0,
-                (current.y() + next.y())/2.0);
-
-    //Add vertex circles - to add new vertices
-    CircleObject* betweener = this->constructAddVertexCircle();
-    betweener->setPos(avg);
-    _addVertexCircles.append(betweener);
+    QPen pen(QBrush(QColor(Qt::darkMagenta)), 15, Qt::DotLine);
+    painter->setBrush(Qt::NoBrush);
+    painter->setPen(pen);
+    painter->drawPolygon(qpf);
    }
+
+   if(sup.outline_code_ & 30) // 2, 4, 8, 16
+   {
+    int outline_count = 0;
+    if(sup.outline_code_ & 2)
+     ++outline_count;
+    if(sup.outline_code_ & 4)
+     ++outline_count;
+    if(sup.outline_code_ & 8)
+     ++outline_count;
+    if(sup.outline_code_ & 16)
+     ++outline_count;
+
+    int overall_width = 12 + outline_count * 3;
+
+    int one_ring_width = overall_width / outline_count;
+    int ring_width = overall_width;
+
+    {
+     QPen pen(QBrush(QColor(Qt::white)), ring_width + 4);
+     painter->setBrush(Qt::NoBrush);
+     painter->setPen(pen);
+     painter->drawPolygon(qpf);
+    }
+
+    if(sup.outline_code_ & 2)
+    {
+     QPen pen(QBrush(QColor(Qt::darkGreen)), ring_width);
+     painter->setBrush(Qt::NoBrush);
+     painter->setPen(pen);
+     painter->drawPolygon(qpf);
+     ring_width -= one_ring_width;
+    }
+
+    if(sup.outline_code_ & 4)
+    {
+     QPen pen(QBrush(QColor(Qt::darkRed)), ring_width);
+     painter->setBrush(Qt::NoBrush);
+     painter->setPen(pen);
+     painter->drawPolygon(qpf);
+     ring_width -= one_ring_width;
+    }
+
+    if(sup.outline_code_ & 8)
+    {
+     QPen pen(QBrush(QColor(Qt::darkMagenta)), ring_width);
+     painter->setBrush(Qt::NoBrush);
+     painter->setPen(pen);
+     painter->drawPolygon(qpf);
+     ring_width -= one_ring_width;
+    }
+
+    if(sup.outline_code_ & 16)
+    {
+     QPen pen(QBrush(QColor(Qt::cyan)), ring_width);
+     painter->setBrush(Qt::NoBrush);
+     painter->setPen(pen);
+     painter->drawPolygon(qpf);
+     ring_width -= one_ring_width;
+    }
+
+    {
+     QPen pen(QBrush(QColor(Qt::white)), 2);
+     painter->setBrush(Qt::NoBrush);
+     painter->setPen(pen);
+     painter->drawPolygon(qpf);
+    }
+
+
+   }
+   if(sup.outline_code_ & 1)
+   {
+    painter->setBrush(QColor(Qt::red));
+    painter->setPen(QPen(Qt::white, 3));
+    painter->drawEllipse(qpf.boundingRect().center(), 24, 24);
+   }
+
+   //    (painter, option, widget);
+   return;
+
   }
- }
+
+#endif
+
+  if(sup.ref_)
+//  if(true)
+  {
+   QPolygonF qpf = *(QPolygonF*) sup.ref_;
+//   (*qpf) << QPointF(-80, 180);
+//   (*qpf) << QPointF(0, 150);
+//   (*qpf) << QPointF(80, 180);
+//   (*qpf) << QPointF(0, 0);
+
+   static r8 scale_factor = .000125;
+
+   qDebug() << "qpf 1= " << qpf;
+
+   QTransform trans;
+   trans = trans.scale(scale_factor, scale_factor);
+   qpf = trans.map(qpf);
+
+   qDebug() << "qpf 2= " << qpf;
+
+      QTransform trans1;
+      trans1 = trans1.fromTranslate(longitude(), latitude());
+      qpf = trans1.map(qpf);
+
+   QPolygonF* qpf1 = new QPolygonF;
+    (*qpf1) << QPointF(40.8782, -74.1096).transposed();
+    (*qpf1) << QPointF(40.8782, -74.1196).transposed();
+    (*qpf1) << QPointF(40.8882, -74.1196).transposed();
+    (*qpf1) << QPointF(40.8882, -74.1096).transposed();
+
+   _geoPoly = *qpf1;
+
+//#ifdef HIDE
+
+   qDebug() << "qpf 3= " << qpf;
+   qDebug() << "qpf1 = " << *qpf1;
+
+   _geoPoly = qpf;
+//?   QPolygonF enuPoly;
+
+//   QPolygonF qpf1;
+//    QPolygonF* qpf1 = new QPolygonF;
+//    (*qpf1) << QPointF(40.8782, -74.1096).transposed();
+//    (*qpf1) << QPointF(40.8782, -74.1196).transposed();
+//    (*qpf1) << QPointF(40.8882, -74.1196).transposed();
+//    (*qpf1) << QPointF(40.8882, -74.1096).transposed();
+
+//   Position latLonCenterPos(qpf1->boundingRect().center(),0);
+//   foreach(QPointF latLon, *qpf1)
+//   {
+
+//       Position latLonPos(latLon,0.0);
+//       QPointF enu = Conversions::lla2enu(latLonPos,latLonCenterPos).toPointF();
+
+//       qDebug() << "1 enu latLon = " << latLon << "; enu = " << enu;
+
+//       enuPoly << enu;
+//   }
+
+//   painter->setBrush(_fillColor);
+//   painter->drawPolygon(enuPoly);
+
+//   return;
+
+//   PolygonObject* poly  = new PolygonObject(view_, *qpf, transit_color);
+
+//   poly->setLatitude(loc.coordinate().latitude());
+//   poly->setLongitude(loc.coordinate().longitude());
+//   scene_->addObject(poly);
+
+//   #endif //def HIDE
+  }
+
+    painter->setRenderHint(QPainter::Antialiasing,true);
+
+    QPolygonF enuPoly;
+
+    Position latLonCenterPos(_geoPoly.boundingRect().center(),0);
+    foreach(QPointF latLon, _geoPoly)
+    {
+
+        Position latLonPos(latLon,0.0);
+        QPointF enu = Conversions::lla2enu(latLonPos,latLonCenterPos).toPointF();
+
+        qDebug() << "2 latLon = " << latLon << "; enu = " << enu;
+
+        enuPoly << enu;
+    }
+
+    painter->setBrush(_fillColor);
+    painter->drawPolygon(enuPoly);
+
+
+    //Populate edit and add-vertex handles if necessary.
+    //Is there a better place to do this? Most likely, yes.
+    if (_editCircles.isEmpty())
+    {
+ //???
+//        //Create objects to edit the polygon!
+//        for (int i = 0; i < _geoPoly.size(); i++)
+//        {
+//            //Edit circles - to change the shape
+//            CircleObject * circle = this->constructEditCircle();
+//            circle->setPos(_geoPoly.at(i));
+//            _editCircles.append(circle);
+
+//            QPointF current = _geoPoly.at(i);
+//            QPointF next = _geoPoly.at((i+1) % _geoPoly.size());
+//            QPointF avg((current.x() + next.x())/2.0,
+//                        (current.y() + next.y())/2.0);
+
+//            //Add vertex circles - to add new vertices
+//            CircleObject * betweener = this->constructAddVertexCircle();
+//            betweener->setPos(avg);
+//            _addVertexCircles.append(betweener);
+//        }
+    }
 }
-
-//???
-
-    //#ifdef HIDE
-       //   qpf = trans.map(qpf);
-       //   trans = {};
-       //   trans = trans.fromTranslate(longitude(), latitude());
-       ////   QTransform trans1;
-       ////   trans1 = trans1.fromTranslate(longitude(), latitude());
-
-    //   qDebug() << "qpf 3= " << qpf;
-    //   qDebug() << "qpf1 = " << *qpf1;
-
-    //   _geoPoly = qpf;
-    //?   QPolygonF enuPoly;
-
-    //   QPolygonF qpf1;
-    //    QPolygonF* qpf1 = new QPolygonF;
-    //    (*qpf1) << QPointF(40.8782, -74.1096).transposed();
-    //    (*qpf1) << QPointF(40.8782, -74.1196).transposed();
-    //    (*qpf1) << QPointF(40.8882, -74.1196).transposed();
-    //    (*qpf1) << QPointF(40.8882, -74.1096).transposed();
-
-    //   Position latLonCenterPos(qpf1->boundingRect().center(),0);
-    //   foreach(QPointF latLon, *qpf1)
-    //   {
-
-    //       Position latLonPos(latLon,0.0);
-    //       QPointF enu = Conversions::lla2enu(latLonPos,latLonCenterPos).toPointF();
-
-    //       qDebug() << "1 enu latLon = " << latLon << "; enu = " << enu;
-
-    //       enuPoly << enu;
-    //   }
-
-    //   painter->setBrush(_fillColor);
-    //   painter->drawPolygon(enuPoly);
-
-    //   return;
-
-    //   PolygonObject* poly  = new PolygonObject(view_, *qpf, transit_color);
-
-    //   poly->setLatitude(loc.coordinate().latitude());
-    //   poly->setLongitude(loc.coordinate().longitude());
-    //   scene_->addObject(poly);
-
-    //   #endif //def HIDE
 
 void PolygonObject::setPos(const QPointF & nPos)
 {
@@ -457,8 +498,7 @@ void PolygonObject::fixAddVertexCirclePos()
 //private
 CircleObject *PolygonObject::constructEditCircle()
 {
-//? CircleObject * toRet = new CircleObject(containing_view_, 8);
-    CircleObject * toRet = new CircleObject(containing_view_, 18);
+    CircleObject * toRet = new CircleObject(containing_view_, 8);
     connect(toRet,
             SIGNAL(posChanged()),
             this,

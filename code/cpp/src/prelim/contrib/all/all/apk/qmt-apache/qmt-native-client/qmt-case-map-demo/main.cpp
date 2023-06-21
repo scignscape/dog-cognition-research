@@ -33,6 +33,8 @@
 #include <QGeoLocation>
 #include <QGeoServiceProvider>
 
+#include "lanternfly/lanternfly-frame.h"
+
 void log(QTextEdit &qTxtLog, const QString &qString)
 {
   qTxtLog.setPlainText(qTxtLog.toPlainText() + qString);
@@ -356,12 +358,25 @@ int main4(int argc, char *argv[])
 
 int main(int argc, char *argv[])
 {
-    QApplication a(argc, argv);
+ QApplication a(argc, argv);
 
-    Lanternfly_Main_Window w;
-    w.show();
+ Lanternfly_Main_Window w;
 
-    return a.exec();
+ QGeoLocation loc;
+ loc.setCoordinate(QGeoCoordinate(40.8782, -74.1096));
+
+ w.lanternfly_frame()->handle_location_marker_request(loc);
+
+
+ w.show();
+
+ return a.exec();
+
+
+//    QGeoLocation loc;
+//    loc.setCoordinate(QGeoCoordinate(latlon.first, latlon.second));
+//    Q_EMIT(location_marker_requested(loc));
+
 }
 
 

@@ -25,6 +25,8 @@
 
 #include <functional>
 
+#include <QGeoLocation>
+
 
 class Main_Window_Controller;
 
@@ -139,6 +141,7 @@ public:
  void mark_coordinates(const QPointF& pos);
  void show_coordinate_marking();
 
+//? void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) Q_DECL_OVERRIDE;
 
 // QGraphicsScene* secondary_scene_;
 // QGraphicsView* secondary_view_;
@@ -196,6 +199,17 @@ private:
 //public:
  QPolygonF* held_coordinate_marking_;
 
+
+ QVector<QGeoLocation> marked_locations_;
+
+
+ QVector<QGeoLocation> limited_marked_locations_;
+
+public:
+ void add_marked_location(QGeoLocation loc)
+ {
+  marked_locations_.push_back(loc);
+ }
 
 };
 

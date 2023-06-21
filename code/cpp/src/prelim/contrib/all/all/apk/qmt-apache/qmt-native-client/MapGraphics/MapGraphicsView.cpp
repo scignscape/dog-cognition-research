@@ -38,6 +38,8 @@
 
 #include "CircleObject.h"
 
+#include <QGeoCoordinate>
+
 
 MapGraphicsView::MapGraphicsView(MapGraphicsScene *scene, QWidget *parent) :
   QWidget(parent), coords_notify_callback_(nullptr),
@@ -56,6 +58,17 @@ MapGraphicsView::MapGraphicsView(MapGraphicsScene *scene, QWidget *parent) :
          [this](const QPoint& qp)
  {
   QMenu* menu = new QMenu;
+
+  if(!marked_locations_.isEmpty())
+  {
+   QPointF ll = mapToScene(qp);
+   for(QGeoLocation loc : marked_locations_)
+   {
+    QPointF locf(loc.coordinate().longitude(), loc.coordinate().latitude());
+    r8 len = QLineF(locf, ll).length();
+    qDebug() << "len = " << len;
+   }
+  }
 
 
   menu->addAction("Reset Superimposed Markings", [this, qp]()

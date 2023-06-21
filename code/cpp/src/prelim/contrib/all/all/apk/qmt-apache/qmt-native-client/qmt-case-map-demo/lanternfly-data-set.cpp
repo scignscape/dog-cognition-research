@@ -70,7 +70,7 @@ void Lanternfly_Data_Set::add_markings(Lanternfly_Main_Window& main_window,
     static QColor transit_color = QColor(55, 90, 110, 255);
 
     circle = new CircleObject(main_window.lanternfly_frame()->view(), 125, false, transit_color);
-    circle->set_ref(qpf);
+    circle->sup.set_ref(qpf);
    }
    break;
   }
@@ -81,10 +81,10 @@ void Lanternfly_Data_Set::add_markings(Lanternfly_Main_Window& main_window,
    circle->setFlags(MapGraphicsObject::ObjectIsSelectable);
    circle->setLatitude(s.latitude);
    circle->setLongitude(s.longitude);
-   circle->set_outline_code(s.presentation_code);
+   circle->sup.set_outline_code(s.presentation_code);
    main_window.lanternfly_frame()->scene()->addObject(circle);
    if(ref)
-     circle->set_ref(ref);
+     circle->sup.set_ref(ref);
    stash.push_back(circle);
   }
  }

@@ -146,7 +146,7 @@ void Main_Window_Controller::check_clear_data_layers(CircleObject* _spot)
  if(_spot)
  {
   active_data_sets_.pop();
-  if(QMT_Client_Data_Set_Base* data_set = _spot->client_data_set_base())
+  if(QMT_Client_Data_Set_Base* data_set = _spot->sup.client_data_set_base())
   {
    if(data_set->current_bind_vector())
    {
@@ -194,7 +194,7 @@ CircleObject* Main_Window_Controller::add_spot_location_marking(r8 latitude, r8 
  result->setLatitude(latitude);
  result->setLongitude(longitude);
  view_->scene()->addObject(result);
- result->set_ref(qpf1);
+ result->sup.set_ref(qpf1);
 
  return result;
 }
@@ -257,7 +257,7 @@ void Main_Window_Controller::find_bus_stops(r8 latitude, r8 longitude, CircleObj
 
  data_set->bind_to_spot_location(spot);
 
- spot->set_client_data_set_base(data_set);
+ spot->sup.set_client_data_set_base(data_set);
 
 
  active_data_sets_.push(data_set);

@@ -38,6 +38,8 @@
 
 #include "CircleObject.h"
 
+#include <QGeoCoordinate>
+
 
 MapGraphicsView::MapGraphicsView(MapGraphicsScene *scene, QWidget *parent) :
   QWidget(parent), coords_notify_callback_(nullptr),
@@ -57,234 +59,276 @@ MapGraphicsView::MapGraphicsView(MapGraphicsScene *scene, QWidget *parent) :
  {
   QMenu* menu = new QMenu;
 
-
-  menu->addAction("Reset Superimposed Markings", [this, qp]()
+  if(!marked_locations_.isEmpty())
   {
-   reset_superimposed_markings();
-  });
-
-
-  menu->addAction("Show Coordinate Marking", [this, qp]()
-  {
-   main_window_controller_->show_coordinate_marking();
-  });
-
-  menu->addAction("Reset Data Layer", [this, qp]()
-  {
-   main_window_controller_->reset_data_layer();
-  });
-
-  menu->addAction("Reset Map Style", [this, qp]()
-  {
-   main_window_controller_->reset_map_style(mapToGlobal(qp));
-  });
-
-  QStringList locs = qmt_client_location_focus_base_->get_short_choice_list();
-  if(!locs.isEmpty())
-  {
-   QMenu* loc_menu = menu->addMenu("Reset Location");
-   for(QString loc : locs)
+   limited_marked_locations_.clear();
+   QPointF ll = mapToScene(qp);
+   for(QGeoLocation loc : marked_locations_)
    {
-    QString text = loc; text.replace('$', ' ');
-    loc_menu->addAction(text, [this, loc]
+    QPointF locf(loc.coordinate().longitude(), loc.coordinate().latitude());
+    r8 len = QLineF(locf, ll).length();
+    qDebug() << "len = " << len;
+    if(len < 0.004)
+     limited_marked_locations_.push_back(loc);
+   }
+  }
+
+  if(!limited_marked_locations_.isEmpty())
+  {
+   menu->addAction("View Case Entry", [this, qp]()
+   {
+    //main_window_controller_->load_single_file_data_set();
+   });
+
+   menu->addAction("View Case Summary (legal)", [this, qp]()
+   {
+//    main_window_controller_->load_single_file_data_set();
+   });
+
+   menu->addAction("View Case Files", [this, qp]()
+   {
+//    main_window_controller_->load_single_file_data_set();
+   });
+
+  }
+
+  else
+  {
+   menu->addAction("Reset Superimposed Markings", [this, qp]()
+   {
+    reset_superimposed_markings();
+   });
+
+
+   menu->addAction("Reset Superimposed Markings", [this, qp]()
+   {
+    reset_superimposed_markings();
+   });
+
+
+   menu->addAction("Show Coordinate Marking", [this, qp]()
+   {
+    main_window_controller_->show_coordinate_marking();
+   });
+
+   menu->addAction("Reset Data Layer", [this, qp]()
+   {
+    main_window_controller_->reset_data_layer();
+   });
+
+   menu->addAction("Reset Map Style", [this, qp]()
+   {
+    main_window_controller_->reset_map_style(mapToGlobal(qp));
+   });
+
+   QStringList locs = qmt_client_location_focus_base_->get_short_choice_list();
+   if(!locs.isEmpty())
+   {
+    QMenu* loc_menu = menu->addMenu("Reset Location");
+    for(QString loc : locs)
     {
-     QString name = qmt_client_location_focus_base_->adopt_location(loc);
-     if(!name.isEmpty() && coords_notify_callback_)
+     QString text = loc; text.replace('$', ' ');
+     loc_menu->addAction(text, [this, loc]
      {
-      coords_notify_callback_({
-        qmt_client_location_focus_base_->current_central_longitude(),
-        qmt_client_location_focus_base_->current_central_latitude()},
-        zoomLevel());
-     }
+      QString name = qmt_client_location_focus_base_->adopt_location(loc);
+      if(!name.isEmpty() && coords_notify_callback_)
+      {
+       coords_notify_callback_({
+         qmt_client_location_focus_base_->current_central_longitude(),
+         qmt_client_location_focus_base_->current_central_latitude()},
+         zoomLevel());
+      }
+     });
+    }
+
+   };
+
+   menu->addAction("Show Latitude/Longitude Coordinates", [this, qp]()
+   {
+    main_window_controller_->show_llcoords(qp);
+   });
+
+   menu->addAction("Load Single-File Data Set", [this, qp]()
+   {
+    main_window_controller_->load_single_file_data_set();
+   });
+
+   menu->addAction("Show/Hide Marking Outlines", [this, qp]()
+   {
+    main_window_controller_->toggle_marking_outline_visibility();
+   });
+
+   QMenu* dialogs =  menu->addMenu("Preview Dialogs");
+
+ //  dialogs->addAction("SES Configuration", [this, qp]()
+ //  {
+ //   Q_EMIT preview_dialogs_requested("SES_Configuration_Dialog");
+ //  });
+
+ //  dialogs->addAction("E-Designation", [this, qp]()
+ //  {
+ //   Q_EMIT preview_dialogs_requested("E_Designation_Dialog");
+ //  });
+
+ ////  dialogs->addAction("SES Sighting", [this, qp]()
+ ////  {
+ ////   Q_EMIT preview_dialogs_requested("SES_Sighting_Dialog");
+ ////  });
+
+ //  dialogs->addAction("SES Filter", [this, qp]()
+ //  {
+ //   Q_EMIT preview_dialogs_requested("SES_Filter_Dialog");
+ //  });
+
+
+     dialogs->addAction("Cases/Testimonials", [this, qp]()
+     {
+      Q_EMIT preview_dialogs_requested("Case_Map_Entry_Dialog");
+     });
+
+
+
+ //  dialogs->addAction("Lanternfly Configuration", [this, qp]()
+ //  {
+ //   Q_EMIT preview_dialogs_requested("Lanternfly_Configuration_Dialog");
+ //  });
+
+ //  dialogs->addAction("Lanternfly Sighting", [this, qp]()
+ //  {
+ //   Q_EMIT preview_dialogs_requested("Lanternfly_Sighting_Dialog");
+ //  });
+
+ //  dialogs->addAction("Lanternfly Sighting Filter", [this, qp]()
+ //  {
+ //   Q_EMIT preview_dialogs_requested("Lanternfly_Sighting_Filter_Dialog");
+ //  });
+
+
+   QMenu* local =  menu->addMenu("Activate Local Tile Server");
+
+   local->addAction("Apache Module (self-contained)", [this, qp]()
+   {
+    main_window_controller_->activate_local_tile_server();
+   });
+
+   local->addAction("Local-Socket Module (for demo/debug)", [this, qp]()
+   {
+    // //  passing nullptr here means we use a local socket with the
+     //    default flag in the url, currently "-l"
+     //    For a different flag pass either a QString or QString*
+     //    with the flag characters (cannot be empty).
+    main_window_controller_->activate_local_tile_server(nullptr);
+   });
+
+   local->addAction("Deactive", [this, qp]()
+   {
+    main_window_controller_->deactivate_local_tile_server();
+   });
+
+
+
+   menu->addAction("Clear Data Layers", [this, qp]()
+   {
+    main_window_controller_->check_clear_data_layers();
+   });
+
+
+   QString current_location_name = qmt_client_location_focus_base_->current_location_name();
+
+   // //  a hack to demo switching between features for different locations.
+   //    Presumably in production there would be a better way to
+   //    map locations to context menu options
+   if(current_location_name == "Bergen$County")
+   {
+    menu->addAction("Lookup Street Address", [this, qp]()
+    {
+     main_window_controller_->llcoords_to_street_address(qp);
+    });
+
+    menu->addAction("Load Bus Data", [this]()
+    {
+     main_window_controller_->load_bus_data();
+    });
+
+    menu->addAction("Find Bus Stops", [this, qp]()
+    {
+     //main_window_controller_->set_info_file("bus", "/home/nlevisrael/gits/acle/bus_data/stops.txt");
+     QPointF ll = mapToScene(qp);
+     main_window_controller_->find_bus_stops(ll.y(), ll.x());
+    });
+
+    menu->addAction("Show Bus Routes", [this, qp]()
+    {
+     QPointF ll = mapToScene(qp);
+     u1 zl = zoomLevel();
+
+     main_window_controller_->load_web_engine_view(mapToGlobal(qp),
+       QUrl("https://www.openstreetmap.org/#map=%1/%2/%3&layers=T"_qt
+       .arg(zl).arg(ll.y()).arg(ll.x())));
+
     });
    }
 
-  };
-
-  menu->addAction("Show Latitude/Longitude Coordinates", [this, qp]()
-  {
-   main_window_controller_->show_llcoords(qp);
-  });
-
-  menu->addAction("Load Single-File Data Set", [this, qp]()
-  {
-   main_window_controller_->load_single_file_data_set();
-  });
-
-  menu->addAction("Show/Hide Marking Outlines", [this, qp]()
-  {
-   main_window_controller_->toggle_marking_outline_visibility();
-  });
-
-  QMenu* dialogs =  menu->addMenu("Preview Dialogs");
-
-//  dialogs->addAction("SES Configuration", [this, qp]()
-//  {
-//   Q_EMIT preview_dialogs_requested("SES_Configuration_Dialog");
-//  });
-
-//  dialogs->addAction("E-Designation", [this, qp]()
-//  {
-//   Q_EMIT preview_dialogs_requested("E_Designation_Dialog");
-//  });
-
-////  dialogs->addAction("SES Sighting", [this, qp]()
-////  {
-////   Q_EMIT preview_dialogs_requested("SES_Sighting_Dialog");
-////  });
-
-//  dialogs->addAction("SES Filter", [this, qp]()
-//  {
-//   Q_EMIT preview_dialogs_requested("SES_Filter_Dialog");
-//  });
-
-
-    dialogs->addAction("Cases/Testimonials", [this, qp]()
+   else if(current_location_name == "Kherson")
+   {
+    menu->addAction("Load Incident Reports", [this]()
     {
-     Q_EMIT preview_dialogs_requested("Case_Map_Entry_Dialog");
+     main_window_controller_->load_incident_reports();
     });
 
+    QMenu* menu1 = menu->addMenu("Track Incidents");
 
+    menu1->addAction("From earliest", [this, qp]()
+    {
+     QPointF ll = mapToScene(qp);
+     main_window_controller_->track_incidents(ll.y(), ll.x(), -1);
+    });
 
-//  dialogs->addAction("Lanternfly Configuration", [this, qp]()
-//  {
-//   Q_EMIT preview_dialogs_requested("Lanternfly_Configuration_Dialog");
-//  });
+    menu1->addAction("From latest", [this, qp]()
+    {
+     QPointF ll = mapToScene(qp);
+     main_window_controller_->track_incidents(ll.y(), ll.x(), 1);
+    });
 
-//  dialogs->addAction("Lanternfly Sighting", [this, qp]()
-//  {
-//   Q_EMIT preview_dialogs_requested("Lanternfly_Sighting_Dialog");
-//  });
+   }
 
-//  dialogs->addAction("Lanternfly Sighting Filter", [this, qp]()
-//  {
-//   Q_EMIT preview_dialogs_requested("Lanternfly_Sighting_Filter_Dialog");
-//  });
-
-
-  QMenu* local =  menu->addMenu("Activate Local Tile Server");
-
-  local->addAction("Apache Module (self-contained)", [this, qp]()
-  {
-   main_window_controller_->activate_local_tile_server();
-  });
-
-  local->addAction("Local-Socket Module (for demo/debug)", [this, qp]()
-  {
-   // //  passing nullptr here means we use a local socket with the
-    //    default flag in the url, currently "-l"
-    //    For a different flag pass either a QString or QString*
-    //    with the flag characters (cannot be empty).
-   main_window_controller_->activate_local_tile_server(nullptr);
-  });
-
-  local->addAction("Deactive", [this, qp]()
-  {
-   main_window_controller_->deactivate_local_tile_server();
-  });
-
-
-
-  menu->addAction("Clear Data Layers", [this, qp]()
-  {
-   main_window_controller_->check_clear_data_layers();
-  });
-
-
-  QString current_location_name = qmt_client_location_focus_base_->current_location_name();
-
-  // //  a hack to demo switching between features for different locations.
-  //    Presumably in production there would be a better way to
-  //    map locations to context menu options
-  if(current_location_name == "Bergen$County")
-  {
-   menu->addAction("Lookup Street Address", [this, qp]()
-   {
-    main_window_controller_->llcoords_to_street_address(qp);
-   });
-
-   menu->addAction("Load Bus Data", [this]()
-   {
-    main_window_controller_->load_bus_data();
-   });
-
-   menu->addAction("Find Bus Stops", [this, qp]()
-   {
-    //main_window_controller_->set_info_file("bus", "/home/nlevisrael/gits/acle/bus_data/stops.txt");
-    QPointF ll = mapToScene(qp);
-    main_window_controller_->find_bus_stops(ll.y(), ll.x());
-   });
-
-   menu->addAction("Show Bus Routes", [this, qp]()
+   menu->addAction("Street Map View (google)", [this, qp]()
    {
     QPointF ll = mapToScene(qp);
     u1 zl = zoomLevel();
 
+    QString u = "https://www.google.com/maps/@%1,%2,%3z"_qt
+      .arg(ll.y()).arg(ll.x()).arg(zl);
+
+    qDebug() << " u = " << u;
+
     main_window_controller_->load_web_engine_view(mapToGlobal(qp),
-      QUrl("https://www.openstreetmap.org/#map=%1/%2/%3&layers=T"_qt
-      .arg(zl).arg(ll.y()).arg(ll.x())));
+      QUrl(u));
 
    });
-  }
 
-  else if(current_location_name == "Kherson")
-  {
-   menu->addAction("Load Incident Reports", [this]()
+   menu->addAction("Take Screenshot", [this]()
    {
-    main_window_controller_->load_incident_reports();
-   });
+    QScreen* screen = QGuiApplication::primaryScreen();
+    if (!screen)
+     return;
+    int target_window_id  = ((QWidget*)this->parent())->winId();
 
-   QMenu* menu1 = menu->addMenu("Track Incidents");
-
-   menu1->addAction("From earliest", [this, qp]()
-   {
-    QPointF ll = mapToScene(qp);
-    main_window_controller_->track_incidents(ll.y(), ll.x(), -1);
-   });
-
-   menu1->addAction("From latest", [this, qp]()
-   {
-    QPointF ll = mapToScene(qp);
-    main_window_controller_->track_incidents(ll.y(), ll.x(), 1);
-   });
-
-  }
-
-  menu->addAction("Street Map View (google)", [this, qp]()
-  {
-   QPointF ll = mapToScene(qp);
-   u1 zl = zoomLevel();
-
-   QString u = "https://www.google.com/maps/@%1,%2,%3z"_qt
-     .arg(ll.y()).arg(ll.x()).arg(zl);
-
-   qDebug() << " u = " << u;
-
-   main_window_controller_->load_web_engine_view(mapToGlobal(qp),
-     QUrl(u));
-
-  });
-
-  menu->addAction("Take Screenshot", [this]()
-  {
-   QScreen* screen = QGuiApplication::primaryScreen();
-   if (!screen)
-    return;
-   int target_window_id  = ((QWidget*)this->parent())->winId();
-
-   QTimer::singleShot(10000, [=]
-   {
-    QPixmap pixmap = screen->grabWindow(target_window_id );
-    QString path = SCREENSHOTS_FOLDER "/ss.png";
-    qDebug() << "Saving to path: " << path;
-
-    QFile file(path);
-    if(file.open(QIODevice::WriteOnly))
+    QTimer::singleShot(10000, [=]
     {
-     pixmap.save(&file, "PNG");
-    }
+     QPixmap pixmap = screen->grabWindow(target_window_id );
+     QString path = SCREENSHOTS_FOLDER "/ss.png";
+     qDebug() << "Saving to path: " << path;
+
+     QFile file(path);
+     if(file.open(QIODevice::WriteOnly))
+     {
+      pixmap.save(&file, "PNG");
+     }
+    });
    });
-  });
+
+  }
 
   menu->popup(this->mapToGlobal(qp));
 
@@ -766,7 +810,7 @@ void MapGraphicsView::add_marking(QPolygonF* qpf, qreal latitude,
  _scene->data_layer_objects.insert(circle);
 
  if(ref)
-   circle->set_ref(ref);
+   circle->sup.set_ref(ref);
  //stash.push_back(circle);
 
  if(check_result)
@@ -784,7 +828,7 @@ void MapGraphicsView::reset_data_layer()
  for(CircleObject* co : _scene->data_layer_objects)
  {
   CircleObject* new_co = new CircleObject(this, co->radius(), false, co->fillColor());
-  new_co->set_ref(co->ref());
+  new_co->sup.set_ref(co->sup.ref());
   new_co->setLatitude(co->latitude());
   new_co->setLongitude(co->longitude());
 
@@ -836,11 +880,11 @@ void MapGraphicsView::mark_coordinates(const QPointF& pos)
   circle->setLatitude(ll.x());
   circle->setLongitude(ll.y());
 
-  circle->set_outline_code(12);
+  circle->sup.set_outline_code(12);
 //  circle->set_outline_code(s.presentation_code);
   scene()->addObject(circle);
   if(ref)
-    circle->set_ref(ref);
+    circle->sup.set_ref(ref);
 
   this->repaint();
   this->update();

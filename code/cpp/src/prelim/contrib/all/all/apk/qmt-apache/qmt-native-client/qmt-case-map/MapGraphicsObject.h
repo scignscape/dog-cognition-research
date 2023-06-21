@@ -18,21 +18,53 @@
 
 #include "accessors.h"
 
+#include <QDebug>
+
 class MapGraphicsView;
 
+class QMT_Client_Data_Set_Base;
 
+
+struct Supplement {
+
+ r8 scale_;
+ void* ref_;
+ u2 outline_code_;
+ u2 held_outline_code_;
+
+ QMT_Client_Data_Set_Base* client_data_set_base_;
+
+
+ ACCESSORS(u2 ,outline_code)
+ ACCESSORS(u2 ,held_outline_code)
+ ACCESSORS(void* ,ref)
+ ACCESSORS(r8 ,scale)
+ ACCESSORS(QMT_Client_Data_Set_Base* ,client_data_set_base)
+
+ Supplement() : client_data_set_base_(nullptr),
+   ref_(nullptr), held_outline_code_(0),
+   outline_code_(0), scale_(1)
+ {}
+
+ void check_ref()
+ {
+  qDebug() << "ref = " << *(QPolygonF*) ref_;
+ }
+
+};
 
 class MAPGRAPHICSSHARED_EXPORT MapGraphicsObject : public QObject
 {
  Q_OBJECT
 
  u4 move_increment_value_;
- u4 index_code_;
 
 protected:
  MapGraphicsView* containing_view_;
  void* style_params_;
  QVariant client_data_;
+
+ u4 index_code_;
 
 
 public:
@@ -54,6 +86,9 @@ public:
  ACCESSORS(void* ,style_params)
  ACCESSORS(QVariant ,client_data)
  ACCESSORS(u4 ,index_code)
+
+
+
 
  bool sizeIsZoomInvariant() const;
 

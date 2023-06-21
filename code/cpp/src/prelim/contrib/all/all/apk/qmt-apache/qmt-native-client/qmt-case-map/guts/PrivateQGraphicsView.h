@@ -29,6 +29,10 @@ protected:
 
     //virtual from QGraphicsView
     virtual void wheelEvent(QWheelEvent *event);
+
+
+//?    virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) Q_DECL_OVERRIDE;
+
     
 Q_SIGNALS:
     void hadMouseDoubleClickEvent(QMouseEvent* event);

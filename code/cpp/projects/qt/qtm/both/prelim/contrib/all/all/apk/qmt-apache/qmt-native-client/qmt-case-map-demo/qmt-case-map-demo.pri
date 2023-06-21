@@ -38,7 +38,7 @@ INCLUDEPATH += $$PHAON_GRAPH_SRC_GROUP_DIR
 
 
 INCLUDEPATH += \
-  $$SRC_GROUP_DIR/MapGraphics
+  $$SRC_GROUP_DIR/qmt-case-map
 
 
 HEADERS += \

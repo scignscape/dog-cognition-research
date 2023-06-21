@@ -8,12 +8,22 @@
 #include "MapGraphics_global.h"
 class CircleObject;
 
+class QMT_Geospatial_Marker;
+
 class MAPGRAPHICSSHARED_EXPORT PolygonObject : public MapGraphicsObject
 {
+ QMT_Geospatial_Marker* ref_marker_;
+
     Q_OBJECT
 public:
-    explicit PolygonObject(MapGraphicsView* containing_view, QPolygonF geoPoly, QColor fillColor = QColor(200,200,200,200), QObject *parent = 0);
+
+
+    PolygonObject(MapGraphicsView* containing_view, QPolygonF geoPoly, QColor fillColor = QColor(200,200,200,200), QObject *parent = 0);
     virtual ~PolygonObject();
+
+    ACCESSORS(QMT_Geospatial_Marker* ,ref_marker)
+
+    void init_ref_marker(const QPolygonF& qpf);
 
     //pure-virtual from MapGraphicsObject
     QRectF boundingRect() const;

@@ -49,7 +49,7 @@ CircleObject* QMT_Client_Layer_Base::add_polygon_object(r8 latitude,
 {
  CircleObject* co = add_circle_object(latitude, longitude, select_margin, color);
 // PolygonObject* result = new PolygonObject(*polygon, color);
- co->set_ref(polygon);
+ co->sup.set_ref(polygon);
  return co;
 // return add_object(latitude, longitude, result);
 }

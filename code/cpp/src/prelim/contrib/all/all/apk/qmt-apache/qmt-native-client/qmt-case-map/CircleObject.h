@@ -7,20 +7,16 @@
 #include "global-types.h"
 
 class MapGraphicsView;
-class QMT_Client_Data_Set_Base;
 
 class MAPGRAPHICSSHARED_EXPORT CircleObject : public MapGraphicsObject
 {
  Q_OBJECT
 
- void* ref_;
- u2 outline_code_;
- u2 held_outline_code_;
-
- QMT_Client_Data_Set_Base* client_data_set_base_;
-
 
 public:
+
+ Supplement sup;
+
  explicit CircleObject(MapGraphicsView* containing_view, qreal radius,
    bool sizeIsZoomInvariant=true, QColor fillColor = QColor(0,0,0,0),MapGraphicsObject *parent = 0);
  virtual ~CircleObject();
@@ -29,7 +25,7 @@ public:
  QRectF boundingRect() const;
 
  //pure-virtual from MapGraphicsObject
- void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
+ void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) Q_DECL_OVERRIDE;
 
  qreal radius() const;
  void setRadius(qreal radius);
@@ -40,20 +36,14 @@ public:
  }
 
 
- ACCESSORS(u2 ,outline_code)
- ACCESSORS(u2 ,held_outline_code)
- ACCESSORS(void* ,ref)
- ACCESSORS(QMT_Client_Data_Set_Base* ,client_data_set_base)
-
-
  void swap_outline_code()
  {
-  if(outline_code_ == 0)
-    outline_code_ = held_outline_code_;
+  if(sup.outline_code_ == 0)
+    sup.outline_code_ = sup.held_outline_code_;
   else
   {
-   held_outline_code_ = outline_code_;
-   outline_code_ = 0;
+   sup.held_outline_code_ = sup.outline_code_;
+   sup.outline_code_ = 0;
   }
 
  }

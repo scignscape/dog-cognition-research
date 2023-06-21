@@ -34,6 +34,8 @@ class QMT_Client_Location_Focus_Base;
 class QMT_Client_Data_Set_Base;
 
 
+#include <QGeoLocation>
+
 class MAPGRAPHICSSHARED_EXPORT MapGraphicsView : public QWidget, public PrivateQGraphicsInfoSource
 {
  Q_OBJECT
@@ -195,6 +197,14 @@ private:
 
 //public:
  QPolygonF* held_coordinate_marking_;
+
+ QVector<QGeoLocation> marked_locations_;
+
+public:
+ void add_marked_location(QGeoLocation loc)
+ {
+  marked_locations_.push_back(loc);
+ }
 
 
 };
