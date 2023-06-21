@@ -4,6 +4,8 @@
 #include <QPolygonF>
 #include <QList>
 
+#include "tsl/ordered_map.h"
+
 #include "MapGraphicsObject.h"
 #include "MapGraphics_global.h"
 class CircleObject;
@@ -52,6 +54,10 @@ protected:
     //virtual from MapGraphicsObject
     virtual void mousePressEvent(QGraphicsSceneMouseEvent * event);
     virtual void keyReleaseEvent(QKeyEvent *event);
+
+    void draw_scene_polygon_at_ll(const QPolygonF& poly, QPointF latlon, QColor color,
+      tsl::ordered_map<const QString*, QVector<QPair<QBrush, QPen>>>& styles,
+      r8 scale = 1);
 
 private Q_SLOTS:
     void handleEditCirclePosChanged();

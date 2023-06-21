@@ -11,6 +11,71 @@
 
 #include "qmt-gis/qmt-geospatial-marker.h"
 
+#include <string>
+
+
+#include <iostream>
+#include <string>
+#include <cstdlib>
+#include <tsl/ordered_map.h>
+#include <tsl/ordered_set.h>
+
+//int main() {
+//    tsl::ordered_map<char, int> map = {{'d', 1}, {'a', 2}, {'g', 3}};
+//    map.insert({'b', 4});
+//    map['h'] = 5;
+//    map['e'] = 6;
+
+//    map.erase('a');
+
+
+//    // {d, 1} {g, 3} {b, 4} {h, 5} {e, 6}
+//    for(const auto& key_value : map) {
+//        std::cout << "{" << key_value.first << ", " << key_value.second << "}" << std::endl;
+//    }
+
+
+//    map.unordered_erase('b');
+
+//    // Break order: {d, 1} {g, 3} {e, 6} {h, 5}
+//    for(const auto& key_value : map) {
+//        std::cout << "{" << key_value.first << ", " << key_value.second << "}" << std::endl;
+//    }
+
+
+//    for(auto it = map.begin(); it != map.end(); ++it) {
+//        //it->second += 2; // Not valid.
+//        it.value() += 2;
+//    }
+
+
+//    if(map.find('d') != map.end()) {
+//        std::cout << "Found 'd'." << std::endl;
+//    }
+
+//    const std::size_t precalculated_hash = std::hash<char>()('d');
+//    // If we already know the hash beforehand, we can pass it as argument to speed-up the lookup.
+//    if(map.find('d', precalculated_hash) != map.end()) {
+//        std::cout << "Found 'd' with hash " << precalculated_hash << "." << std::endl;
+//    }
+
+
+//    tsl::ordered_set<char, std::hash<char>, std::equal_to<char>,
+//                     std::allocator<char>, std::vector<char>> set;
+//    set.reserve(6);
+
+//    set = {'3', '4', '9', '2'};
+//    set.erase('2');
+//    set.insert('1');
+//    set.insert('\0');
+
+//    set.pop_back();
+//    set.insert({'0', '\0'});
+
+//    // Get raw buffer for C API: 34910
+//    std::cout << atoi(set.data()) << std::endl;
+//}
+
 
 PolygonObject::PolygonObject(MapGraphicsView* containing_view, QPolygonF geoPoly, QColor fillColor, QObject *parent) :
     MapGraphicsObject(containing_view, parent), _geoPoly(geoPoly), _fillColor(fillColor),
@@ -62,91 +127,166 @@ bool PolygonObject::contains(const QPointF &geoPos) const
                                   Qt::OddEvenFill);
 }
 
+const QString _outline_ = "outline";
+const QString _nugget_ = "nugget";
+
+void PolygonObject::draw_scene_polygon_at_ll(const QPolygonF& poly, QPointF latlon,
+  QColor color, tsl::ordered_map<const QString*, QVector<QPair<QBrush, QPen>>>& styles, r8 scale)
+{
+ QSharedPointer<MapTileSource> tileSource = containing_view_->tileSource();  //_infoSource->tileSource();
+ if (tileSource.isNull())
+ {
+  qWarning() << this << "can't do bounding box conversion, null tile source.";
+  return;
+ }
+
+ QPolygonF qpf = poly;
+ QPointF base = latlon.transposed();
+
+ styles.insert({&_outline_, {}});
+ styles.insert({&_nugget_, {}});
+ QVector<QPair<QBrush, QPen>>& outline_styles = styles.at(&_outline_); // outline
+ QVector<QPair<QBrush, QPen>>& nugget_styles = styles.at(&_nugget_); // nugget
+
+
+ int zoom_level = containing_view_->zoomLevel();
+
+ QPointF base_pixels = tileSource->ll2qgs(base, zoom_level); //tileSource
+
+
+ QTransform trans;
+ trans = trans.scale(scale, scale);
+
+ QPolygonF qpf2 = trans.map(poly);
+
+ QPolygonF qpf1;
+
+ for(QPointF point : qpf2)
+ {
+  qDebug() << "point = " << point;
+
+  QPointF p1 = base_pixels - point;
+  qDebug() << "p1 = " << p1;
+
+  qpf1 << tileSource->qgs2ll(p1, zoom_level);
+ }
+
+ _geoPoly = qpf1;
+
+ if(ref_marker_->outline_code() & 64)
+ {
+  QPen pen(QBrush(QColor(Qt::darkMagenta)), 15, Qt::DotLine);
+  outline_styles.push_back({Qt::NoBrush, pen});
+//  painter->setBrush(Qt::NoBrush);
+//  painter->setPen(pen);
+//  painter->drawPolygon(*pf);
+ }
+
+ if(ref_marker_->outline_code() & 30) // 2, 4, 8, 16
+ {
+  int outline_count = 0;
+  if(ref_marker_->outline_code() & 2)
+   ++outline_count;
+  if(ref_marker_->outline_code() & 4)
+   ++outline_count;
+  if(ref_marker_->outline_code() & 8)
+   ++outline_count;
+  if(ref_marker_->outline_code() & 16)
+   ++outline_count;
+
+  int overall_width = 12 + outline_count * 3;
+
+  int one_ring_width = overall_width / outline_count;
+  int ring_width = overall_width;
+
+  {
+   QPen pen(QBrush(QColor(Qt::white)), ring_width + 4);
+   outline_styles.push_back({Qt::NoBrush, pen});
+
+//   painter->setBrush(Qt::NoBrush);
+//   painter->setPen(pen);
+//   painter->drawPolygon(*pf);
+  }
+
+  if(ref_marker_->outline_code() & 2)
+  {
+   QPen pen(QBrush(QColor(Qt::darkGreen)), ring_width);
+   outline_styles.push_back({Qt::NoBrush, pen});
+
+//   painter->setBrush(Qt::NoBrush);
+//   painter->setPen(pen);
+//   painter->drawPolygon(*pf);
+   ring_width -= one_ring_width;
+  }
+
+  if(ref_marker_->outline_code() & 4)
+  {
+   QPen pen(QBrush(QColor(Qt::darkRed)), ring_width);
+   outline_styles.push_back({Qt::NoBrush, pen});
+//   painter->setBrush(Qt::NoBrush);
+//   painter->setPen(pen);
+//   painter->drawPolygon(*pf);
+   ring_width -= one_ring_width;
+  }
+
+  if(ref_marker_->outline_code() & 8)
+  {
+   QPen pen(QBrush(QColor(Qt::darkMagenta)), ring_width);
+   outline_styles.push_back({Qt::NoBrush, pen});
+//   painter->setBrush(Qt::NoBrush);
+//   painter->setPen(pen);
+//   painter->drawPolygon(*pf);
+   ring_width -= one_ring_width;
+  }
+
+  if(ref_marker_->outline_code() & 16)
+  {
+   QPen pen(QBrush(QColor(Qt::cyan)), ring_width);
+   outline_styles.push_back({Qt::NoBrush, pen});
+//   painter->setBrush(Qt::NoBrush);
+//   painter->setPen(pen);
+//   painter->drawPolygon(*pf);
+   ring_width -= one_ring_width;
+  }
+
+  {
+   QPen pen(QBrush(QColor(Qt::white)), 2);
+   outline_styles.push_back({Qt::NoBrush, pen});
+//   painter->setBrush(Qt::NoBrush);
+//   painter->setPen(pen);
+//   painter->drawPolygon(*pf);
+  }
+
+
+ }
+ if(ref_marker_->outline_code() & 1)
+ {
+  nugget_styles.push_back({QBrush(QColor(Qt::red)), QPen(Qt::white, 3)});
+//  painter->setBrush(QColor(Qt::red));
+//  painter->setPen(QPen(Qt::white, 3));
+//  painter->drawEllipse(pf->boundingRect().center(), 24, 24);
+ }
+
+
+}
+
+
 //pure-virtual from MapGraphicsObject
 void PolygonObject::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
  Q_UNUSED(option)
  Q_UNUSED(widget)
 
- //?qDebug() << "polygon " << index_code_ << "painting";
+ tsl::ordered_map<const QString*, QVector<QPair<QBrush, QPen>>> styles;
 
+//?#ifdef HIDE
  if(ref_marker_)
  {
-  QPolygonF qpf = ref_marker_->outline();
-  static r8 scale_factor = .000125;
-  QTransform trans;
-  trans = trans.fromTranslate(longitude(), latitude()).scale(scale_factor, scale_factor);
-
-
-  QPointF base {longitude(), latitude()};
-
- // QPointF base_pixels = //tileSource
-
-    QPolygonF qpf1;
-  //  qpf1 << QPointF(longitude(), latitude());
-
-
-    QSharedPointer<MapTileSource> tileSource = containing_view_->tileSource();  //_infoSource->tileSource();
-    if (tileSource.isNull())
-    {
-        qWarning() << this << "can't do bounding box conversion, null tile source.";
-    }
-    else
-    {
-     int zoom_level = containing_view_->zoomLevel();
-     QPointF base_pixels = tileSource->ll2qgs(base, zoom_level); //tileSource
-
-     QPointF pixels_1 = base_pixels - QPointF {12, 12};
-     QPointF pixels_2 = base_pixels - QPointF {0, 24};
-     QPointF pixels_3 = base_pixels - QPointF {-12, 12};
-
-     QPointF ll_1 = tileSource->qgs2ll(pixels_1, zoom_level);
-     QPointF ll_2 = tileSource->qgs2ll(pixels_2, zoom_level);
-     QPointF ll_3 = tileSource->qgs2ll(pixels_3, zoom_level);;
-
-//?     qpf1 << base << ll_1 << ll_2 << ll_3;
-
-//     static r8 scale_factor = .1;
-     QTransform trans;
-     trans = trans.scale(ref_marker_->scale(), ref_marker_->scale());
-
-     QPolygonF qpf2 = trans.map(ref_marker_->outline());
-
-     qDebug() << "qpf2 = " << qpf2;
-
-     QTransform trans1;
-     trans1 = trans1.translate(longitude(), latitude());
-
-     for(QPointF point : qpf2)
-     {
-      qDebug() << "point = " << point;
-
-      QPointF p1 = base_pixels - point;
-      qDebug() << "p1 = " << p1;
-
-      qpf1 << tileSource->qgs2ll(p1, zoom_level);
-     }
-
-
-
-//     QPointF topLeft = tileSource->ll2qgs(latLonRect.topLeft(),zoomLevel);
-//     QPointF bottomRight = tileSource->ll2qgs(latLonRect.bottomRight(),zoomLevel);
-
-    }
-
-
-
-
-//  QPolygonF qpf1;
-//  qpf1 << QPointF(longitude(), latitude());
-//  qpf1 << QPointF(longitude() - 0.001, latitude() - 0.001);
-//  qpf1 << QPointF(longitude(), latitude() - 0.002);
-//  qpf1 << QPointF(longitude() + 0.001, latitude() - 0.001);
-
-  _geoPoly = qpf1;
-
-//?  _geoPoly= trans.map(qpf);
+  draw_scene_polygon_at_ll(ref_marker_->outline(), QPointF{latitude(), longitude()},
+    Qt::red, styles,
+    ref_marker_->scale());
  }
+//?#endif //def HIDE
 
  painter->setRenderHint(QPainter::Antialiasing,true);
 
@@ -162,6 +302,31 @@ void PolygonObject::paint(QPainter *painter, const QStyleOptionGraphicsItem *opt
 
  painter->setBrush(_fillColor);
  painter->drawPolygon(enuPoly);
+
+ QBrush restore_brush = painter->brush();
+ QPen restore_pen = painter->pen();
+
+ for(auto it = styles.begin(); it != styles.end(); ++it)
+ {
+  if(it.key() == _outline_)
+  {
+   for(const auto& pr : it.value())
+   {
+    painter->setBrush(pr.first);
+    painter->setPen(pr.second);
+    painter->drawPolygon(enuPoly);
+   }
+  }
+  else if(it.key() == _nugget_)
+  {
+   for(const auto& pr : it.value())
+   {
+    painter->setBrush(pr.first);
+    painter->setPen(pr.second);
+    painter->drawEllipse(enuPoly.boundingRect().center(), 24, 24);
+   }
+  }
+ }
 
 //?
  if(ref_marker_)
@@ -196,53 +361,6 @@ void PolygonObject::paint(QPainter *painter, const QStyleOptionGraphicsItem *opt
   }
  }
 }
-
-//???
-
-    //#ifdef HIDE
-       //   qpf = trans.map(qpf);
-       //   trans = {};
-       //   trans = trans.fromTranslate(longitude(), latitude());
-       ////   QTransform trans1;
-       ////   trans1 = trans1.fromTranslate(longitude(), latitude());
-
-    //   qDebug() << "qpf 3= " << qpf;
-    //   qDebug() << "qpf1 = " << *qpf1;
-
-    //   _geoPoly = qpf;
-    //?   QPolygonF enuPoly;
-
-    //   QPolygonF qpf1;
-    //    QPolygonF* qpf1 = new QPolygonF;
-    //    (*qpf1) << QPointF(40.8782, -74.1096).transposed();
-    //    (*qpf1) << QPointF(40.8782, -74.1196).transposed();
-    //    (*qpf1) << QPointF(40.8882, -74.1196).transposed();
-    //    (*qpf1) << QPointF(40.8882, -74.1096).transposed();
-
-    //   Position latLonCenterPos(qpf1->boundingRect().center(),0);
-    //   foreach(QPointF latLon, *qpf1)
-    //   {
-
-    //       Position latLonPos(latLon,0.0);
-    //       QPointF enu = Conversions::lla2enu(latLonPos,latLonCenterPos).toPointF();
-
-    //       qDebug() << "1 enu latLon = " << latLon << "; enu = " << enu;
-
-    //       enuPoly << enu;
-    //   }
-
-    //   painter->setBrush(_fillColor);
-    //   painter->drawPolygon(enuPoly);
-
-    //   return;
-
-    //   PolygonObject* poly  = new PolygonObject(view_, *qpf, transit_color);
-
-    //   poly->setLatitude(loc.coordinate().latitude());
-    //   poly->setLongitude(loc.coordinate().longitude());
-    //   scene_->addObject(poly);
-
-    //   #endif //def HIDE
 
 void PolygonObject::setPos(const QPointF & nPos)
 {
@@ -512,3 +630,90 @@ void PolygonObject::destroyAddVertexCircle(MapGraphicsObject *obj)
                SLOT(handleAddVertexCircleSelected()));
     obj->deleteLater();
 }
+
+#ifdef HIDE
+
+ QPolygonF qpf = poly;
+ QPointF base = latlon.transposed();
+
+ QPolygonF qpf1;
+ QSharedPointer<MapTileSource> tileSource = containing_view_->tileSource();  //_infoSource->tileSource();
+ if (tileSource.isNull())
+ {
+  qWarning() << this << "can't do bounding box conversion, null tile source.";
+ }
+ else
+ {
+  int zoom_level = containing_view_->zoomLevel();
+  QPointF base_pixels = tileSource->ll2qgs(base, zoom_level); //tileSource
+  QTransform trans;
+  trans = trans.scale(scale, scale);
+
+  QPolygonF qpf2 = trans.map(poly);
+
+//  QTransform trans1;
+//  trans1 = trans1.translate(longitude(), latitude());
+
+  for(QPointF point : qpf2)
+  {
+   qDebug() << "point = " << point;
+
+   QPointF p1 = base_pixels - point;
+   qDebug() << "p1 = " << p1;
+
+   qpf1 << tileSource->qgs2ll(p1, zoom_level);
+  }
+ }
+ _geoPoly = qpf1;
+
+#endif
+
+
+
+ //???
+
+     //#ifdef HIDE
+        //   qpf = trans.map(qpf);
+        //   trans = {};
+        //   trans = trans.fromTranslate(longitude(), latitude());
+        ////   QTransform trans1;
+        ////   trans1 = trans1.fromTranslate(longitude(), latitude());
+
+     //   qDebug() << "qpf 3= " << qpf;
+     //   qDebug() << "qpf1 = " << *qpf1;
+
+     //   _geoPoly = qpf;
+     //?   QPolygonF enuPoly;
+
+     //   QPolygonF qpf1;
+     //    QPolygonF* qpf1 = new QPolygonF;
+     //    (*qpf1) << QPointF(40.8782, -74.1096).transposed();
+     //    (*qpf1) << QPointF(40.8782, -74.1196).transposed();
+     //    (*qpf1) << QPointF(40.8882, -74.1196).transposed();
+     //    (*qpf1) << QPointF(40.8882, -74.1096).transposed();
+
+     //   Position latLonCenterPos(qpf1->boundingRect().center(),0);
+     //   foreach(QPointF latLon, *qpf1)
+     //   {
+
+     //       Position latLonPos(latLon,0.0);
+     //       QPointF enu = Conversions::lla2enu(latLonPos,latLonCenterPos).toPointF();
+
+     //       qDebug() << "1 enu latLon = " << latLon << "; enu = " << enu;
+
+     //       enuPoly << enu;
+     //   }
+
+     //   painter->setBrush(_fillColor);
+     //   painter->drawPolygon(enuPoly);
+
+     //   return;
+
+     //   PolygonObject* poly  = new PolygonObject(view_, *qpf, transit_color);
+
+     //   poly->setLatitude(loc.coordinate().latitude());
+     //   poly->setLongitude(loc.coordinate().longitude());
+     //   scene_->addObject(poly);
+
+     //   #endif //def HIDE
+
