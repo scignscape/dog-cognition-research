@@ -111,6 +111,11 @@ public:
     */
  virtual bool contains(const QPointF& geoPos) const;
 
+ virtual bool pixel_contains(const QPointF &geoPos) const
+ {
+  return contains(geoPos);
+ }
+
  /**
      * @brief Paints the contents of the Object in ENU coordinates if the object is not zoom invariant.
      * If it is zoom invariant, the units are pixels. That is, this painter should operate in the same

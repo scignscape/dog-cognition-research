@@ -30,6 +30,10 @@ protected:
     //virtual from QGraphicsView
     virtual void wheelEvent(QWheelEvent *event);
 
+    virtual void enterEvent(QEvent *event);
+
+    QCursor custom_cursor_;
+    void init_custom_cursor();
 
 //?    virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) Q_DECL_OVERRIDE;
 

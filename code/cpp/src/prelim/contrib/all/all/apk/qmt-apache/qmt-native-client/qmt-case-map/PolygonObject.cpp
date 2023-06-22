@@ -79,7 +79,7 @@
 
 PolygonObject::PolygonObject(MapGraphicsView* containing_view, QPolygonF geoPoly, QColor fillColor, QObject *parent) :
     MapGraphicsObject(containing_view, parent), _geoPoly(geoPoly), _fillColor(fillColor),
-    ref_marker_(nullptr)
+    ref_marker_(nullptr), ref_geo_hot_spot_(nullptr)
 {
     this->setFlag(MapGraphicsObject::ObjectIsMovable);
     this->setFlag(MapGraphicsObject::ObjectIsSelectable,false);
@@ -120,11 +120,197 @@ QRectF PolygonObject::boundingRect() const
     return QRectF(topLeftENU,bottomRightENU);
 }
 
+
+bool PolygonObject::pixel_contains(const QPointF& geoPos) const
+{
+ if(!ref_geo_hot_spot_)
+   return false;
+
+  qDebug() << " ============== ";
+
+  qDebug() << "lat lon = " << latitude() << ", " << longitude();
+  qDebug() << "geo pos = " << qSetRealNumberPrecision(10) << geoPos.x() << " , " << geoPos.y();
+
+ QPointF geoPos1 =  QPointF(-74.1096,40.8782);
+
+ //?-74.10964966","40.87821814
+
+ qDebug() << "ref_geo_hot_spot_ = " << *ref_geo_hot_spot_;
+ qDebug() << "current_enu_polygon_ = " << current_enu_polygon_;
+ qDebug() << "current_enu_polygon_ b = " << current_enu_polygon_.boundingRect();
+ qDebug() << "ref enu hot spot = " << ref_enu_hot_spot_;
+
+ //
+ Position latLonPos(geoPos, 0.0);
+
+ qDebug() << "latLonPos = " << latLonPos;
+
+
+ // Position latLonPos(geoPos1, 0.0);
+ QPointF enu = Conversions::lla2enu(latLonPos, *ref_geo_hot_spot_).toPointF();
+
+ qDebug() << "enu = " << enu;
+
+ held_enu_hot_spot_ = enu;
+
+ QPointF ll_enu;
+ {
+  Position latLonPos({longitude(), latitude()}, 0.0);
+  ll_enu = Conversions::lla2enu(latLonPos,*ref_geo_hot_spot_).toPointF();
+ }
+
+
+
+//? ref_enu_hot_spot_ = Conversions::lla2enu(*ref_geo_hot_spot_,*ref_geo_hot_spot_).toPointF();
+ QPointF ref_enu_hot_spot = {current_enu_polygon_.boundingRect().center().x(), current_enu_polygon_.boundingRect().top()};
+ qDebug() << "! ref_enu_hot_spot = " << ref_enu_hot_spot;
+
+ qDebug() << "! ll_enu = " << ll_enu;
+
+
+
+
+//? return current_enu_polygon_.containsPoint(enu, Qt::OddEvenFill);
+//?
+ return current_enu_polygon_.boundingRect().contains(enu);
+}
+
+
+#ifdef HIDE
+ qDebug() << "\n === " ;
+ {
+  QPointF geoPos1 {longitude(), latitude()};
+
+  qDebug() << "geoPos ll = " << geoPos1;
+
+  Position latLonCenterPos(_geoPoly.boundingRect().center(),0);
+  Position latLonPos(geoPos1, 0.0);
+  QPointF enu = Conversions::lla2enu(latLonPos,latLonCenterPos).toPointF();
+
+  qDebug() << "enu ll = " << enu;
+ }
+
+ QPointF geoPos0 = QPointF(longitude(), latitude()); //-74.1095,40.8781);
+
+
+ qDebug() << "\ngeo = " << geoPos;
+ qDebug() << "cur = " << current_enu_polygon_;
+
+ qDebug() << "curb = " << current_enu_polygon_.boundingRect();
+
+
+ Position latLonCenterPos(_geoPoly.boundingRect().center(),0);
+
+ Position latLonPos0(geoPos0, 0.0);
+ QPointF enu0 = Conversions::lla2enu(latLonPos0,latLonCenterPos).toPointF();
+
+ qDebug() << "enu0 = " << enu0;
+
+ if(current_enu_polygon_.boundingRect().contains(enu0))
+ {
+  qDebug() << "in poly";
+ }
+ else
+ {
+  qDebug() << "not in poly";
+ }
+
+ Position latLonPos(geoPos, 0.0);
+ QPointF enu = Conversions::lla2enu(latLonPos,latLonCenterPos).toPointF();
+
+ qDebug() << "enu = " << enu;
+
+// return current_enu_polygon_.containsPoint(enu, Qt::OddEvenFill);
+ return current_enu_polygon_.boundingRect().contains(enu);
+#endif
+
+
+#ifdef HIDE
+ qDebug() << "pixel contains called ...";
+
+ qDebug() << "geoPos = " << geoPos;
+
+ QPointF center = _geoPoly.boundingRect().center();
+
+//?
+//
+ bool result = _geoPoly.containsPoint(geoPos, Qt::OddEvenFill);
+
+ qDebug() << "geoPoly b = " << _geoPoly.boundingRect();
+
+ bool result0 = _geoPoly.boundingRect().contains(geoPos);
+ //?
+ bool result1 = _geoPoly.containsPoint(center, Qt::OddEvenFill);
+
+
+ if(result)
+   qDebug() << geoPos << " : " << _geoPoly;
+ else
+   qDebug() << geoPos << " ; " << _geoPoly;
+
+ if(result1)
+   qDebug() << center << " :: " << _geoPoly;
+ else
+   qDebug() << center << " ;; " << _geoPoly;
+
+ if(result0)
+   qDebug() << geoPos << " (0) " << _geoPoly.boundingRect();
+ else
+   qDebug() << geoPos << " [0] " << _geoPoly.boundingRect();
+
+
+//  return _geoPoly.containsPoint(geoPos,
+//                               Qt::OddEvenFill);
+
+ return result;
+#endif
+
+
 //virtual from MapGraphicsObject
 bool PolygonObject::contains(const QPointF &geoPos) const
 {
-    return _geoPoly.containsPoint(geoPos,
-                                  Qt::OddEvenFill);
+ return _geoPoly.containsPoint(geoPos,
+   Qt::OddEvenFill);
+
+#ifdef HIDE
+ qDebug() << "contains called ...";
+
+ qDebug() << "geoPos = " << geoPos;
+
+ QPointF center = _geoPoly.boundingRect().center();
+
+//?
+//
+ bool result = _geoPoly.containsPoint(geoPos, Qt::OddEvenFill);
+
+ qDebug() << "geoPoly b = " << _geoPoly.boundingRect();
+
+ bool result0 = _geoPoly.boundingRect().contains(geoPos);
+ //?
+ bool result1 = _geoPoly.containsPoint(center, Qt::OddEvenFill);
+
+
+ if(result)
+   qDebug() << geoPos << " : " << _geoPoly;
+ else
+   qDebug() << geoPos << " ; " << _geoPoly;
+
+ if(result1)
+   qDebug() << center << " :: " << _geoPoly;
+ else
+   qDebug() << center << " ;; " << _geoPoly;
+
+ if(result0)
+   qDebug() << geoPos << " (0) " << _geoPoly.boundingRect();
+ else
+   qDebug() << geoPos << " [0] " << _geoPoly.boundingRect();
+
+
+//  return _geoPoly.containsPoint(geoPos,
+//                               Qt::OddEvenFill);
+
+ return result;
+#endif
 }
 
 const QString _outline_ = "outline";
@@ -163,11 +349,7 @@ void PolygonObject::draw_scene_polygon_at_ll(const QPolygonF& poly, QPointF latl
 
  for(QPointF point : qpf2)
  {
-  qDebug() << "point = " << point;
-
   QPointF p1 = base_pixels - point;
-  qDebug() << "p1 = " << p1;
-
   qpf1 << tileSource->qgs2ll(p1, zoom_level);
  }
 
@@ -290,18 +472,93 @@ void PolygonObject::paint(QPainter *painter, const QStyleOptionGraphicsItem *opt
 
  painter->setRenderHint(QPainter::Antialiasing,true);
 
- QPolygonF enuPoly;
+// if(ref_enu_polygon_.isEmpty())
+// {
+//?  QPolygonF enuPoly;
 
- Position latLonCenterPos(_geoPoly.boundingRect().center(),0);
+ if(!ref_geo_hot_spot_)
+ {
+  ref_geo_hot_spot_ = new Position({_geoPoly.boundingRect().center().x(), _geoPoly.boundingRect().top()},0);
+ }
+
+ current_enu_polygon_.clear();
+
  foreach(QPointF latLon, _geoPoly)
  {
   Position latLonPos(latLon,0.0);
-  QPointF enu = Conversions::lla2enu(latLonPos,latLonCenterPos).toPointF();
-  enuPoly << enu;
+  QPointF enu = Conversions::lla2enu(latLonPos,*ref_geo_hot_spot_).toPointF();
+  current_enu_polygon_ << enu;
  }
 
+ QPointF ll_enu;
+ {
+  Position latLonPos({longitude(), latitude()}, 0.0);
+  ll_enu = Conversions::lla2enu(latLonPos,*ref_geo_hot_spot_).toPointF();
+ }
+
+
+
+//? ref_enu_hot_spot_ = Conversions::lla2enu(*ref_geo_hot_spot_,*ref_geo_hot_spot_).toPointF();
+ ref_enu_hot_spot_ = {current_enu_polygon_.boundingRect().center().x(), current_enu_polygon_.boundingRect().top()};
+ qDebug() << "ref_enu_hot_spot_ = " << ref_enu_hot_spot_;
+
+ qDebug() << "ll_enu = " << ll_enu;
+
+//?}
+
  painter->setBrush(_fillColor);
- painter->drawPolygon(enuPoly);
+// painter->drawPolygon(enuPoly);
+ painter->drawPolygon(current_enu_polygon_);
+
+ painter->setBrush(Qt::NoBrush);
+ painter->setPen(Qt::blue);
+ painter->drawEllipse(ref_enu_hot_spot_, 5, 5);
+
+ painter->setPen(Qt::yellow);
+ painter->drawEllipse( ll_enu, 4, 4);
+
+ if(!held_enu_hot_spot_.isNull())
+ {
+  painter->setPen(Qt::magenta);
+  painter->drawEllipse(held_enu_hot_spot_, 6, 6);
+ }
+
+// current_enu_polygon_ = enuPoly;
+
+// painter->setBrush(Qt::NoBrush);
+// painter->setPen(Qt::blue);
+
+// painter->drawRect(current_enu_polygon_.boundingRect());
+
+// QPointF enu;
+
+// {
+//  QPointF geoPos {longitude(), latitude()};
+//  Position latLonCenterPos({_geoPoly.boundingRect().center().x(), _geoPoly.boundingRect().top()},0);
+//  Position latLonPos(geoPos, 0.0);
+//  enu = Conversions::lla2enu(latLonPos,latLonCenterPos).toPointF();
+
+//  qDebug() << "enu ll (2) = " << enu;
+
+// }
+
+
+// {
+//  QPointF enu1 =  QPointF(20.0184,-51.9679);
+//  qDebug() << "enu1 (2) = " << enu1;
+
+//  painter->setBrush(Qt::yellow);
+//  painter->drawEllipse(enu1, 5, 5);
+
+// }
+
+// painter->setBrush(Qt::red);
+// painter->drawEllipse(enu, 5, 5);
+
+
+ qDebug() << "\n! cur = " << current_enu_polygon_;
+ qDebug() << "! curb = " << current_enu_polygon_.boundingRect();
+
 
  QBrush restore_brush = painter->brush();
  QPen restore_pen = painter->pen();
@@ -314,7 +571,8 @@ void PolygonObject::paint(QPainter *painter, const QStyleOptionGraphicsItem *opt
    {
     painter->setBrush(pr.first);
     painter->setPen(pr.second);
-    painter->drawPolygon(enuPoly);
+//?    painter->drawPolygon(enuPoly);
+    painter->drawPolygon(current_enu_polygon_);
    }
   }
   else if(it.key() == _nugget_)
@@ -323,10 +581,12 @@ void PolygonObject::paint(QPainter *painter, const QStyleOptionGraphicsItem *opt
    {
     painter->setBrush(pr.first);
     painter->setPen(pr.second);
-    painter->drawEllipse(enuPoly.boundingRect().center(), 24, 24);
+    //?painter->drawEllipse(enuPoly.boundingRect().center(), 24, 24);
+    painter->drawEllipse(current_enu_polygon_.boundingRect().center(), 24, 24);
    }
   }
  }
+
 
 //?
  if(ref_marker_)
@@ -361,6 +621,51 @@ void PolygonObject::paint(QPainter *painter, const QStyleOptionGraphicsItem *opt
   }
  }
 }
+
+
+//QRectF br;
+
+//QPointF top_left = _geoPoly.at(2);
+//QPointF bottom_right = {_geoPoly.at(0).x(), _geoPoly.at(3).y()};
+
+//qDebug() << "top left = " << top_left;
+//qDebug() << "bottom right = " << bottom_right;
+
+
+////? top_left = {-74.11, 40.8788};
+//// bottom_right = {-74.03, 40.68};
+//// bottom_right = {-74.1093, 40.8782};
+
+//br.setTopLeft(top_left);
+//// br.setBottomRight(bottom_right);
+
+//br.setWidth(120);
+//br.setHeight(120);
+
+////= _geoPoly.boundingRect();
+//qDebug() << "br = " << br;
+//painter->setBrush(Qt::blue);
+//painter->setPen(Qt::red);
+
+//painter->drawEllipse(enuPoly.at(0), 11, 11);
+
+
+//painter->setBrush(Qt::white);
+//painter->setPen(Qt::red);
+
+//painter->drawEllipse(enuPoly.at(1), 11, 11);
+
+//painter->setBrush(Qt::gray);
+//painter->setPen(Qt::red);
+
+//painter->drawEllipse(enuPoly.at(2), 11, 11);
+
+//painter->setBrush(Qt::yellow);
+//painter->setPen(Qt::red);
+
+//painter->drawEllipse(enuPoly.at(3), 11, 11);
+
+//// painter->drawRect(br);
 
 void PolygonObject::setPos(const QPointF & nPos)
 {

@@ -46,6 +46,7 @@ MapGraphicsView::MapGraphicsView(MapGraphicsScene *scene, QWidget *parent) :
   qmt_client_location_focus_base_(nullptr),
   held_coordinate_marking_(nullptr)
 {
+
  main_window_controller_ = new Main_Window_Controller(this);
 
  //Setup the given scene and set the default zoomLevel to 3
@@ -54,26 +55,57 @@ MapGraphicsView::MapGraphicsView(MapGraphicsScene *scene, QWidget *parent) :
 
  setContextMenuPolicy(Qt::CustomContextMenu);
 
+// setCursor(Qt::CrossCursor);
+
  connect(this, &QGraphicsView::customContextMenuRequested,
          [this](const QPoint& qp)
  {
+
   QMenu* menu = new QMenu;
 
-  if(!marked_locations_.isEmpty())
+  if(!marked_locations_.empty())
   {
    limited_marked_locations_.clear();
    QPointF ll = mapToScene(qp);
-   for(QGeoLocation loc : marked_locations_)
+
+   for(auto it = marked_locations_.begin(); it != marked_locations_.end(); ++it)
    {
-    QPointF locf(loc.coordinate().longitude(), loc.coordinate().latitude());
-    r8 len = QLineF(locf, ll).length();
-    qDebug() << "len = " << len;
-    if(len < 0.004)
-     limited_marked_locations_.push_back(loc);
+    const QGeoLocation& loc = it.key();
+    MapGraphicsObject* obj = it.value();
+//    if(obj->contains({loc.coordinate().longitude(), loc.coordinate().latitude()}))
+//      limited_marked_locations_.insert({loc, obj});
+
+    QPointF ll1 = obj->boundingRect().center();
+
+    if(obj->pixel_contains({ll.x(), ll.y()}))
+    {
+      limited_marked_locations_.insert({loc, obj});
+      qDebug() << "\n\n--------\n\n";
+
+    }
+    else
+      qDebug() << "\nno...";
+
+    _childView->viewport()->repaint();
+
+
+//     QPointF locf(loc.coordinate().longitude(), loc.coordinate().latitude());
+//     r8 len = QLineF(locf, ll).length();
+//     qDebug() << "locf = " << locf;
+//     qDebug() << "len = " << len;
+//     qDebug() << "ll = " << ll;
+//     qDebug() << "ll1 = " << ll1;
+
+
+//     if(len < 0.004)
+//      limited_marked_locations_.push_back(loc);
+
    }
+
+   return;
   }
 
-  if(!limited_marked_locations_.isEmpty())
+  if(!limited_marked_locations_.empty())
   {
    menu->addAction("View Case Entry", [this, qp]()
    {

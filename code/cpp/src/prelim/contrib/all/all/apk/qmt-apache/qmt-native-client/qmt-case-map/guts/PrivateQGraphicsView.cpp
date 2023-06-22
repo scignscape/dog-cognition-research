@@ -9,6 +9,8 @@ PrivateQGraphicsView::PrivateQGraphicsView(QWidget *parent) :
 {
     this->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     this->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+
+ init_custom_cursor();
 }
 
 PrivateQGraphicsView::PrivateQGraphicsView(QGraphicsScene *scene, QWidget *parent) :
@@ -16,6 +18,26 @@ PrivateQGraphicsView::PrivateQGraphicsView(QGraphicsScene *scene, QWidget *paren
 {
     this->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     this->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+
+ init_custom_cursor();
+}
+
+void PrivateQGraphicsView::init_custom_cursor()
+{
+ signed short xoffset = 3;
+ signed short yoffset = 0;
+
+ QPixmap pm(17 + qAbs(xoffset), 17 + qAbs(yoffset));
+ pm.fill(Qt::transparent);
+ QPainter qp(&pm);
+
+
+ qp.drawLine(0 + xoffset, 6 + yoffset, 16 + xoffset, 6 + yoffset);
+ qp.drawLine(6 + xoffset, 0 + yoffset, 6 + xoffset, 16 + yoffset);
+ qp.drawLine(13 + xoffset, 6 + yoffset, 13 + xoffset, 13 + yoffset);
+ qp.drawLine(13 + xoffset, 13 + yoffset, 6 + xoffset, 13 + yoffset);
+
+ custom_cursor_ = QCursor(pm, 0, 0);
 }
 
 PrivateQGraphicsView::~PrivateQGraphicsView()
@@ -44,12 +66,22 @@ void PrivateQGraphicsView::mouseMoveEvent(QMouseEvent *event)
 
 //protected
 ////virtual from QGraphicsView
+void PrivateQGraphicsView::enterEvent(QEvent *event)
+{
+ QGraphicsView::enterEvent(event);
+ viewport()->setCursor(custom_cursor_);
+}
+
+//protected
+////virtual from QGraphicsView
 void PrivateQGraphicsView::mousePressEvent(QMouseEvent *event)
 {
     event->setAccepted(false);
     this->hadMousePressEvent(event);
     if (!event->isAccepted())
         QGraphicsView::mousePressEvent(event);
+
+    viewport()->setCursor(custom_cursor_);
 }
 
 //protected
@@ -60,6 +92,8 @@ void PrivateQGraphicsView::mouseReleaseEvent(QMouseEvent *event)
     this->hadMouseReleaseEvent(event);
     if (!event->isAccepted())
         QGraphicsView::mouseReleaseEvent(event);
+
+    viewport()->setCursor(custom_cursor_);
 }
 
 //protected
@@ -70,6 +104,8 @@ void PrivateQGraphicsView::contextMenuEvent(QContextMenuEvent *event)
     this->hadContextMenuEvent(event);
     if (!event->isAccepted())
         QGraphicsView::contextMenuEvent(event);
+
+    viewport()->setCursor(custom_cursor_);
 }
 
 //protected

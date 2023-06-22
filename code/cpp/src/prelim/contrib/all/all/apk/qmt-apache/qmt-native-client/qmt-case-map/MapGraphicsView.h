@@ -26,7 +26,20 @@
 #include <functional>
 
 #include <QGeoLocation>
+#include <QGeoCoordinate>
 
+#include "tsl/ordered_map.h"
+
+namespace std {
+ template<>
+ struct hash<QGeoLocation>
+ {
+  size_t operator()(const QGeoLocation& loc) const
+  {
+   return qHash(loc.coordinate());
+  }
+ };
+}
 
 class Main_Window_Controller;
 
@@ -34,6 +47,43 @@ class QMT_Client_Layer_Base;
 class QMT_Client_Context_Menu_Handler_Base;
 class QMT_Client_Location_Focus_Base;
 class QMT_Client_Data_Set_Base;
+
+
+//// for cursors
+//class QGraphicsView_with_Alt_Cursor : public QGraphicsView
+//{
+//protected:
+//    void enterEvent(QEvent *event)
+//    {
+//        QGraphicsView::enterEvent(event);
+//        viewport()->setCursor(Qt::CrossCursor);
+//    }
+
+//    void mousePressEvent(QMouseEvent *event)
+//    {
+//        QGraphicsView::mousePressEvent(event);
+//        viewport()->setCursor(Qt::CrossCursor);
+//    }
+
+//    void mouseReleaseEvent(QMouseEvent *event)
+//    {
+//        QGraphicsView::mouseReleaseEvent(event);
+//        viewport()->setCursor(Qt::CrossCursor);
+//    }
+//};
+
+// void mousePressEvent(QMouseEvent *event)
+// {
+//  //this->QGraphicsView::mousePressEvent(event);
+//  //   viewport()->setCursor(Qt::CrossCursor);
+// }
+
+// void mouseReleaseEvent(QMouseEvent *event)
+// {
+////     QGraphicsView::mouseReleaseEvent(event);
+////     viewport()->setCursor(Qt::CrossCursor);
+// }
+
 
 
 class MAPGRAPHICSSHARED_EXPORT MapGraphicsView : public QWidget, public PrivateQGraphicsInfoSource
@@ -175,7 +225,11 @@ protected:
 
 private:
  QPointer<MapGraphicsScene> _scene;
+
+//
  QPointer<QGraphicsView> _childView;
+//  QPointer<QGraphicsView_with_Alt_Cursor> _childView;
+
  QPointer<QGraphicsScene> _childScene;
  QSharedPointer<MapTileSource> _tileSource;
 
@@ -200,15 +254,13 @@ private:
  QPolygonF* held_coordinate_marking_;
 
 
- QVector<QGeoLocation> marked_locations_;
-
-
- QVector<QGeoLocation> limited_marked_locations_;
+ tsl::ordered_map<QGeoLocation, MapGraphicsObject*> marked_locations_;
+ tsl::ordered_map<QGeoLocation, MapGraphicsObject*> limited_marked_locations_;
 
 public:
- void add_marked_location(QGeoLocation loc)
+ void add_marked_location(QGeoLocation loc, MapGraphicsObject* obj)
  {
-  marked_locations_.push_back(loc);
+  marked_locations_.insert({loc, obj});
  }
 
 };

@@ -114,22 +114,10 @@ Lanternfly_Frame::Lanternfly_Frame(Lanternfly_Main_Window* mw) : QFrame(mw)
  setLayout(main_layout_);
 }
 
-void Lanternfly_Frame::handle_location_marker_request(QGeoLocation loc)
-{
- qDebug() << loc.coordinate().latitude();
- qDebug() << loc.coordinate().longitude();
 
- static u2 count = 0;
 //?#ifdef HIDE
 // {
 //? static QColor transit_color = QColor(155, 90, 40, 255);
-
- QPolygonF* qpf = new QPolygonF;
- (*qpf) << QPointF(-80, 180);
- (*qpf) << QPointF(0, 150);
- (*qpf) << QPointF(80, 180);
- (*qpf) << QPointF(0, 0);
-
 // static r8 scale_factor = .000125;
 
 // QTransform trans;
@@ -163,20 +151,11 @@ void Lanternfly_Frame::handle_location_marker_request(QGeoLocation loc)
 //#endif
 
 //#ifdef HIDE
-
- CircleObject* circle = nullptr;
- PolygonObject* poly = nullptr;
-
- void* ref = nullptr;
-
 //   QPolygonF* qpf = new QPolygonF;
 //   (*qpf) << QPointF(-80, 180);
 //   (*qpf) << QPointF(0, 150);
 //   (*qpf) << QPointF(80, 180);
 //   (*qpf) << QPointF(0, 0);
-
-   static QColor transit_color = QColor(155, 190, 30, 255);
-
 //   static r8 scale_factor = .0025;
 
 //   QTransform trans;
@@ -204,6 +183,40 @@ void Lanternfly_Frame::handle_location_marker_request(QGeoLocation loc)
 
 //   poly = new PolygonObject(view_, QPolygonF({QPointF(loc.coordinate().longitude(),
 //     loc.coordinate().latitude())}));
+
+
+
+
+void Lanternfly_Frame::handle_location_marker_request(QGeoLocation loc)
+{
+ qDebug() << "loc lat: " << loc.coordinate().latitude();
+ qDebug() << "loc lon: " << loc.coordinate().longitude();
+
+ static u2 count = 0;
+
+ QPolygonF* qpf = new QPolygonF;
+//  (*qpf) << QPointF(80, 80);
+//  (*qpf) << QPointF(80, -80);
+//  (*qpf) << QPointF(-80, -80);
+//  (*qpf) << QPointF(-80, 80);
+
+ (*qpf) << QPointF(-80, 180);
+ (*qpf) << QPointF(0, 150);
+ (*qpf) << QPointF(80, 180);
+ (*qpf) << QPointF(0, 0);
+
+// (*qpf) << QPointF(0, 0);
+// (*qpf) << QPointF(80, 180);
+// (*qpf) << QPointF(0, 210);
+// (*qpf) << QPointF(-80, 180);
+
+// *qpf = qpf->in
+
+ CircleObject* circle = nullptr;
+ PolygonObject* poly = nullptr;
+
+ void* ref = nullptr;
+ static QColor transit_color = QColor(155, 190, 30, 255);
 
 
    poly = new PolygonObject(view_, {} //*qpf1
@@ -237,7 +250,7 @@ void Lanternfly_Frame::handle_location_marker_request(QGeoLocation loc)
   view_->zoomOut();
 
   //marked_locations_.push_back(loc);
-  view_->add_marked_location(loc);
+  view_->add_marked_location(loc, circle);
   update();
   repaint();
 
@@ -251,8 +264,8 @@ void Lanternfly_Frame::handle_location_marker_request(QGeoLocation loc)
   poly->setLongitude(loc.coordinate().longitude());
   //?circle->set_outline_code(s.presentation_code);
 
-  if(poly->ref_marker())
-    poly->ref_marker()->set_outline_code(12);
+//  if(poly->ref_marker())
+//    poly->ref_marker()->set_outline_code(12);
 
   scene_->addObject(poly);
 //  if(ref)
@@ -264,7 +277,7 @@ void Lanternfly_Frame::handle_location_marker_request(QGeoLocation loc)
   view_->zoomOut();
 
   //marked_locations_.push_back(loc);
-  view_->add_marked_location(loc);
+  view_->add_marked_location(loc, poly);
   update();
   repaint();
 

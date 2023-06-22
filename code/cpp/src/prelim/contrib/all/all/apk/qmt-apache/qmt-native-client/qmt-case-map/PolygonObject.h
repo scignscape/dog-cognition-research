@@ -9,16 +9,23 @@
 #include "MapGraphicsObject.h"
 #include "MapGraphics_global.h"
 class CircleObject;
+class Position;
 
 class QMT_Geospatial_Marker;
 
 class MAPGRAPHICSSHARED_EXPORT PolygonObject : public MapGraphicsObject
 {
+ Q_OBJECT
+
  QMT_Geospatial_Marker* ref_marker_;
+ QPolygonF current_enu_polygon_;
+ //QPolygonF ref_enu_polygon_;
+ QPointF ref_enu_hot_spot_;
+ Position* ref_geo_hot_spot_;
 
-    Q_OBJECT
+ mutable QPointF held_enu_hot_spot_;
+
 public:
-
 
     PolygonObject(MapGraphicsView* containing_view, QPolygonF geoPoly, QColor fillColor = QColor(200,200,200,200), QObject *parent = 0);
     virtual ~PolygonObject();
@@ -32,6 +39,8 @@ public:
 
     //virtual from MapGraphicsObject
     bool contains(const QPointF &geoPos) const;
+
+    bool pixel_contains(const QPointF &geoPos) const;
 
     //pure-virtual from MapGraphicsObject
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
