@@ -24,6 +24,9 @@
 
 #include "guts/CompositeTileSourceConfigurationWidget.h"
 
+#include "PolygonObject.h"
+#include "qmt-gis/qmt-geospatial-marker.h"
+
 #include "qmt/main-window-controller.h"
 
 #include "qmt/qmt-client-layer-base.h"
@@ -44,7 +47,7 @@
 MapGraphicsView::MapGraphicsView(MapGraphicsScene *scene, QWidget *parent) :
   QWidget(parent), coords_notify_callback_(nullptr),
   qmt_client_location_focus_base_(nullptr),
-  held_coordinate_marking_(nullptr)
+  held_coordinate_marking_(nullptr), current_highlighted_polygon_object_(nullptr)
 {
 
  main_window_controller_ = new Main_Window_Controller(this);
@@ -908,7 +911,7 @@ void MapGraphicsView::mark_coordinates(const QPointF& pos)
  if(circle)
  {
   //?circle->set_index_code(++count);
-  circle->setFlags(MapGraphicsObject::ObjectIsSelectable);
+//?  circle->setFlags(MapGraphicsObject::ObjectIsSelectable);
   circle->setLatitude(ll.x());
   circle->setLongitude(ll.y());
 
@@ -1049,13 +1052,36 @@ void MapGraphicsView::handleChildMouseMove(QMouseEvent* event)
  qDebug() << "\ncount = " << count;
 
  PrivateQGraphicsView* prv = (PrivateQGraphicsView*) _childView.data();
+
  if(count)
  {
   prv->activate_alt_cursor();
+
+  PolygonObject* obj = (PolygonObject*) marked_locations_.front().second;
+
+  if(current_highlighted_polygon_object_ != obj)
+  {
+   if(current_highlighted_polygon_object_)
+     current_highlighted_polygon_object_->ref_marker()->adopt_passive_color();
+   else
+     obj->ref_marker()->adopt_highlight_color();
+   current_highlighted_polygon_object_ = obj;
+  }
+
+
+//  PrivateQGraphicsScene* prs = (PrivateQGraphicsScene*) _childScene.data();
+//  PrivateQGraphicsObject*  prs->get_private_object(obj);
+
  }
  else
  {
   prv->activate_custom_cursor();
+
+  if(current_highlighted_polygon_object_)
+  {
+   current_highlighted_polygon_object_->ref_marker()->adopt_passive_color();
+   current_highlighted_polygon_object_ = nullptr;
+  }
  }
 
  _childScene->update();

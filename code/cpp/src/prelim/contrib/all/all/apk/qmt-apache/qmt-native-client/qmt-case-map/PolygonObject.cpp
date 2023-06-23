@@ -99,9 +99,9 @@ PolygonObject::~PolygonObject()
     _addVertexCircles.clear();
 }
 
-void PolygonObject::init_ref_marker(const QPolygonF& qpf)
+void PolygonObject::init_ref_marker(const QPolygonF& qpf, QColor passive_color, QColor active_color)
 {
- ref_marker_ = new QMT_Geospatial_Marker(qpf);
+ ref_marker_ = new QMT_Geospatial_Marker(qpf, passive_color, active_color);
 }
 
 
@@ -506,22 +506,27 @@ void PolygonObject::paint(QPainter *painter, const QStyleOptionGraphicsItem *opt
 
 //?}
 
- painter->setBrush(_fillColor);
+ QColor fill_color = ref_marker_
+   ? ref_marker_->current_color() : _fillColor;
+
+ painter->setBrush(fill_color);
 // painter->drawPolygon(enuPoly);
  painter->drawPolygon(current_enu_polygon_);
 
- painter->setBrush(Qt::NoBrush);
- painter->setPen(Qt::blue);
- painter->drawEllipse(ref_enu_hot_spot_, 5, 5);
+//?
+// painter->setBrush(Qt::NoBrush);
+// painter->setPen(Qt::blue);
+// painter->drawEllipse(ref_enu_hot_spot_, 5, 5);
 
- painter->setPen(Qt::yellow);
- painter->drawEllipse( ll_enu, 4, 4);
+// painter->setPen(Qt::yellow);
+// painter->drawEllipse( ll_enu, 4, 4);
 
- if(!held_enu_hot_spot_.isNull())
- {
-  painter->setPen(Qt::magenta);
-  painter->drawEllipse(held_enu_hot_spot_, 6, 6);
- }
+//?
+// if(!held_enu_hot_spot_.isNull())
+// {
+//  painter->setPen(Qt::magenta);
+//  painter->drawEllipse(held_enu_hot_spot_, 6, 6);
+// }
 
 // current_enu_polygon_ = enuPoly;
 

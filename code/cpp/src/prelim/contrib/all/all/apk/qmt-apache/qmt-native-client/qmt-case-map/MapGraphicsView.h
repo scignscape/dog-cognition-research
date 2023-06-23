@@ -84,7 +84,7 @@ class QMT_Client_Data_Set_Base;
 ////     viewport()->setCursor(Qt::CrossCursor);
 // }
 
-
+class PolygonObject;
 
 class MAPGRAPHICSSHARED_EXPORT MapGraphicsView : public QWidget, public PrivateQGraphicsInfoSource
 {
@@ -224,6 +224,9 @@ protected:
  void resetQGSSceneSize();
 
 private:
+
+ PolygonObject* current_highlighted_polygon_object_;
+
  QPointer<MapGraphicsScene> _scene;
 
 //

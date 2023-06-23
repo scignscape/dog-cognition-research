@@ -31,6 +31,10 @@ class QMT_Geospatial_Marker
  u2 outline_code_;
  u2 held_outline_code_;
 
+ QColor passive_color_;
+ QColor highlight_color_;
+ QColor current_color_;
+
 public:
 
  ACCESSORS(u2 ,outline_code)
@@ -38,7 +42,27 @@ public:
  ACCESSORS(QPolygonF ,outline)
  ACCESSORS(r8 ,scale)
 
- QMT_Geospatial_Marker(QPolygonF outline);
+ ACCESSORS(QColor ,passive_color)
+ ACCESSORS(QColor ,highlight_color)
+ ACCESSORS(QColor ,current_color)
+
+ QMT_Geospatial_Marker(QPolygonF outline, QColor passive_color, QColor active_color);
+
+ QMT_Geospatial_Marker(QPolygonF outline, QColor passive_color)
+   :  QMT_Geospatial_Marker(outline, passive_color, passive_color)
+ {
+
+ }
+
+ void adopt_highlight_color()
+ {
+  current_color_ = highlight_color_;
+ }
+
+ void adopt_passive_color()
+ {
+  current_color_ = passive_color_;
+ }
 
 };
 

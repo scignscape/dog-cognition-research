@@ -216,15 +216,16 @@ void Lanternfly_Frame::handle_location_marker_request(QGeoLocation loc)
  PolygonObject* poly = nullptr;
 
  void* ref = nullptr;
- static QColor transit_color = QColor(155, 190, 30, 255);
+ static QColor passive_color = QColor(55, 90, 130, 255);
+ static QColor active_color = QColor(155, 190, 30, 255);
 
 
    poly = new PolygonObject(view_, {} //*qpf1
                             );
 
    poly->set_index_code(++count);
-   poly->setFillColor(transit_color);
-   poly->init_ref_marker(*qpf);
+   poly->setFillColor(passive_color);
+   poly->init_ref_marker(*qpf, passive_color, active_color);
    poly->ref_marker()->set_scale(0.2);
 
 //   poly->sup.check_ref();
@@ -233,7 +234,7 @@ void Lanternfly_Frame::handle_location_marker_request(QGeoLocation loc)
  if(circle)
  {
   circle->set_index_code(++count);
-  circle->setFlags(MapGraphicsObject::ObjectIsSelectable);
+//?  circle->setFlags(MapGraphicsObject::ObjectIsSelectable);
   circle->setLatitude(loc.coordinate().latitude());
   circle->setLongitude(loc.coordinate().longitude());
   //?circle->set_outline_code(s.presentation_code);
@@ -259,7 +260,7 @@ void Lanternfly_Frame::handle_location_marker_request(QGeoLocation loc)
  if(poly)
  {
   poly->set_index_code(++count);
-  poly->setFlags(MapGraphicsObject::ObjectIsSelectable);
+//?  poly->setFlags(MapGraphicsObject::ObjectIsSelectable);
   poly->setLatitude(loc.coordinate().latitude());
   poly->setLongitude(loc.coordinate().longitude());
   //?circle->set_outline_code(s.presentation_code);

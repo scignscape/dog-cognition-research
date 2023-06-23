@@ -32,7 +32,7 @@ public:
 
     ACCESSORS(QMT_Geospatial_Marker* ,ref_marker)
 
-    void init_ref_marker(const QPolygonF& qpf);
+    void init_ref_marker(const QPolygonF& qpf, QColor passive_color, QColor active_color);
 
     //pure-virtual from MapGraphicsObject
     QRectF boundingRect() const;

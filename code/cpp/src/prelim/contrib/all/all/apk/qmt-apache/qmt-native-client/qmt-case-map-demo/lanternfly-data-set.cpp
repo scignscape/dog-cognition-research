@@ -78,7 +78,7 @@ void Lanternfly_Data_Set::add_markings(Lanternfly_Main_Window& main_window,
   if(circle)
   {
    circle->set_index_code(++count);
-   circle->setFlags(MapGraphicsObject::ObjectIsSelectable);
+//?   circle->setFlags(MapGraphicsObject::ObjectIsSelectable);
    circle->setLatitude(s.latitude);
    circle->setLongitude(s.longitude);
    circle->sup.set_outline_code(s.presentation_code);
