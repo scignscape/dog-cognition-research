@@ -11,6 +11,10 @@ public:
     PrivateQGraphicsView(QGraphicsScene* scene, QWidget * parent=0);
     virtual ~PrivateQGraphicsView();
 
+    void activate_alt_cursor();
+    void activate_custom_cursor();
+
+
 protected:
     //virtual from QGraphicsView
     virtual void mouseDoubleClickEvent(QMouseEvent *event);
@@ -33,7 +37,9 @@ protected:
     virtual void enterEvent(QEvent *event);
 
     QCursor custom_cursor_;
+    QCursor alt_cursor_;
     void init_custom_cursor();
+
 
 //?    virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) Q_DECL_OVERRIDE;
 

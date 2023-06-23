@@ -39,6 +39,12 @@ private:
     QHash<MapGraphicsObject *,PrivateQGraphicsObject *> _mgToqg;
 
     QList<QGraphicsItem *> _oldSelections;
+
+public:
+    PrivateQGraphicsObject* get_private_object(MapGraphicsObject* obj)
+    {
+     return _mgToqg.value(obj);
+    }
     
 };
 

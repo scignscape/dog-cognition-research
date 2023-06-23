@@ -24,21 +24,80 @@ PrivateQGraphicsView::PrivateQGraphicsView(QGraphicsScene *scene, QWidget *paren
 
 void PrivateQGraphicsView::init_custom_cursor()
 {
- signed short xoffset = 3;
- signed short yoffset = 0;
+ setMouseTracking(true);
 
- QPixmap pm(17 + qAbs(xoffset), 17 + qAbs(yoffset));
- pm.fill(Qt::transparent);
- QPainter qp(&pm);
+ int mid = 7;
+ int hot = 4;
+ int hota = hot + 5;
+ int max = 15;
 
 
- qp.drawLine(0 + xoffset, 6 + yoffset, 16 + xoffset, 6 + yoffset);
- qp.drawLine(6 + xoffset, 0 + yoffset, 6 + xoffset, 16 + yoffset);
- qp.drawLine(13 + xoffset, 6 + yoffset, 13 + xoffset, 13 + yoffset);
- qp.drawLine(13 + xoffset, 13 + yoffset, 6 + xoffset, 13 + yoffset);
 
- custom_cursor_ = QCursor(pm, 0, 0);
+// int mid = 6;
+// int hot = 16;
+// int hota = hot + 2;
+// int max = 31;
+
+ {
+  signed short xoffset = 0;
+  signed short yoffset = 0;
+
+  QPixmap pm(max + 1 + qAbs(xoffset), max + 1 + qAbs(yoffset));
+  pm.fill(Qt::transparent);
+  QPainter qp(&pm);
+
+
+  qp.drawLine(0 + xoffset, mid + yoffset, max + xoffset, mid + yoffset);
+  qp.drawLine(mid + xoffset, 0 + yoffset, mid + xoffset, max + yoffset);
+//  qp.drawLine(hot + xoffset, mid + yoffset, hot + xoffset, hot + yoffset);
+ // qp.drawLine(hot + xoffset, hot + yoffset, mid + xoffset, hot + yoffset);
+
+  qp.drawRect(mid + xoffset, mid + yoffset, hot + xoffset, hot + yoffset);
+
+  custom_cursor_ = QCursor(pm, hota, hota);
+ }
+
+ {
+  signed short xoffset = 0;
+  signed short yoffset = 0;
+
+  QPixmap pm(max + 1 + qAbs(xoffset), max + 1 + qAbs(yoffset));
+  pm.fill(Qt::transparent);
+  QPainter qp(&pm);
+
+//  qp.setBrush(Qt::cyan);
+  qp.setPen(QPen(QBrush(Qt::cyan), 1.5, Qt::DotLine));
+  qp.drawRect(mid + xoffset, mid + yoffset, hot + xoffset, hot + yoffset);
+
+  qp.setPen(Qt::darkCyan);
+
+  qp.drawRect(mid + xoffset, mid + yoffset, hot + xoffset, hot + yoffset);
+
+  qp.drawLine(0 + xoffset, mid + yoffset, max + xoffset, mid + yoffset);
+  qp.drawLine(mid + xoffset, 0 + yoffset, mid + xoffset, max + yoffset);
+
+
+//  qp.drawLine(13 + xoffset, 6 + yoffset, 13 + xoffset, 13 + yoffset);
+//  qp.drawLine(6 + xoffset, 6 + yoffset, 13 + xoffset, 13 + yoffset);
+//  qp.drawLine(13 + xoffset, 13 + yoffset, 6 + xoffset, 13 + yoffset);
+
+  alt_cursor_ = QCursor(pm, hota, hota);
+ }
+
+
+
 }
+
+void PrivateQGraphicsView::activate_alt_cursor()
+{
+ viewport()->setCursor(alt_cursor_);
+}
+
+void PrivateQGraphicsView::activate_custom_cursor()
+{
+ viewport()->setCursor(custom_cursor_);
+}
+
 
 PrivateQGraphicsView::~PrivateQGraphicsView()
 {

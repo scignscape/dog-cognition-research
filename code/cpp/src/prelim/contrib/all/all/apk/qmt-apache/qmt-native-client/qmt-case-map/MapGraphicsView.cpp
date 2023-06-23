@@ -1027,6 +1027,42 @@ void MapGraphicsView::handleChildMouseDoubleClick(QMouseEvent *event)
 //protected slot
 void MapGraphicsView::handleChildMouseMove(QMouseEvent* event)
 {
+ QPointF ll = mapToScene(event->pos());
+
+ int count = 0;
+ for(auto it = marked_locations_.begin(); it != marked_locations_.end(); ++it)
+ {
+  const QGeoLocation& loc = it.key();
+  MapGraphicsObject* obj = it.value();
+//    if(obj->contains({loc.coordinate().longitude(), loc.coordinate().latitude()}))
+//      limited_marked_locations_.insert({loc, obj});
+
+  QPointF ll1 = obj->boundingRect().center();
+
+  if(obj->pixel_contains({ll.x(), ll.y()}))
+  {
+   ++count;
+  }
+//  _childView->viewport()->repaint();
+ }
+
+ qDebug() << "\ncount = " << count;
+
+ PrivateQGraphicsView* prv = (PrivateQGraphicsView*) _childView.data();
+ if(count)
+ {
+  prv->activate_alt_cursor();
+ }
+ else
+ {
+  prv->activate_custom_cursor();
+ }
+
+ _childScene->update();
+ _childView->update();
+ update();
+
+
  QPoint qp = event->pos();
 
  //? qDebug() << "qp = " << qp;
