@@ -126,30 +126,29 @@ bool PolygonObject::pixel_contains(const QPointF& geoPos) const
  if(!ref_geo_hot_spot_)
    return false;
 
-  qDebug() << " ============== ";
+//  qDebug() << " ============== ";
+//  qDebug() << "lat lon = " << latitude() << ", " << longitude();
+//  qDebug() << "geo pos = " << qSetRealNumberPrecision(10) << geoPos.x() << " , " << geoPos.y();
 
-  qDebug() << "lat lon = " << latitude() << ", " << longitude();
-  qDebug() << "geo pos = " << qSetRealNumberPrecision(10) << geoPos.x() << " , " << geoPos.y();
+// QPointF geoPos1 =  QPointF(-74.1096,40.8782);
 
- QPointF geoPos1 =  QPointF(-74.1096,40.8782);
+// //?-74.10964966","40.87821814
 
- //?-74.10964966","40.87821814
-
- qDebug() << "ref_geo_hot_spot_ = " << *ref_geo_hot_spot_;
- qDebug() << "current_enu_polygon_ = " << current_enu_polygon_;
- qDebug() << "current_enu_polygon_ b = " << current_enu_polygon_.boundingRect();
- qDebug() << "ref enu hot spot = " << ref_enu_hot_spot_;
+// qDebug() << "ref_geo_hot_spot_ = " << *ref_geo_hot_spot_;
+// qDebug() << "current_enu_polygon_ = " << current_enu_polygon_;
+// qDebug() << "current_enu_polygon_ b = " << current_enu_polygon_.boundingRect();
+// qDebug() << "ref enu hot spot = " << ref_enu_hot_spot_;
 
  //
  Position latLonPos(geoPos, 0.0);
 
- qDebug() << "latLonPos = " << latLonPos;
+// qDebug() << "latLonPos = " << latLonPos;
 
 
  // Position latLonPos(geoPos1, 0.0);
  QPointF enu = Conversions::lla2enu(latLonPos, *ref_geo_hot_spot_).toPointF();
 
- qDebug() << "enu = " << enu;
+//? qDebug() << "enu = " << enu;
 
  held_enu_hot_spot_ = enu;
 
@@ -163,9 +162,9 @@ bool PolygonObject::pixel_contains(const QPointF& geoPos) const
 
 //? ref_enu_hot_spot_ = Conversions::lla2enu(*ref_geo_hot_spot_,*ref_geo_hot_spot_).toPointF();
  QPointF ref_enu_hot_spot = {current_enu_polygon_.boundingRect().center().x(), current_enu_polygon_.boundingRect().top()};
- qDebug() << "! ref_enu_hot_spot = " << ref_enu_hot_spot;
 
- qDebug() << "! ll_enu = " << ll_enu;
+// qDebug() << "! ref_enu_hot_spot = " << ref_enu_hot_spot;
+// qDebug() << "! ll_enu = " << ll_enu;
 
 
 
@@ -500,9 +499,9 @@ void PolygonObject::paint(QPainter *painter, const QStyleOptionGraphicsItem *opt
 
 //? ref_enu_hot_spot_ = Conversions::lla2enu(*ref_geo_hot_spot_,*ref_geo_hot_spot_).toPointF();
  ref_enu_hot_spot_ = {current_enu_polygon_.boundingRect().center().x(), current_enu_polygon_.boundingRect().top()};
- qDebug() << "ref_enu_hot_spot_ = " << ref_enu_hot_spot_;
 
- qDebug() << "ll_enu = " << ll_enu;
+// qDebug() << "ref_enu_hot_spot_ = " << ref_enu_hot_spot_;
+// qDebug() << "ll_enu = " << ll_enu;
 
 //?}
 
@@ -561,8 +560,8 @@ void PolygonObject::paint(QPainter *painter, const QStyleOptionGraphicsItem *opt
 // painter->drawEllipse(enu, 5, 5);
 
 
- qDebug() << "\n! cur = " << current_enu_polygon_;
- qDebug() << "! curb = " << current_enu_polygon_.boundingRect();
+// qDebug() << "\n! cur = " << current_enu_polygon_;
+// qDebug() << "! curb = " << current_enu_polygon_.boundingRect();
 
 
  QBrush restore_brush = painter->brush();

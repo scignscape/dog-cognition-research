@@ -1,3 +1,4 @@
+
 #ifndef MAPGRAPHICSVIEW_H
 #define MAPGRAPHICSVIEW_H
 
@@ -28,6 +29,9 @@
 #include <QGeoLocation>
 #include <QGeoCoordinate>
 
+#include "menu-header-label.h"
+
+
 #include "tsl/ordered_map.h"
 
 namespace std {
@@ -47,6 +51,9 @@ class QMT_Client_Layer_Base;
 class QMT_Client_Context_Menu_Handler_Base;
 class QMT_Client_Location_Focus_Base;
 class QMT_Client_Data_Set_Base;
+
+class QMT_Case_Group;
+
 
 
 //// for cursors
@@ -86,7 +93,8 @@ class QMT_Client_Data_Set_Base;
 
 class PolygonObject;
 
-class MAPGRAPHICSSHARED_EXPORT MapGraphicsView : public QWidget, public PrivateQGraphicsInfoSource
+class MAPGRAPHICSSHARED_EXPORT MapGraphicsView
+  :  public QWidget, public PrivateQGraphicsInfoSource
 {
  Q_OBJECT
 
@@ -225,7 +233,9 @@ protected:
 
 private:
 
- PolygonObject* current_highlighted_polygon_object_;
+ QMT_Case_Group* current_highlighted_case_group_;
+ PolygonObject* current_highlighted_polygon_object();
+
 
  QPointer<MapGraphicsScene> _scene;
 
@@ -257,14 +267,12 @@ private:
  QPolygonF* held_coordinate_marking_;
 
 
- tsl::ordered_map<QGeoLocation, MapGraphicsObject*> marked_locations_;
+ tsl::ordered_map<QGeoLocation, QPair<MapGraphicsObject*, QMT_Case_Group*>> marked_locations_;
  tsl::ordered_map<QGeoLocation, MapGraphicsObject*> limited_marked_locations_;
 
 public:
- void add_marked_location(QGeoLocation loc, MapGraphicsObject* obj)
- {
-  marked_locations_.insert({loc, obj});
- }
+
+ void add_marked_location(QGeoLocation loc, MapGraphicsObject* obj);
 
 };
 

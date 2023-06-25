@@ -21,7 +21,11 @@
 
 #include <QDebug>
 
+
 class MapGraphicsView;
+
+class QMT_Case_Group;
+class PolygonObject;
 
 class QMT_Geospatial_Marker
 {
@@ -35,6 +39,10 @@ class QMT_Geospatial_Marker
  QColor highlight_color_;
  QColor current_color_;
 
+ QMT_Case_Group* case_group_;
+ PolygonObject* polygon_object_;
+
+
 public:
 
  ACCESSORS(u2 ,outline_code)
@@ -45,6 +53,9 @@ public:
  ACCESSORS(QColor ,passive_color)
  ACCESSORS(QColor ,highlight_color)
  ACCESSORS(QColor ,current_color)
+
+ ACCESSORS(PolygonObject* ,polygon_object)
+
 
  QMT_Geospatial_Marker(QPolygonF outline, QColor passive_color, QColor active_color);
 

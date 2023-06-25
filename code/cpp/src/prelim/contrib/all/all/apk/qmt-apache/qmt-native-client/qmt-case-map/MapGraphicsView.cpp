@@ -18,6 +18,8 @@
 
 #include <QDialog>
 
+#include <QWidgetAction>
+
 #include "guts/PrivateQGraphicsScene.h"
 #include "guts/PrivateQGraphicsView.h"
 #include "guts/Conversions.h"
@@ -37,17 +39,85 @@
 #include "web-engine/qmt-web-engine-page.h"
 #include "web-engine/qmt-my-page.h"
 
+#include "case-map/qmt-case-group.h"
+
 #include "global-types.h"
 
 #include "CircleObject.h"
 
 #include <QGeoCoordinate>
+#include <QLabel>
+
+
+#ifdef HIDE
+ if(!marked_locations_.empty())
+ {
+  limited_marked_locations_.clear();
+  QPointF ll = mapToScene(qp);
+
+  for(auto it = marked_locations_.begin(); it != marked_locations_.end(); ++it)
+  {
+   const QGeoLocation& loc = it.key();
+   MapGraphicsObject* obj = it.value();
+//    if(obj->contains({loc.coordinate().longitude(), loc.coordinate().latitude()}))
+//      limited_marked_locations_.insert({loc, obj});
+
+   QPointF ll1 = obj->boundingRect().center();
+
+   if(obj->pixel_contains({ll.x(), ll.y()}))
+   {
+     limited_marked_locations_.insert({loc, obj});
+     qDebug() << "\n\n--------\n\n";
+
+   }
+   else
+     qDebug() << "\nno...";
+
+   _childView->viewport()->repaint();
+
+
+//     QPointF locf(loc.coordinate().longitude(), loc.coordinate().latitude());
+//     r8 len = QLineF(locf, ll).length();
+//     qDebug() << "locf = " << locf;
+//     qDebug() << "len = " << len;
+//     qDebug() << "ll = " << ll;
+//     qDebug() << "ll1 = " << ll1;
+
+
+//     if(len < 0.004)
+//      limited_marked_locations_.push_back(loc);
+
+  }
+
+//?   return;
+ }
+
+ if(!limited_marked_locations_.empty())
+ {
+  menu->addAction("View Case Entry", [this, qp]()
+  {
+   //main_window_controller_->load_single_file_data_set();
+  });
+
+  menu->addAction("View Case Summary (legal)", [this, qp]()
+  {
+//    main_window_controller_->load_single_file_data_set();
+  });
+
+  menu->addAction("View Case Files", [this, qp]()
+  {
+//    main_window_controller_->load_single_file_data_set();
+  });
+
+ }
+#endif
+
 
 
 MapGraphicsView::MapGraphicsView(MapGraphicsScene *scene, QWidget *parent) :
   QWidget(parent), coords_notify_callback_(nullptr),
   qmt_client_location_focus_base_(nullptr),
-  held_coordinate_marking_(nullptr), current_highlighted_polygon_object_(nullptr)
+  held_coordinate_marking_(nullptr), current_highlighted_case_group_(nullptr)
 {
 
  main_window_controller_ = new Main_Window_Controller(this);
@@ -66,61 +136,35 @@ MapGraphicsView::MapGraphicsView(MapGraphicsScene *scene, QWidget *parent) :
 
   QMenu* menu = new QMenu;
 
-  if(!marked_locations_.empty())
+//?  if( current_highlighted_polygon_object())
+  if(current_highlighted_case_group_)
   {
-   limited_marked_locations_.clear();
-   QPointF ll = mapToScene(qp);
+   int ncases = 5;
+   Menu_Header_Label* mhl = new Menu_Header_Label("%1 cases"_qt.arg(ncases), this);
+   menu->addAction(mhl);
 
-   for(auto it = marked_locations_.begin(); it != marked_locations_.end(); ++it)
+   if(ncases)
    {
-    const QGeoLocation& loc = it.key();
-    MapGraphicsObject* obj = it.value();
-//    if(obj->contains({loc.coordinate().longitude(), loc.coordinate().latitude()}))
-//      limited_marked_locations_.insert({loc, obj});
+    QString first_case = ncases == 1? "Browse case" : "Browse first case";
 
-    QPointF ll1 = obj->boundingRect().center();
-
-    if(obj->pixel_contains({ll.x(), ll.y()}))
+    menu->addAction(first_case, [this, qp]()
     {
-      limited_marked_locations_.insert({loc, obj});
-      qDebug() << "\n\n--------\n\n";
-
-    }
-    else
-      qDebug() << "\nno...";
-
-    _childView->viewport()->repaint();
-
-
-//     QPointF locf(loc.coordinate().longitude(), loc.coordinate().latitude());
-//     r8 len = QLineF(locf, ll).length();
-//     qDebug() << "locf = " << locf;
-//     qDebug() << "len = " << len;
-//     qDebug() << "ll = " << ll;
-//     qDebug() << "ll1 = " << ll1;
-
-
-//     if(len < 0.004)
-//      limited_marked_locations_.push_back(loc);
+     //main_window_controller_->load_single_file_data_set();
+    });
 
    }
 
-   return;
-  }
-
-  if(!limited_marked_locations_.empty())
-  {
-   menu->addAction("View Case Entry", [this, qp]()
-   {
-    //main_window_controller_->load_single_file_data_set();
-   });
-
-   menu->addAction("View Case Summary (legal)", [this, qp]()
+   menu->addAction("Add case", [this, qp]()
    {
 //    main_window_controller_->load_single_file_data_set();
    });
 
-   menu->addAction("View Case Files", [this, qp]()
+   menu->addAction("Browse Files", [this, qp]()
+   {
+//    main_window_controller_->load_single_file_data_set();
+   });
+
+   menu->addAction("Area/Location Info", [this, qp]()
    {
 //    main_window_controller_->load_single_file_data_set();
    });
@@ -129,6 +173,31 @@ MapGraphicsView::MapGraphicsView(MapGraphicsScene *scene, QWidget *parent) :
 
   else
   {
+   QMenu* smenu = menu->addMenu("Add Case ...");
+
+   smenu->addAction("Enter Address", [this, qp]()
+   {
+   });
+
+   smenu->addAction("This county", [this, qp]()
+   {
+   });
+
+   smenu->addAction("This City/Town", [this, qp]()
+   {
+   });
+
+   smenu->addAction("This Address/Location", [this, qp]()
+   {
+   });
+
+   menu->addAction("Show Latitude/Longitude Coordinates", [this, qp]()
+   {
+    main_window_controller_->show_llcoords(qp);
+   });
+
+
+#ifdef HIDE
    menu->addAction("Reset Superimposed Markings", [this, qp]()
    {
     reset_superimposed_markings();
@@ -363,6 +432,7 @@ MapGraphicsView::MapGraphicsView(MapGraphicsScene *scene, QWidget *parent) :
     });
    });
 
+#endif // HIDE
   }
 
   menu->popup(this->mapToGlobal(qp));
@@ -929,6 +999,14 @@ void MapGraphicsView::mark_coordinates(const QPointF& pos)
 
 }
 
+
+PolygonObject* MapGraphicsView::current_highlighted_polygon_object()
+{
+ if(current_highlighted_case_group_)
+   return static_cast<PolygonObject*>(current_highlighted_case_group_->geomarker());
+ return nullptr;
+}
+
 void MapGraphicsView::setZoomLevel(quint8 nZoom, ZoomMode zMode)
 {
  if (_tileSource.isNull())
@@ -1027,6 +1105,14 @@ void MapGraphicsView::handleChildMouseDoubleClick(QMouseEvent *event)
  event->setAccepted(false);
 }
 
+void MapGraphicsView::add_marked_location(QGeoLocation loc, MapGraphicsObject* obj)
+{
+ QMT_Case_Group* new_case_group = new QMT_Case_Group(loc);
+ new_case_group->set_geomarker(obj); //static_cast<PolygonObject*>(obj));
+ marked_locations_.insert({loc, {obj, new_case_group}});
+}
+
+
 //protected slot
 void MapGraphicsView::handleChildMouseMove(QMouseEvent* event)
 {
@@ -1036,7 +1122,7 @@ void MapGraphicsView::handleChildMouseMove(QMouseEvent* event)
  for(auto it = marked_locations_.begin(); it != marked_locations_.end(); ++it)
  {
   const QGeoLocation& loc = it.key();
-  MapGraphicsObject* obj = it.value();
+  MapGraphicsObject* obj = it.value().first;
 //    if(obj->contains({loc.coordinate().longitude(), loc.coordinate().latitude()}))
 //      limited_marked_locations_.insert({loc, obj});
 
@@ -1049,7 +1135,7 @@ void MapGraphicsView::handleChildMouseMove(QMouseEvent* event)
 //  _childView->viewport()->repaint();
  }
 
- qDebug() << "\ncount = " << count;
+//? qDebug() << "\ncount = " << count;
 
  PrivateQGraphicsView* prv = (PrivateQGraphicsView*) _childView.data();
 
@@ -1057,15 +1143,17 @@ void MapGraphicsView::handleChildMouseMove(QMouseEvent* event)
  {
   prv->activate_alt_cursor();
 
-  PolygonObject* obj = (PolygonObject*) marked_locations_.front().second;
+  QPair<MapGraphicsObject*, QMT_Case_Group*> pr = marked_locations_.front().second;
 
-  if(current_highlighted_polygon_object_ != obj)
+  PolygonObject* cobj = current_highlighted_polygon_object();
+  if(cobj != pr.first)
   {
-   if(current_highlighted_polygon_object_)
-     current_highlighted_polygon_object_->ref_marker()->adopt_passive_color();
+   if(cobj)
+     cobj->ref_marker()->adopt_passive_color();
    else
-     obj->ref_marker()->adopt_highlight_color();
-   current_highlighted_polygon_object_ = obj;
+     static_cast<PolygonObject*>(pr.first)->ref_marker()->adopt_highlight_color();
+//     ((PolygonObject*)pr.first)->ref_marker()->adopt_highlight_color();
+   current_highlighted_case_group_ = pr.second;
   }
 
 
@@ -1077,10 +1165,10 @@ void MapGraphicsView::handleChildMouseMove(QMouseEvent* event)
  {
   prv->activate_custom_cursor();
 
-  if(current_highlighted_polygon_object_)
+  if(PolygonObject* obj = current_highlighted_polygon_object())
   {
-   current_highlighted_polygon_object_->ref_marker()->adopt_passive_color();
-   current_highlighted_polygon_object_ = nullptr;
+   obj->ref_marker()->adopt_passive_color();
+   current_highlighted_case_group_ = nullptr;
   }
  }
 

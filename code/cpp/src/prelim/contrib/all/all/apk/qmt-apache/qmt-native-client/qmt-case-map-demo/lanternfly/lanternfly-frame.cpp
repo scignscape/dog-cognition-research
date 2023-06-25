@@ -99,8 +99,8 @@ Lanternfly_Frame::Lanternfly_Frame(Lanternfly_Main_Window* mw) : QFrame(mw)
 
  view_->set_coords_notify_callback([this](const QPointF qpf, quint8 zoom)
  {
-  coords_line_edit_->setText(QString("%1,%2    (%3)")
-    .arg(qpf.y()).arg(qpf.x()).arg(zoom));
+  coords_line_edit_->setText("%1:%2    (%3)"_qt
+    .arg(qpf.y(), 10, 'f').arg(qpf.x(), 10, 'f').arg(zoom));
  });
 
  view_->setScene(scene_);

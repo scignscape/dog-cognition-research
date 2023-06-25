@@ -123,6 +123,19 @@ SOURCES += \
 
 
 
+HEADERS += \
+  $$SRC_DIR/case-map/qmt-single-case.h \
+  $$SRC_DIR/case-map/qmt-case-group.h \
+
+
+SOURCES += \
+  $$SRC_DIR/case-map/qmt-single-case.cpp \
+  $$SRC_DIR/case-map/qmt-case-group.cpp \
+
+
+
+
+
 # # taken directly from the MapGraphics project file
 #
 symbian {
