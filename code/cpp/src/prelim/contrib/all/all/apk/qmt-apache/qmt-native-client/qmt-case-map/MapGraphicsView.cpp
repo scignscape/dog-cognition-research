@@ -177,6 +177,8 @@ MapGraphicsView::MapGraphicsView(MapGraphicsScene *scene, QWidget *parent) :
 
    smenu->addAction("Enter Address", [this, qp]()
    {
+    main_window_controller_->init_case_group(qp);
+    main_window_controller_->add_case_at_current_group();
    });
 
    smenu->addAction("This county", [this, qp]()

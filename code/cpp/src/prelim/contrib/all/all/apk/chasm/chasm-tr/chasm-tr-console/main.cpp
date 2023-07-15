@@ -81,6 +81,9 @@ USING_AQNS(Chasm_TR)
 
 #include "stats/slico/slico.h"
 
+#include "chgr/chgr-environment.h"
+#include "chgr/chgr-hypernode.h"
+
 
 void testqvar(QVariant arg1, r8 arg2, u2 arg3)
 {
@@ -106,6 +109,22 @@ void demo_opencv(QString arg1)
 }
 
 
+void allocate_hypernode(u4& id)
+{
+ ChGr_Environment::allocate_new_hypernode(id);
+ qDebug() << "id = " << id;
+}
+
+
+void allocate_mempad(u4& id, u4 size)
+{
+ ChGr_Environment::allocate_new_mempad(id, size);
+ qDebug() << "id = " << id << "and size = " << size;
+}
+
+
+
+
 
 // //   u1 = 1  u2 = 2  QString = 3
  //     u4 = 4  QByteArray = 5
@@ -122,6 +141,9 @@ int main(int argc, char *argv[])
  cpt.register_s0(testqvar, @300762);
  cpt.register_s0(prn, @1001);
  cpt.register_s0(prs, @1003);
+
+ cpt.register_s0(allocate_hypernode, @1000);
+ cpt.register_s0(allocate_mempad, @20004);
 
  cpt.register_s0(demo_opencv, @1003);
 

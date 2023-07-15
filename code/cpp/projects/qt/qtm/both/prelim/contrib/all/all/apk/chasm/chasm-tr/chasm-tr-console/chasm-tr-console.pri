@@ -39,12 +39,18 @@ defined(FEATURE_OpenCV ,var) {
    -lopencv_features2d
 
 
+
+
  HEADERS += \
   $$SRC_DIR/stats/feature-classifier-transform.h \
   $$SRC_DIR/stats/slic/slic.h \
   $$SRC_DIR/stats/slico/slico.h \
   $$SRC_DIR/stats/stat-test-image.h \
-  $$SRC_DIR/stats/test-stat-assessment.h
+  $$SRC_DIR/stats/test-stat-assessment.h \
+  $$SRC_DIR/chgr/chgr-hypernode.h \
+  $$SRC_DIR/chgr/chgr-environment.h \
+  $$SRC_DIR/chgr/chgr-mempad.h \
+
 
  SOURCES += \
   $$SRC_DIR/stats/feature-classifier-transform.cpp \
@@ -53,7 +59,10 @@ defined(FEATURE_OpenCV ,var) {
   $$SRC_DIR/stats/slico/slico.cpp \
   $$SRC_DIR/stats/stat-test-image.cpp \
   $$SRC_DIR/stats/test-stat-assessment.cpp \
-  $$SRC_DIR/stats/test-stat-assessment.demo-test.cpp
+  $$SRC_DIR/stats/test-stat-assessment.demo-test.cpp \
+  $$SRC_DIR/chgr/chgr-hypernode.cpp \
+  $$SRC_DIR/chgr/chgr-environment.cpp \
+  $$SRC_DIR/chgr/chgr-mempad.cpp \
 
 ###
 

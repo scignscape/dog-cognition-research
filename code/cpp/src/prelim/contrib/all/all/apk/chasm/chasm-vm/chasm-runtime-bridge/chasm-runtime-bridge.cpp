@@ -146,6 +146,7 @@ void Chasm_Runtime_Bridge::load_symbol_u2(QString literal)
  load_symbol_u_(literal, 2);
 }
 
+
 // // unsigned, base 8
 void Chasm_Runtime_Bridge::load_symbol_u8(QString literal)
 {

@@ -21,6 +21,8 @@
 
 #include <QDebug>
 
+#include <QMap>
+
 class MapGraphicsView;
 
 class QMT_Single_Case
@@ -28,10 +30,13 @@ class QMT_Single_Case
  Position coarse_position_;
  Position fine_position_;
 
+ QMap<QString, QString> test_;
+
 public:
 
  QMT_Single_Case(Position coarse_position, Position fine_position = {0, 0});
 
+ ACCESSORS(QMap<QString, QString> ,test)
 
 };
 

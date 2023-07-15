@@ -68,6 +68,9 @@ public:
   active_data_sets_.push(ds);
  }
 
+ void init_case_group(QPoint qp);
+ void add_case_at_current_group();
+
  void reset_map_style(QPoint qp);
  void reset_data_layer();
  void show_coordinate_marking();

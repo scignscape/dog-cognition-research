@@ -32,6 +32,10 @@
 
 #include <QDebug>
 
+#include "case-map/qmt-case-group.h"
+#include "case-map/qmt-single-case.h"
+
+
 Main_Window_Controller::Main_Window_Controller(MapGraphicsView* view)
   :  view_(view), info_files_(_auto_new(info_files_)),
      current_map_style_index_(-1), current_location_spot_(nullptr)
@@ -411,6 +415,20 @@ void Main_Window_Controller::load_single_file_data_set()
     active_data_sets_.push(ds);
  }
 }
+
+void Main_Window_Controller::init_case_group(QPoint qp)
+{
+ QPointF ll = view_->mapToScene(qp);
+ QGeoLocation loc;
+ loc.setCoordinate({ll.y(), ll.x()});
+ QMT_Case_Group* qcg = new QMT_Case_Group(loc);
+}
+
+void Main_Window_Controller::add_case_at_current_group()
+{
+
+}
+
 
 void Main_Window_Controller::show_llcoords(QPoint qp)
 {

@@ -27,13 +27,8 @@ ACCESSORS__GET(type, name)
 #endif
 
 
-#ifndef ACCESSORS_get
-#define ACCESSORS_get(type, name) \
- type name() const { return name##_; }
-#endif
-
-#ifndef ACCESSORS__GET
-#define ACCESSORS__GET(type, name) \
+#ifndef ACCESSORS__GET_2
+#define ACCESSORS__GET_2(type, name) \
  type name() const { return name##_; }
 #endif
 
@@ -55,13 +50,13 @@ ACCESSORS__GET(type, name)
 #endif
 
 
-#ifndef RZ_CALL_IMPL
-#define RZ_CALL_IMPL(type, name) \
+#ifndef ACCESSORS_CALL_IMPL
+#define ACCESSORS_CALL_IMPL(type, name) \
  type name() const { return impl_.name(); }
 #endif
 
-#ifndef RZ_CALL_IMPL_VOID
-#define RZ_CALL_IMPL_VOID(type, name) \
+#ifndef ACCESSORS_CALL_IMPL_VOID
+#define ACCESSORS_CALL_IMPL_VOID(type, name) \
  void name(type arg) { impl_.name(arg); }
 #endif
 
@@ -83,28 +78,13 @@ ACCESSORS__GET(type, name)
  type& name() { return name##_; }
 #endif
 
-#ifndef ACCESSORS_rget
-#define ACCESSORS_rget(type, name) \
- type& name() { return name##_; }
-#endif
-
 #ifndef ACCESSORS__RGET_CONST
 #define ACCESSORS__RGET_CONST(type, name) \
  type& name() const { return (type&) name##_; }
 #endif
 
-#ifndef ACCESSORS_rget_const
-#define ACCESSORS_rget_const(type, name) \
- type& name() const { return (type&) name##_; }
-#endif
-
 #ifndef ACCESSORS__CONST_RGET
 #define ACCESSORS__CONST_RGET(type, name) \
- const type& name() const { return name##_; }
-#endif
-
-#ifndef ACCESSORS_const_rget
-#define ACCESSORS_const_rget(type, name) \
  const type& name() const { return name##_; }
 #endif
 
@@ -130,8 +110,8 @@ ACCESSORS__GET(type, name)
 #endif
 
 
-#ifndef ACCESSORS__SET
-#define ACCESSORS__SET(type, name) \
+#ifndef ACCESSORS__SET_2
+#define ACCESSORS__SET_2(type, name) \
  void set_##name(type _arg_) { name##_ = _arg_; }
 #endif
 
@@ -153,9 +133,6 @@ ACCESSORS__GET(type, name)
  ACCESSORS__GET_FNP(ret, type, name)
 #endif
 
-
-
-
 #ifndef ACCESSORS__SET_FNP__STATIC
 #define ACCESSORS__SET_FNP__STATIC(ret, type, name) \
  static void set_##name(ret (*_arg_) (type)) { name##_ = _arg_; }
@@ -166,49 +143,26 @@ ACCESSORS__GET(type, name)
  static ret (*get_##name())(type) { return name##_; }
 #endif
 
-
-
 #ifndef ACCESSORS__FNP__STATIC
 #define ACCESSORS__FNP__STATIC(ret, type, name) \
  ACCESSORS__SET_FNP__STATIC(ret, type, name) \
  ACCESSORS__GET_FNP__STATIC(ret, type, name)
 #endif
 
-
-#ifndef ACCESSORS_set
-#define ACCESSORS_set(type, name) \
- void set_##name(type _arg_) { name##_ = _arg_; }
-#endif
-
-
 #ifndef ACCESSORS__SETR
 #define ACCESSORS__SETR(type, name) \
  auto& set_##name(type _arg_) { name##_ = _arg_; return *this; }
 #endif
-
-#ifndef ACCESSORS_setr
-#define ACCESSORS_setr(type, name) \
- auto& set_##name(type _arg_) { name##_ = _arg_; return *this; }
-#endif
-
 
 #ifndef ACCESSORS__SETP
 #define ACCESSORS__SETP(type, name) \
  auto set_##name(type _arg_) { name##_ = _arg_; return this; }
 #endif
 
-
-#ifndef ACCESSORS_setp
-#define ACCESSORS_setp(type, name) \
- auto set_##name(type _arg_) { name##_ = _arg_; return this; }
-#endif
-
-
 #ifndef Q_INVOKABLE__ACCESSORS__SET
 #define Q_INVOKABLE__ACCESSORS__SET(type, name) \
  void Q_INVOKABLE set_##name(type _arg_) { name##_ = _arg_; }
 #endif
-
 
 #ifndef ACCESSORS__SDECLARE
 #define ACCESSORS__SDECLARE(type, name) \
@@ -241,10 +195,10 @@ ACCESSORS__GET(type, name)
 #endif
 
 
-#ifndef ACCESSORS
-#define ACCESSORS(type, name) \
- ACCESSORS_get(MACRO_PASTE(type), name) \
- ACCESSORS_set(MACRO_PASTE(type), name)
+#ifndef ACCESSORS_2
+#define ACCESSORS_2(type, name) \
+ ACCESSORS__GET_2(MACRO_PASTE(type), name) \
+ ACCESSORS__SET_2(MACRO_PASTE(type), name)
 #endif
 
 
@@ -352,6 +306,34 @@ struct fn_setter
   ACCESSORS__DECLARE(type, name) \
   ACCESSORS__DO(type, name)
 #endif
+
+// // now setup macros for various lengths of arguments -- up to 9 for now ...
+
+
+
+#ifndef ACCESSORS_3
+#define ACCESSORS_3(arg1, arg2, arg3) \
+ACCESSORS_2(MACRO_PASTE(arg1, arg2) ,arg3)
+#endif
+
+
+#include "preproc-concat.h"
+
+#ifndef ACCESSORS
+#define ACCESSORS(...) _preproc_CONCAT(ACCESSORS_, _preproc_NUM_ARGS(__VA_ARGS__))(__VA_ARGS__)
+#endif
+
+#ifndef ACCESSORS__GET
+#define ACCESSORS__GET(...) _preproc_CONCAT(ACCESSORS__GET_, _preproc_NUM_ARGS(__VA_ARGS__))(__VA_ARGS__)
+#endif
+
+#ifndef ACCESSORS__SET
+#define ACCESSORS__SET(...) _preproc_CONCAT(ACCESSORS__SET_, _preproc_NUM_ARGS(__VA_ARGS__))(__VA_ARGS__)
+#endif
+
+
+
+
 
 
 #endif //ACCESSORS__H
