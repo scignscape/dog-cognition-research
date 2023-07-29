@@ -9,7 +9,6 @@
 
 **/_unzip
 
-**/-build_
 **/-build_/*
 
 !/code/cpp/src/prelim/contrib/nathaniel/cutelyst/-build_/qt/cutelyst.pro
