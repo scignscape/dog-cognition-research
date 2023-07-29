@@ -12,6 +12,10 @@
 **/-build_
 **/-build_/*
 
+!/code/cpp/src/prelim/contrib/nathaniel/cutelyst/-build_/qt/cutelyst.pro
+!/code/cpp/src/prelim/contrib/nathaniel/cutelyst/-build_/qt/preferred
+
+
 **/quickstart_sparse_array
 **/quickstart_sparse_array/*
 
