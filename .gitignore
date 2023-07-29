@@ -9,6 +9,9 @@
 
 **/_unzip
 
+**/-build_
+**/-build_/*
+
 **/quickstart_sparse_array
 **/quickstart_sparse_array/*
 
