@@ -10,8 +10,8 @@
 **/_unzip
 
 
-#code/cpp/src/prelim/contrib/nathaniel/cutelyst/-build_/*
-#!code/cpp/src/prelim/contrib/nathaniel/cutelyst/-build_/qt/cutelyst.pro
+code/cpp/src/prelim/contrib/nathaniel/cutelyst/-build_/*
+!code/cpp/src/prelim/contrib/nathaniel/cutelyst/-build_/qt/cutelyst.pro
 
 
 # **/-build_/qt/preferred/
