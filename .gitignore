@@ -10,6 +10,15 @@
 **/_unzip
 
 
+**/-build_/*
+!**/-build_/qt
+**/-build_/qt/*
+!**/-build_/qt/cutelyst.pro
+!**/-build_/qt/preferred
+**/-build_/qt/preferred/*
+!**/-build_/qt/preferred/NOTE
+
+
 #code/cpp/src/prelim/contrib/nathaniel/cutelyst/-build_/*
 #!code/cpp/src/prelim/contrib/nathaniel/cutelyst/-build_/qt
 #code/cpp/src/prelim/contrib/nathaniel/cutelyst/-build_/qt/*
