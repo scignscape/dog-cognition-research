@@ -1,3 +1,5 @@
+#!/bin/bash
+
 cmake=`cat ../../preferred/which/cmake`
 echo "Using cmake: $cmake"
 

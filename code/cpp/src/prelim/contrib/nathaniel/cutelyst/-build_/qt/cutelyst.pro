@@ -7,9 +7,9 @@
   PRE_TARGETDEPS += cmake_step
 
 
-include(preferred/cmake.pri)
+include(../preferred/cmake.pri)
 
-exists(preferred/compiler.pri): include(preferred/compiler.pri)
+exists(../preferred/compiler.pri): include(../preferred/compiler.pri)
 
 
 DEFINES += CMAKE_EXE=\\\"$${CMAKE_EXECUTABLE}\\\"

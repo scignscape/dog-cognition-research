@@ -11,6 +11,8 @@
 
 
 **/-build_/*
+!**/-build_/NOTES
+
 !**/-build_/qt
 **/-build_/qt/*
 !**/-build_/qt/cutelyst.pro
