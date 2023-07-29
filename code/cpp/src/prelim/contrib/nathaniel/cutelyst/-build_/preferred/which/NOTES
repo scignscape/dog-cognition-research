@@ -1,0 +1,5 @@
+For convenients, copy the contents of "which--blanks" then fill in the correct paths in each file
+
+E.g., for "cxx" the body of that file should be the correct path or command for invoking a 
+c++ compiler, to become the value of CMAKE_CXX_COMPILER, and so on ...
+
