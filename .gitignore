@@ -11,7 +11,10 @@
 
 
 code/cpp/src/prelim/contrib/nathaniel/cutelyst/-build_/*
+!code/cpp/src/prelim/contrib/nathaniel/cutelyst/-build_/qt
+code/cpp/src/prelim/contrib/nathaniel/cutelyst/-build_/qt/*
 !code/cpp/src/prelim/contrib/nathaniel/cutelyst/-build_/qt/cutelyst.pro
+
 
 
 # **/-build_/qt/preferred/
