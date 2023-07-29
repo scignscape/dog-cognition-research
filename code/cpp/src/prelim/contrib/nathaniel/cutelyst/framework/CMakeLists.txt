@@ -7,12 +7,6 @@ add_compile_definitions(TSI_QMAKE_GENERATED=0)
 add_compile_definitions(TSI_CMAKE_GENERATED=1)
 
 
-# _ROOT_FOLDER = ROOT_FOLDER ""_qt;
-# _APPS_ROOT_FOLDER = APPS_ROOT_FOLDER ""_qt;
-# _FRAMEWORK_ROOT_FOLDER = FRAMEWORK_ROOT_FOLDER ""_qt;
-# _INSTALL_ROOT_FOLDER = INSTALL_ROOT_FOLDER ""_qt;
-
-
 get_filename_component(var_APPS_ROOT_FOLDER "${CMAKE_CURRENT_SOURCE_DIR}/../apps" ABSOLUTE)
 get_filename_component(var_INSTALL_ROOT_FOLDER "${CMAKE_CURRENT_SOURCE_DIR}/../-build_/install" ABSOLUTE)
 get_filename_component(var_FRAMEWORK_ROOT_FOLDER "${CMAKE_CURRENT_SOURCE_DIR}" ABSOLUTE)
@@ -25,7 +19,7 @@ add_compile_definitions(INSTALL_ROOT_FOLDER="${var_INSTALL_ROOT_FOLDER}")
 add_compile_definitions(FRAMEWORK_ROOT_FOLDER="${var_FRAMEWORK_ROOT_FOLDER}")
 add_compile_definitions(ROOT_FOLDER="${var_ROOT_FOLDER}")
 
-add_compile_definitions(CMAKE_EXECUTABLE="${CMAKE_COMMAND}")
+add_compile_definitions(CMAKE_EXE="${CMAKE_COMMAND}")
 
 add_compile_definitions(COMPILER_CMD_CXX="${CMAKE_CXX_COMPILER}")
 add_compile_definitions(COMPILER_CMD_CC="${CMAKE_C_COMPILER}")
