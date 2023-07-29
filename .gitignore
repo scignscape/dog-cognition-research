@@ -19,19 +19,6 @@
 !**/-build_/qt/preferred/NOTE
 
 
-#code/cpp/src/prelim/contrib/nathaniel/cutelyst/-build_/*
-#!code/cpp/src/prelim/contrib/nathaniel/cutelyst/-build_/qt
-#code/cpp/src/prelim/contrib/nathaniel/cutelyst/-build_/qt/*
-#!code/cpp/src/prelim/contrib/nathaniel/cutelyst/-build_/qt/cutelyst.pro
-#!code/cpp/src/prelim/contrib/nathaniel/cutelyst/-build_/qt/preferred
-#code/cpp/src/prelim/contrib/nathaniel/cutelyst/-build_/qt/preferred/*
-#!code/cpp/src/prelim/contrib/nathaniel/cutelyst/-build_/qt/preferred/NOTE
-
-
-# **/-build_/qt/preferred/
-# !**/-build_/qt/preferred/NOTE
-
-
 **/quickstart_sparse_array
 **/quickstart_sparse_array/*
 
