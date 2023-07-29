@@ -43,8 +43,10 @@ DEFINES += QT_5_or_6=QT_MAJOR_VERSION
 ROOT_DIR = $$_PRO_FILE_PWD_
 ROOT_DIR ~= s!/-build_/qt.*!!
 
+message($$ROOT_DIR)
 
-FRAMEWORK_ROOT_DIR = $${ROOT_DIR}/cutelyst
+
+FRAMEWORK_ROOT_DIR = $${ROOT_DIR}/framework
 APPS_ROOT_DIR = $${ROOT_DIR}/apps
 INSTALL_ROOT_DIR = $${ROOT_DIR}/-build_/install
 BUILD_WORKING_DIR = $${ROOT_DIR}/-build_/run-cmake/working

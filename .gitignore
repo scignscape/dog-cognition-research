@@ -14,9 +14,25 @@
 !**/-build_/qt
 **/-build_/qt/*
 !**/-build_/qt/cutelyst.pro
-!**/-build_/qt/preferred
-**/-build_/qt/preferred/*
-!**/-build_/qt/preferred/NOTE
+
+!**/-build_/preferred
+**/-build_/preferred/*
+!**/-build_/preferred/NOTE
+!**/-build_/preferred/which
+**/-build_/preferred/which/*
+!**/-build_/preferred/which--blanks
+
+!**/-build_/run-cmake
+**/-build_/run-cmake/*
+!**/-build_/run-cmake/run-cmake.sh
+!**/-build_/run-cmake/working
+**/-build_/run-cmake/working/*
+
+
+
+
+
+
 
 
 **/quickstart_sparse_array
