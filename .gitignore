@@ -11,7 +11,8 @@
 
 /-build_/*
 !/-build_/qt/*.pro
-!/-build_/qt/preferred
+
+/-build_/qt/preferred/
 !/-build_/qt/preferred/NOTE
 
 
