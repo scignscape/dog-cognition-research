@@ -9,10 +9,9 @@
 
 **/_unzip
 
-/-build_/*
-!/-build_/qt/*.pro
-!/-build_/qt/preferred
-/-build_/qt/preferred/*
+**/-build_/*
+!**/-build_/qt/*.pro
+!**/-build_/qt/preferred
 
 
 **/quickstart_sparse_array
