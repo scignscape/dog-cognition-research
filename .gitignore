@@ -28,6 +28,7 @@
 !**/-build_/run-cmake/run-cmake.sh
 !**/-build_/run-cmake/working
 **/-build_/run-cmake/working/*
+!**/-build_/run-cmake/working/NOTES
 
 
 
