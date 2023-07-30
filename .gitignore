@@ -32,7 +32,7 @@
 **/-build_/run-cmake/working/*
 !**/-build_/run-cmake/working/NOTES
 
-!**/-build_/qt
+!**/apps/**/-build_/qt/*
 
 
 
