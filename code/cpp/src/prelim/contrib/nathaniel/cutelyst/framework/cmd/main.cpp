@@ -89,7 +89,7 @@ bool build_tsi(const QString &filename, const QString &appName)
 
 #define CMAKE_QT_PREFIX QT_CMAKE_FOLDER "/Qt" _STRINGIFY(QT_VERSION_MAJOR)
 
-#define cmake_CUTELYST_PREFIX INSTALL_ROOT_FOLDER "/cmake/Cutelyst3Qt5"
+#define cmake_CUTELYST_PREFIX INSTALL_ROOT_FOLDER "/lib/cmake/Cutelyst3Qt5"
 
 
  QString _ROOT_FOLDER = ROOT_FOLDER ""_qt;
@@ -247,7 +247,7 @@ LIBS += -L%1/lib \
   ../../../../%6
            )"_qt.arg(CMAKE_EXE ""_qt).arg(COMPILER_CMD_CC ""_qt).arg(COMPILER_CMD_CXX ""_qt)
   .arg(CMAKE_QT_PREFIX ""_qt).arg(cmake_CUTELYST_PREFIX ""_qt).arg(filename);
-
+;;;;;
     data.close();
 
     data.setPermissions(QFile::ExeOwner | QFile::ReadOwner  | QFile::WriteOwner);
@@ -263,7 +263,7 @@ LIBS += -L%1/lib \
     QTextStream out(&data);
 
     out << R"(
-cp ./src/lib%1.so ../../lib  \
+cp ./src/lib%1.so ../lib  \
            )"_qt.arg(filename);
 
     data.close();
