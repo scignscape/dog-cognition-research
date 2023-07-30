@@ -10,6 +10,13 @@ while [[ $prefix =~ $re ]]; do
   prefix=${BASH_REMATCH[1]}${BASH_REMATCH[2]}
 done
 
+
+re1ln='(.*)\\\s*'
+if [[ $prefix =~ $re1ln ]]; then
+  prefix=${BASH_REMATCH[1]}
+fi
+
+
 echo "Using prefix-path: $prefix"
 $cmake \
  -D CMAKE_BUILD_TYPE=Debug \

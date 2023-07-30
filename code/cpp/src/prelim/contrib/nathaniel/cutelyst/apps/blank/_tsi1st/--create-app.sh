@@ -2,8 +2,12 @@
 # note: the arguments after the cutelyst invocation will pass the -h
 # argument unless this script is called with one or more alternative parameters
 #
-cd ../`pwd`;
-LD_LIBRARY_PATH=??:\
-??:$LD_LIBRARY_PATH \
-??/install/bin/cutelyst3-qt5 --server --app-file ??/tsi/-build_/lib/libbHello.so ;
-cd --
+
+#!/bin/bash
+current_dir=${PWD##*/}
+cd ..
+appname=${PWD##*/} 
+echo "Creating application, with name $appname"
+cd $current_dir
+./_run.sh --create-app $appname
+
