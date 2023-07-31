@@ -1,10 +1,10 @@
 
 
 ##
- cmake_step.commands = cd ../run-cmake/working; \
-   ../run-cmake.sh; make; make install
-  QMAKE_EXTRA_TARGETS += cmake_step
-  PRE_TARGETDEPS += cmake_step
+cmake_step.commands = cd ../run-cmake/working; \
+  ../run-cmake.sh; make; make install
+QMAKE_EXTRA_TARGETS += cmake_step
+PRE_TARGETDEPS += cmake_step
 
 
 include(../preferred/cmake.pri)
@@ -43,8 +43,6 @@ DEFINES += QT_5_or_6=QT_MAJOR_VERSION
 
 ROOT_DIR = $$_PRO_FILE_PWD_
 ROOT_DIR ~= s!/-build_/qt.*!!
-
-message($$ROOT_DIR)
 
 
 FRAMEWORK_ROOT_DIR = $${ROOT_DIR}/framework
