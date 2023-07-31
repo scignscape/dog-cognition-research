@@ -198,8 +198,9 @@ DEFINES += FRAMEWORK_ROOT_FOLDER=\\\"$${FRAMEWORK_ROOT_DIR}\\\"
 # add to the environment:
 #   %6:%1/lib:$LD_LIBRARY_PATH
 
+
 cmake_step.commands = cd ../run-cmake/working; \
-../run-cmake.sh; make; ../copy-lib.sh
+../run-cmake.sh; make; make copy-install
 QMAKE_EXTRA_TARGETS += cmake_step
 PRE_TARGETDEPS += cmake_step
 
@@ -427,7 +428,7 @@ bool buildControllerImplementation(const QString &filename, const QString &contr
   out << "{" << "\n";
   out << "}" << "\n";
   out << "\n";
-  out << "void " << controllerName << "::index" << "(Context *c)" << "\n";
+  out << "void " << controllerName << "::index" << "(Context* c)" << "\n";
   out << "{" << "\n";
   if (helpers) {
    out << SPACES_STRING1 "c->response()->body() = \"Welcome to Cutelyst!\";" << "\n";
@@ -437,7 +438,7 @@ bool buildControllerImplementation(const QString &filename, const QString &contr
   out << "}" << "\n";
   out << "\n";
   if (helpers) {
-   out << "void " << controllerName << "::defaultPage" << "(Context *c)" << "\n";
+   out << "void " << controllerName << "::defaultPage" << "(Context* c)" << "\n";
    out << "{" << "\n";
    out << SPACES_STRING1 "c->response()->body() = \"Page not found!\";" << "\n";
    out << SPACES_STRING1 "c->response()->setStatus(404);" << "\n";
@@ -482,15 +483,15 @@ bool buildControllerHeader(const QString &filename, const QString &controllerNam
   out << SPACES_STRING1 "~" << controllerName << "();" << "\n";
   out << "\n";
   out << SPACES_STRING1 "C_ATTR(index, :Path :AutoArgs)" << "\n";
-  out << SPACES_STRING1 "void index(Context *c);" << "\n";
+  out << SPACES_STRING1 "void index(Context* c);" << "\n";
   if (helpers) {
    out << "\n";
    out << SPACES_STRING1 "C_ATTR(defaultPage, :Path)" << "\n";
-   out << SPACES_STRING1 "void defaultPage(Context *c);" << "\n";
+   out << SPACES_STRING1 "void defaultPage(Context* c);" << "\n";
    out << "\n";
    out << "private:\n";
    out << SPACES_STRING1 "C_ATTR(End, :ActionClass(\"RenderView\"))" << "\n";
-   out << SPACES_STRING1 "void End(Context *c) { Q_UNUSED(c); }" << "\n";
+   out << SPACES_STRING1 "void End(Context* c) { Q_UNUSED(c); }" << "\n";
   }
   out << "};" << "\n";
   out << "\n";
@@ -580,7 +581,7 @@ bool buildProjectCMakeLists(const QString &name, const QString &appName)
   out << "add_subdirectory(src)" << "\n";
   // //  tsi ...
   out << "\n";
-  out << "# tsi specific targets, acting like a \"make install\" ...";
+  out << "# tsi specific targets, acting like a \"make install\" ..." << "\n";
   out << "add_custom_target(copy-install ../copy-lib.sh)" << "\n";
   out << "add_custom_target(c-i make copy-install)" << "\n";
 
