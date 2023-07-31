@@ -192,7 +192,7 @@ DEFINES += FRAMEWORK_ROOT_FOLDER=\\\"$${FRAMEWORK_ROOT_DIR}\\\"
 # executable path:
 #   %1/bin/cutelyst3-qt5
 # command line arguments:
-#   --server --app-file %2/%4/tsi/-build_/lib/%7 -- --chdir %2/%4/tsi/-build_/lib
+#   --server --app-file %2/%4/tsi/-build_/lib/%7
 # working directory:
 #   %2/%4/%4
 # add to the environment:
@@ -519,8 +519,8 @@ bool buildSrcCMakeLists(const QString &name, const QString &appName)
   out << "file(GLOB_RECURSE " << appName << "_SRCS *.cpp *.h)" << "\n";
   out << "\n";
   out << "set(" << appName << "_SRCS" << "\n";
-  out << "    ${" << appName << "_SRCS}" << "\n";
-  out << "    ${TEMPLATES_SRC}" << "\n";
+  out << SPACES_STRING1 "${" << appName << "_SRCS}" << "\n";
+  out << SPACES_STRING1 "${TEMPLATES_SRC}" << "\n";
   out << ")" << "\n";
   out << "\n";
   out << "# Create the application" << "\n";
@@ -528,9 +528,9 @@ bool buildSrcCMakeLists(const QString &name, const QString &appName)
   out << "\n";
   out << "# Link to Cutelyst" << "\n";
   out << "target_link_libraries(" << appName << "\n";
-  out << "    Cutelyst::Core" << "\n";
-  out << "    Qt5::Core" << "\n";
-  out << "    Qt5::Network" << "\n";
+  out << SPACES_STRING1 "Cutelyst::Core" << "\n";
+  out << SPACES_STRING1 "Qt5::Core" << "\n";
+  out << SPACES_STRING1 "Qt5::Network" << "\n";
   out << ")" << "\n";
 
   //        target_include_directories(dtHello PRIVATE "../../../../cutelyst")
@@ -560,10 +560,10 @@ bool buildProjectCMakeLists(const QString &name, const QString &appName)
   out << "cmake_minimum_required(VERSION 3.16 FATAL_ERROR)" << "\n";
   out << "\n";
   out << "if(WIN32)\n";
-  out << "  if(MSVC)\n";
-  out << "    add_definitions(-D_SCL_SECURE_NO_WARNINGS)\n";
-  out << "    add_definitions(-D_CRT_SECURE_NO_DEPRECATE)\n";
-  out << "  endif()\n";
+  out << SPACES_STRING2 "if(MSVC)\n";
+  out << SPACES_STRING4 "add_definitions(-D_SCL_SECURE_NO_WARNINGS)\n";
+  out << SPACES_STRING4 "add_definitions(-D_CRT_SECURE_NO_DEPRECATE)\n";
+  out << SPACES_STRING2 "endif()\n";
   out << "endif()\n\n";
   out << "find_package(Qt" << QT_VERSION_MAJOR << " COMPONENTS Core Network REQUIRED)" << "\n";
   out << "find_package(Cutelyst" << CUTELYST_VERSION_MAJOR << "Qt" << QT_VERSION_MAJOR << " REQUIRED)" << "\n";
@@ -578,6 +578,11 @@ bool buildProjectCMakeLists(const QString &name, const QString &appName)
   out << "file(GLOB_RECURSE TEMPLATES_SRC root/*)" << "\n";
   out << "\n";
   out << "add_subdirectory(src)" << "\n";
+  // //  tsi ...
+  out << "\n";
+  out << "# tsi specific targets, acting like a \"make install\" ...";
+  out << "add_custom_target(copy-install ../copy-lib.sh)" << "\n";
+  out << "add_custom_target(c-i make copy-install)" << "\n";
 
   std::cout << OUT_CREATED << qPrintable(name) << std::endl;
 

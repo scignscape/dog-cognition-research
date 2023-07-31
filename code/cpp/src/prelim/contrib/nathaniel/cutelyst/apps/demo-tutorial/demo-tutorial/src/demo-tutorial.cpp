@@ -1,25 +1,23 @@
-
-
-
-#include "books_3-1.h"
-
-#include "books.h"
+#include "demo-tutorial.h"
 
 #include "root.h"
 
+#include "books.h"
+
 #include "Cutelyst/Plugins/View/Grantlee/grantleeview.h"
+
 
 using namespace Cutelyst;
 
-Books_3_1::Books_3_1(QObject *parent) : Application(parent)
+demo_tutorial::demo_tutorial(QObject *parent) : Application(parent)
 {
 }
 
-Books_3_1::~Books_3_1()
+demo_tutorial::~demo_tutorial()
 {
 }
 
-bool Books_3_1::init()
+bool demo_tutorial::init()
 {
  new Root(this);
 

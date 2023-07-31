@@ -13,10 +13,11 @@ public:
  ~Books();
 
  C_ATTR(index, :Path :AutoArgs)
- void index(Context *c);
+ void index(Context* c);
 
  C_ATTR(list, :Local)
- void list(Context *c);
+ void list(Context* c);
+
 };
 
 #endif //BOOKS__H

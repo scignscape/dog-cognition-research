@@ -10,12 +10,12 @@ Books::~Books()
 {
 }
 
-void Books::index(Context *c)
+void Books::index(Context* c)
 {
  c->response()->body() = "Matched Controller::Books in Books.";
 }
 
-void Books::list(Context *c)
+void Books::list(Context* c)
 {
     // c is the Cutelyst::Context that's used to 'glue together'
     // the various components that make up the application
@@ -31,4 +31,3 @@ void Books::list(Context *c)
     // your controllers).
     c->setStash("template", "books/list.html");
 }
-

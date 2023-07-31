@@ -1,4 +1,4 @@
-project(books_2)
+project(demo_tutorial)
 
 cmake_minimum_required(VERSION 3.16 FATAL_ERROR)
 
@@ -22,3 +22,6 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 file(GLOB_RECURSE TEMPLATES_SRC root/*)
 
 add_subdirectory(src)
+
+add_custom_target(copy-install ../copy-lib.sh)
+add_custom_target(c-i make copy-install)
