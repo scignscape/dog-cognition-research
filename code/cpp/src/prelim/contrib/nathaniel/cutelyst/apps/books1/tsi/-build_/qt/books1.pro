@@ -9,7 +9,7 @@ INSTALL_ROOT_DIR=/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/na
 APPS_ROOT_DIR=/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/nathaniel/cutelyst/apps
 FRAMEWORK_ROOT_DIR=/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/nathaniel/cutelyst/framework
 
-DEFINES += INSTALL_ROOT_FOLDER=\\\"$${INSTALL_ROOT_DIR}\\\"
+DEFINES += INSTALL_ROOT_FOLDER=\\\"$$INSTALL_ROOT_DIR\\\"
 DEFINES += APPS_ROOT_FOLDER=\\\"$${APPS_ROOT_DIR}\\\"
 DEFINES += FRAMEWORK_ROOT_FOLDER=\\\"$${FRAMEWORK_ROOT_DIR}\\\"
 
@@ -26,21 +26,24 @@ PRE_TARGETDEPS += cmake_step
 
 INCLUDEPATH += \
   books1 \
-  $${INSTALL_ROOT_DIR}/include/cutelyst3-qt5 \
+  $$INSTALL_ROOT_DIR/include/cutelyst3-qt5 \
 
 TEMPLATE = lib
 
 SRC_DIR = /home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/nathaniel/cutelyst/apps/books1/books1/src
 
 HEADERS += \
-  $${SRC_DIR}/root.h \
-  $${SRC_DIR}/books1.h \
+  $$SRC_DIR/root.h \
+  $$SRC_DIR/books1.h \
+  $$SRC_DIR/books.h \
 
 SOURCES += \
-  $${SRC_DIR}/root.cpp \
-  $${SRC_DIR}/books1.cpp \
+  $$SRC_DIR/root.cpp \
+  $$SRC_DIR/books1.cpp \
+  $$SRC_DIR/books.cpp \
 
-LIBS += -L$${INSTALL_ROOT_DIR}/lib \
+
+LIBS += -L$$INSTALL_ROOT_DIR/lib \
   -lCutelyst3Qt5 \
 
           

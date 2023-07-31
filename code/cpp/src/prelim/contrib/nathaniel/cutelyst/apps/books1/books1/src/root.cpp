@@ -12,12 +12,12 @@ Root::~Root()
 
 void Root::index(Context *c)
 {
-    c->response()->body() = "Welcome to Cutelyst (books1)";
+ c->response()->body() = "Welcome to Cutelyst (books1)";
 }
 
 void Root::defaultPage(Context *c)
 {
-    c->response()->body() = "Page not found!";
-    c->response()->setStatus(404);
+ c->response()->body() = "Page not found!";
+ c->response()->setStatus(404);
 }
 

@@ -13,5 +13,8 @@ target_link_libraries(books1
     Cutelyst::Core
     Qt5::Core
     Qt5::Network
+
+ Cutelyst::View::Grantlee # Add this line
 )
+
 
