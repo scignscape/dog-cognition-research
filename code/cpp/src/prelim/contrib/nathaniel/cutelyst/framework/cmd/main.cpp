@@ -185,7 +185,7 @@ DEFINES += FRAMEWORK_ROOT_FOLDER=\\\"$${FRAMEWORK_ROOT_DIR}\\\"
 
 ##  Paste this into the custom executable to run the server from Qt Creator ...
 #  %1/bin/cutelyst3-qt5
-#  --server --app-file %2/%3/tsi/-build_/lib/lib%1.so -- --chdir %2/%4/tsi/-build_/lib
+#  --server --app-file %2/%5/tsi/-build_/lib/lib%4.so -- --chdir %2/%4/tsi/-build_/lib
 #  %6:%1/lib:$LD_LIBRARY_PATH
 
 cmake_step.commands = cd ../run-cmake/working; \
@@ -195,21 +195,21 @@ PRE_TARGETDEPS += cmake_step
 
 INCLUDEPATH += \
   %4 \
-  %1/include/cutelyst3-qt5 \
+  $${INSTALL_ROOT_DIR}/include/cutelyst3-qt5 \
 
 TEMPLATE = lib
 
-SRC_DIR = %2/src
+SRC_DIR = %2/%5/%5/src
 
 HEADERS += \
-  $$SRC_DIR/root.h \
-  $$SRC_DIR/src/%5.h \
+  $${SRC_DIR}/root.h \
+  $${SRC_DIR}/%5.h \
 
 SOURCES += \
-  $$SRC_DIR/src/root.cpp \
-  $$SRC_DIR/src/%5.cpp \
+  $${SRC_DIR}/root.cpp \
+  $${SRC_DIR}/%5.cpp \
 
-LIBS += -L%1/lib \
+LIBS += -L$${INSTALL_ROOT_DIR}/lib \
   -lCutelyst3Qt5 \
 
           )"_qt.arg(_INSTALL_ROOT_FOLDER).arg(_APPS_ROOT_FOLDER)
@@ -263,7 +263,7 @@ LIBS += -L%1/lib \
     QTextStream out(&data);
 
     out << R"(
-cp ./src/lib%1.so ../lib  \
+cp ./src/lib%1.so ../../lib  \
            )"_qt.arg(filename);
 
     data.close();

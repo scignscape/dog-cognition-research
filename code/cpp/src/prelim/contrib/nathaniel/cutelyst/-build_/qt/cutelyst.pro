@@ -14,8 +14,9 @@ exists(../preferred/compiler.pri): include(../preferred/compiler.pri)
 
 DEFINES += CMAKE_EXE=\\\"$${CMAKE_EXECUTABLE}\\\"
 
-DEFINES += COMPILER_CMD_CXX=\\\"${QMAKE_CXX}\\\"
-DEFINES += COMPILER_CMD_CC=\\\"${QMAKE_CC}\\\"
+DEFINES += COMPILER_CMD_CXX=\\\"$${QMAKE_CXX}\\\"
+DEFINES += COMPILER_CMD_CC=\\\"$${QMAKE_CC}\\\"
+
 
 
 #QMAKE_CC=/home/nlevisrael/gits/gcc-10/install/bin/gcc
