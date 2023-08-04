@@ -27,7 +27,7 @@
 
 #include "chasm-textio.h"
 
-// Q_LOGGING_CATEGORY(CUTELYST_GAINTLEE, "cutelyst.gaintlee", QtWarningMsg)
+// Q_LOGGING_CATEGORY(CUTELYST_GRANTLEE, "cutelyst.grantlee", QtWarningMsg)
 
 USING_CHASM_NAMESPACE
 

@@ -6,11 +6,11 @@
 #include "application.h"
 #include "config.h"
 #include "context.h"
-#include "gaintleeview_p.h"
+#include "grantleeview_p.h"
 #include "response.h"
 
-#include <gaintlee/metatype.h>
-#include <gaintlee/qtlocalizer.h>
+#include <grantlee/metatype.h>
+#include <grantlee/qtlocalizer.h>
 
 #include <QDirIterator>
 #include <QString>
@@ -19,41 +19,41 @@
 
 #define loadByName_debug  loadByName
 
-Q_LOGGING_CATEGORY(CUTELYST_GAINTLEE, "cutelyst.gaintlee", QtWarningMsg)
+Q_LOGGING_CATEGORY(CUTELYST_GRANTLEE, "cutelyst.grantlee", QtWarningMsg)
 
 using namespace Cutelyst;
 
-GAINTLEE_BEGIN_LOOKUP(ParamsMultiMap)
+GRANTLEE_BEGIN_LOOKUP(ParamsMultiMap)
 return object.value(property);
-GAINTLEE_END_LOOKUP
+GRANTLEE_END_LOOKUP
 
-GAINTLEE_BEGIN_LOOKUP_PTR(Cutelyst::Request)
+GRANTLEE_BEGIN_LOOKUP_PTR(Cutelyst::Request)
 return object->property(property.toLatin1().constData());
-GAINTLEE_END_LOOKUP
+GRANTLEE_END_LOOKUP
 
-GaintleeView::GaintleeView(QObject *parent, const QString &name)
-    : View(new GaintleeViewPrivate, parent, name)
+GrantleeView::GrantleeView(QObject *parent, const QString &name)
+    : View(new GrantleeViewPrivate, parent, name)
 {
-    Q_D(GaintleeView);
+    Q_D(GrantleeView);
 
-    Gaintlee::registerMetaType<ParamsMultiMap>();
-    Gaintlee::registerMetaType<Cutelyst::Request *>(); // To be able to access it's properties
+    Grantlee::registerMetaType<ParamsMultiMap>();
+    Grantlee::registerMetaType<Cutelyst::Request *>(); // To be able to access it's properties
 
-    d->loader = QSharedPointer<Gaintlee::FileSystemTemplateLoader>(new Gaintlee::FileSystemTemplateLoader);
+    d->loader = QSharedPointer<Grantlee::FileSystemTemplateLoader>(new Grantlee::FileSystemTemplateLoader);
 
-    d->engine = new Gaintlee::Engine(this);
+    d->engine = new Grantlee::Engine(this);
     d->engine->addTemplateLoader(d->loader);
 
     QString plugins_dir = CUTELYST_PLUGINS_DIR;
 
-    // Set also the paths from CUTELYST_PLUGINS_DIR env variable as plugin paths of gaintlee engine
+    // Set also the paths from CUTELYST_PLUGINS_DIR env variable as plugin paths of grantlee engine
     const QByteArrayList dirs = QByteArrayList{QByteArrayLiteral(CUTELYST_PLUGINS_DIR)} + qgetenv("CUTELYST_PLUGINS_DIR").split(';');
     for (const QByteArray &dir : dirs) {
         d->engine->addPluginPath(QString::fromLocal8Bit(dir));
     }
 
-//?    d->engine->addDefaultLibrary(QStringLiteral("gaintlee_cutelyst"));
-    d->engine->addDefaultLibrary(QStringLiteral("libgaintlee-view"));
+//?    d->engine->addDefaultLibrary(QStringLiteral("grantlee_cutelyst"));
+    d->engine->addDefaultLibrary(QStringLiteral("libgrantlee-view"));
 
     auto app = qobject_cast<Application *>(parent);
     if (app) {
@@ -64,66 +64,66 @@ GaintleeView::GaintleeView(QObject *parent, const QString &name)
         // {{ Cutelyst.req.base }} instead of {{ c.req.base }}
         d->cutelystVar = app->config(QStringLiteral("CUTELYST_VAR"), QStringLiteral("c")).toString();
 
-        app->loadTranslations(QStringLiteral("plugin_view_gaintlee"));
+        app->loadTranslations(QStringLiteral("plugin_view_grantlee"));
     } else {
         // make sure templates can be found on the current directory
         setIncludePaths({QDir::currentPath()});
     }
 }
 
-QStringList GaintleeView::includePaths() const
+QStringList GrantleeView::includePaths() const
 {
-    Q_D(const GaintleeView);
+    Q_D(const GrantleeView);
     return d->includePaths;
 }
 
-void GaintleeView::setIncludePaths(const QStringList &paths)
+void GrantleeView::setIncludePaths(const QStringList &paths)
 {
-    Q_D(GaintleeView);
+    Q_D(GrantleeView);
     d->loader->setTemplateDirs(paths);
     d->includePaths = paths;
     Q_EMIT changed();
 }
 
-QString GaintleeView::templateExtension() const
+QString GrantleeView::templateExtension() const
 {
-    Q_D(const GaintleeView);
+    Q_D(const GrantleeView);
     return d->extension;
 }
 
-void GaintleeView::setTemplateExtension(const QString &extension)
+void GrantleeView::setTemplateExtension(const QString &extension)
 {
-    Q_D(GaintleeView);
+    Q_D(GrantleeView);
     d->extension = extension;
     Q_EMIT changed();
 }
 
-QString GaintleeView::wrapper() const
+QString GrantleeView::wrapper() const
 {
-    Q_D(const GaintleeView);
+    Q_D(const GrantleeView);
     return d->wrapper;
 }
 
-void GaintleeView::setWrapper(const QString &name)
+void GrantleeView::setWrapper(const QString &name)
 {
-    Q_D(GaintleeView);
+    Q_D(GrantleeView);
     d->wrapper = name;
     Q_EMIT changed();
 }
 
-void GaintleeView::setCache(bool enable)
+void GrantleeView::setCache(bool enable)
 {
-    Q_D(GaintleeView);
+    Q_D(GrantleeView);
 
     if (enable != d->cache.isNull()) {
         return; // already enabled
     }
 
     delete d->engine;
-    d->engine = new Gaintlee::Engine(this);
+    d->engine = new Grantlee::Engine(this);
 
     if (enable) {
-        d->cache = QSharedPointer<Gaintlee::CachingLoaderDecorator>(new Gaintlee::CachingLoaderDecorator(d->loader));
+        d->cache = QSharedPointer<Grantlee::CachingLoaderDecorator>(new Grantlee::CachingLoaderDecorator(d->loader));
         d->engine->addTemplateLoader(d->cache);
     } else {
         d->cache.clear();
@@ -132,15 +132,15 @@ void GaintleeView::setCache(bool enable)
     Q_EMIT changed();
 }
 
-Gaintlee::Engine *GaintleeView::engine() const
+Grantlee::Engine *GrantleeView::engine() const
 {
-    Q_D(const GaintleeView);
+    Q_D(const GrantleeView);
     return d->engine;
 }
 
-void GaintleeView::preloadTemplates()
+void GrantleeView::preloadTemplates()
 {
-    Q_D(GaintleeView);
+    Q_D(GrantleeView);
 
     if (!isCaching()) {
         setCache(true);
@@ -163,15 +163,15 @@ void GaintleeView::preloadTemplates()
     }
 }
 
-bool GaintleeView::isCaching() const
+bool GrantleeView::isCaching() const
 {
-    Q_D(const GaintleeView);
+    Q_D(const GrantleeView);
     return !d->cache.isNull();
 }
 
-QByteArray GaintleeView::render(Context *c) const
+QByteArray GrantleeView::render(Context *c) const
 {
-    Q_D(const GaintleeView);
+    Q_D(const GrantleeView);
 
     QByteArray ret;
     c->setStash(d->cutelystVar, QVariant::fromValue(c));
@@ -194,11 +194,11 @@ QByteArray GaintleeView::render(Context *c) const
         }
     }
 
-    qCDebug(CUTELYST_GAINTLEE) << "Rendering template" << templateFile;
+    qCDebug(CUTELYST_GRANTLEE) << "Rendering template" << templateFile;
 
-    Gaintlee::Context gc(stash);
+    Grantlee::Context gc(stash);
 
-    auto localizer = QSharedPointer<Gaintlee::QtLocalizer>::create(c->locale());
+    auto localizer = QSharedPointer<Grantlee::QtLocalizer>::create(c->locale());
 
     auto transIt = d->translators.constFind(c->locale());
     if (transIt != d->translators.constEnd()) {
@@ -213,34 +213,34 @@ QByteArray GaintleeView::render(Context *c) const
 
     gc.setLocalizer(localizer);
 
-    Gaintlee::Template tmpl = d->engine->loadByName_debug(templateFile);
-    if (tmpl->error() != Gaintlee::NoError) {
-        c->res()->setBody(c->translate("Cutelyst::GaintleeView", "Internal server error."));
+    Grantlee::Template tmpl = d->engine->loadByName_debug(templateFile);
+    if (tmpl->error() != Grantlee::NoError) {
+        c->res()->setBody(c->translate("Cutelyst::GrantleeView", "Internal server error."));
         c->error(QLatin1String("Error while rendering template: ") + tmpl->errorString());
         return ret;
     }
 
     QString content = tmpl->render(&gc);
-    if (tmpl->error() != Gaintlee::NoError) {
-        c->res()->setBody(c->translate("Cutelyst::GaintleeView", "Internal server error."));
+    if (tmpl->error() != Grantlee::NoError) {
+        c->res()->setBody(c->translate("Cutelyst::GrantleeView", "Internal server error."));
         c->error(QLatin1String("Error while rendering template: ") + tmpl->errorString());
         return ret;
     }
 
     if (!d->wrapper.isEmpty()) {
-        Gaintlee::Template wrapper = d->engine->loadByName_debug(d->wrapper);
-        if (tmpl->error() != Gaintlee::NoError) {
-            c->res()->setBody(c->translate("Cutelyst::GaintleeView", "Internal server error."));
+        Grantlee::Template wrapper = d->engine->loadByName_debug(d->wrapper);
+        if (tmpl->error() != Grantlee::NoError) {
+            c->res()->setBody(c->translate("Cutelyst::GrantleeView", "Internal server error."));
             c->error(QLatin1String("Error while rendering template: ") + tmpl->errorString());
             return ret;
         }
 
-        Gaintlee::SafeString safeContent(content, true);
+        Grantlee::SafeString safeContent(content, true);
         gc.insert(QStringLiteral("content"), safeContent);
         content = wrapper->render(&gc);
 
-        if (wrapper->error() != Gaintlee::NoError) {
-            c->res()->setBody(c->translate("Cutelyst::GaintleeView", "Internal server error."));
+        if (wrapper->error() != Grantlee::NoError) {
+            c->res()->setBody(c->translate("Cutelyst::GrantleeView", "Internal server error."));
             c->error(QLatin1String("Error while rendering template: ") + tmpl->errorString());
             return ret;
         }
@@ -250,34 +250,34 @@ QByteArray GaintleeView::render(Context *c) const
     return ret;
 }
 
-void GaintleeView::addTranslator(const QLocale &locale, QTranslator *translator)
+void GrantleeView::addTranslator(const QLocale &locale, QTranslator *translator)
 {
-    Q_D(GaintleeView);
-    Q_ASSERT_X(translator, "add translator to GaintleeView", "invalid QTranslator object");
+    Q_D(GrantleeView);
+    Q_ASSERT_X(translator, "add translator to GrantleeView", "invalid QTranslator object");
     d->translators.insert(locale, translator);
 }
 
-void GaintleeView::addTranslator(const QString &locale, QTranslator *translator)
+void GrantleeView::addTranslator(const QString &locale, QTranslator *translator)
 {
     addTranslator(QLocale(locale), translator);
 }
 
-void GaintleeView::addTranslationCatalog(const QString &path, const QString &catalog)
+void GrantleeView::addTranslationCatalog(const QString &path, const QString &catalog)
 {
-    Q_D(GaintleeView);
-    Q_ASSERT_X(!path.isEmpty(), "add translation catalog to GaintleeView", "empty path");
-    Q_ASSERT_X(!catalog.isEmpty(), "add translation catalog to GaintleeView", "empty catalog name");
+    Q_D(GrantleeView);
+    Q_ASSERT_X(!path.isEmpty(), "add translation catalog to GrantleeView", "empty path");
+    Q_ASSERT_X(!catalog.isEmpty(), "add translation catalog to GrantleeView", "empty catalog name");
     d->translationCatalogs.insert(catalog, path);
 }
 
-void GaintleeView::addTranslationCatalogs(const QHash<QString, QString> &catalogs)
+void GrantleeView::addTranslationCatalogs(const QHash<QString, QString> &catalogs)
 {
-    Q_D(GaintleeView);
+    Q_D(GrantleeView);
     Q_ASSERT_X(!catalogs.empty(), "add translation catalogs to GranteleeView", "empty QHash");
     d->translationCatalogs.unite(catalogs);
 }
 
-QVector<QLocale> GaintleeView::loadTranslationsFromDir(const QString &filename, const QString &directory, const QString &prefix, const QString &suffix)
+QVector<QLocale> GrantleeView::loadTranslationsFromDir(const QString &filename, const QString &directory, const QString &prefix, const QString &suffix)
 {
     QVector<QLocale> locales;
 
@@ -300,27 +300,27 @@ QVector<QLocale> GaintleeView::loadTranslationsFromDir(const QString &filename, 
                         if (Q_LIKELY(trans->load(loc, filename, _prefix, directory))) {
                             addTranslator(loc, trans);
                             locales.append(loc);
-                            qCDebug(CUTELYST_GAINTLEE) << "Loaded translations for locale" << loc << "from" << ts.absoluteFilePath();
+                            qCDebug(CUTELYST_GRANTLEE) << "Loaded translations for locale" << loc << "from" << ts.absoluteFilePath();
                         } else {
                             delete trans;
-                            qCWarning(CUTELYST_GAINTLEE) << "Can not load translations for locale" << loc;
+                            qCWarning(CUTELYST_GRANTLEE) << "Can not load translations for locale" << loc;
                         }
                     } else {
-                        qCWarning(CUTELYST_GAINTLEE) << "Can not load translations for invalid locale string" << locString;
+                        qCWarning(CUTELYST_GRANTLEE) << "Can not load translations for invalid locale string" << locString;
                     }
                 }
                 locales.squeeze();
             } else {
-                qCWarning(CUTELYST_GAINTLEE) << "Can not find translation files for" << filename << "in directory" << directory;
+                qCWarning(CUTELYST_GRANTLEE) << "Can not find translation files for" << filename << "in directory" << directory;
             }
         } else {
-            qCWarning(CUTELYST_GAINTLEE) << "Can not load translations from not existing directory:" << directory;
+            qCWarning(CUTELYST_GRANTLEE) << "Can not load translations from not existing directory:" << directory;
         }
     } else {
-        qCWarning(CUTELYST_GAINTLEE) << "Can not load translations for empty file name or empty path.";
+        qCWarning(CUTELYST_GRANTLEE) << "Can not load translations for empty file name or empty path.";
     }
 
     return locales;
 }
 
-//?#include "moc_gaintleeview.cpp"
+//?#include "moc_grantleeview.cpp"

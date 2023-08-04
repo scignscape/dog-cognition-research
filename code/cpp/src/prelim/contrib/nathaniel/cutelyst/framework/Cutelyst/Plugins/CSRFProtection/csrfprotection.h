@@ -72,7 +72,7 @@ class CSRFProtectionPrivate;
  * }
  * @endcode
  *
- * In your Gaintlee or Cutelee template you should then use the <CODE>{% c_csrf_token %}</CODE> tag in your
+ * In your Grantlee or Cutelee template you should then use the <CODE>{% c_csrf_token %}</CODE> tag in your
  * forms to add a hidden input field that contains the CSRF protection token.
  *
  * @code{.html}
@@ -139,8 +139,8 @@ class CSRFProtectionPrivate;
  * in the session is salted with another random value. The same secret with a different salt has then to be sent
  * to the application either via a hidden form field or via a HTTP request header.
  *
- * To get the form field you can use the <CODE>{% c_csrf_token %}</CODE> tag in your Gaintlee templates. If you
- * are not using Gaintlee or if you do not use a form but AJAX, you can use CSRFProtection::getToken() to place the
+ * To get the form field you can use the <CODE>{% c_csrf_token %}</CODE> tag in your Grantlee templates. If you
+ * are not using Grantlee or if you do not use a form but AJAX, you can use CSRFProtection::getToken() to place the
  * token somewhere in your DOM tree so that you can read it with JavaScript.
  *
  * <H3 ID="limitations">Limitations</H3>
@@ -327,7 +327,7 @@ public:
 
     /**
      * Returns HTML code for a hidden input field that contains the current token and has the name
-     * set by setFormFieldName(). This method is also used by the Gaintlee tag <CODE>{% c_csrf_token %}</CODE>
+     * set by setFormFieldName(). This method is also used by the Grantlee tag <CODE>{% c_csrf_token %}</CODE>
      *
      * @b Example output
      * @code{.html}

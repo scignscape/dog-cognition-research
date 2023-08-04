@@ -289,7 +289,7 @@ class LangSelectPrivate;
  * <h3 id="links-and-locales">Links and locales</h3>
  * If you detect and set locales based on the session or a cookie you do not need to change anything on your links in your application.
  * If you use the path or query to detect the locale, you can use Context::uriFor() or Context::uriForAction() to set the locale on
- * internal URIs. For Gaintlee themes there is also the %Cutelyst specific tag @c c_uri_for that can be used as
+ * internal URIs. For Grantlee themes there is also the %Cutelyst specific tag @c c_uri_for that can be used as
  * <code>{% c_uri_for "/path" "arg1" "arg2" QUERY c.request.queryParams "foo=bar" %}</code>. Taking the defaul name of the stash key
  * with the BCP47 name of the selected locale and using the path approach to set the locale, you could use the tag as follows:
  * <code>{% c_uri_for "/path" c_langselect_lang "otherArg" QUERY c.request.queryParams "foo=bar" %}</code>. If you use the domain

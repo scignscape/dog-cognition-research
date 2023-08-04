@@ -350,6 +350,32 @@ LIBS += -L$$INSTALL_ROOT_DIR/lib \
   .arg(_FRAMEWORK_ROOT_FOLDER).arg(filename).arg(fnlc)
   .arg(QT_LIBS_FOLDER ""_qt).arg(lib_file).arg(qtc_lib_file).arg(_BUILD_VIA_QTC_FOLDER);
 
+ QString grantlee_version_string = "5.3";
+
+    out << R"(
+
+## For projects using grantlee from a local installation, uncomment these lines
+#  (change the paths if needed)
+
+#FEATURE_USE_LOCAL_GRANTLEE = USE_LOCAL_GRANTLEE
+
+defined(FEATURE_USE_LOCAL_GRANTLEE ,var) {
+
+DEFINES += $${FEATURE_USE_LOCAL_GRANTLEE}
+
+GRANTLEE_VERSION_STRING = %1
+
+
+LIBS += -L$$INSTALL_ROOT_DIR/lib/cutelyst$${CUTELYST_MAJOR_VERSION}-qt$${QT_MAJOR_VERSION}-plugins/grantlee/$${GRANTLEE_VERSION_STRING} \
+  -lgrantlee-view \
+
+# current location of local grantlee -- but this might change ...
+LIBS += -L$$ROOT_DIR/-build_/grantlee/install/lib \
+  -lGrantlee_Templates
+
+}
+)"_qt.arg(grantlee_version_string);
+
     data.close();
    }
   }

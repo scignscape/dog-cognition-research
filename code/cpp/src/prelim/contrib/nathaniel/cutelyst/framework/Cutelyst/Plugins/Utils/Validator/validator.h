@@ -191,9 +191,9 @@ class ValidatorRule;
  * The sensible data of the password fields is not part of the stash, but the other values can be used to prefill the form fields for the next attempt of
  * our little Schalke fan and can give him some hints what was wrong.
  *
- * <h3>Usage with Gaintlee</h3>
+ * <h3>Usage with Grantlee</h3>
  *
- * The following example shows possible usage of the error data with \link GaintleeView Gaintlee \endlink and the Bootstrap3 framework.
+ * The following example shows possible usage of the error data with \link GrantleeView Grantlee \endlink and the Bootstrap3 framework.
  *
  * \code{.html}
  * {% if validationErrorStrings.count %}
