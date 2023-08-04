@@ -68,7 +68,7 @@ bool createController(const QString &controllerName)
 
 #include <QDebug>
 
-#include "../tsi/global-types.h"
+#include "tsi/tsi-global-types.h"
 
 bool build_tsi(const QString &filename, const QString &appName)
 {
@@ -90,30 +90,47 @@ bool build_tsi(const QString &filename, const QString &appName)
  QString _APPS_ROOT_FOLDER = APPS_ROOT_FOLDER ""_qt;
  QString _FRAMEWORK_ROOT_FOLDER = FRAMEWORK_ROOT_FOLDER ""_qt;
  QString _INSTALL_ROOT_FOLDER = INSTALL_ROOT_FOLDER ""_qt;
+ QString _BUILD_VIA_QTC_FOLDER = BUILD_VIA_QTC_FOLDER ""_qt;
 
  QString lib_file = filename;
  lib_file.replace(u'-', u'_');
  lib_file = "lib%1.so"_qt.arg(lib_file);
 
+ QString qtc_lib_file = "lib%1.so"_qt.arg(filename);
+
 
  while(ok)
  {
   {
-   // "-- --chdir /home/nlevisrael/gits/cutelyst/apps/%1/tsi/-build_/lib"
-   QString run_app_params = "--server --app-file "
-     APPS_ROOT_FOLDER "/%1/tsi/-build_/lib/%2"_qt.arg(filename).arg(lib_file);
+   QString app_params = "--server --app-file "
+     APPS_ROOT_FOLDER "/%1/tsi/-build_/lib/%2"_qt; //.arg(filename).arg(lib_file);
+
+   QString run_app_params = app_params.arg(filename).arg(lib_file);
+   QString run_app_params_qtc = app_params.arg(filename).arg(qtc_lib_file);
+
    QString generic_run_params = "${1:-h} ${@:2:$#}"_qt;
 
-   QString text = R"(# shell script to launch cutelyst generators ...
+   QString generic_text = R"(# shell script to launch cutelyst generators ...
 # note: the arguments after the cutelyst invocation will pass the -h
-# argument unless this script is called with one or more alternative parameters
+# argument unless this script is called with one or more alternative parameters)";
+
+   QString app_text = R"(# shell script to launch the cutelyst console ...)";
+
+   QString _text = R"(#=1
 #
 cd ../%1;
-LD_LIBRARY_PATH=%2/lib:\
-%3:$LD_LIBRARY_PATH \
-%2/bin/cutelyst3-qt5 #=1 ;
+LD_LIBRARY_PATH=%3:\
+%2/lib:\
+$LD_LIBRARY_PATH \
+%2/bin/%4 #=2 ;
 cd --
-)"_qt.arg(filename).arg(_INSTALL_ROOT_FOLDER).arg(QT_LIBS_FOLDER ""_qt).replace("#="_qt, "%"_qt);
+)"_qt;
+
+   QString text = _text.arg(filename).arg(_INSTALL_ROOT_FOLDER)
+     .arg(QT_LIBS_FOLDER ""_qt).arg("cutelyst3-qt5").replace("#="_qt, "%"_qt);
+
+   QString qtc_text = _text.arg(filename).arg(_BUILD_VIA_QTC_FOLDER)
+     .arg(QT_LIBS_FOLDER ""_qt).arg("cutelyst-console").replace("#="_qt, "%"_qt);
 
    {
     QFile data(qd.absoluteFilePath("run-cutelyst.sh"_qt));
@@ -121,7 +138,7 @@ cd --
     if((ok = data.open(QFile::WriteOnly)))
     {
      QTextStream out(&data);
-     out << text.arg(generic_run_params);
+     out << text.arg(generic_text).arg(generic_run_params);
 
      data.close();
      data.setPermissions(QFile::ExeOwner | QFile::ReadOwner  | QFile::WriteOwner);
@@ -136,14 +153,45 @@ cd --
     if((ok = data.open(QFile::WriteOnly)))
     {
      QTextStream out(&data);
-     out << text.arg(run_app_params);
+     out << text.arg(app_text).arg(run_app_params);
 
      data.close();
      data.setPermissions(QFile::ExeOwner | QFile::ReadOwner  | QFile::WriteOwner);
     }
     if(!ok) break;
    }
+
+   {
+    QFile data(qd.absoluteFilePath("run-cutelyst-qtc.sh"_qt));
+
+    if((ok = data.open(QFile::WriteOnly)))
+    {
+     QTextStream out(&data);
+     out << qtc_text.arg(generic_text).arg(generic_run_params);
+
+     data.close();
+     data.setPermissions(QFile::ExeOwner | QFile::ReadOwner  | QFile::WriteOwner);
+    }
+    if(!ok) break;
+   }
+
+   {
+    QFile data(qd.absoluteFilePath("run-cutelyst-app-qtc.sh"_qt));
+
+    if((ok = data.open(QFile::WriteOnly)))
+    {
+     QTextStream out(&data);
+     out << qtc_text.arg(app_text).arg(run_app_params_qtc);
+
+     data.close();
+     data.setPermissions(QFile::ExeOwner | QFile::ReadOwner  | QFile::WriteOwner);
+    }
+    if(!ok) break;
+   }
+
   }
+
+
 
   qd.mkpath("-build_"_qt);
   ok = qd.cd("-build_"_qt);
@@ -168,19 +216,34 @@ cd --
     out << R"(
 
 ## auto-generated defines:
-# INSTALL_ROOT_FOLDER: %1
+# INSTALL_ROOT_FOLDER: %1 (build via cmake) or $8 (build via Qt Creator)
 # APPS_ROOT_FOLDER: %2
 # FRAMEWORK_ROOT_FOLDER: %3
 
 # Other Notes: Overall name of project: %4
 #  Name of project (lowercase, for source file names): %5
 #  Qt libraries: %6
-#  This project's library name: %7
+#  This project's library name (for cmake-based builds): %7
 
 
-INSTALL_ROOT_DIR=%1
 APPS_ROOT_DIR=%2
 FRAMEWORK_ROOT_DIR=%3
+
+
+## comment this out to link and run against
+#  cmake-based builds of the framework
+FEATURE_ALL_VIA_QTC = ALL_VIA_QTC
+
+
+defined(FEATURE_ALL_VIA_QTC ,var) {
+
+INSTALL_ROOT_DIR=%9
+
+} else {
+
+INSTALL_ROOT_DIR=%1
+
+}
 
 DEFINES += INSTALL_ROOT_FOLDER=\\\"$${INSTALL_ROOT_DIR}\\\"
 DEFINES += APPS_ROOT_FOLDER=\\\"$${APPS_ROOT_DIR}\\\"
@@ -188,7 +251,9 @@ DEFINES += FRAMEWORK_ROOT_FOLDER=\\\"$${FRAMEWORK_ROOT_DIR}\\\"
 
 
 
-##  Paste this into the custom executable to run the server from Qt Creator ...
+###  Paste this into the custom executable to run the server from Qt Creator ...
+
+## For cmake-based builds
 # executable path:
 #   %1/bin/cutelyst3-qt5
 # command line arguments:
@@ -199,40 +264,91 @@ DEFINES += FRAMEWORK_ROOT_FOLDER=\\\"$${FRAMEWORK_ROOT_DIR}\\\"
 #   %6:%1/lib:$LD_LIBRARY_PATH
 
 
+## For "all-qtc" (Qt Creator) builds
+# executable path:
+#   %9/bin/cutelyst-console
+# command line arguments:
+#   --server --app-file %2/%4/tsi/-build_/via-qtc/%8
+# working directory:
+#   %2/%4/%4
+# add to the environment:
+#   %6:%9/lib:$LD_LIBRARY_PATH
+
+######
+
+
+defined(FEATURE_ALL_VIA_QTC ,var) {
+
+# additional make steps if needed ...
+
+APP_ROOT_DIR = $$_PRO_FILE_PWD_
+APP_ROOT_DIR ~= s!/-build_/qt.*!!
+
+DESTDIR = $${APP_ROOT_DIR}/-build_/via-qtc
+
+} else {
+
 cmake_step.commands = cd ../run-cmake/working; \
 ../run-cmake.sh; make; make copy-install
 QMAKE_EXTRA_TARGETS += cmake_step
 PRE_TARGETDEPS += cmake_step
 
-INCLUDEPATH += \
-%4 \
-$$INSTALL_ROOT_DIR/include/cutelyst3-qt5 \
+}
 
 TEMPLATE = lib
+
+
+defined(FEATURE_ALL_VIA_QTC ,var) {
+
+DEFINES += $${FEATURE_ALL_VIA_QTC}
+
+INCLUDEPATH += \
+  $${FRAMEWORK_ROOT_DIR} \
+  $${INSTALL_ROOT_DIR}/include/supplement \
+
+} else {
+
+INCLUDEPATH += \
+  $$INSTALL_ROOT_DIR/include/cutelyst3-qt5 \
+}
+
+INCLUDEPATH += \
+  %4 \
+
 
 SRC_DIR = $${APPS_ROOT_DIR}/%4/%4/src
 
 
 HEADERS += \
- $$SRC_DIR/root.h \
- $$SRC_DIR/%5.h \
+  $$SRC_DIR/root.h \
+  $$SRC_DIR/%5.h \
 
 
 SOURCES += \
- $$SRC_DIR/root.cpp \
- $$SRC_DIR/%5.cpp \
+  $$SRC_DIR/root.cpp \
+  $$SRC_DIR/%5.cpp \
 
 
 DISTFILES += \
- $$SRC_DIR/../CMakeLists.txt \
- $$SRC_DIR/CMakeLists.txt \
+  $$SRC_DIR/../CMakeLists.txt \
+  $$SRC_DIR/CMakeLists.txt \
 
 
+CUTELYST_MAJOR_VERSION = 3
+
+defined(FEATURE_ALL_VIA_QTC ,var) {
 LIBS += -L$$INSTALL_ROOT_DIR/lib \
--lCutelyst3Qt5 \
+  -lcutelyst-lib \
+
+} else {
+LIBS += -L$$INSTALL_ROOT_DIR/lib \
+  -lCutelyst$${CUTELYST_MAJOR_VERSION}Qt$${QT_MAJOR_VERSION} \
+
+}
 
 )"_qt.arg(_INSTALL_ROOT_FOLDER).arg(_APPS_ROOT_FOLDER)
-  .arg(_FRAMEWORK_ROOT_FOLDER).arg(filename).arg(fnlc).arg(QT_LIBS_FOLDER ""_qt).arg(lib_file);
+  .arg(_FRAMEWORK_ROOT_FOLDER).arg(filename).arg(fnlc)
+  .arg(QT_LIBS_FOLDER ""_qt).arg(lib_file).arg(qtc_lib_file).arg(_BUILD_VIA_QTC_FOLDER);
 
     data.close();
    }
@@ -676,7 +792,7 @@ bool createApplication(const QString &name)
  return true;
 }
 
-#include "../tsi/global-types.h"
+//#include "../tsi-global-types.h"
 
 
 int main(int argc, char *argv[])

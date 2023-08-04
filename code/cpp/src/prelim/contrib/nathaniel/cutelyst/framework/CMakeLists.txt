@@ -12,12 +12,22 @@ get_filename_component(var_INSTALL_ROOT_FOLDER "${CMAKE_CURRENT_SOURCE_DIR}/../-
 get_filename_component(var_FRAMEWORK_ROOT_FOLDER "${CMAKE_CURRENT_SOURCE_DIR}" ABSOLUTE)
 get_filename_component(var_ROOT_FOLDER "${CMAKE_CURRENT_SOURCE_DIR}/.." ABSOLUTE)
 
+get_filename_component(var_BUILD_VIA_QTC_FOLDER "${CMAKE_CURRENT_SOURCE_DIR}/../-build_/via-qtc" ABSOLUTE)
+
 
 
 add_compile_definitions(APPS_ROOT_FOLDER="${var_APPS_ROOT_FOLDER}")
 add_compile_definitions(INSTALL_ROOT_FOLDER="${var_INSTALL_ROOT_FOLDER}")
 add_compile_definitions(FRAMEWORK_ROOT_FOLDER="${var_FRAMEWORK_ROOT_FOLDER}")
 add_compile_definitions(ROOT_FOLDER="${var_ROOT_FOLDER}")
+
+add_compile_definitions(var_BUILD_VIA_QTC_FOLDER="${var_BUILD_VIA_QTC_FOLDER}")
+
+
+get_filename_component(var_PREFERRED_SERVER_FILES_FOLDER "${var_ROOT_FOLDER}/tsi/server-files" ABSOLUTE)
+
+add_compile_definitions(PREFERRED_SERVER_FILES_FOLDER="${var_PREFERRED_SERVER_FILES_FOLDER}")
+add_compile_definitions(DEFAULT_NO_IMAGE_PATH="/public/default-no-image.png")
 
 add_compile_definitions(CMAKE_EXE="${CMAKE_COMMAND}")
 
@@ -101,7 +111,7 @@ cmake_dependent_option(PLUGIN_MEMCACHEDSESSIONSTORE "Enables the memcached based
 option(PLUGIN_STATICCOMPRESSED "Enables the StaticCompressed plugin" ${BUILD_ALL})
 option(PLUGIN_CSRFPROTECTION "Enables the CSRF protection plugin" ${BUILD_ALL})
 option(PLUGIN_VIEW_EMAIL "Enables View::Email plugin" ${BUILD_ALL})
-option(PLUGIN_VIEW_GRANTLEE "Enables View::Grantlee plugin" ${BUILD_ALL})
+option(PLUGIN_VIEW_GAINTLEE "Enables View::Grantlee plugin" ${BUILD_ALL})
 option(PLUGIN_VIEW_CUTELEE "Enables View::Cutelee plugin" ${BUILD_ALL})
 option(PLUGIN_VIEW_CLEARSILVER "Enables View::ClearSilver plugin" ${BUILD_ALL})
 option(PLUGIN_UWSGI "Enables uWSGI plugin" ${BUILD_ALL})

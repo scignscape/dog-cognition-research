@@ -545,6 +545,31 @@ SOURCES += \
    $${FRAMEWORK_ROOT_DIR}/cmd/main.cpp \
 
 
+SOURCES += \
+   $${FRAMEWORK_ROOT_DIR}/Cutelyst/tsi/chasm-view.cpp \
+   $${FRAMEWORK_ROOT_DIR}/Cutelyst/tsi/tsi-resource-info.cpp \
+   $${FRAMEWORK_ROOT_DIR}/Cutelyst/tsi/response/tsi-server-response.cpp \
+   $${FRAMEWORK_ROOT_DIR}/Cutelyst/tsi/response/raw-file/tsi-raw-file-server-response.cpp \
+
+
+HEADERS += \
+  $${FRAMEWORK_ROOT_DIR}/Cutelyst/tsi/tsi-preproc-concat.h \
+  $${FRAMEWORK_ROOT_DIR}/Cutelyst/tsi/tsi-accessors.h \
+  $${FRAMEWORK_ROOT_DIR}/Cutelyst/tsi/tsi-global-types.h \
+  $${FRAMEWORK_ROOT_DIR}/Cutelyst/tsi/tsi-resource-info.h \
+  $${FRAMEWORK_ROOT_DIR}/Cutelyst/tsi/chasm-view.h \
+  $${FRAMEWORK_ROOT_DIR}/Cutelyst/tsi/chasm-view_p.h \
+  $${FRAMEWORK_ROOT_DIR}/Cutelyst/tsi/chasm-macros.h \
+  $${FRAMEWORK_ROOT_DIR}/Cutelyst/tsi/response/tsi-server-response.h \
+  $${FRAMEWORK_ROOT_DIR}/Cutelyst/tsi/response/raw-file/tsi-raw-file-server-response.h \
+
+
+PREFERRED_SERVER_FILES_DIR=$${ROOT_DIR}/tsi/server-files
+
+DEFINES += PREFERRED_SERVER_FILES_FOLDER=\\\"$${PREFERRED_SERVER_FILES_DIR}\\\"
+DEFINES += DEFAULT_NO_IMAGE_PATH=\\\"/public/default-no-image.png\\\"
+
+
 QT += sql
 
 LIBS += -lmemcached -lpwquality -lGrantlee_Templates

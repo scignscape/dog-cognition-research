@@ -7,7 +7,31 @@
 #include "context.h"
 #include "controller.h"
 
+
+//#include "../tsi/global-types.h"
+
+//#define INC_OK
+//#include "chasm-view.cpp"
+//#undef INC_OK
+
+//CHASM_NAMESPACE_
+
+
+//QString test_string()
+//{
+// return "test_string ok ..."_qt;
+//}
+
+//_CHASM_NAMESPACE
+
+
+//QString chasm_test_str()
+//{
+// return "chasm test_str ok ..."_qt;
+//}
+
 using namespace Cutelyst;
+
 
 Action::Action(QObject *parent)
     : Component(new ActionPrivate, parent)

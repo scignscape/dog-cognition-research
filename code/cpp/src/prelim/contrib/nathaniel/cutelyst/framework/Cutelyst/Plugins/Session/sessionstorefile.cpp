@@ -14,7 +14,6 @@
 #include <QLockFile>
 #include <QLoggingCategory>
 
-#include "../tsi/global-types.h"
 
 using namespace Cutelyst;
 

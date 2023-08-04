@@ -1,10 +1,10 @@
-if (PLUGIN_VIEW_GRANTLEE)
+if (PLUGIN_VIEW_GAINTLEE)
     find_package(Grantlee5 REQUIRED)
     message(STATUS "PLUGIN: View::Grantlee, enabled.")
     add_subdirectory(Grantlee)
 else ()
     message(STATUS "PLUGIN: View::Grantlee, disabled.")
-endif (PLUGIN_VIEW_GRANTLEE)
+endif (PLUGIN_VIEW_GAINTLEE)
 
 if (PLUGIN_VIEW_CUTELEE)
     find_package(Cutelee6Qt${QT_VERSION_MAJOR} REQUIRED)

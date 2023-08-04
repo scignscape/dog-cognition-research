@@ -12,6 +12,7 @@
 #include <QtCore/QMetaMethod>
 #include <QtCore/QStringList>
 
+
 namespace Cutelyst {
 
 class Controller;
@@ -40,6 +41,7 @@ public:
      */
     explicit Action(QObject *parent = nullptr);
     virtual ~Action() override = default;
+
 
     virtual Modifiers modifiers() const override;
 

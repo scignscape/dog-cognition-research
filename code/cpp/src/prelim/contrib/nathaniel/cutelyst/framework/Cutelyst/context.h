@@ -15,6 +15,8 @@
 #include <QtCore/QUrl>
 #include <QtCore/QVariant>
 
+class TSI_Server_Response;
+
 namespace Cutelyst {
 
 class Action;
@@ -28,6 +30,9 @@ class View;
 class Stats;
 class Plugin;
 class ContextPrivate;
+
+
+
 
 /*! \class Context context.h Cutelyst/Context
  * @brief The %Cutelyst %Context
@@ -56,6 +61,10 @@ public:
      */
     Context(Application *app);
     virtual ~Context();
+
+    // // tsi ...
+    void check_tsi_path(EngineRequest* request);
+    TSI_Server_Response& get_tsi_server_response();
 
     /*!
      * Returns true if an error was set.

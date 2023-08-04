@@ -4,7 +4,7 @@
 
 #include "books.h"
 
-#include "Cutelyst/Plugins/View/Grantlee/grantleeview.h"
+#include "Cutelyst/Plugins/View/Gaintlee/gaintleeview.h"
 
 
 using namespace Cutelyst;
@@ -24,7 +24,7 @@ bool demo_tutorial::init()
  new Books(this);
 
 
- auto view = new GrantleeView(this);
+ auto view = new GaintleeView(this);
  view->setIncludePaths({ pathTo("root/src") });
 
  return true;

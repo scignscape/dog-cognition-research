@@ -8,25 +8,27 @@
 #include <Cutelyst/ParamsMultiMap>
 #include <Cutelyst/Request>
 #include <Cutelyst/Response>
-#include <grantlee/exception.h>
-#include <grantlee/parser.h>
+
+#include <gaintlee/exception.h>
+#include <gaintlee/parser.h>
+
 
 #ifdef PLUGIN_CSRFPROTECTION_ENABLED
 #    include <Cutelyst/Plugins/CSRFProtection/CSRFProtection>
 #endif
 
-Grantlee::Node *CSRFTag::getNode(const QString &tagContent, Grantlee::Parser *p) const
+Gaintlee::Node *CSRFTag::getNode(const QString &tagContent, Gaintlee::Parser *p) const
 {
     Q_UNUSED(tagContent);
     return new CSRF(p);
 }
 
-CSRF::CSRF(Grantlee::Parser *parser)
-    : Grantlee::Node(parser)
+CSRF::CSRF(Gaintlee::Parser *parser)
+    : Gaintlee::Node(parser)
 {
 }
 
-void CSRF::render(Grantlee::OutputStream *stream, Grantlee::Context *gc) const
+void CSRF::render(Gaintlee::OutputStream *stream, Gaintlee::Context *gc) const
 {
 #ifdef PLUGIN_CSRFPROTECTION_ENABLED
     // In case cutelyst context is not set as "c"

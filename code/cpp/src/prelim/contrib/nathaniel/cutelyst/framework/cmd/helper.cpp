@@ -50,4 +50,9 @@ QString Helper::findApplication(const QDir &projectDir)
     return QString();
 }
 
+
+#ifndef HIDE_MOC_INCLUDES
 #include "moc_helper.cpp"
+#endif
+
+

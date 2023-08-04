@@ -21,12 +21,12 @@ void Books::list(Context* c)
     // the various components that make up the application
 
     // Retrieve all of the book records as book model objects and store in the
-    // stash where they can be accessed by the Grantlee template
+    // stash where they can be accessed by the Gaintlee template
     // c->setStash("books", sql result);
     // But, for now, use this code until we create the model later
     c->setStash("books", "");
 
-    // Set the Grantlee template to use. You will almost always want to do this
+    // Set the Gaintlee template to use. You will almost always want to do this
     // in your action methods (action methods respond to user input in
     // your controllers).
     c->setStash("template", "books/list.html");

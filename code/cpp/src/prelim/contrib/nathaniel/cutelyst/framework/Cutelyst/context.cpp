@@ -46,6 +46,38 @@ Context::~Context()
     delete d_ptr;
 }
 
+#include "tsi/response/tsi-server-response.h"
+// // tsi ...
+
+
+TSI_Server_Response& Context::get_tsi_server_response()
+{
+ Q_D(Context);
+
+ return d->tsi_server_response_;
+}
+
+
+void Context::check_tsi_path(EngineRequest* request)
+{
+ // //  tsi needs to modify its server response ...
+ // Q_D(const Context);
+
+ Q_D(Context);
+
+ QString request_path = request->path;
+
+ TSI_Server_Response& tsr = d->tsi_server_response_;
+ QString new_request_path = tsr.init_from_request_path(request_path);
+
+ if(new_request_path.isEmpty())
+   return;
+
+ request->setPath(new_request_path);
+}
+
+
+
 bool Context::error() const noexcept
 {
     Q_D(const Context);

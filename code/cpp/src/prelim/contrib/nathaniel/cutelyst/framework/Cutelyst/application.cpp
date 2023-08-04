@@ -147,7 +147,12 @@ Component *Application::createComponentPlugin(const QString &name, QObject *pare
         }
     }
 
+#ifdef ALL_VIA_QTC
+    const QByteArrayList dirs = QByteArrayList{QByteArrayLiteral(CUTELYST_PLUGINS_DIR)};
+#else
     const QByteArrayList dirs = QByteArrayList{QByteArrayLiteral(CUTELYST_PLUGINS_DIR)} + qgetenv("CUTELYST_PLUGINS_DIR").split(';');
+#endif
+
     for (const QByteArray &dir : dirs) {
         Component *component = d->createComponentPlugin(name, parent, QString::fromLocal8Bit(dir));
         if (component) {
@@ -354,7 +359,7 @@ bool Application::setup(Engine *engine)
     return false;
 }
 
-void Application::handleRequest(EngineRequest *request)
+void Application::handleRequest(EngineRequest* request)
 {
     Q_D(Application);
 
@@ -367,6 +372,8 @@ void Application::handleRequest(EngineRequest *request)
     priv->engineRequest = request;
     priv->response      = new Response(d->headers, request);
     priv->request       = new Request(request);
+
+    c->check_tsi_path(request);
 
     if (d->useStats) {
         priv->stats = new Stats(request);
@@ -385,6 +392,7 @@ void Application::handleRequest(EngineRequest *request)
         d->dispatcher->prepareAction(c);
 
         Q_EMIT beforeDispatch(c);
+
 
         d->dispatcher->dispatch(c);
 

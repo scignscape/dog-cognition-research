@@ -1,6 +1,13 @@
 configure_file(cutelyst_global.h.in cutelyst_global.h @ONLY)
 
 set(cutelystqt_SRC
+
+ # tsi ...
+ tsi/chasm-view.cpp
+ tsi/response/tsi-server-response.cpp
+ tsi/response/raw-file/tsi-raw-file-server-response.cpp
+ tsi/tsi-resource-info.cpp
+
     utils.cpp
     upload.cpp
     upload_p.h
@@ -51,7 +58,35 @@ if (${QT_VERSION} VERSION_LESS "6.1.0")
     )
 endif (${QT_VERSION} VERSION_LESS "6.1.0")
 
+# tsi ...
+set(tsi_HEADERS
+
+ tsi/tsi-accessors.h
+ tsi/tsi-preproc-concat.h
+ tsi/tsi-global-types.h
+ tsi/tsi-resource-info.h
+ tsi/response/tsi-server-response.h
+ tsi/response/raw-file/tsi-raw-file-server-response.h
+
+ tsi/chasm-view.h
+ tsi/chasm-view_p.h
+ tsi/chasm-macros.h
+)
+
+set(tsi_response_HEADERS
+
+ tsi/response/tsi-server-response.h
+)
+
+set(tsi_response_raw_file_HEADERS
+
+ tsi/response/raw-file/tsi-raw-file-server-response.h
+)
+
+##
+
 set(cutelystqt_HEADERS
+
     paramsmultimap.h
     ParamsMultiMap
     action.h
@@ -146,12 +181,25 @@ target_link_libraries(Cutelyst${PROJECT_VERSION_MAJOR}Qt${QT_VERSION_MAJOR}
 )
 
 set_property(TARGET Cutelyst${PROJECT_VERSION_MAJOR}Qt${QT_VERSION_MAJOR} PROPERTY PUBLIC_HEADER ${cutelystqt_HEADERS})
+
+
 install(TARGETS Cutelyst${PROJECT_VERSION_MAJOR}Qt${QT_VERSION_MAJOR}
     EXPORT CutelystTargets DESTINATION ${CMAKE_INSTALL_LIBDIR}
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR} COMPONENT runtime
     ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR} COMPONENT devel
     PUBLIC_HEADER DESTINATION include/cutelyst${PROJECT_VERSION_MAJOR}-qt${QT_VERSION_MAJOR}/Cutelyst COMPONENT devel
 )
+
+install(FILES ${tsi_HEADERS} DESTINATION 
+  include/cutelyst${PROJECT_VERSION_MAJOR}-qt${QT_VERSION_MAJOR}/Cutelyst/tsi)
+
+install(FILES ${tsi_response_HEADERS} DESTINATION
+  include/cutelyst${PROJECT_VERSION_MAJOR}-qt${QT_VERSION_MAJOR}/Cutelyst/tsi/response)
+
+install(FILES ${tsi_response_raw_file_HEADERS} DESTINATION
+  include/cutelyst${PROJECT_VERSION_MAJOR}-qt${QT_VERSION_MAJOR}/Cutelyst/tsi/response/raw-file)
+
+
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/cutelyst_global.h
         DESTINATION include/cutelyst${PROJECT_VERSION_MAJOR}-qt${QT_VERSION_MAJOR}/Cutelyst
 )

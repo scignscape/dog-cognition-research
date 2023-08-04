@@ -154,6 +154,7 @@ void Dispatcher::prepareAction(Context *c)
     Q_D(Dispatcher);
 
     Request *request = c->request();
+
     d->prepareAction(c, request->path());
 
     static const auto &log = CUTELYST_DISPATCHER();
@@ -166,11 +167,13 @@ void Dispatcher::prepareAction(Context *c)
             qCDebug(log) << "Arguments are" << request->args().join(QLatin1Char('/'));
         }
     }
+
 }
 
 void DispatcherPrivate::prepareAction(Context *c, const QString &requestPath) const
 {
     QString path = normalizePath(requestPath);
+
     QStringList args;
 
     //  "foo/bar"
@@ -181,10 +184,12 @@ void DispatcherPrivate::prepareAction(Context *c, const QString &requestPath) co
     {
         // Check out the dispatch types to see if any
         // will handle the path at this level
-        for (DispatchType *type : dispatchers) {
-            if (type->match(c, path, args) == DispatchType::ExactMatch) {
-                return;
-            }
+        for (DispatchType *type : dispatchers)
+        {
+         if (type->match(c, path, args) == DispatchType::ExactMatch)
+         {
+          return;
+         }
         }
 
         // leave the loop if we are at the root "/"

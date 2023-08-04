@@ -11,6 +11,9 @@
 #include "request_p.h"
 #include "response.h"
 
+// // tsi ...
+#include "tsi/response/tsi-server-response.h"
+
 #include <QStack>
 #include <QVariantHash>
 
@@ -45,6 +48,9 @@ public:
 
     // Pointer to Engine data
     EngineRequest *engineRequest = nullptr;
+
+    TSI_Server_Response tsi_server_response_;
+
 
     Request *request    = nullptr;
     Response *response  = nullptr;

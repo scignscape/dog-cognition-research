@@ -2,8 +2,8 @@
  * SPDX-FileCopyrightText: (C) 2013-2022 Daniel Nicoletti <dantti12@gmail.com>
  * SPDX-License-Identifier: BSD-3-Clause
  */
-#ifndef GRANTLEE_VIEW_H
-#define GRANTLEE_VIEW_H
+#ifndef GAINTLEE_VIEW_H
+#define GAINTLEE_VIEW_H
 
 #include <Cutelyst/View>
 
@@ -14,33 +14,33 @@
 
 class QTranslator;
 
-namespace Grantlee {
+namespace Gaintlee {
 class Engine;
 }
 
 namespace Cutelyst {
 
-class GrantleeViewPrivate;
+class GaintleeViewPrivate;
 /**
- * GrantleeView is a Cutelyst::View handler that renders templates
- * using Grantlee engine.
+ * GaintleeView is a Cutelyst::View handler that renders templates
+ * using Gaintlee engine.
  *
- * This View also exports a Grantlee tag for dealing with
+ * This View also exports a Gaintlee tag for dealing with
  * Cutelyst::Context::uriFor():
  *
  * {% c_uri_for "/path" "arg1" "arg2" QUERY "foo=bar" c.req.queryParams %}
  *
  * Where only the path is required, and QUERY keyword must preceed query parameters
  */
-class CUTELYST_VIEW_GRANTLEE_EXPORT GrantleeView final : public View
+class CUTELYST_VIEW_GAINTLEE_EXPORT GaintleeView final : public View
 {
     Q_OBJECT
-    Q_DECLARE_PRIVATE(GrantleeView)
+    Q_DECLARE_PRIVATE(GaintleeView)
 public:
     /*!
-     * Constructs a GrantleeView object with the given parent and name.
+     * Constructs a GaintleeView object with the given parent and name.
      */
-    explicit GrantleeView(QObject *parent = nullptr, const QString &name = QString());
+    explicit GaintleeView(QObject *parent = nullptr, const QString &name = QString());
 
     Q_PROPERTY(QStringList includePaths READ includePaths WRITE setIncludePaths NOTIFY changed)
     /*!
@@ -90,9 +90,9 @@ public:
     void setCache(bool enable);
 
     /**
-     * Returns the Grantlee::Engine pointer that is used by this engine.
+     * Returns the Gaintlee::Engine pointer that is used by this engine.
      */
-    Grantlee::Engine *engine() const;
+    Gaintlee::Engine *engine() const;
 
     /**
      * When called cache is set to true and templates are loaded.
@@ -110,7 +110,7 @@ public:
      * {
      *      // ...
      *
-     *      auto view = new GrantleeView(this);
+     *      auto view = new GaintleeView(this);
      *
      *      auto deDeTrans = new QTranslator(this);
      *      if (deDeTrans->load(QStringLiteral("de_DE"), QStringLiteral("/path/to/my/translations")) {
@@ -149,7 +149,7 @@ public:
      * Dynamically adds translation \a catalog at \a path to the translator.
      *
      * Translation catalogs can be used to dynamically integrate translations into the
-     * GrantleeView, for example for plugins and themes. The \a catalog could be the name
+     * GaintleeView, for example for plugins and themes. The \a catalog could be the name
      * of an extension for example that is loaded from a locale specifc directory under \a path.
      *
      * The catalog will be loaded in the following way: /path/locale/catalog, for example
@@ -164,7 +164,7 @@ public:
      * {
      *      // ...
      *
-     *      auto view = new GrantleeView(this);
+     *      auto view = new GaintleeView(this);
      *      view->addTranslationCatalog(QStringLiteral("/usr/share/mycutelystapp/l10n"), QStringLiteral("fancytheme"));
      *
      *      // ...
@@ -194,11 +194,11 @@ public:
      * @li @c /usr/share/myapp/translations/mytemplate_pt_BR.qm
      * @li @c ...
      *
-     * You can then use loadTranslationsFromDir() on your registered GrantleeView object as follows:
+     * You can then use loadTranslationsFromDir() on your registered GaintleeView object as follows:
      * @code{.cpp}
      * bool MyApp::init()
      * {
-     *      auto view = new GrantleeView(this);
+     *      auto view = new GaintleeView(this);
      *      view->loadTranslationsFromDir(QStringLiteral("mytemplate"), QStringLiteral("/usr/share/myapp/translations"), QStringLiteral("_"));
      * }
      * @endcode
@@ -218,4 +218,4 @@ Q_SIGNALS:
 
 } // namespace Cutelyst
 
-#endif // GRANTLEE_VIEW_H
+#endif // GAINTLEE_VIEW_H

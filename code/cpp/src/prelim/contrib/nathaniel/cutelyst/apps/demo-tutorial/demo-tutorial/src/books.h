@@ -18,6 +18,9 @@ public:
  C_ATTR(list, :Local)
  void list(Context* c);
 
+ C_ATTR(ok, :Local)
+ void ok(Context* c);
+
 };
 
 #endif //BOOKS__H
