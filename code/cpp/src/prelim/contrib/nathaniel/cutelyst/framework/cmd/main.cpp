@@ -98,6 +98,11 @@ bool build_tsi(const QString &filename, const QString &appName)
 
  QString qtc_lib_file = "lib%1.so"_qt.arg(filename);
 
+ QString cutelyst_qt_version_string = "cutelyst%1-qt%2"_qt
+   .arg(CUTELYST_VERSION_MAJOR).arg(QT_VERSION_MAJOR);
+
+ QString cutelyst_qt_version_string_ucfirst = "Cutelyst%1Qt%2"_qt
+   .arg(CUTELYST_VERSION_MAJOR).arg(QT_VERSION_MAJOR);
 
  while(ok)
  {
@@ -127,7 +132,7 @@ cd --
 )"_qt;
 
    QString text = _text.arg(filename).arg(_INSTALL_ROOT_FOLDER)
-     .arg(QT_LIBS_FOLDER ""_qt).arg("cutelyst3-qt5").replace("#="_qt, "%"_qt);
+     .arg(QT_LIBS_FOLDER ""_qt).arg(cutelyst_qt_version_string).replace("#="_qt, "%"_qt);
 
    QString qtc_text = _text.arg(filename).arg(_BUILD_VIA_QTC_FOLDER)
      .arg(QT_LIBS_FOLDER ""_qt).arg("cutelyst-console").replace("#="_qt, "%"_qt);
@@ -216,7 +221,8 @@ cd --
     out << R"(
 
 ## auto-generated defines:
-# INSTALL_ROOT_FOLDER: %1 (build via cmake) or $8 (build via Qt Creator)
+# INSTALL_ROOT_FOLDER: %1 (build via cmake)
+#  or %9 (build via Qt Creator)
 # APPS_ROOT_FOLDER: %2
 # FRAMEWORK_ROOT_FOLDER: %3
 
@@ -255,7 +261,7 @@ DEFINES += FRAMEWORK_ROOT_FOLDER=\\\"$${FRAMEWORK_ROOT_DIR}\\\"
 
 ## For cmake-based builds
 # executable path:
-#   %1/bin/cutelyst3-qt5
+#   %1/bin/%8
 # command line arguments:
 #   --server --app-file %2/%4/tsi/-build_/lib/%7
 # working directory:
@@ -263,16 +269,23 @@ DEFINES += FRAMEWORK_ROOT_FOLDER=\\\"$${FRAMEWORK_ROOT_DIR}\\\"
 # add to the environment:
 #   %6:%1/lib:$LD_LIBRARY_PATH
 
+)"_qt.arg(_INSTALL_ROOT_FOLDER).arg(_APPS_ROOT_FOLDER)
+           .arg(_FRAMEWORK_ROOT_FOLDER).arg(filename).arg(fnlc)
+           .arg(QT_LIBS_FOLDER ""_qt).arg(lib_file)
+           .arg(cutelyst_qt_version_string)
+           .arg(_BUILD_VIA_QTC_FOLDER);
 
+
+    out << R"(
 ## For "all-qtc" (Qt Creator) builds
 # executable path:
-#   %9/bin/cutelyst-console
+#   %7/bin/cutelyst-console
 # command line arguments:
 #   --server --app-file %2/%4/tsi/-build_/via-qtc/%8
 # working directory:
 #   %2/%4/%4
 # add to the environment:
-#   %6:%9/lib:$LD_LIBRARY_PATH
+#   %6:%7/lib:$LD_LIBRARY_PATH
 
 ######
 
@@ -309,7 +322,7 @@ INCLUDEPATH += \
 } else {
 
 INCLUDEPATH += \
-  $$INSTALL_ROOT_DIR/include/cutelyst3-qt5 \
+  $$INSTALL_ROOT_DIR/include/%1 \
 }
 
 INCLUDEPATH += \
@@ -334,7 +347,7 @@ DISTFILES += \
   $$SRC_DIR/CMakeLists.txt \
 
 
-CUTELYST_MAJOR_VERSION = 3
+CUTELYST_MAJOR_VERSION = %3
 
 defined(FEATURE_ALL_VIA_QTC ,var) {
 LIBS += -L$$INSTALL_ROOT_DIR/lib \
@@ -344,11 +357,14 @@ LIBS += -L$$INSTALL_ROOT_DIR/lib \
 LIBS += -L$$INSTALL_ROOT_DIR/lib \
   -lCutelyst$${CUTELYST_MAJOR_VERSION}Qt$${QT_MAJOR_VERSION} \
 
+# note: currently this would be %9
 }
 
-)"_qt.arg(_INSTALL_ROOT_FOLDER).arg(_APPS_ROOT_FOLDER)
-  .arg(_FRAMEWORK_ROOT_FOLDER).arg(filename).arg(fnlc)
-  .arg(QT_LIBS_FOLDER ""_qt).arg(lib_file).arg(qtc_lib_file).arg(_BUILD_VIA_QTC_FOLDER);
+)"_qt.arg(cutelyst_qt_version_string).arg(_APPS_ROOT_FOLDER)
+  .arg(CUTELYST_VERSION_MAJOR)
+  .arg(filename).arg(fnlc)
+  .arg(QT_LIBS_FOLDER ""_qt).arg(_BUILD_VIA_QTC_FOLDER)
+  .arg(qtc_lib_file).arg(cutelyst_qt_version_string_ucfirst);
 
  QString grantlee_version_string = "5.3";
 
@@ -373,9 +389,18 @@ LIBS += -L$$INSTALL_ROOT_DIR/lib/cutelyst$${CUTELYST_MAJOR_VERSION}-qt$${QT_MAJO
 LIBS += -L$$ROOT_DIR/-build_/grantlee/install/lib \
   -lGrantlee_Templates
 
-}
-)"_qt.arg(grantlee_version_string);
 
+## For the Qt Creator configuration, add to the LD_LIBRARY_PATH environment:
+#  %2/lib/cutelyst%3-qt%4-plugins/grantlee/%1
+#  %5/-build_/grantlee/install/lib
+
+#  With a build via cmake, replace the first line with
+#  %6/lib/cutelyst%3-qt%4-plugins/grantlee/%1
+
+}
+)"_qt.arg(grantlee_version_string).arg(_BUILD_VIA_QTC_FOLDER)
+     .arg(CUTELYST_VERSION_MAJOR).arg(QT_VERSION_MAJOR).arg(_ROOT_FOLDER)
+     .arg(_INSTALL_ROOT_FOLDER);
     data.close();
    }
   }
