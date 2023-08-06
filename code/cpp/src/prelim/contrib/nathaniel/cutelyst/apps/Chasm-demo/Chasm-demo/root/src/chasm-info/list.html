@@ -1,0 +1,16 @@
+
+{% comment %}This is a Grantlee comment.{% endcomment %}
+
+{% comment %}Some basic HTML with a loop to display ...{% endcomment %}
+<table>
+<tr><th>Code</th><th>Status</th><th>Path</th></tr>
+{% comment %}Display each book in a table row{% endcomment %}
+{% for ci in chasm_info %}
+  <tr>
+    <td>{{ ci.code }}</td>
+    <td>{{ ci.status }}</td>
+    <td>{{ ci.path }}</td>
+  </tr>
+{% endfor %}
+</table>
+

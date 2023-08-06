@@ -6,8 +6,8 @@
 # APPS_ROOT_FOLDER: /home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/nathaniel/cutelyst/apps
 # FRAMEWORK_ROOT_FOLDER: /home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/nathaniel/cutelyst/framework
 
-# Other Notes: Overall name of project: Chasm-app
-#  Name of project (lowercase, for source file names): chasm-app
+# Other Notes: Overall name of project: Chasm-demo
+#  Name of project (lowercase, for source file names): chasm-demo
 #  Qt libraries: /home/nlevisrael/Qt/5.15.2/gcc_64/lib
 #  This project's library name (for cmake-based builds): libChasm_demo.so
 
@@ -50,9 +50,9 @@ DEFINES += FRAMEWORK_ROOT_FOLDER=\\\"$${FRAMEWORK_ROOT_DIR}\\\"
 # executable path:
 #   /home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/nathaniel/cutelyst/-build_/install/bin/cutelyst3-qt5
 # command line arguments:
-#   --server --app-file /home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/nathaniel/cutelyst/apps/Chasm-app/tsi/-build_/lib/libChasm_demo.so
+#   --server --app-file /home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/nathaniel/cutelyst/apps/Chasm-demo/tsi/-build_/lib/libChasm_demo.so
 # working directory:
-#   /home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/nathaniel/cutelyst/apps/Chasm-app/Chasm-app
+#   /home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/nathaniel/cutelyst/apps/Chasm-demo/Chasm-demo
 # add to the environment:
 #   /home/nlevisrael/Qt/5.15.2/gcc_64/lib:/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/nathaniel/cutelyst/-build_/install/lib:$LD_LIBRARY_PATH
 
@@ -61,9 +61,9 @@ DEFINES += FRAMEWORK_ROOT_FOLDER=\\\"$${FRAMEWORK_ROOT_DIR}\\\"
 # executable path:
 #   /home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/nathaniel/cutelyst/-build_/via-qtc/bin/cutelyst-console
 # command line arguments:
-#   --server --app-file /home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/nathaniel/cutelyst/apps/Chasm-app/tsi/-build_/via-qtc/libChasm-app.so
+#   --server --app-file /home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/nathaniel/cutelyst/apps/Chasm-demo/tsi/-build_/via-qtc/libChasm-demo.so
 # working directory:
-#   /home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/nathaniel/cutelyst/apps/Chasm-app/Chasm-app
+#   /home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/nathaniel/cutelyst/apps/Chasm-demo/Chasm-demo
 # add to the environment:
 #   /home/nlevisrael/Qt/5.15.2/gcc_64/lib:/home/nlevisrael/gits/dcr-wip/ar/code/cpp/src/prelim/contrib/nathaniel/cutelyst/-build_/via-qtc/lib:$LD_LIBRARY_PATH
 
@@ -106,23 +106,23 @@ INCLUDEPATH += \
 }
 
 INCLUDEPATH += \
-  Chasm-app \
+  Chasm-demo \
 
 
-SRC_DIR = $${APPS_ROOT_DIR}/Chasm-app/Chasm-app/src
+SRC_DIR = $${APPS_ROOT_DIR}/Chasm-demo/Chasm-demo/src
 
 
 HEADERS += \
   $$SRC_DIR/root.h \
   $$SRC_DIR/chasm-info.h \
-  $$SRC_DIR/chasm-app.h \
+  $$SRC_DIR/chasm-demo.h \
   $$SRC_DIR/test-controller.h \
 
 
 SOURCES += \
   $$SRC_DIR/root.cpp \
   $$SRC_DIR/chasm-info.cpp \
-  $$SRC_DIR/chasm-app.cpp \
+  $$SRC_DIR/chasm-demo.cpp \
   $$SRC_DIR/test-controller.cpp \
 
 

@@ -12,6 +12,16 @@
 #include <QtCore/QVariant>
 #include <QtCore/QVector>
 
+
+#ifdef _including_from_app_
+
+#ifndef NO_NAMESPACE_CLASS_DEF
+#define namespace_class(n,c) namespace n { class c; }
+#endif
+
+#endif
+
+
 class QTranslator;
 
 namespace Cutelyst {

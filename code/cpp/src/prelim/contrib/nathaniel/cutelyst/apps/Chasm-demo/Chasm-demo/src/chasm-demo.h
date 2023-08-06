@@ -1,6 +1,5 @@
-
-#ifndef CHASM_APP__H
-#define CHASM_APP__H
+#ifndef CHASM_DEMO__H
+#define CHASM_DEMO__H
 
 
          #define _including_from_app_
@@ -19,7 +18,7 @@ namespace_class(Chasm::TSI ,Chasm_View)
 USING_CHASM_NAMESPACE
 
 
-class Chasm_app : public Application
+class Chasm_demo : public Application
 {
  Q_OBJECT
  CUTELYST_APPLICATION(IID "Chasm_app")
@@ -31,11 +30,11 @@ class Chasm_app : public Application
 public:
 
 
- Q_INVOKABLE explicit Chasm_app(QObject *parent = nullptr);
- ~Chasm_app();
+ Q_INVOKABLE explicit Chasm_demo(QObject *parent = nullptr);
+ ~Chasm_demo();
 
  bool init();
 };
 
-#endif //CHASM_APP__H
+#endif //CHASM_DEMO__H
 

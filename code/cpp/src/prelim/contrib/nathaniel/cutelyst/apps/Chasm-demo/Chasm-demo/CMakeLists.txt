@@ -1,4 +1,4 @@
-project(Chasm_app)
+project(Chasm_demo)
 
 cmake_minimum_required(VERSION 3.16 FATAL_ERROR)
 
@@ -26,5 +26,3 @@ add_subdirectory(src)
 # tsi specific targets, acting like a "make install" ...
 add_custom_target(copy-install ../copy-lib.sh)
 add_custom_target(c-i make copy-install)
-
-

@@ -251,6 +251,13 @@ INSTALL_ROOT_DIR=%1
 
 }
 
+
+## comment this out to prevent Cutelyst/Application
+#  from defining the "namespace_class" macro
+   # (see application.h line 18 ...
+# DEFINES += NO_NAMESPACE_CLASS_DEF
+
+
 DEFINES += INSTALL_ROOT_FOLDER=\\\"$${INSTALL_ROOT_DIR}\\\"
 DEFINES += APPS_ROOT_FOLDER=\\\"$${APPS_ROOT_DIR}\\\"
 DEFINES += FRAMEWORK_ROOT_FOLDER=\\\"$${FRAMEWORK_ROOT_DIR}\\\"
@@ -545,9 +552,14 @@ bool buildApplicationHeader(const QString &filename, const QString &appName)
   out << "#ifndef " << appName.toUpper() << HEADER_EXT_STRING << "\n";
   out << "#define " << appName.toUpper() << HEADER_EXT_STRING << "\n";
   out << "\n";
+  out << "\n";
+  out << "         #define _including_from_app_\n";
   out << "#include <Cutelyst/Application>" << "\n";
+  out << "         #undef _including_from_app_\n";
+  out << "\n";
   out << "\n";
   out << "using namespace Cutelyst;" << "\n";
+  out << "\n";
   out << "\n";
   out << "class " << appName << " : public Application" << "\n";
   out << "{" << "\n";
@@ -746,11 +758,28 @@ bool buildProjectCMakeLists(const QString &name, const QString &appName)
   out << "file(GLOB_RECURSE TEMPLATES_SRC root/*)" << "\n";
   out << "\n";
   out << "add_subdirectory(src)" << "\n";
+
   // //  tsi ...
+  out << "\n";
   out << "\n";
   out << "# tsi specific targets, acting like a \"make install\" ..." << "\n";
   out << "add_custom_target(copy-install ../copy-lib.sh)" << "\n";
   out << "add_custom_target(c-i make copy-install)" << "\n";
+  out << "#target_compile_definitions(Chasm_app" << "\n";
+  out << "#" << "\n";
+  out << " ## comment this out to prevent Cutelyst/Application" << "\n";
+  out << " #  from defining the \"namespace_class\" macro" << "\n";
+  out << "    # (see application.h line 18 ..." << "\n";
+  out << " # NO_NAMESPACE_CLASS_DEF" << "\n";
+  out << "\n";
+  out << " ## comment this out if you want to define a macro" << "\n";
+  out << " #  indicating that the grantlee templating" << "\n";
+  out << "#  library is being used from an installation" << "\n";
+  out << " #  specific to this archive or cutelyst build ..." << "\n";
+  out << " # USE_LOCAL_GRANTLEE" << "\n";
+  out << "#" << "\n";
+  out << "# )" << "\n";
+  out << "\n";
 
   std::cout << OUT_CREATED << qPrintable(name) << std::endl;
 
