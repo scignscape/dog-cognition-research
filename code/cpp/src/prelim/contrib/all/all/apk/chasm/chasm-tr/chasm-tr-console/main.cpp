@@ -131,7 +131,7 @@ void allocate_mempad(u4& id, u4 size)
  //     r8 = 6  QVariant = 7
  //     n8 = 8  ? = 9
 
-int main(int argc, char *argv[])
+int main1(int argc, char *argv[])
 {
  Chasm_Runtime csr;
  Chasm_Runtime_Bridge crb(&csr);
@@ -157,7 +157,7 @@ int main(int argc, char *argv[])
 
 
 
-int main1(int argc, char *argv[])
+int main(int argc, char *argv[])
 {
 
  ChTR_Document chrd(ROOT_FOLDER "/../chtr/t1/t1.cr");

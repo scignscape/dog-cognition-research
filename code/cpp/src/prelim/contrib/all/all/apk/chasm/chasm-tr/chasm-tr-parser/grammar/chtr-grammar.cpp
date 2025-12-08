@@ -20,6 +20,7 @@
 
 USING_AQNS(Chasm_TR)
 
+
 ChTR_Grammar::ChTR_Grammar()
 {
 }
@@ -76,13 +77,22 @@ void ChTR_Grammar::init(ChTR_Parser& p, ChTR_Graph& g, ChTR_Graph_Build& graph_b
 
 
  add_rule(source_context,
+   "carrier-declaration",
+   "," // (?<symbol> \\S+)"
+   ,[&]
+ {
+  QString sym = p.matched("symbol");
+  graph_build.prepare_carrier_declaration(sym);
+ });
+
+
+ add_rule(source_context,
    "statement-entry",
    "\\. (?!\\s)"
    ,[&]
  {
   graph_build.enter_statement_body();
  });
-
 
 
  add_rule(source_context,

@@ -41,6 +41,7 @@ class ChTR_Channel_Object;
 class ChTR_Code_Statement;
 
 
+// // //
 
 
 class ChTR_Graph_Build
@@ -104,6 +105,8 @@ public:
  void init();
 
  void enter_statement_body();
+
+ void prepare_carrier_declaration(QString symbol);
 
  void enter_channel_body();
  void leave_channel_body();

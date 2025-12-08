@@ -79,6 +79,13 @@ void ChTR_Graph_Build::init()
  //graph_.set
 }
 
+
+void ChTR_Graph_Build::prepare_carrier_declaration(QString symbol)
+{
+
+}
+
+
 void ChTR_Graph_Build::read_channel_string(QString channel_string)
 {
  ChTR_Channel_Object* cco = new ChTR_Channel_Object(channel_string);
