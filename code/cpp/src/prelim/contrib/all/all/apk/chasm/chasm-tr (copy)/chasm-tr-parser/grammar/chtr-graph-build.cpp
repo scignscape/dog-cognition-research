@@ -29,10 +29,6 @@
 
 #include "chtr-document.h"
 
-#include "textio.h"
-USING_KANS(TextIO)
-
-
 //?#include "chasm-tr/kernel/dominion/types.h"
 
 
@@ -45,7 +41,7 @@ ChTR_Graph_Build::ChTR_Graph_Build(ChTR_Document* d, ChTR_Parser& p, ChTR_Graph&
    ,graph_(g)
    ,parser_(p)
    ,fr_(ChTR_Relae_Frame::instance())
-   ,qy_(ChTR_Relae_Query::instance())
+   ,qry_(ChTR_Relae_Query::instance())
    ,held_line_number_(0)
    ,current_context_code_(0)
    ,current_source_type_(nullptr)
@@ -53,150 +49,9 @@ ChTR_Graph_Build::ChTR_Graph_Build(ChTR_Document* d, ChTR_Parser& p, ChTR_Graph&
    ,current_channel_object_(nullptr)
    ,current_code_statement_(nullptr)
    ,current_statement_level_node_(nullptr)
-   ,current_line_number_(0)
-   ,acc(&acc_)
 {
  current_source_file_ = new ChTR_Source_File;
- acc << "\n";
 }
-
-void ChTR_Graph_Build::parse_line_number(QString text)
-{
- current_line_number_ = text.mid(1).trimmed().toUInt();
-}
-
-void ChTR_Graph_Build::read_graph_build_program(QString lines)
-{
- s4 pos = 0;
- s4 end = lines.length();
-
- while(pos < end)
- {
-  s4 np = lines.indexOf(";.\n", pos);
-  if(np == -1)
-    np = lines.indexOf("\n.\n", pos);
-  if(np == -1)
-    break;
-  QString l = lines.mid(pos, np - pos).trimmed();
-  if(l.startsWith(".;"))
-  {
-   pos = np + 3;
-   continue;
-  }
-  if(l.startsWith("# "))
-  {
-   parse_line_number(l);
-   pos = np + 3;
-   continue;
-  }
-
-//  bool reread = false;
-  int mp = l.indexOf(" $");
-//  if(mp == -1)
-//  {
-//   mp = l.indexOf(" @");
-//   reread = true;
-//  }
-  if(mp != -1)
-  {
-   QString l1 = l.mid(0, mp).trimmed();
-   QString l2 = l.mid(mp + 2, np - mp - 2).trimmed();
-//   if(reread)
-//     reread_substitute(l2);
-   read_line(l1, l2);
-  }
-  else
-  {
-   read_line(l.trimmed());
-  }
-  pos = np + 3;
- }
-
-}
-
-void ChTR_Graph_Build::scoped_symbol_decl(QString symbol)
-{
-
-}
-
-void ChTR_Graph_Build::type_expression_token(QString token)
-{
-
-}
-
-void ChTR_Graph_Build::scoped_symbol_pin(QString symbol)
-{
-
-}
-
-void ChTR_Graph_Build::proc_name(QString token)
-{
-
-}
-
-void ChTR_Graph_Build::symbol_token(QString token)
-{
-
-}
-
-void ChTR_Graph_Build::pin_value_literal(QString token)
-{
-
-}
-
-
-
-void ChTR_Graph_Build::read_line(QString fn, QString arg)
-{
- static QMap<QString, void(ChTR_Graph_Build::*)(QString)> static_map {{
-   { ".scoped-symbol-decl", &ChTR_Graph_Build::scoped_symbol_decl },
-   { ".type-expression-token", &ChTR_Graph_Build::type_expression_token },
-   { ".scoped-symbol-pin", &ChTR_Graph_Build::scoped_symbol_pin },
-   { ".pin-value-literal", &ChTR_Graph_Build::pin_value_literal },
-   { ".proc-name", &ChTR_Graph_Build::proc_name },
-   { ".symbol-token", &ChTR_Graph_Build::symbol_token },
- }};
-
- auto it = static_map.find(fn);
- if(it != static_map.end())
- {
-//  QString* a = new QString(arg);
-  line_ops_.push_back({arg, fn_u{.fn1=it.value()}});
- }
-
-}
-
-void ChTR_Graph_Build::read_line(QString fn)
-{
-
-}
-
-
-void ChTR_Graph_Build::load_pregraph(QString file_path)
-{
- QString lines;
- load_file(file_path, lines);
- read_graph_build_program(lines);
-}
-
-
-
-
-//void ChTR_Graph_Build::acc(QString contents)
-//{
-// acc << contents;
-//}
-
-
-void ChTR_Graph_Build::prepare_carrier_declaration(QString symbol)
-{
- acc << ".scoped-symbol-decl $ " << symbol;
-}
-
-
-
-
-// // // //
 
 void ChTR_Graph_Build::init()
 {
@@ -222,6 +77,12 @@ void ChTR_Graph_Build::init()
  current_statement_level_node_ = root_node;
 
  //graph_.set
+}
+
+
+void ChTR_Graph_Build::prepare_carrier_declaration(QString symbol)
+{
+
 }
 
 
@@ -256,7 +117,7 @@ void ChTR_Graph_Build::enter_statement_body()
  if(current_statement_level_node_ == graph_.root_node())
  {
   ChTR_Node* n = new ChTR_Node(ccs);
-  current_statement_level_node_ << fr_/qy_.Root_Sequence >> n;
+  current_statement_level_node_ << fr_/qry_.Root_Sequence >> n;
  }
 }
 

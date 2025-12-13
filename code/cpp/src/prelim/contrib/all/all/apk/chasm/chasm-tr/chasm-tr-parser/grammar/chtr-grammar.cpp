@@ -11,6 +11,8 @@
 
 #include "chtr-graph-build.h"
 
+#include "chtr-pregraph.h"
+
 #include "chtr-parser.h"
 
 #include "relae-graph/relae-parser.templates.h"
@@ -25,8 +27,11 @@ ChTR_Grammar::ChTR_Grammar()
 {
 }
 
-void ChTR_Grammar::init(ChTR_Parser& p, ChTR_Graph& g, ChTR_Graph_Build& graph_build)
+void ChTR_Grammar::init(ChTR_Parser& p, ChTR_Graph& g,
+   ChTR_Pregraph& pregraph, ChTR_Graph_Build& graph_build)
 {
+ pregraph.set_grammar(this);
+
  // //  Check for package privates...?
  pre_rule( "script-word", "(?:[^{}()\\[\\]\\s`;,:]|(?:\\w::?\\w))+" );
  pre_rule( "ns-word", "(?: [^{}()\\[\\]\\s`;,:]+ )" );
@@ -43,8 +48,13 @@ void ChTR_Grammar::init(ChTR_Parser& p, ChTR_Graph& g, ChTR_Graph_Build& graph_b
  pre_rule( "non-parens", "[^)]*" );
 
 
- Context source_context = add_context("source-context");
- track_context({&source_context});
+ Context statement_level_context = add_context("statement-level-context");
+ Context run_call_context = add_context("run-call-context");
+
+ Context source_context = add_context("source-context",
+   {statement_level_context, run_call_context});
+
+ track_context({&statement_level_context, &run_call_context, &source_context});
 
 // Context group_context = add_context("group-context");
 // track_context({&group_context});
@@ -67,59 +77,45 @@ void ChTR_Grammar::init(ChTR_Parser& p, ChTR_Graph& g, ChTR_Graph_Build& graph_b
 //  graph_build.enter_qj_context(p.matched("line-number").toUShort(), p.matched("context-name"));
 // });
 
- add_rule(flags_all_(parse_context ,open_channel_body), source_context,
-   "read-carrier-string",
-   " [^)\\s]+ "          // (?<enum-type> \\w+) , (?<base-type> \\w+) )",
-   ,[&]
-  {
-   graph_build.read_carrier_string(p.match_text());
-  });
-
-
  add_rule(source_context,
    "carrier-declaration",
-   "," // (?<symbol> \\S+)"
+   ", (?<symbol> \\S+) (?<tween> \\s+) (?<tx> [^,;*&)\\]] \\S*)"
    ,[&]
  {
   QString sym = p.matched("symbol");
-  graph_build.prepare_carrier_declaration(sym);
+  QString tween = p.matched("tween");
+  QString tx = p.matched("tx");
+  pregraph.prepare_carrier_declaration(sym, tween, tx);
  });
-
 
  add_rule(source_context,
-   "statement-entry",
-   "\\. (?!\\s)"
+   "anchor-or-pin",
+   "\\\\ (?<symbol> \\S+) (?<tween> \\s+) (?<token> \\S+)"
    ,[&]
  {
-  graph_build.enter_statement_body();
+  QString sym = p.matched("symbol");
+  QString tween = p.matched("tween");
+  QString token = p.matched("token");
+  pregraph.anchor_or_pin(sym, tween, token);
  });
-
 
  add_rule(source_context,
-   "channel-declaration",
-   "\\[ (?<channel-string> [^\\]]+ )"
+   "non-anchored-call",
+   "\\) \\s* (?<proc-name> \\S+)"
    ,[&]
  {
-  graph_build.read_channel_string(p.matched("channel-string"));
+  QString proc = p.matched("proc-name");
+  pregraph.non_anchored_call(proc);
  });
 
-
- add_rule(flags_all_(parse_context ,active_channel), source_context,
-   "enter-channel-body",
-   " \\( "          // (?<enum-type> \\w+) , (?<base-type> \\w+) )",
+ add_rule(run_call_context,
+   "symbol-token",
+   "(?<symbol-token> \\S+)"
    ,[&]
-  {
-   graph_build.enter_channel_body();
-  });
-
-
- add_rule(flags_all_(parse_context ,open_channel_body), source_context,
-   "leave-channel-body",
-   " \\) "          // (?<enum-type> \\w+) , (?<base-type> \\w+) )",
-   ,[&]
-  {
-   graph_build.leave_channel_body();
-  });
+ {
+  QString symbol = p.matched("symbol-token");
+  pregraph.symbol_token(symbol);
+ });
 
 
  add_rule(source_context,
@@ -127,9 +123,79 @@ void ChTR_Grammar::init(ChTR_Parser& p, ChTR_Graph& g, ChTR_Graph_Build& graph_b
    ".",
    [&]
  {
-//  QString s = p.match_text();
-//  qDebug() << "s = " << s;
+  pregraph.check_lines(p.match_text());
+ //  QString s = p.match_text();
+ //  qDebug() << "s = " << s;
  });
+
+
+ // // // // //
+
+
+
+// add_rule(flags_all_(parse_context ,open_channel_body), source_context,
+//   "read-carrier-string",
+//   " [^)\\s]+ "          // (?<enum-type> \\w+) , (?<base-type> \\w+) )",
+//   ,[&]
+//  {
+//   graph_build.read_carrier_string(p.match_text());
+//  });
+
+
+// add_rule(source_context,
+//   "carrier-declaration",
+//   "," // (?<symbol> \\S+)"
+//   ,[&]
+// {
+//  QString sym = p.matched("symbol");
+//  graph_build.prepare_carrier_declaration(sym);
+// });
+
+
+// add_rule(source_context,
+//   "statement-entry",
+//   "\\. (?!\\s)"
+//   ,[&]
+// {
+//  graph_build.enter_statement_body();
+// });
+
+
+// add_rule(source_context,
+//   "channel-declaration",
+//   "\\[ (?<channel-string> [^\\]]+ )"
+//   ,[&]
+// {
+//  graph_build.read_channel_string(p.matched("channel-string"));
+// });
+
+
+// add_rule(flags_all_(parse_context ,active_channel), source_context,
+//   "enter-channel-body",
+//   " \\( "          // (?<enum-type> \\w+) , (?<base-type> \\w+) )",
+//   ,[&]
+//  {
+//   graph_build.enter_channel_body();
+//  });
+
+
+// add_rule(flags_all_(parse_context ,open_channel_body), source_context,
+//   "leave-channel-body",
+//   " \\) "          // (?<enum-type> \\w+) , (?<base-type> \\w+) )",
+//   ,[&]
+//  {
+//   graph_build.leave_channel_body();
+//  });
+
+
+// add_rule(source_context,
+//   "skip",
+//   ".",
+//   [&]
+// {
+////  QString s = p.match_text();
+////  qDebug() << "s = " << s;
+// });
 
 
 

@@ -27,7 +27,7 @@ AQNS_(Chasm_TR)
 class ChTR_Parser;
 class ChTR_Grammar;
 class ChTR_Graph_Build;
-class ChTR_Pregraph;
+//?class ChTR_Word_Entry_List;
 class ChTR_Graph;
 
 
@@ -35,7 +35,6 @@ class ChTR_Document
 {
  ChTR_Graph* graph_;
  ChTR_Parser* parser_;
- ChTR_Pregraph* pregraph_;
  ChTR_Graph_Build* graph_build_;
  ChTR_Grammar* grammar_;
 
@@ -52,8 +51,6 @@ public:
  ACCESSORS(QString ,local_path)
  ACCESSORS(QString ,raw_text)
  ACCESSORS(QString ,local_directory)
-
- ACCESSORS(ChTR_Pregraph* ,pregraph)
  ACCESSORS(ChTR_Graph* ,graph)
  ACCESSORS__GET(ChTR_Grammar* ,grammar)
 
@@ -63,9 +60,7 @@ public:
 
  ~ChTR_Document();
 
- QString save_file(QString path_or_extension, QString contents);
-
- QString save_pregraph(QString path_or_extension);
+ void save_file(QString path_or_extension, QString contents);
 
  QVector<ChTR_Graph::hypernode_type*>& top_level_hypernodes();
 
@@ -83,8 +78,6 @@ public:
  void parse(int start_position = 0, int end_position = -1);
 
  void surround(QString divider, QString text);
-
- void load_pregraph(QString file_path);
 };
 
 _AQNS(Chasm_TR)

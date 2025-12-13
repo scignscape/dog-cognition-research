@@ -20,8 +20,7 @@ exists($$ROOT_DIR/../preferred/compiler.pri): include($$ROOT_DIR/../preferred/co
 
 CONFIG += c++17
 
-##?
-FEATURE_OpenCV = USE_OpenCV
+## FEATURE_OpenCV = USE_OpenCV
 
 # ### For OpenCV
 defined(FEATURE_OpenCV ,var) {

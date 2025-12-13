@@ -62,14 +62,8 @@ public:
 
 private:
 
- //QString
 
  QString acc_;
-
- QTextStream acc;
-
-// void acc(QString text);
-
 
  ChTR_Parse_Context parse_context_;
 
@@ -79,7 +73,7 @@ private:
  ChTR_Graph& graph_;
 
  ChTR_Relae_Frame& fr_;
- const ChTR_Relae_Query& qy_;
+ const ChTR_Relae_Query& qry_;
 
 
  QVector<hypernode_type*> top_level_hypernodes_;
@@ -97,14 +91,6 @@ private:
 
  ChTR_Node* current_statement_level_node_;
 
- u4 current_line_number_;
-
- typedef union {void(ChTR_Graph_Build::*fn0)();
-   void(ChTR_Graph_Build::*fn1)(QString);} fn_u;
-
- QVector<QPair<QString, fn_u>> line_ops_;
-
-
 public:
 
  ChTR_Graph_Build(ChTR_Document* d, ChTR_Parser& p, ChTR_Graph& g);
@@ -112,30 +98,8 @@ public:
  ACCESSORS__RGET(ChTR_Parse_Context ,parse_context)
  ACCESSORS__RGET(QVector<hypernode_type*> ,top_level_hypernodes)
 
- void load_pregraph(QString file_path);
-
- void parse_line_number(QString text);
 
  void init();
-
- void read_line(QString fn, QString arg);
- void read_line(QString fn);
-
- void read_graph_build_program(QString lines);
-
- QString pregraph_code()
- {
-  return acc_;
- }
-
-
- void scoped_symbol_decl(QString symbol);
- void type_expression_token(QString token);
- void scoped_symbol_pin(QString symbol);
- void proc_name(QString token);
- void symbol_token(QString token);
- void pin_value_literal(QString token);
-
 
  void enter_statement_body();
 
@@ -146,7 +110,6 @@ public:
 
  void read_channel_string(QString channel_string);
  void read_carrier_string(QString carrier_string);
-
 
 
 };

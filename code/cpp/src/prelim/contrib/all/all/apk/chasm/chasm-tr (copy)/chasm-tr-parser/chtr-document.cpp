@@ -13,7 +13,6 @@
 #include "grammar/chtr-grammar.h"
 #include "grammar/chtr-parser.h"
 #include "grammar/chtr-graph-build.h"
-#include "grammar/chtr-pregraph.h"
 
 #include <QFileInfo>
 #include <QDir>
@@ -73,21 +72,10 @@ void ChTR_Document::load_file(QString path)
 }
 
 
-void ChTR_Document::load_pregraph(QString file_path)
-{
- graph_build_->load_pregraph(file_path);
-}
-
-QString ChTR_Document::save_pregraph(QString path_or_extension)
-{
- return save_file(path_or_extension, pregraph_->pregraph_code());
-}
-
-QString ChTR_Document::save_file(QString path_or_extension, QString contents)
+void ChTR_Document::save_file(QString path_or_extension, QString contents)
 {
  resolve_report_path(path_or_extension);
  KA::TextIO::save_file(path_or_extension, contents);
- return path_or_extension;
 }
 
 
@@ -134,12 +122,9 @@ void ChTR_Document::parse(int start_position, int end_position)
  graph_build_ = new ChTR_Graph_Build(this, *parser_, *graph_);
  graph_build_->init();
 
- pregraph_ = new ChTR_Pregraph(this, *parser_, *graph_);
- pregraph_->init();
-
  grammar_ = new ChTR_Grammar;
 
- grammar_->init(*parser_, *graph_, *pregraph_, *graph_build_);
+ grammar_->init(*parser_, *graph_, *graph_build_);
 
  grammar_->compile(*parser_, *graph_, raw_text_, start_position);
 }

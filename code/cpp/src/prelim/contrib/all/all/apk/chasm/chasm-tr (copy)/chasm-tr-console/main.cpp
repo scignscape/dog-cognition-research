@@ -60,9 +60,6 @@ load-pst $ /test ;.
 
 #include "chasm-tr-parser/chtr-document.h"
 
-//#include "chasm-tr-parser/grammar/chtr-graph-build.h"
-
-
 #include "chasm-tr/chvm/chvm-code-generator.h"
 //?#include "chasm-tr/chvm/eval/channel-package-runner.h"
 
@@ -80,7 +77,6 @@ USING_AQNS(Chasm_TR)
 #include "chasm-vm/chasm-vm.h"
 #include "chasm-runtime-bridge/chasm-runtime-bridge.h"
 #include "chasm-procedure-table/chasm-procedure-table.h"
-
 
 
 //#include "stats/slico/slico.h"
@@ -168,21 +164,12 @@ int main(int argc, char *argv[])
 
  chrd.parse();
 
- QString pre_path = chrd.save_pregraph("..pre");
+ ChVM_Code_Generator ccg(chrd.graph());
 
- chrd.load_pregraph(pre_path);
+ QString chvm;
+ ccg.graph_to_chvm(chvm);
 
-// ChTR_Graph_Build* gb = chrd.graph_build();
-// gb->load_pregraph(pre_path);
-
-
-// ChVM_Code_Generator ccg(chrd.graph());
-
-// QString chvm;
-// ccg.graph_to_chvm(chvm);
-
-// chrd.save_file("..chvm", chvm);
-
+ chrd.save_file("..chvm", chvm);
 
 //? ChVM_Channel_Package_Runner ccr();
 
