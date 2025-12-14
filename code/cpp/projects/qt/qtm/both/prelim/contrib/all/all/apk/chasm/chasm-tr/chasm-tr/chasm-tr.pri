@@ -34,6 +34,8 @@ DEFINES += USE_AQNS
 HEADERS += \
   $$SRC_DIR/kernel/dominion/types.h \
   $$SRC_DIR/kernel/dominion/connectors.h \
+  $$SRC_DIR/types/chtr-type-object.h \
+  $$SRC_DIR/types/chtr-type-system.h \
   $$SRC_DIR/chtr-channel-object.h \
   $$SRC_DIR/chtr-channel-package.h \
   $$SRC_DIR/chtr-source-token.h \
@@ -54,6 +56,8 @@ SOURCES += \
   $$SRC_DIR/chtr-source-token.cpp \
   $$SRC_DIR/chtr-carrier.cpp \
   $$SRC_DIR/chtr-code-statement.cpp \
+  $$SRC_DIR/types/chtr-type-object.cpp \
+  $$SRC_DIR/types/chtr-type-system.cpp \
   $$SRC_DIR/chvm/chvm-code-generator.cpp \
   $$SRC_DIR/chvm/chvm-code-block.cpp \
   $$SRC_DIR/chvm/chvm-code-statement.cpp \

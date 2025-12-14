@@ -18,6 +18,8 @@
 
 #include "kernel/graph/chtr-graph.h"
 
+#include "types/chtr-type-system.h"
+
 #include <QStack>
 
 
@@ -26,6 +28,9 @@ AQNS_(Chasm_TR)
 
 class ChTR_Graph;
 class ChTR_Node;
+class ChTR_Node_Factory;
+
+
 class ChTR_Document;
 class ChTR_Parser;
 class ChTR_Graph;
@@ -39,6 +44,7 @@ class ChTR_Source_File;
 class ChTR_Channel_Package;
 class ChTR_Channel_Object;
 class ChTR_Code_Statement;
+
 
 
 class ChTR_Graph_Build
@@ -78,8 +84,10 @@ private:
  ChTR_Parser& parser_;
  ChTR_Graph& graph_;
 
- ChTR_Relae_Frame& fr_;
- const ChTR_Relae_Query& qy_;
+ ChTR_Relae_Frame& Sf;
+ const ChTR_Relae_Query& Qy;
+
+ ChTR_Node_Factory& node_factory_;
 
 
  QVector<hypernode_type*> top_level_hypernodes_;
@@ -97,13 +105,33 @@ private:
 
  ChTR_Node* current_statement_level_node_;
 
+ ChTR_Type_System type_system_;
+
  u4 current_line_number_;
+
+ QMap<QString, QVector<QPair<u4, QString*>>> acc_lines_;
+
+ void cut();
+
+// QTextStream acc;
+
 
  typedef union {void(ChTR_Graph_Build::*fn0)();
    void(ChTR_Graph_Build::*fn1)(QString);} fn_u;
 
  QVector<QPair<QString, fn_u>> line_ops_;
 
+ enum class Expression_States {
+
+  N_A, Held_Declare_Point_Token, Held_Anchor_Token
+
+ };
+
+ Expression_States current_expression_state_;
+
+ caon_ptr<ChTR_Node> current_parse_node_;
+
+ QString current_subroutine_name_;
 
 public:
 
@@ -120,6 +148,8 @@ public:
 
  void read_line(QString fn, QString arg);
  void read_line(QString fn);
+
+ void run_lines();
 
  void read_graph_build_program(QString lines);
 

@@ -37,6 +37,7 @@ DEFINES += USE_AQNS
 
 HEADERS += \
   $$SRC_DIR/grammar/chtr-graph-build.h \
+  $$SRC_DIR/grammar/chtr-node-factory.h \
   $$SRC_DIR/grammar/chtr-pregraph.h \
   $$SRC_DIR/grammar/chtr-grammar.h \
   $$SRC_DIR/grammar/chtr-parse-context.h \
@@ -48,6 +49,7 @@ HEADERS += \
 
 SOURCES += \
   $$SRC_DIR/grammar/chtr-graph-build.cpp \
+  $$SRC_DIR/grammar/chtr-node-factory.cpp \
   $$SRC_DIR/grammar/chtr-pregraph.cpp \
   $$SRC_DIR/grammar/chtr-grammar.cpp \
   $$SRC_DIR/grammar/chtr-parse-context.cpp \

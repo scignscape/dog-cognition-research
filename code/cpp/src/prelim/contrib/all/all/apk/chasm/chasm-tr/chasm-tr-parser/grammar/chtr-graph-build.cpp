@@ -24,6 +24,10 @@
 #include "chasm-tr/chtr-channel-package.h"
 #include "chasm-tr/chtr-code-statement.h"
 
+#include "chtr-node-factory.h"
+
+#include "chasm-tr/chtr-source-token.h"
+
 #include "relae-graph/relae-caon-ptr.h"
 #include "relae-graph/relae-node-ptr.h"
 
@@ -44,8 +48,9 @@ ChTR_Graph_Build::ChTR_Graph_Build(ChTR_Document* d, ChTR_Parser& p, ChTR_Graph&
    ,document_(d)
    ,graph_(g)
    ,parser_(p)
-   ,fr_(ChTR_Relae_Frame::instance())
-   ,qy_(ChTR_Relae_Query::instance())
+   ,Sf(ChTR_Relae_Frame::instance())
+   ,Qy(ChTR_Relae_Query::instance())
+   ,node_factory_(ChTR_Node_Factory::instance())
    ,held_line_number_(0)
    ,current_context_code_(0)
    ,current_source_type_(nullptr)
@@ -54,15 +59,31 @@ ChTR_Graph_Build::ChTR_Graph_Build(ChTR_Document* d, ChTR_Parser& p, ChTR_Graph&
    ,current_code_statement_(nullptr)
    ,current_statement_level_node_(nullptr)
    ,current_line_number_(0)
+   ,current_expression_state_(Expression_States::N_A)
    ,acc(&acc_)
 {
  current_source_file_ = new ChTR_Source_File;
  acc << "\n";
+
+ current_subroutine_name_ = "--sf--";
 }
 
 void ChTR_Graph_Build::parse_line_number(QString text)
 {
  current_line_number_ = text.mid(1).trimmed().toUInt();
+}
+
+void ChTR_Graph_Build::cut()
+{
+ auto& acc_lines = acc_lines_[current_subroutine_name_];
+
+ u4 ln = acc_lines.size() + 1;
+
+ QString* line = new QString(acc_);
+
+ acc_.clear();
+
+ acc_lines.push_back({ln, line});
 }
 
 void ChTR_Graph_Build::read_graph_build_program(QString lines)
@@ -112,16 +133,58 @@ void ChTR_Graph_Build::read_graph_build_program(QString lines)
   pos = np + 3;
  }
 
+ run_lines();
 }
+
+void ChTR_Graph_Build::run_lines()
+{
+
+// const QVector<QPair<QString*, fn_u>>& lines = it.value();
+ for(auto& pr: line_ops_)
+ {
+  if(pr.first.isEmpty())
+    (this->*(pr.second.fn0))();
+  else
+    (this->*(pr.second.fn1))(pr.first);
+ }
+}
+
 
 void ChTR_Graph_Build::scoped_symbol_decl(QString symbol)
 {
-
+ ChTR_Source_Token* token = new ChTR_Source_Token(symbol);
+ current_parse_node_ = node_factory_.make_new_node(token);
+ current_expression_state_ = Expression_States::Held_Declare_Point_Token;
 }
 
 void ChTR_Graph_Build::type_expression_token(QString token)
 {
+ ChTR_Type_Object* cto = type_system_.find_type(token);
 
+ if(!cto)
+ {
+  // //  error?
+  return;
+ }
+
+ caon_ptr<ChTR_Node> type_node = node_factory_.make_new_node(cto);
+
+ switch (current_expression_state_)
+ {
+ case Expression_States::Held_Declare_Point_Token:
+  {
+   caon_ptr<ChTR_Source_Token> source_token = current_parse_node_->source_token();
+   QString text = source_token->text();
+   acc << "load-type-object $ " << token; cut();
+   acc << "declare-lexical-typed-symbol $ " << text; cut();
+
+   current_parse_node_ << Sf/Qy.Symbol_to_Type_Object >> type_node;
+
+  }
+  break;
+ default:
+  break;
+ }
 }
 
 void ChTR_Graph_Build::scoped_symbol_pin(QString symbol)
@@ -256,7 +319,7 @@ void ChTR_Graph_Build::enter_statement_body()
  if(current_statement_level_node_ == graph_.root_node())
  {
   ChTR_Node* n = new ChTR_Node(ccs);
-  current_statement_level_node_ << fr_/qy_.Root_Sequence >> n;
+  current_statement_level_node_ << Sf/Qy.Root_Sequence >> n;
  }
 }
 
