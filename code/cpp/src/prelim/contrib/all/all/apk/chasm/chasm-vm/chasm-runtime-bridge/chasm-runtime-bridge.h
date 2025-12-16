@@ -132,6 +132,7 @@ public:
 
  void clear_current_ghost_scope();
 
+ void load_type_object(QString token);
 
  void load_type_ref();
  void load_type_u1();

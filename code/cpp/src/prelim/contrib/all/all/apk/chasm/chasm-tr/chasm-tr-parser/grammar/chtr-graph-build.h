@@ -20,6 +20,8 @@
 
 #include "types/chtr-type-system.h"
 
+#include "codegen/chtr-chvm-generator.h"
+
 #include <QStack>
 
 
@@ -44,6 +46,28 @@ class ChTR_Source_File;
 class ChTR_Channel_Package;
 class ChTR_Channel_Object;
 class ChTR_Code_Statement;
+
+class ChTR_Lexical_Scope
+{
+ QMap<QString, ChTR_Type_Object*> known_symbols_;
+
+public:
+
+ ChTR_Lexical_Scope() {}
+
+ void add_symbol(QString token, ChTR_Type_Object* cto)
+ {
+  known_symbols_[token] = cto;
+ }
+
+ QString get_symbol_name(QString token)
+ {
+  if(known_symbols_.contains(token))
+    return token;
+
+  return {};
+ }
+};
 
 
 
@@ -70,9 +94,8 @@ private:
 
  //QString
 
- QString acc_;
 
- QTextStream acc;
+ ChTR_CHVM_Generator gen;
 
 // void acc(QString text);
 
@@ -109,7 +132,8 @@ private:
 
  u4 current_line_number_;
 
- QMap<QString, QVector<QPair<u4, QString*>>> acc_lines_;
+ QString current_channel_name_;
+
 
  void cut();
 
@@ -126,12 +150,23 @@ private:
   N_A, Held_Declare_Point_Token, Held_Anchor_Token
 
  };
-
  Expression_States current_expression_state_;
+
+ enum class Channel_States {
+
+  N_A, Implicit_Lambda, Named_Channel_Entered, Name_Channel_Exited,
+
+ };
+ Channel_States current_channel_state_;
+
+ ChTR_Lexical_Scope* current_lexical_scope_;
+ ChTR_Lexical_Scope file_lexical_scope_;
+
 
  caon_ptr<ChTR_Node> current_parse_node_;
 
- QString current_subroutine_name_;
+
+
 
 public:
 
@@ -153,10 +188,10 @@ public:
 
  void read_graph_build_program(QString lines);
 
- QString pregraph_code()
- {
-  return acc_;
- }
+ QString chvm_code();
+// {
+//  return acc_;
+// }
 
 
  void scoped_symbol_decl(QString symbol);

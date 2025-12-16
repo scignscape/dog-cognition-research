@@ -172,6 +172,9 @@ int main(int argc, char *argv[])
 
  chrd.load_pregraph(pre_path);
 
+ QString chvm_path = chrd.save_chvm("..chvm");
+
+
 // ChTR_Graph_Build* gb = chrd.graph_build();
 // gb->load_pregraph(pre_path);
 

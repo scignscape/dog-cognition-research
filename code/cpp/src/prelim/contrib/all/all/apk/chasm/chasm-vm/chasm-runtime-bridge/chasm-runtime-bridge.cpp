@@ -251,6 +251,12 @@ void Chasm_Runtime_Bridge::gen_carrier(void* pv)
 }
 
 
+void Chasm_Runtime_Bridge::load_type_object(QString token)
+{
+
+}
+
+
 void Chasm_Runtime_Bridge::load_type_ref()
 {
  current_type_object_ = type_object_ref_;

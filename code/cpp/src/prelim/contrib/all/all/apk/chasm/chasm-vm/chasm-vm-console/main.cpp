@@ -26,8 +26,35 @@ void testqvar(QVariant arg1, r8 arg2, u2 arg3)
  qDebug() << "arg3 = " << arg3;
 }
 
+void prn(u1 arg)
+{
+ qDebug() << "arg = " << arg;
+}
+
 
 int main(int argc, char *argv[])
+{
+ Chasm_Runtime csr;
+ Chasm_Runtime_Bridge crb(&csr);
+ Chasm_Procedure_Table cpt(&csr);
+ crb.set_proctable(&cpt);
+
+ cpt.register_s0(testqvar, @300762);
+ cpt.register_s0(prn, @1001);
+
+ Chasm_VM csvm(&crb);
+
+//? csvm.gen_source_proc_name();
+
+// csvm.load_program(DEMO_CVM_FOLDER "/t1/t1.cvm");
+ csvm.load_program(DEMO_CVM_FOLDER "/t1/t1.cr.chvm");
+
+//?
+ csvm.run_current_source_proc_name();
+}
+
+
+int main1(int argc, char *argv[])
 {
  Chasm_Runtime csr;
  Chasm_Runtime_Bridge crb(&csr);

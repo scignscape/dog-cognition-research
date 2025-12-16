@@ -16,13 +16,13 @@ USING_AQNS(Chasm_TR)
 
 ChTR_Type_System::ChTR_Type_System()
 {
- types_by_name_["u1"] = new ChTR_Type_Object("u1");
- types_by_name_["u2"] = new ChTR_Type_Object("u2");
- types_by_name_["u4"] = new ChTR_Type_Object("u4");
+ types_by_name_["u1"] = new ChTR_Type_Object("u1", true);
+ types_by_name_["u2"] = new ChTR_Type_Object("u2", true);
+ types_by_name_["u4"] = new ChTR_Type_Object("u4", true);
 
- types_by_name_["s1"] = new ChTR_Type_Object("s1");
- types_by_name_["s2"] = new ChTR_Type_Object("s2");
- types_by_name_["s4"] = new ChTR_Type_Object("s4");
+ types_by_name_["s1"] = new ChTR_Type_Object("s1", true);
+ types_by_name_["s2"] = new ChTR_Type_Object("s2", true);
+ types_by_name_["s4"] = new ChTR_Type_Object("s4", true);
 
 }
 

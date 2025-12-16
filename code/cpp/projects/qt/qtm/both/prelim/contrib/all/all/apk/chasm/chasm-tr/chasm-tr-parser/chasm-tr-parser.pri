@@ -42,6 +42,8 @@ HEADERS += \
   $$SRC_DIR/grammar/chtr-grammar.h \
   $$SRC_DIR/grammar/chtr-parse-context.h \
   $$SRC_DIR/grammar/chtr-parser.h \
+  $$SRC_DIR/codegen/chtr-chvm-generator.h \
+  $$SRC_DIR/codegen/chtr-chvm-line.h \
   $$SRC_DIR/chtr-source-file.h \
   $$SRC_DIR/chtr-document.h \
 
@@ -54,6 +56,8 @@ SOURCES += \
   $$SRC_DIR/grammar/chtr-grammar.cpp \
   $$SRC_DIR/grammar/chtr-parse-context.cpp \
   $$SRC_DIR/grammar/chtr-parser.cpp \
+  $$SRC_DIR/codegen/chtr-chvm-generator.cpp \
+  $$SRC_DIR/codegen/chtr-chvm-line.cpp \
   $$SRC_DIR/chtr-source-file.cpp \
   $$SRC_DIR/chtr-document.cpp \
 

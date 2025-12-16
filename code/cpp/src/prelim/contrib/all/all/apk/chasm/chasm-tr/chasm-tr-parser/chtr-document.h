@@ -66,6 +66,7 @@ public:
  QString save_file(QString path_or_extension, QString contents);
 
  QString save_pregraph(QString path_or_extension);
+ QString save_chvm(QString path_or_extension);
 
  QVector<ChTR_Graph::hypernode_type*>& top_level_hypernodes();
 

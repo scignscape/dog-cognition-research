@@ -24,6 +24,8 @@
 #include "chasm-tr/chtr-channel-package.h"
 #include "chasm-tr/chtr-code-statement.h"
 
+#include "chasm-tr/types/chtr-type-object.h"
+
 #include "chtr-node-factory.h"
 
 #include "chasm-tr/chtr-source-token.h"
@@ -59,14 +61,24 @@ ChTR_Graph_Build::ChTR_Graph_Build(ChTR_Document* d, ChTR_Parser& p, ChTR_Graph&
    ,current_code_statement_(nullptr)
    ,current_statement_level_node_(nullptr)
    ,current_line_number_(0)
+   ,current_channel_state_(Channel_States::N_A)
    ,current_expression_state_(Expression_States::N_A)
-   ,acc(&acc_)
 {
- current_source_file_ = new ChTR_Source_File;
- acc << "\n";
+ current_lexical_scope_ = &file_lexical_scope_;
 
- current_subroutine_name_ = "--sf--";
+ current_source_file_ = new ChTR_Source_File;
+ // acc << "\n"; cut();
+
 }
+
+
+QString ChTR_Graph_Build::chvm_code()
+{
+ QString result;
+ gen.chvm_code(result);
+ return result;
+}
+
 
 void ChTR_Graph_Build::parse_line_number(QString text)
 {
@@ -75,15 +87,7 @@ void ChTR_Graph_Build::parse_line_number(QString text)
 
 void ChTR_Graph_Build::cut()
 {
- auto& acc_lines = acc_lines_[current_subroutine_name_];
-
- u4 ln = acc_lines.size() + 1;
-
- QString* line = new QString(acc_);
-
- acc_.clear();
-
- acc_lines.push_back({ln, line});
+ gen.cut();
 }
 
 void ChTR_Graph_Build::read_graph_build_program(QString lines)
@@ -175,8 +179,23 @@ void ChTR_Graph_Build::type_expression_token(QString token)
   {
    caon_ptr<ChTR_Source_Token> source_token = current_parse_node_->source_token();
    QString text = source_token->text();
-   acc << "load-type-object $ " << token; cut();
-   acc << "declare-lexical-typed-symbol $ " << text; cut();
+
+   current_lexical_scope_->add_symbol(text, cto);
+
+   gen
+     .blank()
+     .preamble_comment("statement-level declaration");
+   //preamble()
+
+//   gen_.blank();
+
+   if(cto->flags.built_in)
+     gen << "load-type-" << cto->name();
+   else
+     gen << "load-type-object $ " << token;
+   cut();
+
+   gen << "declare-lexical-typed-symbol $ " << text; cut();
 
    current_parse_node_ << Sf/Qy.Symbol_to_Type_Object >> type_node;
 
@@ -189,23 +208,55 @@ void ChTR_Graph_Build::type_expression_token(QString token)
 
 void ChTR_Graph_Build::scoped_symbol_pin(QString symbol)
 {
-
+ gen
+   .blank()
+   .preamble_comment("statement-level pin")
+   << "single-init-pin $ " << symbol; cut();
 }
 
 void ChTR_Graph_Build::proc_name(QString token)
 {
+ gen
+   .blank()
+   .preamble_comment("statement")
+   .dissolve({"init-new-ghost-scope", "push-carrier-deque"})
+   .blank()
+   << "load-proc-name $ " << token;
+ cut();
 
+ current_channel_state_ = Channel_States::Implicit_Lambda;
 }
 
 void ChTR_Graph_Build::symbol_token(QString token)
 {
+ switch(current_channel_state_)
+ {
+ case Channel_States::Implicit_Lambda:
+  {
+   QString symbol_name = current_lexical_scope_->get_symbol_name(token);
+
+   if(symbol_name.isEmpty())
+   {
+    // error
+    return;
+   }
+
+   gen << "load-carrier-symbol $ " << symbol_name; cut();
+  }
+ }
 
 }
 
 void ChTR_Graph_Build::pin_value_literal(QString token)
 {
-
+ gen
+   .blank()
+   << "load-value-literal $ " << token;
+   cut();
+ gen << "resolve-pins"; cut();
 }
+
+
 
 
 
@@ -249,12 +300,6 @@ void ChTR_Graph_Build::load_pregraph(QString file_path)
 //{
 // acc << contents;
 //}
-
-
-void ChTR_Graph_Build::prepare_carrier_declaration(QString symbol)
-{
- acc << ".scoped-symbol-decl $ " << symbol;
-}
 
 
 

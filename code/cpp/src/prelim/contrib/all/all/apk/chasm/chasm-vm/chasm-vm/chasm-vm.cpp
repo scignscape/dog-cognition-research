@@ -62,6 +62,8 @@ void Chasm_VM::reread_substitute(QString& key)
 
 void Chasm_VM::parse_fn_line(QString line)
 {
+ current_source_proc_name_ = line.mid(3).simplified();
+
 // if(line[3] == 'p')
 // {
 //  ++source_fn_anon_count_;
@@ -131,6 +133,11 @@ void Chasm_VM::read_local_program(QString lines)
 
 void Chasm_VM::run_current_source_proc_name()
 {
+ //?
+ current_source_proc_name_ = "--sf--";
+
+ qDebug() << "C: " << current_source_proc_name_;
+
  run_lines(current_source_proc_name_);
 }
 
@@ -138,21 +145,21 @@ void Chasm_VM::read_line(QString inst)
 {
  static QMap<QString, void(Chasm_Runtime_Bridge::*)()> static_map {{
   { "new_call_package", &Chasm_Runtime_Bridge::new_call_package },
-  { "load_type_ref", &Chasm_Runtime_Bridge::load_type_ref },
-  { "load_type_u1", &Chasm_Runtime_Bridge::load_type_u1 },
-  { "load_type_u2", &Chasm_Runtime_Bridge::load_type_u2 },
-  { "load_type_QString", &Chasm_Runtime_Bridge::load_type_QString },
-  { "load_type_u4", &Chasm_Runtime_Bridge::load_type_u4 },
-  { "load_type_QByteArray", &Chasm_Runtime_Bridge::load_type_QByteArray },
-  { "load_type_r8", &Chasm_Runtime_Bridge::load_type_r8 },
-  { "load_type_QVariant", &Chasm_Runtime_Bridge::load_type_QVariant },
-  { "load_type_n8", &Chasm_Runtime_Bridge::load_type_n8 },
-  { "load_type_ptr", &Chasm_Runtime_Bridge::load_type_ptr },
+  { "load-type-ref", &Chasm_Runtime_Bridge::load_type_ref },
+  { "load-type-u1", &Chasm_Runtime_Bridge::load_type_u1 },
+  { "load-type-u2", &Chasm_Runtime_Bridge::load_type_u2 },
+  { "load-type-QString", &Chasm_Runtime_Bridge::load_type_QString },
+  { "load-type-u4", &Chasm_Runtime_Bridge::load_type_u4 },
+  { "load-type-QByteArray", &Chasm_Runtime_Bridge::load_type_QByteArray },
+  { "load-type-r8", &Chasm_Runtime_Bridge::load_type_r8 },
+  { "load-type-QVariant", &Chasm_Runtime_Bridge::load_type_QVariant },
+  { "load-type-n8", &Chasm_Runtime_Bridge::load_type_n8 },
+  { "load-type-ptr", &Chasm_Runtime_Bridge::load_type_ptr },
 
   { "push_carrier_deque", &Chasm_Runtime_Bridge::push_carrier_deque },
   { "gen_carrier", &Chasm_Runtime_Bridge::gen_carrier},
   { "reset_loaded_raw_value", &Chasm_Runtime_Bridge::reset_loaded_raw_value },
-  { "reset_type_object", &Chasm_Runtime_Bridge::reset_type_object },
+  { "reset-type-object", &Chasm_Runtime_Bridge::reset_type_object },
   { "add_carriers", &Chasm_Runtime_Bridge::add_carriers },
   { "reset_carrier_deque", &Chasm_Runtime_Bridge::reset_carrier_deque },
   { "init_new_ghost_scope", &Chasm_Runtime_Bridge::init_new_ghost_scope },
@@ -173,6 +180,10 @@ void Chasm_VM::read_line(QString inst)
 void Chasm_VM::read_line(QString inst, QString arg)
 {
  static QMap<QString, void(Chasm_Runtime_Bridge::*)(QString)> static_map {{
+
+  { "load-type-object", &Chasm_Runtime_Bridge::load_type_object },
+
+
   { "add_new_channel", &Chasm_Runtime_Bridge::add_new_channel },
   { "gen_carrier_tvr", &Chasm_Runtime_Bridge::gen_carrier_tvr },
   { "run_eval", &Chasm_Runtime_Bridge::run_eval },

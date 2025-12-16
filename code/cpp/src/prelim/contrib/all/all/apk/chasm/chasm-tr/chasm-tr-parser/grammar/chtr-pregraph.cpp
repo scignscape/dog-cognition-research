@@ -109,7 +109,7 @@ void ChTR_Pregraph::prepare_carrier_declaration(QString symbol,
 
 QString ChTR_Pregraph::pregraph_code()
 {
- return acc_lines_.join("\n");
+ return acc_lines_.join("\n") + "\n\n .; end of source file ;. \n";
 }
 
 void ChTR_Pregraph::cut()

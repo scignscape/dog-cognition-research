@@ -33,12 +33,20 @@ class ChTR_Carrier;
 
 class ChTR_Type_Object
 {
+public:
+
+ flags_(1)
+  bool built_in:1;
+  bool pointer:1;
+  bool reference:1;
+ _flags
+
  QString name_;
 
 public:
 
 
- ChTR_Type_Object(QString name = {});
+ ChTR_Type_Object(QString name = {}, bool built_in = false);
 
  ACCESSORS(QString ,name)
 

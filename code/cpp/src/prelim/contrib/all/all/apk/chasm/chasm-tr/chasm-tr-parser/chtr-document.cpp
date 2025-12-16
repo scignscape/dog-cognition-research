@@ -83,6 +83,11 @@ QString ChTR_Document::save_pregraph(QString path_or_extension)
  return save_file(path_or_extension, pregraph_->pregraph_code());
 }
 
+QString ChTR_Document::save_chvm(QString path_or_extension)
+{
+ return save_file(path_or_extension, graph_build_->chvm_code());
+}
+
 QString ChTR_Document::save_file(QString path_or_extension, QString contents)
 {
  resolve_report_path(path_or_extension);
