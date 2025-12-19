@@ -80,6 +80,9 @@ class Chasm_Runtime_Bridge
 
  Chasm_Procedure_Table* proctable_;
 
+ u4 current_source_file_index_;
+ u4 current_statement_line_number_;
+
  void resolve_pins();
  void load_value_literal(QString token);
  void resolve_value_literal(QStringList& qsl);
@@ -151,6 +154,9 @@ public:
  void check_ghost(const Chasm_Carrier& cc);
 
  void clear_current_ghost_scope();
+ void source_file_index(QString value);
+ void statement_line_number(QString value);
+
 
  void load_type_object(QString token);
 

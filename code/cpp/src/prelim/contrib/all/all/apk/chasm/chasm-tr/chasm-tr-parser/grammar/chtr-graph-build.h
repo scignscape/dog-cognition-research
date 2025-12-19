@@ -134,6 +134,8 @@ private:
 
  QString current_channel_name_;
 
+ u4 source_file_index_;
+
  void cut();
 
 // QTextStream acc;

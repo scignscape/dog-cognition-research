@@ -53,6 +53,7 @@ ChTR_Graph_Build::ChTR_Graph_Build(ChTR_Document* d, ChTR_Parser& p, ChTR_Graph&
    ,Sf(ChTR_Relae_Frame::instance())
    ,Qy(ChTR_Relae_Query::instance())
    ,node_factory_(ChTR_Node_Factory::instance())
+   ,source_file_index_(0)
    ,held_line_number_(0)
    ,current_context_code_(0)
    ,current_source_type_(nullptr)
@@ -155,11 +156,20 @@ void ChTR_Graph_Build::run_lines()
 
 void ChTR_Graph_Build::source_file(QString file_path)
 {
- gen.blank();
- gen << "@sf " << file_path; cut();
- gen.blank();
- gen << "init-source-file-lexical-scope"; cut(); gen.blank();
+ ++source_file_index_;
 
+ gen
+   .blank()
+   << "@sf " << file_path; cut();
+ gen
+   .blank()
+   << "init-source-file-lexical-scope"; cut();
+
+ gen
+   .blank()
+   << "source-file-index $ " << source_file_index_; cut();
+
+ gen.blank();
 }
 
 

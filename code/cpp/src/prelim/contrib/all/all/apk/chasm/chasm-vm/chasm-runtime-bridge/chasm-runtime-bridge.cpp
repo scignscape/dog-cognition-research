@@ -33,7 +33,9 @@ Chasm_Runtime_Bridge::Chasm_Runtime_Bridge(Chasm_Runtime* csr)
      current_type_object_(nullptr), current_carrier_deque_(nullptr),
      current_loaded_raw_value_(0), current_ghost_scope_(nullptr),
      current_lexical_scope_(nullptr),
-     proctable_(nullptr)
+     proctable_(nullptr),
+     current_source_file_index_(0),
+     current_statement_line_number_(0)
 {
  const QVector<Chasm_Type_Object*>& pto = *csr_->pretype_type_objects();
 
@@ -94,6 +96,16 @@ void Chasm_Runtime_Bridge::run_eval(QString proc_name)
  }
 }
 
+
+void Chasm_Runtime_Bridge::statement_line_number(QString value)
+{
+ current_statement_line_number_  = value.toUInt();
+}
+
+void Chasm_Runtime_Bridge::source_file_index(QString value)
+{
+ current_source_file_index_  = value.toUInt();
+}
 
 void Chasm_Runtime_Bridge::reset_carrier_deque()
 {

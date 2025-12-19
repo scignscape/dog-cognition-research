@@ -192,6 +192,8 @@ void Chasm_VM::read_line(QString inst, QString arg)
   { "add-new-channel", &Chasm_Runtime_Bridge::add_new_channel },
   { "load-proc-name", &Chasm_Runtime_Bridge::load_proc_name },
   { "load-carrier-symbol-lxs", &Chasm_Runtime_Bridge::load_carrier_symbol_lxs },
+  { "source-file-index", &Chasm_Runtime_Bridge::source_file_index },
+  { "statement-line-number", &Chasm_Runtime_Bridge::statement_line_number },
 
   { "add_new_channel", &Chasm_Runtime_Bridge::add_new_channel },
   { "gen_carrier_tvr", &Chasm_Runtime_Bridge::gen_carrier_tvr },
