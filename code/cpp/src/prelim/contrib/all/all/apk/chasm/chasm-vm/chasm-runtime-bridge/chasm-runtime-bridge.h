@@ -39,6 +39,8 @@ class Chasm_Call_Package;
 class Chasm_Type_Object;
 class CSM_Ghost_Scope;
 
+class CHVM_Lexical_Scope;
+
 
 //typedef void(*_minimal_fn_s0_type)();
 //typedef void(_min_::*_minimal_fn_s1_type)();
@@ -49,6 +51,7 @@ class Chasm_Runtime_Bridge
  Chasm_Runtime* csr_;
  Chasm_Call_Package* current_call_package_;
  Chasm_Type_Object* current_type_object_;
+
 
  Chasm_Type_Object* type_object_ref_;
  Chasm_Type_Object* type_object_u1_;
@@ -61,6 +64,9 @@ class Chasm_Runtime_Bridge
  Chasm_Type_Object* type_object_n8_;
  Chasm_Type_Object* type_object_ptr_;
 
+ QVector<QStringList> current_pins_;
+ QString* current_value_literal_position_;
+
  QStack<std::deque<Chasm_Carrier>*> carrier_stacks_;
 
  std::deque<Chasm_Carrier>* current_carrier_deque_;
@@ -70,7 +76,14 @@ class Chasm_Runtime_Bridge
  CSM_Ghost_Scope* current_ghost_scope_;
  QStack<CSM_Ghost_Scope*> active_ghost_scopes_;
 
+ CHVM_Lexical_Scope* current_lexical_scope_;
+
  Chasm_Procedure_Table* proctable_;
+
+ void resolve_pins();
+ void load_value_literal(QString token);
+ void resolve_value_literal(QStringList& qsl);
+
 
  void infer_unsigned_type()
  {
@@ -119,13 +132,20 @@ public:
 
  Chasm_Runtime_Bridge(Chasm_Runtime* csr);
 
+ static u4 truncate_u(u4 value, u1 byte_span);
+ static s4 truncate_s(s4 value, u1 byte_span);
+
  Chasm_Carrier last_carrier();
 
  void new_call_package(); //Chasm_Call_Package*
 
  void add_new_channel(QString name);
 
+ void init_source_file_lexical_scope();
+ void declare_lexical_typed_symbol(QString symbol);
+
  void init_new_ghost_scope();
+ void single_init_pin(QString symbol);
 
  void check_claims(const Chasm_Carrier& cc);
  void check_ghost(const Chasm_Carrier& cc);
@@ -150,11 +170,14 @@ public:
  void gen_carrier(void* pv);
  void gen_carrier_tvr(QString rep);
  void gen_carrier_lsr();
+ void gen_carrier(Chasm_Type_Object* cto);
+ void gen_carrier(QString symbol, Chasm_Type_Object* cto);
 
 
  void load_string_literal(QString literal);
 
  void load_proc_name(QString name);
+ void load_carrier_symbol_lxs(QString symbol);
 
  void load_symbol_u10(QString literal);
  void load_symbol_s10(QString literal);

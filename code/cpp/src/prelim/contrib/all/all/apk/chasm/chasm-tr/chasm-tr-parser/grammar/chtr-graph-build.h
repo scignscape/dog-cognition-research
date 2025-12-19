@@ -154,7 +154,7 @@ private:
 
  enum class Channel_States {
 
-  N_A, Implicit_Lambda, Named_Channel_Entered, Name_Channel_Exited,
+  N_A, Implicit_Lambda, Explicit_Lambda, Named_Channel_Entered, Name_Channel_Exited,
 
  };
  Channel_States current_channel_state_;
@@ -189,6 +189,9 @@ public:
  void read_graph_build_program(QString lines);
 
  QString chvm_code();
+
+ void source_file(QString file_path);
+
 // {
 //  return acc_;
 // }

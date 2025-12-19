@@ -49,6 +49,7 @@ HEADERS += \
   $$SRC_DIR/chasm-runtime-bridge.h \
   $$SRC_DIR/csm-ghost-scope.h \
   $$SRC_DIR/chasm-runtime-eval.h \
+  $$SRC_DIR/chvm-lexical-scope.h \
 
 
 
@@ -56,6 +57,7 @@ SOURCES += \
   $$SRC_DIR/chasm-runtime-bridge.cpp \
   $$SRC_DIR/csm-ghost-scope.cpp \
   $$SRC_DIR/chasm-runtime-eval.cpp \
+  $$SRC_DIR/chvm-lexical-scope.cpp \
 
 
 

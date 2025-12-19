@@ -11,8 +11,10 @@
 #include <QDebug>
 
 
-Chasm_Type_Object::Chasm_Type_Object(QString name, u2 c0, u2 c1, u2 c2, u2 c3)
- :  name_(name), qmetatype_(nullptr),
+Chasm_Type_Object::Chasm_Type_Object(QString name, Built_In_Status st,
+    u1 byte_span, u2 c0, u2 c1, u2 c2, u2 c3)
+ :  built_in_status_(st), byte_span_(byte_span),
+    associate_(nullptr), name_(name), qmetatype_(nullptr),
     codes_with_position_{c0, c1, c2, c3}
 {
 

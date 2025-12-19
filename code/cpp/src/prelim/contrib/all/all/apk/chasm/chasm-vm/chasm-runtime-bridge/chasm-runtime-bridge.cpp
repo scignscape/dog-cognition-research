@@ -7,10 +7,14 @@
 
 #include "chasm-runtime-bridge.h"
 
+#include "chvm-lexical-scope.h"
+
 #include "chasm-lib/chasm/chasm-runtime.h"
 #include "chasm-lib/chasm/chasm-call-package.h"
 
 #include "chasm-procedure-table/chasm-procedure-table.h"
+
+#include "chasm-lib/chasm/types/chasm-type-object.h"
 
 #include "csm-ghost-scope.h"
 
@@ -25,8 +29,10 @@
 
 Chasm_Runtime_Bridge::Chasm_Runtime_Bridge(Chasm_Runtime* csr)
   :  csr_(csr), current_call_package_(nullptr),
+     current_value_literal_position_(nullptr),
      current_type_object_(nullptr), current_carrier_deque_(nullptr),
      current_loaded_raw_value_(0), current_ghost_scope_(nullptr),
+     current_lexical_scope_(nullptr),
      proctable_(nullptr)
 {
  const QVector<Chasm_Type_Object*>& pto = *csr_->pretype_type_objects();
@@ -236,11 +242,21 @@ Chasm_Carrier Chasm_Runtime_Bridge::last_carrier()
  return current_carrier_deque_->back();
 }
 
-void Chasm_Runtime_Bridge::gen_carrier()
+void Chasm_Runtime_Bridge::gen_carrier(Chasm_Type_Object* cto)
 {
- Chasm_Carrier cc = csr_->gen_carrier_by_type_object(current_type_object_);
+ Chasm_Carrier cc = csr_->gen_carrier_by_type_object(cto);
  check_claims(cc);
  current_carrier_deque_->push_back(cc);
+}
+
+void Chasm_Runtime_Bridge::gen_carrier()
+{
+ gen_carrier(current_type_object_);
+}
+
+void Chasm_Runtime_Bridge::gen_carrier(QString symbol, Chasm_Type_Object* cto)
+{
+
 }
 
 void Chasm_Runtime_Bridge::gen_carrier(void* pv)
@@ -251,11 +267,92 @@ void Chasm_Runtime_Bridge::gen_carrier(void* pv)
 }
 
 
+void Chasm_Runtime_Bridge::init_source_file_lexical_scope()
+{
+ current_lexical_scope_ = new CHVM_Lexical_Scope();
+}
+
+
 void Chasm_Runtime_Bridge::load_type_object(QString token)
 {
 
 }
 
+void Chasm_Runtime_Bridge::load_carrier_symbol_lxs(QString symbol)
+{
+ Chasm_Type_Object* cto = current_lexical_scope_->type_object_for_symbol(symbol);
+ gen_carrier(cto);
+}
+
+void Chasm_Runtime_Bridge::load_value_literal(QString token)
+{
+ *current_value_literal_position_ = token;
+}
+
+void Chasm_Runtime_Bridge::resolve_pins()
+{
+ for(QStringList& qsl : current_pins_)
+ {
+  resolve_value_literal(qsl);
+ }
+}
+
+u4 Chasm_Runtime_Bridge::truncate_u(u4 value, u1 byte_span)
+{
+ switch (byte_span)
+ {
+ case 1: return (u4)(u1) value;
+ case 2: return (u4)(u2) value;
+
+ default: return value;
+ }
+}
+
+s4 Chasm_Runtime_Bridge::truncate_s(s4 value, u1 byte_span)
+{
+ switch (byte_span)
+ {
+ case 1: return (s4)(u1) value;
+ case 2: return (s4)(u2) value;
+
+ default: return value;
+ }
+}
+
+void Chasm_Runtime_Bridge::resolve_value_literal(QStringList& qsl)
+{
+ QString symbol = qsl.first();
+ QString value = qsl.last();
+
+ Chasm_Type_Object* cto = current_lexical_scope_->type_object_for_symbol(symbol);
+
+ n8 nval = 0;
+
+ switch (cto->built_in_status())
+ {
+ case Chasm_Type_Object::Built_In_Status::u_like:
+  {
+   u4 val = value.toUInt();
+   nval = truncate_u(val, cto->byte_span());
+  }
+  break;
+ default:
+  break;
+ }
+
+ current_lexical_scope_->register_value(symbol, nval);
+}
+
+void Chasm_Runtime_Bridge::single_init_pin(QString symbol)
+{
+ current_pins_.push_back({symbol, ""});
+ current_value_literal_position_ = &current_pins_.last()[1];
+}
+
+void Chasm_Runtime_Bridge::declare_lexical_typed_symbol(QString symbol)
+{
+ current_lexical_scope_->register_symbol(symbol, current_type_object_);
+}
 
 void Chasm_Runtime_Bridge::load_type_ref()
 {

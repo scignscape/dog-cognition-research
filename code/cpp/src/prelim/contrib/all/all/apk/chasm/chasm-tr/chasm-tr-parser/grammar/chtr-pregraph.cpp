@@ -50,6 +50,8 @@ ChTR_Pregraph::ChTR_Pregraph(ChTR_Document* d,
    ,current_line_number_(1)
 {
  acc << "\n"; cut();
+ acc << ".source-file $ " << d->local_path(); cut();
+ acc << "\n"; cut();
 }
 
 //void ChTR_Pregraph::acc(QString contents)

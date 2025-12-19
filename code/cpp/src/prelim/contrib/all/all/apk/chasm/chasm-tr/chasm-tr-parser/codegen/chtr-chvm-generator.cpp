@@ -45,9 +45,11 @@ void ChTR_CHVM_Generator::check_register_current_subroutine_name()
 
  if(lines.isEmpty())
  {
-  ChTR_CHVM_Line* ccl = new ChTR_CHVM_Line(0, "@fn %1 ;."_qt.arg(current_subroutine_name_));
-//  ccl->pre_blank();
-  lines.push_back(ccl);
+//  ChTR_CHVM_Line* ccl = new ChTR_CHVM_Line(0, "@fn %1 ;."_qt.arg(current_subroutine_name_));
+//  lines.push_back(ccl);
+
+  dissolve({"@fn %1"_qt.arg(current_subroutine_name_)});
+
   known_subroutine_names_.push_back(current_subroutine_name_);
  }
 }
@@ -56,7 +58,8 @@ ChTR_CHVM_Generator& ChTR_CHVM_Generator::dissolve(QVector<QString> new_lines)
 {
  for (QString line : new_lines)
  {
-  acc_stream_ << statement_line(line); cut();
+  acc_stream_ << line; cut();
+//  acc_stream_ << statement_line(line); cut();
  }
  return *this;
 }

@@ -32,8 +32,9 @@ public:
 
  ACCESSORS__GET(QVector<Chasm_Type_Object*>* ,pretype_type_objects)
 
- Chasm_Type_Object* register_type_object(QString name, u2 pos1code, u2 pos2code,
-   u2 pos3code, u2 pos4code);
+ Chasm_Type_Object* register_type_object(QString name,
+   s2 status, u1 byte_span,
+   u2 pos1code, u2 pos2code, u2 pos3code, u2 pos4code);
 
  Chasm_Type_Object* get_type_object_by_name(QString name);
 

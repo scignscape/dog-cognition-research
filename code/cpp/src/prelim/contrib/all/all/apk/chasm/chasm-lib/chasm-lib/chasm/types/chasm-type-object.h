@@ -25,21 +25,47 @@
 
 #include "../chasm-runtime.h"
 
+#include "flags.h"
 
 //KANS_(GTagML)
 
 class Chasm_Type_Object
 {
+public:
+
+ enum class Built_In_Status : s2 {
+  N_A = 0, u_like = 1, s_like = 2,
+  r_like = 4, n8_like = 8,
+  QString_like = 16,
+  QByteArray_like = 32,
+  QVariant_like = 64,
+  QStringList_like = 128,
+
+  associate_via_ptr = 8192,
+  associate_via_ref = 16384,
+ };
+
+private:
+
  QString name_;
+
+ Built_In_Status built_in_status_;
+ u1 byte_span_;
+
  QMetaType* qmetatype_;
 
  u2 codes_with_position_[4];
 
+ Chasm_Type_Object* associate_;
+
 public:
 
- Chasm_Type_Object(QString name, u2 c0, u2 c1, u2 c2, u2 c3);
+ Chasm_Type_Object(QString name, Built_In_Status st,
+  u1 byte_span, u2 c0, u2 c1, u2 c2, u2 c3);
 
  ACCESSORS(QString ,name)
+ ACCESSORS(Built_In_Status ,built_in_status)
+ ACCESSORS(u1 ,byte_span)
 
  u1 get_pretype_code();
 

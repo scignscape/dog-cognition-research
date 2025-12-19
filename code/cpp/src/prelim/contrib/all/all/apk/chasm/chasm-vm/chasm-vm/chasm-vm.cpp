@@ -145,6 +145,11 @@ void Chasm_VM::read_line(QString inst)
 {
  static QMap<QString, void(Chasm_Runtime_Bridge::*)()> static_map {{
   { "new_call_package", &Chasm_Runtime_Bridge::new_call_package },
+
+  { "new-call-package", &Chasm_Runtime_Bridge::new_call_package },
+  { "push-carrier-deque", &Chasm_Runtime_Bridge::push_carrier_deque },
+
+  { "init-source-file-lexical-scope", &Chasm_Runtime_Bridge::init_source_file_lexical_scope },
   { "load-type-ref", &Chasm_Runtime_Bridge::load_type_ref },
   { "load-type-u1", &Chasm_Runtime_Bridge::load_type_u1 },
   { "load-type-u2", &Chasm_Runtime_Bridge::load_type_u2 },
@@ -182,7 +187,10 @@ void Chasm_VM::read_line(QString inst, QString arg)
  static QMap<QString, void(Chasm_Runtime_Bridge::*)(QString)> static_map {{
 
   { "load-type-object", &Chasm_Runtime_Bridge::load_type_object },
-
+  { "declare-lexical-typed-symbol", &Chasm_Runtime_Bridge::declare_lexical_typed_symbol },
+  { "add-new-channel", &Chasm_Runtime_Bridge::add_new_channel },
+  { "load-proc-name", &Chasm_Runtime_Bridge::load_proc_name },
+  { "load-carrier-symbol-lxs", &Chasm_Runtime_Bridge::load_carrier_symbol_lxs },
 
   { "add_new_channel", &Chasm_Runtime_Bridge::add_new_channel },
   { "gen_carrier_tvr", &Chasm_Runtime_Bridge::gen_carrier_tvr },

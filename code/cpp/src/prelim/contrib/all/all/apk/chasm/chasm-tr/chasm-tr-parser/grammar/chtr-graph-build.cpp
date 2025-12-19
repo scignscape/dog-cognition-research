@@ -153,6 +153,15 @@ void ChTR_Graph_Build::run_lines()
  }
 }
 
+void ChTR_Graph_Build::source_file(QString file_path)
+{
+ gen.blank();
+ gen << "@sf " << file_path; cut();
+ gen.blank();
+ gen << "init-source-file-lexical-scope"; cut(); gen.blank();
+
+}
+
 
 void ChTR_Graph_Build::scoped_symbol_decl(QString symbol)
 {
@@ -221,8 +230,13 @@ void ChTR_Graph_Build::proc_name(QString token)
    .preamble_comment("statement")
    .dissolve({"init-new-ghost-scope", "push-carrier-deque"})
    .blank()
+   .dissolve({"new-call-package"})
+   .blank()
+   .dissolve({"add-new-channel $ proc"})
    << "load-proc-name $ " << token;
+
  cut();
+ gen.blank();
 
  current_channel_state_ = Channel_States::Implicit_Lambda;
 }
@@ -232,6 +246,10 @@ void ChTR_Graph_Build::symbol_token(QString token)
  switch(current_channel_state_)
  {
  case Channel_States::Implicit_Lambda:
+   gen.dissolve({"add-new-channel $ lambda"}).blank();
+   current_channel_state_ = Channel_States::Explicit_Lambda;
+   // //  fall through
+ case Channel_States::Explicit_Lambda:
   {
    QString symbol_name = current_lexical_scope_->get_symbol_name(token);
 
@@ -241,7 +259,7 @@ void ChTR_Graph_Build::symbol_token(QString token)
     return;
    }
 
-   gen << "load-carrier-symbol $ " << symbol_name; cut();
+   gen << "load-carrier-symbol-lxs $ " << symbol_name; cut();
   }
  }
 
@@ -263,6 +281,7 @@ void ChTR_Graph_Build::pin_value_literal(QString token)
 void ChTR_Graph_Build::read_line(QString fn, QString arg)
 {
  static QMap<QString, void(ChTR_Graph_Build::*)(QString)> static_map {{
+   { ".source-file", &ChTR_Graph_Build::source_file },
    { ".scoped-symbol-decl", &ChTR_Graph_Build::scoped_symbol_decl },
    { ".type-expression-token", &ChTR_Graph_Build::type_expression_token },
    { ".scoped-symbol-pin", &ChTR_Graph_Build::scoped_symbol_pin },
