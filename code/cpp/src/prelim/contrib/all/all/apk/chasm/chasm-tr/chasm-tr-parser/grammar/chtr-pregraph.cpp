@@ -111,6 +111,11 @@ void ChTR_Pregraph::prepare_carrier_declaration(QString symbol,
 
 QString ChTR_Pregraph::pregraph_code()
 {
+ check_resolve_statement();
+ check_write_line_number();
+
+ acc << ".source-file-end"; cut();
+
  return acc_lines_.join("\n") + "\n\n .; end of source file ;. \n";
 }
 

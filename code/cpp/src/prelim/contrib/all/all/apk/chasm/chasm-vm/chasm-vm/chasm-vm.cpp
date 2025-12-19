@@ -148,6 +148,7 @@ void Chasm_VM::read_line(QString inst)
 
   { "new-call-package", &Chasm_Runtime_Bridge::new_call_package },
   { "push-carrier-deque", &Chasm_Runtime_Bridge::push_carrier_deque },
+  { "add-carriers", &Chasm_Runtime_Bridge::add_carriers },
 
   { "init-source-file-lexical-scope", &Chasm_Runtime_Bridge::init_source_file_lexical_scope },
   { "load-type-ref", &Chasm_Runtime_Bridge::load_type_ref },

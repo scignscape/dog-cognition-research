@@ -274,8 +274,23 @@ void ChTR_Graph_Build::pin_value_literal(QString token)
  gen << "resolve-pins"; cut();
 }
 
+void ChTR_Graph_Build::source_file_end()
+{
+ switch(current_channel_state_)
+ {
+ case Channel_States::Implicit_Lambda:
+ case Channel_States::Explicit_Lambda:
 
+  gen
+    .blank()
+    .dissolve({"add-carriers", "run-proc-eval"})
+    .blank()
+    .dissolve({"reset-carrier-deque", "clear-current-ghost-scope"})
+    .blank();
+ }
 
+ gen.blank().dissolve({"@sfe"});
+}
 
 
 void ChTR_Graph_Build::read_line(QString fn, QString arg)
@@ -301,6 +316,16 @@ void ChTR_Graph_Build::read_line(QString fn, QString arg)
 
 void ChTR_Graph_Build::read_line(QString fn)
 {
+ static QMap<QString, void(ChTR_Graph_Build::*)()> static_map {{
+   { ".source-file-end", &ChTR_Graph_Build::source_file_end },
+ }};
+
+ auto it = static_map.find(fn);
+ if(it != static_map.end())
+ {
+//  QString* a = new QString(arg);
+  line_ops_.push_back({{}, fn_u{.fn0=it.value()}});
+ }
 
 }
 

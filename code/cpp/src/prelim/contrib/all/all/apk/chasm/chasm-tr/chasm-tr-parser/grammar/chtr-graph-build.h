@@ -134,7 +134,6 @@ private:
 
  QString current_channel_name_;
 
-
  void cut();
 
 // QTextStream acc;
@@ -204,6 +203,7 @@ public:
  void symbol_token(QString token);
  void pin_value_literal(QString token);
 
+ void source_file_end();
 
  void enter_statement_body();
 
