@@ -149,6 +149,8 @@ void Chasm_VM::read_line(QString inst)
   { "new-call-package", &Chasm_Runtime_Bridge::new_call_package },
   { "push-carrier-deque", &Chasm_Runtime_Bridge::push_carrier_deque },
   { "add-carriers", &Chasm_Runtime_Bridge::add_carriers },
+  { "run-proc-eval", &Chasm_Runtime_Bridge::run_proc_eval },
+  { "resolve-pins", &Chasm_Runtime_Bridge::resolve_pins },
 
   { "init-source-file-lexical-scope", &Chasm_Runtime_Bridge::init_source_file_lexical_scope },
   { "load-type-ref", &Chasm_Runtime_Bridge::load_type_ref },
@@ -194,6 +196,9 @@ void Chasm_VM::read_line(QString inst, QString arg)
   { "load-carrier-symbol-lxs", &Chasm_Runtime_Bridge::load_carrier_symbol_lxs },
   { "source-file-index", &Chasm_Runtime_Bridge::source_file_index },
   { "statement-line-number", &Chasm_Runtime_Bridge::statement_line_number },
+  { "single-init-pin", &Chasm_Runtime_Bridge::single_init_pin },
+  { "load-value-literal", &Chasm_Runtime_Bridge::load_value_literal },
+
 
   { "add_new_channel", &Chasm_Runtime_Bridge::add_new_channel },
   { "gen_carrier_tvr", &Chasm_Runtime_Bridge::gen_carrier_tvr },

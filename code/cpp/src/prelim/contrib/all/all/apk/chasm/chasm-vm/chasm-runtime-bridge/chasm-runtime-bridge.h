@@ -83,9 +83,19 @@ class Chasm_Runtime_Bridge
  u4 current_source_file_index_;
  u4 current_statement_line_number_;
 
- void resolve_pins();
- void load_value_literal(QString token);
- void resolve_value_literal(QStringList& qsl);
+ QMap<QString, u4> interned_symbols_;
+ u4 max_interned_symbol_;
+
+ u4 interned(QString sym)
+ {
+  auto it = interned_symbols_.find(sym);
+  if(it == interned_symbols_.end())
+  {
+   interned_symbols_.insert(sym, ++max_interned_symbol_);
+   return max_interned_symbol_;
+  }
+  return *it;
+ }
 
 
  void infer_unsigned_type()
@@ -139,6 +149,12 @@ public:
  static s4 truncate_s(s4 value, u1 byte_span);
 
  Chasm_Carrier last_carrier();
+
+ void resolve_pins();
+ void load_value_literal(QString token);
+ void resolve_value_literal(QStringList& qsl);
+
+
 
  void new_call_package(); //Chasm_Call_Package*
 

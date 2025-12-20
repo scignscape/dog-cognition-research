@@ -35,7 +35,8 @@ Chasm_Runtime_Bridge::Chasm_Runtime_Bridge(Chasm_Runtime* csr)
      current_lexical_scope_(nullptr),
      proctable_(nullptr),
      current_source_file_index_(0),
-     current_statement_line_number_(0)
+     current_statement_line_number_(0),
+     max_interned_symbol_(0)
 {
  const QVector<Chasm_Type_Object*>& pto = *csr_->pretype_type_objects();
 
@@ -99,7 +100,7 @@ void Chasm_Runtime_Bridge::run_eval(QString proc_name)
 
 void Chasm_Runtime_Bridge::statement_line_number(QString value)
 {
- current_statement_line_number_  = value.toUInt();
+ current_statement_line_number_ = value.toUInt();
 }
 
 void Chasm_Runtime_Bridge::source_file_index(QString value)
@@ -268,7 +269,16 @@ void Chasm_Runtime_Bridge::gen_carrier()
 
 void Chasm_Runtime_Bridge::gen_carrier(QString symbol, Chasm_Type_Object* cto)
 {
+ Chasm_Carrier cc = csr_->gen_carrier_by_type_object(cto);
+ cc.set_fcode(current_source_file_index_);
+ cc.set_lcode(current_statement_line_number_);
+ cc.set_ccode(interned(symbol));
 
+ n8 val = current_lexical_scope_->retrieve_value(symbol);
+ cc.set_raw_value(val);
+
+ check_claims(cc);
+ current_carrier_deque_->push_back(cc);
 }
 
 void Chasm_Runtime_Bridge::gen_carrier(void* pv)
@@ -293,7 +303,9 @@ void Chasm_Runtime_Bridge::load_type_object(QString token)
 void Chasm_Runtime_Bridge::load_carrier_symbol_lxs(QString symbol)
 {
  Chasm_Type_Object* cto = current_lexical_scope_->type_object_for_symbol(symbol);
- gen_carrier(cto);
+
+
+ gen_carrier(symbol, cto);
 }
 
 void Chasm_Runtime_Bridge::load_value_literal(QString token)

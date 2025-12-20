@@ -77,7 +77,7 @@ struct trisym
 
 
  u4 fcode() { return (code & 0xFFFFFF0000000000) >> 40; }
- s4 scode() { return (code & 0x000000FFFFFF0000) >> 24; }
+ s4 lcode() { return (code & 0x000000FFFFFF0000) >> 24; }
  u4 ccode() { return (code & 0xFFF0) >> 4; }
 
  u1 type_flag() { return (code & 0x0F); }
@@ -100,6 +100,21 @@ public:
 
  ACCESSORS(trisym ,key)
  ACCESSORS(n8 ,raw_value)
+
+ void set_fcode(u4 val)
+ {
+  key_.set_fcode(val);
+ }
+
+ void set_lcode(u4 val)
+ {
+  key_.set_lcode(val);
+ }
+
+ void set_ccode(u4 val)
+ {
+  key_.set_ccode(val);
+ }
 
  void set_type_flag(u1 tf)
  {

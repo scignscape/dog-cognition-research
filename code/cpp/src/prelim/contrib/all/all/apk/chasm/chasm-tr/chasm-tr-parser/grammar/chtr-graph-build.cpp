@@ -238,6 +238,9 @@ void ChTR_Graph_Build::proc_name(QString token)
  gen
    .blank()
    .preamble_comment("statement")
+   << "statemnt-line-number $ " << current_line_number_; cut();
+
+ gen
    .dissolve({"init-new-ghost-scope", "push-carrier-deque"})
    .blank()
    .dissolve({"new-call-package"})
