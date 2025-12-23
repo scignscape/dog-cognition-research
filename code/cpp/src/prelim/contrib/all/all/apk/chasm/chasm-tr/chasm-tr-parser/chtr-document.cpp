@@ -147,6 +147,8 @@ void ChTR_Document::parse(int start_position, int end_position)
  grammar_->init(*parser_, *graph_, *pregraph_, *graph_build_);
 
  grammar_->compile(*parser_, *graph_, raw_text_, start_position);
+
+ pregraph_->resolve_source_file();
 }
 
 ChTR_Document::~ChTR_Document()

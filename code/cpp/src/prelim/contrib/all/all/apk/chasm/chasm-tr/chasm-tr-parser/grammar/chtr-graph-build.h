@@ -193,9 +193,14 @@ public:
 
  void source_file(QString file_path);
 
-// {
-//  return acc_;
-// }
+ void check_resolve_statement();
+
+ void write_handoff_rtl();
+ void write_handoff_rts();
+ void resolve_expression();
+ void resolve_statement();
+ void enter_expression();
+ void enter_statement();
 
 
  void scoped_symbol_decl(QString symbol);

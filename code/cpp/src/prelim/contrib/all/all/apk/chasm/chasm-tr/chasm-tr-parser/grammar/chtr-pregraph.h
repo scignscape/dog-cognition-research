@@ -50,6 +50,9 @@ public:
 
  flags_(1)
   bool active_run_call:1;
+  bool infix_mode:1;
+  bool active_statement:1;
+  bool active_expression:1;
 
 //  bool discard_acc:1;
 //  bool split_acc:1;
@@ -89,7 +92,19 @@ private:
 
  QStringList acc_lines_;
 
+ enum class Carrier_Handoff_States {
+   N_A, Implicit_Return_to_Lambda, Return_to_Lambda, Return_to_Sigma
+ };
+
+ QStack<Carrier_Handoff_States> current_handoff_states_;
+ Carrier_Handoff_States declared_handoff_state_;
+
  QStack<QString> proc_names_;
+
+ QStack<QPair<s4, s4>> infix_line_indices_;
+
+ u1 infix_count_;
+ u1 expression_nesting_count_;
 
  u4 last_line_number_written_;
  u4 current_line_number_;
@@ -104,14 +119,25 @@ public:
  ACCESSORS(ChTR_Grammar* ,grammar)
 
  void check_resolve_statement();
+ void reenter_statement_level();
+ void temp_reenter_statement_level();
+
+ void enter_expression();
+
+ void leave_expression();
+
 
  void check_lines(QString text);
+
+ void check_write_handoff();
 
  void check_write_line_number();
 
  void init();
 
  void cut();
+
+ void check_enter_infix_mode();
 
  void non_anchored_call(QString proc_name);
 
@@ -125,6 +151,8 @@ public:
 
  void prepare_carrier_declaration(QString symbol,
    QString tween, QString type_token);
+
+ void resolve_source_file();
 
 // void enter_channel_body();
 // void leave_channel_body();

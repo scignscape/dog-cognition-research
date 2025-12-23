@@ -287,7 +287,7 @@ void ChTR_Graph_Build::pin_value_literal(QString token)
  gen << "resolve-pins"; cut();
 }
 
-void ChTR_Graph_Build::source_file_end()
+void ChTR_Graph_Build::check_resolve_statement()
 {
  switch(current_channel_state_)
  {
@@ -301,9 +301,45 @@ void ChTR_Graph_Build::source_file_end()
     .dissolve({"reset-carrier-deque", "clear-current-ghost-scope"})
     .blank();
  }
+}
 
+
+void ChTR_Graph_Build::source_file_end()
+{
+ check_resolve_statement();
  gen.blank().dissolve({"@sfe"});
 }
+
+void ChTR_Graph_Build::write_handoff_rtl()
+{
+
+}
+
+void ChTR_Graph_Build::write_handoff_rts()
+{
+
+}
+
+void ChTR_Graph_Build::resolve_expression()
+{
+
+}
+
+void ChTR_Graph_Build::resolve_statement()
+{
+
+}
+
+void ChTR_Graph_Build::enter_expression()
+{
+
+}
+
+void ChTR_Graph_Build::enter_statement()
+{
+
+}
+
 
 
 void ChTR_Graph_Build::read_line(QString fn, QString arg)
@@ -331,6 +367,14 @@ void ChTR_Graph_Build::read_line(QString fn)
 {
  static QMap<QString, void(ChTR_Graph_Build::*)()> static_map {{
    { ".source-file-end", &ChTR_Graph_Build::source_file_end },
+
+   { ".write-handoff-rtl", &ChTR_Graph_Build::write_handoff_rtl },
+   { ".write-handoff-rts", &ChTR_Graph_Build::write_handoff_rts },
+   { ".enter-expression", &ChTR_Graph_Build::enter_expression },
+   { ".enter-statement", &ChTR_Graph_Build::enter_statement },
+   { ".resolve-expression", &ChTR_Graph_Build::resolve_expression },
+   { ".resolve-statement", &ChTR_Graph_Build::resolve_statement },
+
  }};
 
  auto it = static_map.find(fn);

@@ -47,12 +47,13 @@ void ChTR_Grammar::init(ChTR_Parser& p, ChTR_Graph& g,
 
  pre_rule( "non-parens", "[^)]*" );
 
+ Context source_context = add_context("source-context");
 
- Context statement_level_context = add_context("statement-level-context");
- Context run_call_context = add_context("run-call-context");
+ Context statement_level_context = add_context("statement-level-context", {source_context});
+ Context run_call_context = add_context("run-call-context", {source_context});
 
- Context source_context = add_context("source-context",
-   {statement_level_context, run_call_context});
+// Context source_context = add_context("source-context",
+//   {statement_level_context, run_call_context});
 
  track_context({&statement_level_context, &run_call_context, &source_context});
 
@@ -62,7 +63,7 @@ void ChTR_Grammar::init(ChTR_Parser& p, ChTR_Graph& g,
 // Context read_context = add_context("read-context",
 //   {sample_context, group_context});
 
- activate(source_context);
+ activate(statement_level_context);
 
  ChTR_Parse_Context& parse_context = graph_build.parse_context();
 
@@ -82,6 +83,8 @@ void ChTR_Grammar::init(ChTR_Parser& p, ChTR_Graph& g,
    ", (?<symbol> \\S+) (?<tween> \\s+) (?<tx> [^,;*&)\\]] \\S*)"
    ,[&]
  {
+  pregraph.reenter_statement_level();
+
   QString sym = p.matched("symbol");
   QString tween = p.matched("tween");
   QString tx = p.matched("tx");
@@ -93,6 +96,8 @@ void ChTR_Grammar::init(ChTR_Parser& p, ChTR_Graph& g,
    "\\\\ (?<symbol> \\S+) (?<tween> \\s+) (?<token> \\S+)"
    ,[&]
  {
+  pregraph.reenter_statement_level();
+
   QString sym = p.matched("symbol");
   QString tween = p.matched("tween");
   QString token = p.matched("token");
@@ -100,10 +105,22 @@ void ChTR_Grammar::init(ChTR_Parser& p, ChTR_Graph& g,
  });
 
  add_rule(source_context,
+   "check-enter-infix-mode",
+   //"(?<\\s)>>(?=\\s)"
+   ">>"
+   ,[&]
+ {
+  pregraph.check_enter_infix_mode();
+ });
+
+
+ add_rule(source_context,
    "non-anchored-call",
    "\\) \\s* (?<proc-name> \\S+)"
    ,[&]
  {
+  pregraph.reenter_statement_level();
+
   QString proc = p.matched("proc-name");
   pregraph.non_anchored_call(proc);
  });

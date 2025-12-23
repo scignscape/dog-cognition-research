@@ -46,8 +46,11 @@ ChTR_Pregraph::ChTR_Pregraph(ChTR_Document* d,
    ,fr_(ChTR_Relae_Frame::instance())
    ,qy_(ChTR_Relae_Query::instance())
    ,acc(&acc_)
+   ,declared_handoff_state_(Carrier_Handoff_States::N_A)
    ,last_line_number_written_(0)
    ,current_line_number_(1)
+   ,expression_nesting_count_(0)
+   ,infix_count_(0)
 {
  acc << "\n"; cut();
  acc << ".source-file $ " << d->local_path(); cut();
@@ -59,15 +62,79 @@ ChTR_Pregraph::ChTR_Pregraph(ChTR_Document* d,
 // acc << contents;
 //}
 
-void ChTR_Pregraph::check_resolve_statement()
+void ChTR_Pregraph::enter_expression()
+{
+ flags.active_expression = true;
+ ++expression_nesting_count_;
+ acc << ".enter-expression"; cut();
+
+ current_handoff_states_.push(Carrier_Handoff_States::Implicit_Return_to_Lambda);
+}
+
+void ChTR_Pregraph::leave_expression()
+{
+ acc << ".resolve-expression"; cut();
+ check_write_handoff();
+//? flags.active_expression = false;
+
+//? acc << ".leave-expression"; cut();
+ --expression_nesting_count_;
+ if(expression_nesting_count_ == 0)
+   flags.active_expression = false;
+}
+
+void ChTR_Pregraph::reenter_statement_level()
+{
+ temp_reenter_statement_level();
+ grammar_->activate_context("statement-level-context");
+}
+
+void ChTR_Pregraph::temp_reenter_statement_level()
 {
  if(flags.active_run_call)
  {
-  acc << ".resolve-symbol"; cut();
-
-  grammar_->activate_context("statement-level-context");
+  check_resolve_statement();
+  //  acc << ".resolve-symbol"; cut();
   flags.active_run_call = false;
  }
+}
+
+void ChTR_Pregraph::check_write_handoff()
+{
+ if(current_handoff_states_.isEmpty())
+   return;
+
+ switch (current_handoff_states_.pop())
+ {
+ case Carrier_Handoff_States::Implicit_Return_to_Lambda:
+ case Carrier_Handoff_States::Return_to_Lambda:
+  acc << ".write-handoff-rtl"; cut();
+  break;
+
+ case Carrier_Handoff_States::Return_to_Sigma:
+  acc << ".write-handoff-rts"; cut();
+  break;
+
+ default:
+  break;
+ }
+
+// current_handoff_state_ = Carrier_Handoff_States::N_A;
+}
+
+void ChTR_Pregraph::check_resolve_statement()
+{
+ while(flags.active_expression)
+ {
+  leave_expression();
+ }
+
+ if(flags.active_statement)
+ {
+  acc << ".resolve-statement"; cut();
+
+ }
+
 }
 
 void ChTR_Pregraph::check_write_line_number()
@@ -92,7 +159,23 @@ void ChTR_Pregraph::check_lines(QString text)
 
 void ChTR_Pregraph::symbol_token(QString token)
 {
- acc << ".symbol-token $ " << token; cut();
+ if(flags.infix_mode)
+ {
+  ++infix_count_;
+  if(infix_count_ % 2)
+  {
+   acc << ".symbol-token $ " << token; cut();
+  }
+  else
+  {
+   auto ix = infix_line_indices_.pop();
+   acc_lines_[ix.first].insert(ix.second, token);
+  }
+ }
+ else
+ {
+  acc << ".symbol-token $ " << token; cut();
+ }
 }
 
 void ChTR_Pregraph::prepare_carrier_declaration(QString symbol,
@@ -109,13 +192,17 @@ void ChTR_Pregraph::prepare_carrier_declaration(QString symbol,
  acc << ".type-expression-token $ " << type_token; cut();
 }
 
-QString ChTR_Pregraph::pregraph_code()
+void ChTR_Pregraph::resolve_source_file()
 {
  check_resolve_statement();
  check_write_line_number();
 
  acc << ".source-file-end"; cut();
+}
 
+
+QString ChTR_Pregraph::pregraph_code()
+{
  return acc_lines_.join("\n") + "\n\n .; end of source file ;. \n";
 }
 
@@ -129,11 +216,52 @@ void ChTR_Pregraph::cut()
  acc_.clear();
 }
 
+void ChTR_Pregraph::check_enter_infix_mode()
+{
+ check_write_line_number();
+
+ infix_count_ = 0;
+
+ if(flags.infix_mode)
+ {
+  flags.infix_mode = false;
+
+ }
+ else
+ {
+  flags.infix_mode = true;
+  acc << ".enter-infix-mode"; cut();
+
+  enter_expression();
+
+  acc << ".proc-name $ ";
+  u4 acc_size = acc_.size();
+  cut();
+
+  infix_line_indices_.push({acc_lines_.size() - 1, acc_size});
+ }
+}
+
 void ChTR_Pregraph::non_anchored_call(QString proc_name)
 {
  check_write_line_number();
 
  proc_names_.push_back(proc_name);
+
+ if(flags.active_expression)
+ {
+  acc << ".enter-expression"; cut();
+ }
+ else if(flags.active_statement)
+ {
+  acc << ".enter-expression"; cut();
+  flags.active_expression = true;
+ }
+ else
+ {
+  acc << ".enter-statement"; cut();
+  flags.active_statement = true;
+ }
 
  acc << ".proc-name $ " << proc_name; cut();
 
