@@ -173,6 +173,7 @@ public:
  void source_file_index(QString value);
  void statement_line_number(QString value);
 
+ void gen_return_channels();
 
  void load_type_object(QString token);
 

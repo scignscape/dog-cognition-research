@@ -164,6 +164,9 @@ void Chasm_VM::read_line(QString inst)
   { "load-type-n8", &Chasm_Runtime_Bridge::load_type_n8 },
   { "load-type-ptr", &Chasm_Runtime_Bridge::load_type_ptr },
   { "gen-retvalue-channel-u4", &Chasm_Runtime_Bridge::gen_retvalue_channel_u4 },
+  { "gen-return-channels", &Chasm_Runtime_Bridge::gen_return_channels },
+
+
 
   { "push_carrier_deque", &Chasm_Runtime_Bridge::push_carrier_deque },
   { "gen_carrier", &Chasm_Runtime_Bridge::gen_carrier},

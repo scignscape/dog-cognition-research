@@ -201,6 +201,7 @@ public:
 
   switch (tf)
   {
+  case 15: return 0;
   case 1: case 2: case 4: case 8: case 9: return (VALUE_Type) raw_value_; break;
   case 6: return reinterpret_value<VALUE_Type>(); break;
 

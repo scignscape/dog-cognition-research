@@ -113,6 +113,13 @@ void Chasm_Runtime_Bridge::gen_retvalue_channel_u4()
  current_call_package_->add_carrier(rcc);
 }
 
+void Chasm_Runtime_Bridge::gen_return_channels()
+{
+ current_call_package_->add_new_channel("retvalue");
+
+ // //  possible exception, etc.
+}
+
 
 void Chasm_Runtime_Bridge::statement_line_number(QString value)
 {

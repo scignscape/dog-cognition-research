@@ -379,16 +379,15 @@ void ChTR_Graph_Build::enter_expression()
  gen
    .blank()
    .preamble_comment("expression")
-   << "statemnt-line-number $ " << current_line_number_; cut();
+   << "statement-line-number $ " << current_line_number_; cut();
 
 // .dissolve({"init-new-ghost-scope", "push-carrier-deque"})
 
  gen
   .dissolve({"push-carrier-deque"})
   .blank()
-  .dissolve({"new-call-package"})
-  .blank(); //?cut();
-
+  .dissolve({"new-call-package", "gen-return-channels"})
+  .blank();
 }
 
 void ChTR_Graph_Build::enter_statement()
@@ -396,7 +395,7 @@ void ChTR_Graph_Build::enter_statement()
  gen
    .blank()
    .preamble_comment("statement")
-   << "statemnt-line-number $ " << current_line_number_; cut();
+   << "statement-line-number $ " << current_line_number_; cut();
 
  gen
   .dissolve({"init-new-ghost-scope", "push-carrier-deque"})
