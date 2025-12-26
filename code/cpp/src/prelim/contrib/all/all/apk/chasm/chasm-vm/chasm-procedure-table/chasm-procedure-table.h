@@ -40,7 +40,10 @@ class CSM_Ghost_Scope;
 
 typedef void(*_minimal_fn_s0_type)();
 typedef void(_min_::*_minimal_fn_s1_type)();
-union _minimal_fn_type { _minimal_fn_s0_type s0; _minimal_fn_s1_type s1; };
+typedef n8(*_minimal_fn_s0_r1_type)();
+
+
+union _minimal_fn_type { _minimal_fn_s0_type s0; _minimal_fn_s1_type s1; _minimal_fn_s0_r1_type s0r1; };
 
 typedef QPair<Chasm_Function_Code, Chasm_Function_Code> CFC_Pair;
 
@@ -86,6 +89,9 @@ public:
 
  void register_procedure_s0(QString name,
    _minimal_fn_s0_type fn, QString code);
+
+ void register_procedure_s0_r1(QString name,
+   _minimal_fn_s0_r1_type fn, QString code);
 
  void register_procedure_s1(QString name,
    _minimal_fn_s1_type sfn, QString code);

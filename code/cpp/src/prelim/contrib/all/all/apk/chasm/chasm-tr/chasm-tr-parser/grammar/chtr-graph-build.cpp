@@ -111,7 +111,8 @@ void ChTR_Graph_Build::read_graph_build_program(QString lines)
   }
   if(l.startsWith("# "))
   {
-   parse_line_number(l);
+   line_ops_.push_back({l, fn_u{.fn1 = &ChTR_Graph_Build::parse_line_number}});
+   //parse_line_number(l);
    pos = np + 3;
    continue;
   }
@@ -236,15 +237,6 @@ void ChTR_Graph_Build::scoped_symbol_pin(QString symbol)
 void ChTR_Graph_Build::proc_name(QString token)
 {
  gen
-   .blank()
-   .preamble_comment("statement")
-   << "statemnt-line-number $ " << current_line_number_; cut();
-
- gen
-   .dissolve({"init-new-ghost-scope", "push-carrier-deque"})
-   .blank()
-   .dissolve({"new-call-package"})
-   .blank()
    .dissolve({"add-new-channel $ proc"})
    << "load-proc-name $ " << token;
 
@@ -268,7 +260,59 @@ void ChTR_Graph_Build::symbol_token(QString token)
 
    if(symbol_name.isEmpty())
    {
-    // error
+    bool negative = false;
+    bool positive = false;
+    bool fp = false;
+    if(token[0] == '-')
+    {
+     negative = true;
+     token = token.mid(1);
+    }
+    if(token[0] == '+')
+    {
+     positive = true;
+     token = token.mid(1);
+    }
+    if(token[0] == '.')
+    {
+     fp = true;
+     token = token.mid(1);
+    }
+
+    if(token[0].isDigit())
+    {
+     QString base;
+     QString signed_or_not;
+     QString generic_or_literal;
+     QString int_or_float;
+     if(token[0] == '0')
+     {
+      if(token.size() == 1)
+      {
+       generic_or_literal = "generic";
+      }
+      else if(token[1].isDigit())
+        base = "_0";
+      else
+        base = token.mid(0, 2).prepend("_");
+     }
+
+     if(negative)
+       signed_or_not = "signed-negative";
+     else if(positive)
+       signed_or_not = "signed-positive";
+     else
+       signed_or_not = "unsigned";
+
+     if(generic_or_literal.isEmpty())
+       generic_or_literal = "literal";
+     if(fp)
+       int_or_float = "float";
+     else
+       int_or_float = "int";
+     gen << "load-" << signed_or_not << "-" << generic_or_literal
+         << "-" << int_or_float << " $ " << token; cut();
+    }
     return;
    }
 
@@ -332,11 +376,33 @@ void ChTR_Graph_Build::resolve_statement()
 
 void ChTR_Graph_Build::enter_expression()
 {
+ gen
+   .blank()
+   .preamble_comment("expression")
+   << "statemnt-line-number $ " << current_line_number_; cut();
+
+// .dissolve({"init-new-ghost-scope", "push-carrier-deque"})
+
+ gen
+  .dissolve({"push-carrier-deque"})
+  .blank()
+  .dissolve({"new-call-package"})
+  .blank(); //?cut();
 
 }
 
 void ChTR_Graph_Build::enter_statement()
 {
+ gen
+   .blank()
+   .preamble_comment("statement")
+   << "statemnt-line-number $ " << current_line_number_; cut();
+
+ gen
+  .dissolve({"init-new-ghost-scope", "push-carrier-deque"})
+  .blank()
+  .dissolve({"new-call-package"})
+  .blank(); //?cut();
 
 }
 

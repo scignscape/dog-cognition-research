@@ -89,12 +89,28 @@ void Chasm_Runtime_Bridge::run_eval(QString proc_name)
  const QPair<CFC_Pair, _minimal_fn_type>& pr = *it;
  if(pr.first.first.convention == 0)
  {
-  csr_->evaluate(current_call_package_, pr.first, pr.second.s0);
+  if(pr.first.first.return_code == 0)
+    csr_->evaluate(current_call_package_, pr.first, pr.second.s0);
+  else
+  {
+   Chasm_Carrier rcar;
+   rcar.set_type_flag(pr.first.first.return_code);
+   csr_->evaluate(current_call_package_, pr.first, pr.second.s0r1, &rcar);
+   qDebug() << rcar.raw_value();
+  }
  }
  else if(pr.first.first.convention == 1)
  {
   csr_->evaluate(current_call_package_, pr.first, pr.second.s1);
  }
+}
+
+
+void Chasm_Runtime_Bridge::gen_retvalue_channel_u4()
+{
+ current_call_package_->add_new_channel("retvalue");
+ Chasm_Carrier rcc = csr_->gen_carrier(4);
+ current_call_package_->add_carrier(rcc);
 }
 
 
@@ -262,6 +278,15 @@ void Chasm_Runtime_Bridge::gen_carrier(Chasm_Type_Object* cto)
  current_carrier_deque_->push_back(cc);
 }
 
+void Chasm_Runtime_Bridge::gen_carrier_with_raw_value()
+{
+ Chasm_Carrier cc = csr_->gen_carrier_by_type_object(current_type_object_);
+ cc.set_raw_value(current_loaded_raw_value_);
+ check_claims(cc);
+ current_carrier_deque_->push_back(cc);
+}
+
+
 void Chasm_Runtime_Bridge::gen_carrier()
 {
  gen_carrier(current_type_object_);
@@ -306,12 +331,22 @@ void Chasm_Runtime_Bridge::load_carrier_symbol_lxs(QString symbol)
 
 
  gen_carrier(symbol, cto);
+ current_type_object_ = nullptr;
 }
 
 void Chasm_Runtime_Bridge::load_value_literal(QString token)
 {
  *current_value_literal_position_ = token;
 }
+
+void Chasm_Runtime_Bridge::load_unsigned_literal_int(QString token)
+{
+ load_symbol_u10(token);
+ gen_carrier_with_raw_value();
+ current_type_object_ = nullptr;
+}
+
+
 
 void Chasm_Runtime_Bridge::resolve_pins()
 {

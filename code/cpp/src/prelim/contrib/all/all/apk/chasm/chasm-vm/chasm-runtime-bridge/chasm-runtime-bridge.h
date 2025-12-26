@@ -154,7 +154,7 @@ public:
  void load_value_literal(QString token);
  void resolve_value_literal(QStringList& qsl);
 
-
+ void load_unsigned_literal_int(QString token);
 
  void new_call_package(); //Chasm_Call_Package*
 
@@ -187,6 +187,8 @@ public:
  void load_type_n8();
  void load_type_ptr();
 
+ void gen_retvalue_channel_u4();
+
  void push_carrier_deque();
  void gen_carrier();
  void gen_carrier(void* pv);
@@ -194,6 +196,8 @@ public:
  void gen_carrier_lsr();
  void gen_carrier(Chasm_Type_Object* cto);
  void gen_carrier(QString symbol, Chasm_Type_Object* cto);
+
+ void gen_carrier_with_raw_value();
 
 
  void load_string_literal(QString literal);

@@ -163,6 +163,7 @@ void Chasm_VM::read_line(QString inst)
   { "load-type-QVariant", &Chasm_Runtime_Bridge::load_type_QVariant },
   { "load-type-n8", &Chasm_Runtime_Bridge::load_type_n8 },
   { "load-type-ptr", &Chasm_Runtime_Bridge::load_type_ptr },
+  { "gen-retvalue-channel-u4", &Chasm_Runtime_Bridge::gen_retvalue_channel_u4 },
 
   { "push_carrier_deque", &Chasm_Runtime_Bridge::push_carrier_deque },
   { "gen_carrier", &Chasm_Runtime_Bridge::gen_carrier},
@@ -175,6 +176,7 @@ void Chasm_VM::read_line(QString inst)
 
   { "gen_carrier_lsr", &Chasm_Runtime_Bridge::gen_carrier_lsr},
   { "run_proc_eval", &Chasm_Runtime_Bridge::run_proc_eval },
+
 
  }};
 
@@ -198,6 +200,8 @@ void Chasm_VM::read_line(QString inst, QString arg)
   { "statement-line-number", &Chasm_Runtime_Bridge::statement_line_number },
   { "single-init-pin", &Chasm_Runtime_Bridge::single_init_pin },
   { "load-value-literal", &Chasm_Runtime_Bridge::load_value_literal },
+
+  { "load-unsigned-literal-int", &Chasm_Runtime_Bridge::load_unsigned_literal_int },
 
 
   { "add_new_channel", &Chasm_Runtime_Bridge::add_new_channel },

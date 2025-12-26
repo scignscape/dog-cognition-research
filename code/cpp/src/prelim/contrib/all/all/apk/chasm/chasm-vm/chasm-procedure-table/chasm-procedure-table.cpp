@@ -72,6 +72,18 @@ void Chasm_Procedure_Table::register_procedure_s1(QString name,
 }
 
 
+void Chasm_Procedure_Table::register_procedure_s0_r1(QString name,
+  _minimal_fn_s0_r1_type fn, QString code)
+{
+ QString lead;
+ QString fc = read_fncode(code, lead);
+ n8 nn = fc.toULongLong();
+ CFC_Pair fncode = _cfc(nn);
+ procedure_name_resolutions_[name] = name + code;
+ registered_procedures_[name + code] = {fncode, _minimal_fn_type {.s0r1 = fn}};
+}
+
+
 void Chasm_Procedure_Table::register_procedure_s0(QString name,
   _minimal_fn_s0_type fn, QString code)
 {
