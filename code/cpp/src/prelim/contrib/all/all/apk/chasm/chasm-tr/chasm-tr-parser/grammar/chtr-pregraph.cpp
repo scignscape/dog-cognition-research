@@ -178,6 +178,23 @@ void ChTR_Pregraph::symbol_token(QString token)
  }
 }
 
+void ChTR_Pregraph::prepare_carrier_declarations(QStringList symbols,
+  QStringList tweens, QString type_token)
+{
+ check_resolve_statement();
+ check_write_line_number();
+
+ for(QString symbol : symbols)
+ {
+  acc << ".scoped-symbol-decl $ " << symbol; cut();
+
+  check_lines(tweens.takeFirst());
+  check_write_line_number();
+ }
+
+ acc << ".type-expression-token $ " << type_token; cut();
+}
+
 void ChTR_Pregraph::prepare_carrier_declaration(QString symbol,
   QString tween, QString type_token)
 {

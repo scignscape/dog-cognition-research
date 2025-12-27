@@ -152,6 +152,10 @@ public:
  void prepare_carrier_declaration(QString symbol,
    QString tween, QString type_token);
 
+ void prepare_carrier_declarations(QStringList symbols,
+   QStringList tweens, QString type_token);
+
+
  void resolve_source_file();
 
 // void enter_channel_body();

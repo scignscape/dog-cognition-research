@@ -92,6 +92,30 @@ void ChTR_Grammar::init(ChTR_Parser& p, ChTR_Graph& g,
  });
 
  add_rule(source_context,
+   "carrier-declaration",
+   "(?<all>(?:, (?<symbol> \\S+) (?<tween> \\s+) ){2,} ) (?<tx> [^,;*&)\\]] \\S*)"
+   ,[&]
+ {
+  pregraph.reenter_statement_level();
+  QString tx = p.matched("tx");
+
+  QString all = p.matched("all");
+
+  QStringList qsl = all.split(QRegularExpression("\\b"));
+
+  QStringList syms, tweens;
+
+  for(u2 i = 1; i < qsl.size(); i += 2)
+  {
+   syms.push_back(qsl[i]);
+   tweens.push_back(qsl[i + 1].chopped((u1)(i < qsl.size() - 2)));
+  }
+
+  pregraph.prepare_carrier_declarations(syms, tweens, tx);
+ });
+
+
+ add_rule(source_context,
    "anchor-or-pin",
    "\\\\ (?<symbol> \\S+) (?<tween> \\s+) (?<token> \\S+)"
    ,[&]
