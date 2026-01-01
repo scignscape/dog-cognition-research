@@ -174,6 +174,9 @@ public:
  void statement_line_number(QString value);
 
  void gen_return_channels();
+ void resolve_handoffs(QString channels);
+
+ void resolve_handoffs(QMap<QString, QString> channels);
 
  void load_type_object(QString token);
 

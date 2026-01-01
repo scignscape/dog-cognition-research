@@ -45,7 +45,10 @@ public:
 
  void add_new_channel(QString name);
 
+ void add_string_carrier(QString text);
+
  void add_carrier(const Chasm_Carrier& cc);
+ void add_carrier(QString channel_name, const Chasm_Carrier& cc);
 
  void add_carriers(const QVector<Chasm_Carrier>& ccs);
  void add_carriers(std::deque<Chasm_Carrier>& ccs);

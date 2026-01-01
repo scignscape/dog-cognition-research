@@ -205,6 +205,7 @@ void Chasm_VM::read_line(QString inst, QString arg)
   { "load-value-literal", &Chasm_Runtime_Bridge::load_value_literal },
 
   { "load-unsigned-literal-int", &Chasm_Runtime_Bridge::load_unsigned_literal_int },
+  { "resolve-handoffs", &Chasm_Runtime_Bridge::resolve_handoffs },
 
 
   { "add_new_channel", &Chasm_Runtime_Bridge::add_new_channel },

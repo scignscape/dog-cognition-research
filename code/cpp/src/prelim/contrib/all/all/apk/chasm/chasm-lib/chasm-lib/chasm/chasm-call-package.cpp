@@ -59,6 +59,22 @@ void Chasm_Call_Package::add_new_channel(QString name)
  channels_[name] = current_build_channel_;
 }
 
+void Chasm_Call_Package::add_carrier(QString channel_name, const Chasm_Carrier& cc)
+{
+ if(Chasm_Channel* ch = channel(channel_name))
+ {
+  ch->add_carrier(cc);
+ }
+}
+
+void Chasm_Call_Package::add_string_carrier(QString text)
+{
+ Chasm_Carrier cc;
+ QString* str = new QString(text);
+ cc.set_raw_value( (n8) str);
+ cc.set_type_flag(3);
+}
+
 void Chasm_Call_Package::add_carrier(const Chasm_Carrier& cc)
 {
  current_build_channel_->add_carrier(cc);

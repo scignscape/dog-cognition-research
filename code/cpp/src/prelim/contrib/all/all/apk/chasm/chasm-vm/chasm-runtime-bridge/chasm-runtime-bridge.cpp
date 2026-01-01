@@ -73,6 +73,7 @@ void Chasm_Runtime_Bridge::run_proc_eval()
 void Chasm_Runtime_Bridge::load_proc_name(QString name)
 {
  held_procname_ = name;
+ current_call_package_->add_string_carrier(name);
 }
 
 
@@ -96,6 +97,7 @@ void Chasm_Runtime_Bridge::run_eval(QString proc_name)
    Chasm_Carrier rcar;
    rcar.set_type_flag(pr.first.first.return_code);
    csr_->evaluate(current_call_package_, pr.first, pr.second.s0r1, &rcar);
+   current_call_package_->add_carrier("retvalue", rcar);
    qDebug() << rcar.raw_value();
   }
  }
@@ -105,6 +107,24 @@ void Chasm_Runtime_Bridge::run_eval(QString proc_name)
  }
 }
 
+void Chasm_Runtime_Bridge::resolve_handoffs(QMap<QString, QString> channels)
+{
+
+}
+
+void Chasm_Runtime_Bridge::resolve_handoffs(QString channels)
+{
+ QStringList qsl = channels.simplified().split(" ");
+
+ QMap<QString, QString> handoff;
+
+ while(!qsl.isEmpty())
+ {
+  handoff[qsl.takeFirst()] = qsl.takeFirst();
+ }
+
+ resolve_handoffs(handoff);
+}
 
 void Chasm_Runtime_Bridge::gen_retvalue_channel_u4()
 {
