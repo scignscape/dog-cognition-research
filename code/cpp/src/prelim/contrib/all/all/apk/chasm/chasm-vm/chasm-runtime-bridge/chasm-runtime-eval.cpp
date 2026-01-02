@@ -46,12 +46,12 @@ Chasm_Runtime_Eval::Chasm_Runtime_Eval(Chasm_Runtime* csr)
 
 Chasm_Carrier Chasm_Runtime_Eval::_call_s0(QString name)
 {
- _call_s0(name, "retvalue", {});
+ _call_s0(name, "retv", {});
 }
 
 Chasm_Carrier Chasm_Runtime_Eval::call_s0(QString name, QString args_rep)
 {
- //? return _call_s0(name, "retvalue", args_rep);
+ //? return _call_s0(name, "retv", args_rep);
 }
 
 Chasm_Carrier Chasm_Runtime_Eval::_call_s0(QString name, QString ret_channel_name, QVector<void*> args)
@@ -205,7 +205,7 @@ Chasm_Carrier Chasm_Runtime_Eval::call_s1(void* obj, QString name)
  Chasm_Carrier scc = csr_->gen_carrier(9).take_value(&obj);
  ccp->add_carrier(scc);
 
- ccp->add_new_channel("retvalue");
+ ccp->add_new_channel("retv");
  Chasm_Carrier rcc = csr_->gen_carrier(cfc.first.return_code);
  ccp->add_carrier(rcc);
 

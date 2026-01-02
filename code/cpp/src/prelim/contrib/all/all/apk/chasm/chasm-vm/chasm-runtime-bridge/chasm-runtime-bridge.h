@@ -137,7 +137,11 @@ class Chasm_Runtime_Bridge
  void load_symbol_u_(QString literal, u1 radix);
  void load_symbol_s_(QString literal, u1 radix);
 
- QString held_procname_;
+ QStack<QString> held_procnames_;
+
+ QStringList channel_handoff_keys_;
+
+ QMap<QString, QVector<Chasm_Carrier>> held_handoff_carriers_;
 
 public:
 
@@ -190,6 +194,10 @@ public:
  void load_type_QVariant();
  void load_type_n8();
  void load_type_ptr();
+
+ void pop_call_package();
+ void pull_call_package();
+ void pop_proc_name();
 
  void gen_retvalue_channel_u4();
 

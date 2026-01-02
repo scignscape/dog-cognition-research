@@ -170,6 +170,11 @@ public:
   return *(VALUE_Type*)&raw_value_;
  }
 
+ QString string_ptr_value()
+ {
+  return *(QString*) raw_value_;
+ }
+
  template<typename VALUE_Type>
  void set_value_as(const VALUE_Type& val);
 

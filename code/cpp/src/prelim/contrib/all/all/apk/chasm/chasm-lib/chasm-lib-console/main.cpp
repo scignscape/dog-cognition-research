@@ -175,7 +175,7 @@ void run_testqss(Chasm_Runtime* csr)
  csr->evaluate(ccp, 300120_cfc, &testqss);
  qDebug() << "a3 = " << a3;
 
- // ccp->add_new_channel("retvalue");
+ // ccp->add_new_channel("retv");
  // Chasm_Carrier cc0 = csr->gen_carrier<u1>(csr->Retvalue._u1);
  // ccp->add_carrier(cc0);
  // csr->evaluate(ccp, 71341, (minimal_fn_s0_re1_type) &testqs1, &cc0);
@@ -208,7 +208,7 @@ void run_testqs1(Chasm_Runtime* csr)
 
  ccp->add_carriers({cc1,cc2,cc3});
 
- ccp->add_new_channel("retvalue");
+ ccp->add_new_channel("retv");
  Chasm_Carrier cc0 = csr->gen_carrier<u1>(csr->Retvalue._u1);
  ccp->add_carrier(cc0);
 
@@ -242,7 +242,7 @@ void run_testqs1n(Chasm_Runtime* csr)
 
  ccp->add_carriers({cc1,cc2,cc3});
 
- ccp->add_new_channel("retvalue");
+ ccp->add_new_channel("retv");
 
  Chasm_Carrier cc0 = csr->gen_carrier<u2>(csr->Retvalue._u1);
  ccp->add_carrier(cc0);
@@ -275,7 +275,7 @@ void run_testqs2(Chasm_Runtime* csr)
 
  ccp->add_carriers({cc1,cc2,cc3});
 
- ccp->add_new_channel("retvalue");
+ ccp->add_new_channel("retv");
 
  Chasm_Carrier cc0 = csr->gen_carrier<u2>(csr->Retvalue._u2);
  ccp->add_carrier(cc0);
@@ -309,7 +309,7 @@ void run_testqs2n(Chasm_Runtime* csr)
 
  ccp->add_carriers({cc1,cc2,cc3});
 
- ccp->add_new_channel("retvalue");
+ ccp->add_new_channel("retv");
 
  Chasm_Carrier cc0 = csr->gen_carrier<u2>(csr->Retvalue._u2);
  ccp->add_carrier(cc0);
@@ -343,7 +343,7 @@ void run_testqsq(Chasm_Runtime* csr)
 
  ccp->add_carriers({cc1,cc2,cc3});
 
- ccp->add_new_channel("retvalue");
+ ccp->add_new_channel("retv");
 
  Chasm_Carrier cc0 = csr->gen_carrier<QString>(csr->Retvalue._QString);
  ccp->add_carrier(cc0);
@@ -378,7 +378,7 @@ void run_testqs4(Chasm_Runtime* csr)
 
  ccp->add_carriers({cc1,cc2,cc3});
 
- ccp->add_new_channel("retvalue");
+ ccp->add_new_channel("retv");
 
  Chasm_Carrier cc0 = csr->gen_carrier<u4>(csr->Retvalue._u4);
  ccp->add_carrier(cc0);
@@ -411,7 +411,7 @@ void run_testqs4n(Chasm_Runtime* csr)
 
  ccp->add_carriers({cc1,cc2,cc3});
 
- ccp->add_new_channel("retvalue");
+ ccp->add_new_channel("retv");
 
  Chasm_Carrier cc0 = csr->gen_carrier<u4>(csr->Retvalue._u4);
  ccp->add_carrier(cc0);
@@ -445,7 +445,7 @@ void run_testqs5(Chasm_Runtime* csr)
 
  ccp->add_carriers({cc1,cc2,cc3});
 
- ccp->add_new_channel("retvalue");
+ ccp->add_new_channel("retv");
 
  Chasm_Carrier cc0 = csr->gen_carrier<QByteArray>(csr->Retvalue._QByteArray);
  ccp->add_carrier(cc0);
@@ -480,7 +480,7 @@ void run_testqs6(Chasm_Runtime* csr)
 
  ccp->add_carriers({cc1,cc2,cc3});
 
- ccp->add_new_channel("retvalue");
+ ccp->add_new_channel("retv");
 
  Chasm_Carrier cc0 = csr->gen_carrier<r8>(csr->Retvalue._r8);
  ccp->add_carrier(cc0);
@@ -514,7 +514,7 @@ void run_testqs6n(Chasm_Runtime* csr)
 
  ccp->add_carriers({cc1,cc2,cc3});
 
- ccp->add_new_channel("retvalue");
+ ccp->add_new_channel("retv");
 
  Chasm_Carrier cc0 = csr->gen_carrier<r8>(csr->Retvalue._r8);
  ccp->add_carrier(cc0);
@@ -547,7 +547,7 @@ void run_testqsv(Chasm_Runtime* csr)
 
  ccp->add_carriers({cc1,cc2,cc3});
 
- ccp->add_new_channel("retvalue");
+ ccp->add_new_channel("retv");
 
  Chasm_Carrier cc0 = csr->gen_carrier<QVariant>(csr->Retvalue._QVariant);
  ccp->add_carrier(cc0);
@@ -582,7 +582,7 @@ void run_testqs8(Chasm_Runtime* csr)
 
  ccp->add_carriers({cc1,cc2,cc3});
 
- ccp->add_new_channel("retvalue");
+ ccp->add_new_channel("retv");
 
  Chasm_Carrier cc0 = csr->gen_carrier<n8>(csr->Retvalue._n8);
  ccp->add_carrier(cc0);
@@ -618,7 +618,7 @@ void run_testqsp(Chasm_Runtime* csr)
 
  ccp->add_carriers({cc1,cc2,cc3});
 
- ccp->add_new_channel("retvalue");
+ ccp->add_new_channel("retv");
 
  Chasm_Carrier cc0 = csr->gen_carrier<void*>();
  ccp->add_carrier(cc0);
@@ -655,7 +655,7 @@ void run_testqsb(Chasm_Runtime* csr)
 
  ccp->add_carriers({cc1,cc2,cc3});
 
- ccp->add_new_channel("retvalue");
+ ccp->add_new_channel("retv");
  Chasm_Carrier cc0 = csr->gen_carrier<void*>(csr->Retvalue._ptr);
  ccp->add_carrier(cc0);
 
@@ -884,7 +884,7 @@ void run_smart(Chasm_Runtime* csr, QVector<Chasm_Typed_Value_Representation>& ar
 
  ccp->add_carriers({cc1,cc2,cc3});
 
- ccp->add_new_channel("retvalue");
+ ccp->add_new_channel("retv");
 
  Chasm_Carrier cc0 = csr->gen_carrier<u4>(csr->Retvalue._ptr);
  ccp->add_carrier(cc0);
@@ -915,7 +915,7 @@ void run_smart(Chasm_Runtime* csr)
 
  ccp->add_carriers({cc1,cc2,cc3});
 
- ccp->add_new_channel("retvalue");
+ ccp->add_new_channel("retv");
 
  Chasm_Carrier cc0 = csr->gen_carrier<void*>(csr->Retvalue._ptr);
  ccp->add_carrier(cc0);
@@ -996,7 +996,7 @@ void run_test0r9(Chasm_Runtime* csr)
 {
  Chasm_Call_Package* ccp = csr->new_call_package();
 
- ccp->add_new_channel("retvalue");
+ ccp->add_new_channel("retv");
  Chasm_Carrier cc0 = csr->gen_carrier<void*>(csr->Retvalue._ptr);
  ccp->add_carrier(cc0);
 
@@ -1097,7 +1097,7 @@ void run_test0s1(Chasm_Runtime* csr)
 {
  Chasm_Call_Package* ccp = csr->new_call_package();
 
-// ccp->add_new_channel("retvalue");
+// ccp->add_new_channel("retv");
 
  ccp->add_new_channel("sigma");
  test0s1 ts1{{"q1", "q2"}};
@@ -1132,7 +1132,7 @@ void run_test0s1r(Chasm_Runtime* csr)
  Chasm_Carrier cc_this = csr->gen_carrier<void*>(&arg1);
  ccp->add_carrier(cc_this);
 
- ccp->add_new_channel("retvalue");
+ ccp->add_new_channel("retv");
  Chasm_Carrier cc0 = csr->gen_carrier<void*>(csr->Retvalue._ptr);
  ccp->add_carrier(cc0);
 
@@ -1181,7 +1181,7 @@ void run_teste4(Chasm_Runtime* csr)
 
  ccp->add_carriers({cc1,cc2,cc3,cc4});
 
- ccp->add_new_channel("retvalue");
+ ccp->add_new_channel("retv");
 
  Chasm_Carrier cc0 = csr->gen_carrier<void*>(csr->Retvalue._ptr);
  ccp->add_carrier(cc0);
@@ -1224,7 +1224,7 @@ void run_teste3(Chasm_Runtime* csr)
 
  ccp->add_carriers({cc1,cc2,cc3});
 
- ccp->add_new_channel("retvalue");
+ ccp->add_new_channel("retv");
 
  Chasm_Carrier cc0 = csr->gen_carrier<void*>(csr->Retvalue._ptr);
  ccp->add_carrier(cc0);
@@ -1264,7 +1264,7 @@ void run_teste4of1(Chasm_Runtime* csr)
 
  ccp->add_carriers({cc1,cc2,cc3,cc4});
 
- ccp->add_new_channel("retvalue");
+ ccp->add_new_channel("retv");
 
  Chasm_Carrier cc0 = csr->gen_carrier<void*>(csr->Retvalue._ptr);
  ccp->add_carrier(cc0);
@@ -1303,7 +1303,7 @@ void run_teste4of2(Chasm_Runtime* csr)
 
  ccp->add_carriers({cc1,cc2,cc3,cc4});
 
- ccp->add_new_channel("retvalue");
+ ccp->add_new_channel("retv");
 
  Chasm_Carrier cc0 = csr->gen_carrier<void*>(csr->Retvalue._ptr);
  ccp->add_carrier(cc0);
@@ -1344,7 +1344,7 @@ void run_teste5of2(Chasm_Runtime* csr)
 
  ccp->add_carriers({cc1,cc2,cc3,cc4,cc5});
 
- ccp->add_new_channel("retvalue");
+ ccp->add_new_channel("retv");
 
  Chasm_Carrier cc0 = csr->gen_carrier<void*>(csr->Retvalue._ptr);
  ccp->add_carrier(cc0);
@@ -1367,7 +1367,7 @@ void run_test0(Chasm_Runtime* csr)
 {
  Chasm_Call_Package* ccp = csr->new_call_package();
 
- ccp->add_new_channel("retvalue");
+ ccp->add_new_channel("retv");
 
  Chasm_Carrier cc0 = csr->gen_carrier<void*>(csr->Retvalue._ptr);
  ccp->add_carrier(cc0);
@@ -1418,7 +1418,7 @@ void run_teste2of2(Chasm_Runtime* csr)
 
  ccp->add_carriers({cc1,cc2});
 
- ccp->add_new_channel("retvalue");
+ ccp->add_new_channel("retv");
 
  Chasm_Carrier cc0 = csr->gen_carrier<r8>(csr->Retvalue._r8);
  ccp->add_carrier(cc0);
@@ -1443,7 +1443,7 @@ void run_teste2of2rev(Chasm_Runtime* csr)
 
  ccp->add_carriers({cc1,cc2});
 
- ccp->add_new_channel("retvalue");
+ ccp->add_new_channel("retv");
 
  Chasm_Carrier cc0 = csr->gen_carrier<r8>(csr->Retvalue._r8);
  ccp->add_carrier(cc0);
@@ -1498,7 +1498,7 @@ void run_test1s1r(Chasm_Runtime* csr)
  ccp->add_carrier(cc1);
 
 
- ccp->add_new_channel("retvalue");
+ ccp->add_new_channel("retv");
  Chasm_Carrier ccr = csr->gen_carrier<void*>(csr->Retvalue._ptr);
  ccp->add_carrier(ccr);
 
@@ -1560,7 +1560,7 @@ void run_test2s1r(Chasm_Runtime* csr)
  ccp->add_carriers({cc1,cc2});
 
 
- ccp->add_new_channel("retvalue");
+ ccp->add_new_channel("retv");
  Chasm_Carrier ccr = csr->gen_carrier<r8>(csr->Retvalue._r8);
  ccp->add_carrier(ccr);
 
@@ -1632,7 +1632,7 @@ void run_test3s1r(Chasm_Runtime* csr)
  ccp->add_carriers({cc1,cc2,cc3});
 
 
- ccp->add_new_channel("retvalue");
+ ccp->add_new_channel("retv");
  Chasm_Carrier ccr = csr->gen_carrier<void*>(csr->Retvalue._ptr);
  ccp->add_carrier(ccr);
 
@@ -1705,7 +1705,7 @@ void run_test4s1r(Chasm_Runtime* csr)
 
  ccp->add_carriers({cc1,cc2,cc3,cc4});
 
- ccp->add_new_channel("retvalue");
+ ccp->add_new_channel("retv");
  Chasm_Carrier ccr = csr->gen_carrier<void*>(csr->Retvalue._ptr);
  ccp->add_carrier(ccr);
 
@@ -1783,7 +1783,7 @@ void run_test62s1r(Chasm_Runtime* csr)
 
  ccp->add_carriers({cc1,cc2,cc3,cc4,cc5,cc6});
 
- ccp->add_new_channel("retvalue");
+ ccp->add_new_channel("retv");
  Chasm_Carrier ccr = csr->gen_carrier<QByteArray>(csr->Retvalue._QByteArray);
  ccp->add_carrier(ccr);
 
@@ -1820,7 +1820,7 @@ void run_test4rr(Chasm_Runtime* csr)
 
  ccp->add_carriers({cc1,cc2,cc3,cc4});
 
- ccp->add_new_channel("retvalue");
+ ccp->add_new_channel("retv");
  Chasm_Carrier ccr = csr->gen_carrier<void*>(csr->Retvalue._u1);
  ccp->add_carrier(ccr);
 

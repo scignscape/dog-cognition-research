@@ -178,6 +178,8 @@ public:
  Chasm_Type_Object* get_type_object_by_name(QString name);
 
  Chasm_Call_Package* new_call_package();
+ void pop_call_package();
+ Chasm_Call_Package* pull_call_package();
 
  Chasm_Carrier gen_carrier(Chasm_Typed_Value_Representation& tvr);
  Chasm_Carrier gen_carrier(QString type_name = {});

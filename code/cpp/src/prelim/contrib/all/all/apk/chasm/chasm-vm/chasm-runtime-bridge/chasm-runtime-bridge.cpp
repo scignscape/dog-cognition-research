@@ -12,6 +12,9 @@
 #include "chasm-lib/chasm/chasm-runtime.h"
 #include "chasm-lib/chasm/chasm-call-package.h"
 
+#include "chasm-lib/chasm/chasm-carrier.h"
+#include "chasm-lib/chasm/chasm-channel.h"
+
 #include "chasm-procedure-table/chasm-procedure-table.h"
 
 #include "chasm-lib/chasm/types/chasm-type-object.h"
@@ -50,6 +53,8 @@ Chasm_Runtime_Bridge::Chasm_Runtime_Bridge(Chasm_Runtime* csr)
  type_object_QVariant_ = pto[7];
  type_object_n8_ = pto[8];
  type_object_ptr_ = pto[9];
+
+ channel_handoff_keys_ = QStringList {"retv", "ctor", "error"};
 }
 
 void Chasm_Runtime_Bridge::init_new_ghost_scope()
@@ -67,12 +72,19 @@ void Chasm_Runtime_Bridge::clear_current_ghost_scope()
 
 void Chasm_Runtime_Bridge::run_proc_eval()
 {
- run_eval(held_procname_);
+ QString hp = held_procnames_.top();
+
+ if(hp.isEmpty())
+ {
+  // taken from carrier ...
+ }
+
+ run_eval(hp);
 }
 
 void Chasm_Runtime_Bridge::load_proc_name(QString name)
 {
- held_procname_ = name;
+ held_procnames_.push(name);
  current_call_package_->add_string_carrier(name);
 }
 
@@ -97,7 +109,7 @@ void Chasm_Runtime_Bridge::run_eval(QString proc_name)
    Chasm_Carrier rcar;
    rcar.set_type_flag(pr.first.first.return_code);
    csr_->evaluate(current_call_package_, pr.first, pr.second.s0r1, &rcar);
-   current_call_package_->add_carrier("retvalue", rcar);
+   current_call_package_->add_carrier("retv", rcar);
    qDebug() << rcar.raw_value();
   }
  }
@@ -109,6 +121,55 @@ void Chasm_Runtime_Bridge::run_eval(QString proc_name)
 
 void Chasm_Runtime_Bridge::resolve_handoffs(QMap<QString, QString> channels)
 {
+ for(QString k : channel_handoff_keys_)
+ {
+  auto it = channels.find(k);
+  if(it == channels.end())
+    continue;
+
+  Chasm_Channel* ch = current_call_package_->channel(k);
+  for(Chasm_Carrier& cc : ch->carriers())
+  {
+   held_handoff_carriers_[*it].push_back(cc);
+  }
+ }
+}
+
+void Chasm_Runtime_Bridge::pop_proc_name()
+{
+ held_procnames_.pop();
+}
+
+
+void Chasm_Runtime_Bridge::pull_call_package()
+{
+ current_call_package_ = csr_->pull_call_package();
+
+ QString str = current_call_package_->channel("proc")->first_carrier().string_ptr_value();
+ qDebug() << str;
+
+ QMapIterator<QString, QVector<Chasm_Carrier>> it(held_handoff_carriers_);
+ while(it.hasNext())
+ {
+  it.next();
+  Chasm_Channel* ch = current_call_package_->check_channel(it.key());
+
+  for(const Chasm_Carrier& cc : it.value())
+  {
+   ch->add_carrier(cc);
+  }
+
+ }
+
+}
+
+
+void Chasm_Runtime_Bridge::pop_call_package()
+{
+ csr_->pop_call_package();
+// QString str = current_call_package_->channel("proc")->first_carrier().string_ptr_value();
+// qDebug() << str;
+
 
 }
 
@@ -120,7 +181,8 @@ void Chasm_Runtime_Bridge::resolve_handoffs(QString channels)
 
  while(!qsl.isEmpty())
  {
-  handoff[qsl.takeFirst()] = qsl.takeFirst();
+  QString k = qsl.takeFirst();
+  handoff[k] = qsl.takeFirst();
  }
 
  resolve_handoffs(handoff);
@@ -128,14 +190,14 @@ void Chasm_Runtime_Bridge::resolve_handoffs(QString channels)
 
 void Chasm_Runtime_Bridge::gen_retvalue_channel_u4()
 {
- current_call_package_->add_new_channel("retvalue");
+ current_call_package_->add_new_channel("retv");
  Chasm_Carrier rcc = csr_->gen_carrier(4);
  current_call_package_->add_carrier(rcc);
 }
 
 void Chasm_Runtime_Bridge::gen_return_channels()
 {
- current_call_package_->add_new_channel("retvalue");
+ current_call_package_->add_new_channel("retv");
 
  // //  possible exception, etc.
 }

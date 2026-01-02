@@ -30,6 +30,19 @@ Chasm_Call_Package::Chasm_Call_Package(u4 id)
 }
 
 
+Chasm_Channel* Chasm_Call_Package::check_channel(QString name)
+{
+ Chasm_Channel* result = channel(name);
+
+ if(!result)
+ {
+  result = new Chasm_Channel(name);
+  channels_[name] = result;
+ }
+
+ return result;
+}
+
 Chasm_Channel* Chasm_Call_Package::channel(QString name)
 {
  auto it = channels_.find(name);
@@ -73,6 +86,7 @@ void Chasm_Call_Package::add_string_carrier(QString text)
  QString* str = new QString(text);
  cc.set_raw_value( (n8) str);
  cc.set_type_flag(3);
+ add_carrier(cc);
 }
 
 void Chasm_Call_Package::add_carrier(const Chasm_Carrier& cc)

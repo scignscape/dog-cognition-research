@@ -54,6 +54,10 @@ public:
  void add_carriers(std::deque<Chasm_Carrier>& ccs);
 
  Chasm_Channel* channel(QString name);
+
+ Chasm_Channel* check_channel(QString name);
+
+
 // {
 //  return channels_.value(name);
 // }

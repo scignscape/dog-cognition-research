@@ -165,6 +165,10 @@ void Chasm_VM::read_line(QString inst)
   { "load-type-ptr", &Chasm_Runtime_Bridge::load_type_ptr },
   { "gen-retvalue-channel-u4", &Chasm_Runtime_Bridge::gen_retvalue_channel_u4 },
   { "gen-return-channels", &Chasm_Runtime_Bridge::gen_return_channels },
+  { "pop-call-package", &Chasm_Runtime_Bridge::pop_call_package },
+  { "pull-call-package", &Chasm_Runtime_Bridge::pull_call_package },
+  { "pop-proc-name", &Chasm_Runtime_Bridge::pop_proc_name },
+
 
 
 

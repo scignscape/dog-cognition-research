@@ -90,11 +90,11 @@
 // if(!lambda)
 //   return;
 
-// Chasm_Channel* retvalue = ccp->channel("retvalue");
-// if(!retvalue)
+// Chasm_Channel* retv = ccp->channel("retv");
+// if(!retv)
 //   return;
 
-// Chasm_Carrier cc = retvalue->first_carrier();
+// Chasm_Carrier cc = retv->first_carrier();
 
 // void* rr = cc.value<void*>();
 
@@ -127,8 +127,8 @@
 // if(!lambda)
 //  return;
 
-// Chasm_Channel* retvalue = ccp->channel("retvalue");
-// if(!retvalue)
+// Chasm_Channel* retv = ccp->channel("retv");
+// if(!retv)
 //  return;
 
 // Chasm_Channel* sigma = ccp->channel("sigma");
@@ -138,7 +138,7 @@
 // else
 //  _this = nullptr;
 
-// Chasm_Carrier cc = retvalue->first_carrier();
+// Chasm_Carrier cc = retv->first_carrier();
 
 // void* rr = cc.value<void*>();
 
@@ -534,6 +534,16 @@ void Chasm_Runtime::init_no_file_session()
  current_no_file_session_ = ++gen_trisym_file_index_;
 }
 
+void Chasm_Runtime::pop_call_package()
+{
+ current_call_packages_.pop();
+}
+
+Chasm_Call_Package* Chasm_Runtime::pull_call_package()
+{
+ pop_call_package();
+ return current_call_packages_.top();
+}
 
 Chasm_Call_Package* Chasm_Runtime::new_call_package()
 {
@@ -565,11 +575,11 @@ void _evaluate_s01_0_rX(Chasm_Call_Package* ccp, Chasm_Function_Code fncode,
   return;
  }
 
- Chasm_Channel* retvalue = ccp->channel("retvalue");
- if(!retvalue)
+ Chasm_Channel* retv = ccp->channel("retv");
+ if(!retv)
    return;
 
- Chasm_Carrier cc = retvalue->first_carrier();
+ Chasm_Carrier cc = retv->first_carrier();
 
  switch (fncode.return_code)
  {

@@ -114,7 +114,7 @@ public:
 
  Chasm_Carrier _call_s0(QString name, QVector<void*> args)
  {
-  return _call_s0(name, "retvalue", args);
+  return _call_s0(name, "retv", args);
  }
 
  Chasm_Carrier _call_s0(QString name, QString ret_channel_name, QVector<void*> args);
