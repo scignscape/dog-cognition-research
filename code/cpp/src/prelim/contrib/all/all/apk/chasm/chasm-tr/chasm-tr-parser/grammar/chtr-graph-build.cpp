@@ -333,6 +333,39 @@ void ChTR_Graph_Build::pin_value_literal(QString token)
 
 void ChTR_Graph_Build::check_resolve_statement()
 {
+// switch(current_channel_state_)
+// {
+// case Channel_States::Implicit_Lambda:
+// case Channel_States::Explicit_Lambda:
+
+//  gen
+//    .blank()
+//    .dissolve({"add-carriers", "run-proc-eval"})
+//    .blank()
+//    .dissolve({"reset-carrier-deque", "clear-current-ghost-scope"})
+//    .blank();
+// }
+}
+
+
+void ChTR_Graph_Build::source_file_end()
+{
+ check_resolve_statement();
+ gen.blank().dissolve({"@sfe"});
+}
+
+void ChTR_Graph_Build::write_handoff_rtl()
+{
+ gen.blank().dissolve({"resolve-handoffs $ retv lambda"});
+}
+
+void ChTR_Graph_Build::write_handoff_rts()
+{
+
+}
+
+void ChTR_Graph_Build::resolve_expression()
+{
  switch(current_channel_state_)
  {
  case Channel_States::Implicit_Lambda:
@@ -345,32 +378,46 @@ void ChTR_Graph_Build::check_resolve_statement()
     .dissolve({"reset-carrier-deque", "clear-current-ghost-scope"})
     .blank();
  }
-}
-
-
-void ChTR_Graph_Build::source_file_end()
-{
- check_resolve_statement();
- gen.blank().dissolve({"@sfe"});
-}
-
-void ChTR_Graph_Build::write_handoff_rtl()
-{
 
 }
 
-void ChTR_Graph_Build::write_handoff_rts()
+void ChTR_Graph_Build::expression_to_statement()
 {
+ current_expression_state_ = Expression_States::Expression_Return;
 
+ gen
+   .blank()
+   .dissolve({"pop-proc-name", "pull-call-package"});
+//   .blank()
+//   .dissolve("run-proc-eval");
 }
 
-void ChTR_Graph_Build::resolve_expression()
+void ChTR_Graph_Build::expression_to_expression()
 {
-
+ gen
+   .blank()
+   .dissolve({"pop-proc-name", "pull-call-package"});
 }
 
 void ChTR_Graph_Build::resolve_statement()
 {
+ switch(current_channel_state_)
+ {
+ case Channel_States::Implicit_Lambda:
+ case Channel_States::Explicit_Lambda:
+  if(current_expression_state_ != Expression_States::Expression_Return)
+   gen
+     .blank()
+     .dissolve({"add-carriers", "run-proc-eval"});
+  else
+   gen
+     .blank()
+     .dissolve({"run-proc-eval"});
+  gen
+    .blank()
+    .dissolve({"reset-carrier-deque", "clear-current-ghost-scope"})
+    .blank();
+ }
 
 }
 
@@ -439,6 +486,8 @@ void ChTR_Graph_Build::read_line(QString fn)
    { ".enter-statement", &ChTR_Graph_Build::enter_statement },
    { ".resolve-expression", &ChTR_Graph_Build::resolve_expression },
    { ".resolve-statement", &ChTR_Graph_Build::resolve_statement },
+   { ".expression-to-expression", &ChTR_Graph_Build::expression_to_expression },
+   { ".expression-to-statement", &ChTR_Graph_Build::expression_to_statement },
 
  }};
 

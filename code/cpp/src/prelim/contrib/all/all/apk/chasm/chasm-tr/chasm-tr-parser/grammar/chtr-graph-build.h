@@ -148,16 +148,17 @@ private:
 
  enum class Expression_States {
 
-  N_A, Held_Declare_Point_Token, Held_Anchor_Token
+  N_A, Held_Declare_Point_Token, Held_Anchor_Token, Expression_Return
 
  };
  Expression_States current_expression_state_;
 
- enum class Channel_States {
+ enum class Channel_States : s2 {
 
-  N_A, Implicit_Lambda, Explicit_Lambda, Named_Channel_Entered, Name_Channel_Exited,
-
+  N_A, Implicit_Lambda = 1, Explicit_Lambda = 2, Named_Channel_Entered = 4, Named_Channel_Exited = 8,
+  //Expression_Return = 256
  };
+
  Channel_States current_channel_state_;
 
  ChTR_Lexical_Scope* current_lexical_scope_;
@@ -194,6 +195,9 @@ public:
  void source_file(QString file_path);
 
  void check_resolve_statement();
+
+ void expression_to_statement();
+ void expression_to_expression();
 
  void write_handoff_rtl();
  void write_handoff_rts();

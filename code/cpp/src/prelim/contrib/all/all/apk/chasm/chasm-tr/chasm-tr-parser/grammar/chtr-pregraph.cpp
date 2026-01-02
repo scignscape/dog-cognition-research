@@ -80,7 +80,19 @@ void ChTR_Pregraph::leave_expression()
 //? acc << ".leave-expression"; cut();
  --expression_nesting_count_;
  if(expression_nesting_count_ == 0)
-   flags.active_expression = false;
+ {
+  flags.active_expression = false;
+  acc << ".expression-to-statement"; cut();
+ }
+ else
+ {
+  acc << ".expression-to-expression"; cut();
+
+//  acc << ".resolve-expression"; cut();
+//   ;.
+//  pull-call-package ;.
+ }
+
 }
 
 void ChTR_Pregraph::reenter_statement_level()
@@ -98,6 +110,7 @@ void ChTR_Pregraph::temp_reenter_statement_level()
   flags.active_run_call = false;
  }
 }
+
 
 void ChTR_Pregraph::check_write_handoff()
 {
